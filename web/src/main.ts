@@ -122,11 +122,21 @@ function render(): void {
       : state.activeTab === 'saved'
         ? renderSavedView({ saved: state.saved, filter: state.savedFilter, selectedId: state.selectedId })
         : state.activeTab === 'analytics'
-          ? renderAnalyticsView(state.logs)
+          ? renderAnalyticsView(state.logs, state.saved)
           : renderLogsView(state.logs);
   root.innerHTML = renderAppShell({ config: state.config, activeTab: state.activeTab, drawerOpen: state.drawerOpen, logs: state.logs, savedCount: state.saved.length, surfaceHtml });
   bindAppEvents(state, { render, refreshTopics, selectTopic, createSequel, toast });
 }
+
+window.addEventListener('keydown', (ev) => {
+  const tag = (ev.target as HTMLElement | null)?.tagName;
+  if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA' || ev.metaKey || ev.ctrlKey || ev.altKey) return;
+  if (ev.key.toLowerCase() === 'r' && state.activeTab === 'studio') { state.batchNonce += 1; void refreshTopics(); }
+  const digit = Number(ev.key);
+  if (digit >= 1 && digit <= 8 && state.activeTab === 'studio' && state.topics[digit - 1]) {
+    void selectTopic(state.topics[digit - 1].id, false);
+  }
+});
 
 render();
 void loadLiveTrends().then((feed) => {

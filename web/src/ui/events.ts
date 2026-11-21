@@ -94,6 +94,11 @@ export function bindAppEvents(
           window.setTimeout(() => { state.copiedTarget = null; hooks.render(); }, 1200);
         }); return;
       }
+      if (a === 'copy-all' && state.prompts) {
+        const pack = state.activeTopic ? `\n\n---\n\n${buildViralPackage(state.activeTopic, state.prompts).copyText}` : '';
+        void navigator.clipboard.writeText(`${state.prompts.storyboardPrompt}\n\n---\n\n${state.prompts.videoPrompt}${pack}`).then(() => hooks.toast('Copied Full Bundle'));
+        return;
+      }
       if (a === 'reroll-rig' && state.prompts) { const out = rerollCameraRig(state.prompts, (state.rigStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Camera: ${out.rigLabel}`); return; }
       if (a === 'reroll-punchline' && state.prompts) { const out = cycleAlternatePunchline(state.prompts, (state.punchStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Punchline: ${out.style}`); return; }
       if (a === 'export-saved-md') { exportSavedMarkdown(state.saved); hooks.toast('Exported Saved .md'); return; }

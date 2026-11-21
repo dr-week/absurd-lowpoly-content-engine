@@ -1,11 +1,15 @@
 import { BRAND_SIGNALS } from '../data/brands';
+import { computeTasteDna } from '../engine/taste_dna';
 import { computeAnalytics } from '../engine/telemetry';
 import { Glyphs } from '../glyphs';
-import type { RatingLogEntry } from '../types';
+import type { RatingLogEntry, SavedItem } from '../types';
 import { esc } from './escape';
 
-export function renderAnalyticsView(logs: RatingLogEntry[]): string {
+export function renderAnalyticsView(logs: RatingLogEntry[], saved: SavedItem[] = []): string {
   const s = computeAnalytics(logs);
+  const dna = computeTasteDna(logs, saved);
+  const pills = (items: string[], cls = 'pill') =>
+    items.length ? items.map((x) => `<span class="${cls}">${esc(x)}</span>`).join('') : '<span class="pill">—</span>';
 
   const angleBars = s.byAngle.length
     ? s.byAngle
@@ -43,25 +47,29 @@ export function renderAnalyticsView(logs: RatingLogEntry[]): string {
           <h2>Viral & Taste</h2>
         </div>
         <button type="button" class="btn btn--primary" data-action="export-json" title="Export JSON">
-          ${Glyphs.download(15)}
-          <span>JSON</span>
+          ${Glyphs.download(15)}<span>JSON</span>
         </button>
       </div>
 
       <div class="metrics-grid">
         <div class="metric-box"><div class="metric-box__label">Rated</div><div class="metric-box__value">${s.totalVotes}</div></div>
         <div class="metric-box"><div class="metric-box__label">Approval</div><div class="metric-box__value">${s.approvalRate}%</div></div>
-        <div class="metric-box"><div class="metric-box__label">Topics</div><div class="metric-box__value">${s.byKind.topic.up}/${s.byKind.topic.down}</div></div>
-        <div class="metric-box"><div class="metric-box__label">Prompts</div><div class="metric-box__value">${s.byKind.storyboard.up + s.byKind.video.up}/${s.byKind.storyboard.down + s.byKind.video.down}</div></div>
+        <div class="metric-box"><div class="metric-box__label">Saved</div><div class="metric-box__value">${saved.length}</div></div>
+        <div class="metric-box"><div class="metric-box__label">Viral Wins</div><div class="metric-box__value">${dna.viralCount}</div></div>
       </div>
 
       <div class="card-subpanel">
-        <div class="subpanel-title">Taste Signal</div>
+        <div class="subpanel-title">Live Taste DNA (Auto-Steers AI)</div>
+        <div class="trend-strip">${pills(dna.topHooks, 'pill pill--accent')}${pills(dna.topSituations, 'pill pill--positive')}${pills(dna.topWorlds, 'pill')}</div>
+      </div>
+
+      <div class="card-subpanel">
+        <div class="subpanel-title">Format Approval</div>
         <div class="bar-list">${angleBars}</div>
       </div>
 
       <div class="card-subpanel">
-        <div class="subpanel-title">Brand Heat (India)</div>
+        <div class="subpanel-title">World Heat</div>
         <div class="bar-list">${brandRows}</div>
       </div>
     </section>

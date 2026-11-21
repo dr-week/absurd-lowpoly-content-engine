@@ -74,8 +74,15 @@ def main() -> None:
         trends_data = json.loads(trends_path.read_text(encoding="utf-8"))
         headlines = [t["title"] for t in trends_data.get("trends", [])[:16] if t.get("title")]
 
-    prompt = "Twist these live world/science/Goa headlines into 16 completely different episodes:\n" + "\n".join(
-        f"{i + 1}. {h}" for i, h in enumerate(headlines)
+    taste_path = Path("web/public/taste_profile.json")
+    taste_line = ""
+    if taste_path.exists():
+        taste_line = "\nUSER TASTE DIRECTIVE: " + json.loads(taste_path.read_text(encoding="utf-8")).get("prompt_directive", "")
+
+    prompt = (
+        "Twist these live world/science/Goa headlines into 16 completely different episodes:\n"
+        + "\n".join(f"{i + 1}. {h}" for i, h in enumerate(headlines))
+        + taste_line
     )
     raw = _call_gemini(gemini_key, prompt) if gemini_key else _call_groq(groq_key, prompt)
     parsed = json.loads(_extract_json(raw))
