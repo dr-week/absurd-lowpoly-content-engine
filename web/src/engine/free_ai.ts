@@ -6,6 +6,18 @@ import { classifyHook, classifySituation, getHookLabel, getSituationLabel } from
 import { synthesizeTopicsFromHeadlines, synthesizeTrendCard } from './trend_synthesizer';
 
 const POLLINATIONS_URL = 'https://text.pollinations.ai/openai';
+const PLLNS_TS_KEY = 'absurd_studio_pllns_ts';
+const PLLNS_COOLDOWN_MS = 46_000;
+
+function canCallPollinations(): boolean {
+  if (typeof localStorage === 'undefined') return true;
+  const last = Number(localStorage.getItem(PLLNS_TS_KEY) || '0');
+  return Date.now() - last >= PLLNS_COOLDOWN_MS;
+}
+
+function recordPollinationsCall(): void {
+  if (typeof localStorage !== 'undefined') localStorage.setItem(PLLNS_TS_KEY, String(Date.now()));
+}
 
 function extractJson(raw: string): string {
   const s = raw.trim().replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim();
@@ -16,6 +28,8 @@ function extractJson(raw: string): string {
 }
 
 async function callFreeAI(system: string, user: string, timeoutMs = 22000): Promise<string> {
+  if (!canCallPollinations()) throw new Error('Cooldown active');
+  recordPollinationsCall();
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
@@ -66,12 +80,13 @@ export async function generateFreshLiveNewsTopics(params: {
   const avoid = Array.from(seenTitles).slice(-40);
 
   const system =
-    'You are a stand-up & sketch comedy head writer inventing 8 BRAND-NEW, structurally DIFFERENT absurdist comedy topics for short deadpan Hindi videos. ' +
-    'NEVER mention "low-poly", "PS1", "3D", "meme", or "viral" in titles or pitches. NEVER use robotic prefixes like "Fake biopic:" or "Breaking:". ' +
+    'You are a stand-up & sketch comedy head writer inventing 8 BRAND-NEW, structurally DIFFERENT absurdist comedy topics. ' +
+    'ALL titles and pitches MUST be in crisp ENGLISH ONLY (zero Hindi/Devanagari in titles or pitches). ' +
+    'NEVER mention "low-poly", "PS1", "3D", "meme", or "viral". NEVER use prefixes like "Fake biopic:" or "Breaking:". ' +
     'Cover ALL 6 formats: over-engineer, fake-origin, breaking-news, fake-tutorial, petty-spiral, weird-science. ' +
     'Include iconic figures (Elon Musk, Trump, Gandhiji, Putin, Modi), Goa, Science, and World News. NEVER lock to Delhi or Mumbai. ' +
     `${WRITERS_ROOM_RULES} ` +
-    'Return ONLY valid JSON: {"topics":[{"title":"UPPERCASE PUNCHY TITLE","angle":"over-engineer|fake-origin|breaking-news|fake-tutorial|petty-spiral|weird-science","brand":"Short World Tag","pitch":"Cold-open 1-sentence setup + broken-assumption twist + deadpan payoff","viralScore":92}]}';
+    'Return ONLY valid JSON: {"topics":[{"title":"UPPERCASE ENGLISH TITLE","angle":"over-engineer|fake-origin|breaking-news|fake-tutorial|petty-spiral|weird-science","brand":"Short World Tag","pitch":"Cold-open 1-sentence English setup + broken-assumption twist + deadpan payoff","viralScore":92}]}';
 
   const newsBlock = headlines.map((h, i) => `${i + 1}. [${h.source}] ${h.title}`).join('\n');
   const user = [

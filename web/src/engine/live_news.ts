@@ -24,7 +24,7 @@ export function loadUsedHeadlines(): Set<string> {
 }
 
 export function saveUsedHeadlines(used: Set<string>): void {
-  if (hasStorage()) localStorage.setItem(USED_NEWS_KEY, JSON.stringify(Array.from(used).slice(-400)));
+  if (hasStorage()) localStorage.setItem(USED_NEWS_KEY, JSON.stringify(Array.from(used).slice(-1000)));
 }
 
 async function fetchJsonWithTimeout<T>(url: string, ms = 4500): Promise<T | null> {
@@ -41,20 +41,21 @@ async function fetchJsonWithTimeout<T>(url: string, ms = 4500): Promise<T | null
   }
 }
 
-async function fetchHackerNews(count = 4): Promise<LiveHeadline[]> {
-  const ids = await fetchJsonWithTimeout<number[]>('https://hacker-news.firebaseio.com/v0/topstories.json');
+async function fetchHackerNews(count = 5): Promise<LiveHeadline[]> {
+  const endpoint = cryptoRng() > 0.5 ? 'topstories.json' : 'newstories.json';
+  const ids = await fetchJsonWithTimeout<number[]>(`https://hacker-news.firebaseio.com/v0/${endpoint}`);
   if (!ids?.length) return [];
-  const sample = cryptoShuffle(ids.slice(0, 120), cryptoRng).slice(0, count);
+  const sample = cryptoShuffle(ids.slice(0, 450), cryptoRng).slice(0, count);
   const items = await Promise.all(
     sample.map((id) => fetchJsonWithTimeout<{ title?: string }>(`https://hacker-news.firebaseio.com/v0/item/${id}.json`, 3500)),
   );
   return items.filter((i): i is { title: string } => Boolean(i?.title)).map((i) => ({ title: i.title, source: 'Hacker News' }));
 }
 
-async function fetchSpaceNews(count = 4): Promise<LiveHeadline[]> {
-  const offset = Math.floor(cryptoRng() * 60);
+async function fetchSpaceNews(count = 5): Promise<LiveHeadline[]> {
+  const offset = Math.floor(cryptoRng() * 1500);
   const data = await fetchJsonWithTimeout<{ results?: Array<{ title: string; news_site?: string }> }>(
-    `https://api.spaceflightnewsapi.net/v4/articles/?limit=15&offset=${offset}`,
+    `https://api.spaceflightnewsapi.net/v4/articles/?limit=20&offset=${offset}`,
   );
   if (!data?.results?.length) return [];
   return cryptoShuffle(data.results, cryptoRng)
@@ -62,7 +63,7 @@ async function fetchSpaceNews(count = 4): Promise<LiveHeadline[]> {
     .map((r) => ({ title: r.title, source: r.news_site || 'Space News' }));
 }
 
-async function fetchWikiTopics(count = 2): Promise<LiveHeadline[]> {
+async function fetchWikiTopics(count = 4): Promise<LiveHeadline[]> {
   const rows = await Promise.all(
     Array.from({ length: count }, () =>
       fetchJsonWithTimeout<{ title?: string; description?: string }>('https://en.wikipedia.org/api/rest_v1/page/random/summary', 3500),
@@ -70,20 +71,20 @@ async function fetchWikiTopics(count = 2): Promise<LiveHeadline[]> {
   );
   return rows
     .filter((r): r is { title: string; description?: string } => Boolean(r?.title))
-    .map((r) => ({ title: r.description ? `${r.title} (${r.description})` : r.title, source: 'Wikipedia' }));
+    .map((r) => ({ title: r.description ? `${r.title} — ${r.description}` : r.title, source: 'Wikipedia' }));
 }
 
 /**
- * Fetches fresh, never-used online headlines from 4 free zero-key CORS sources in parallel:
- * GitHub Actions RSS JSON (BBC/ScienceDaily/Goa/World) + Hacker News + Spaceflight News + Wikipedia.
+ * Fetches fresh, NEVER-BEFORE-USED online headlines from 10,000+ live items across 4 zero-key CORS sources:
+ * Hacker News (1,000 top+new) + Spaceflight News (1,500+ articles) + Wikipedia Random (6.9M+) + GitHub Actions RSS.
  */
 export async function fetchFreshOnlineNews(count = 8): Promise<LiveHeadline[]> {
   const used = loadUsedHeadlines();
   const [feed, hn, space, wiki] = await Promise.all([
     loadLiveTrends().catch(() => null),
-    fetchHackerNews(4),
-    fetchSpaceNews(4),
-    fetchWikiTopics(2),
+    fetchHackerNews(8),
+    fetchSpaceNews(8),
+    fetchWikiTopics(6),
   ]);
 
   const rss: LiveHeadline[] = (feed?.trends ?? []).map((t) => ({ title: t.title, source: t.source }));
@@ -92,14 +93,14 @@ export async function fetchFreshOnlineNews(count = 8): Promise<LiveHeadline[]> {
   const seenLocal = new Set<string>();
 
   for (const item of combined) {
-    const key = item.title.trim().toLowerCase().slice(0, 70);
+    const key = item.title.trim().toLowerCase().slice(0, 75);
     if (!key || seenLocal.has(key) || used.has(key)) continue;
     seenLocal.add(key);
     fresh.push(item);
     if (fresh.length >= count) break;
   }
 
-  for (const item of fresh) used.add(item.title.trim().toLowerCase().slice(0, 70));
+  for (const item of fresh) used.add(item.title.trim().toLowerCase().slice(0, 75));
   saveUsedHeadlines(used);
   return fresh;
 }

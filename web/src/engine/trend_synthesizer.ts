@@ -1,4 +1,6 @@
+import { LIVE_ARCHETYPES } from '../data/live_archetypes';
 import type { TopicOption } from '../types';
+import { cryptoRng, cryptoShuffle } from './randomizer';
 
 /**
  * Multi-template Live Trend Synthesizer:
@@ -90,37 +92,57 @@ export function synthesizeTrendCard(query: string, batchNonce: number): TopicOpt
   };
 }
 
+const USED_ARCH_KEY = 'absurd_studio_used_arch_v1';
+
+function loadUsedArchetypes(): Set<string> {
+  if (typeof localStorage === 'undefined') return new Set();
+  try {
+    const raw = localStorage.getItem(USED_ARCH_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return new Set(Array.isArray(parsed) ? (parsed as string[]) : []);
+  } catch {
+    return new Set();
+  }
+}
+
+function saveUsedArchetypes(used: Set<string>): void {
+  if (typeof localStorage !== 'undefined') localStorage.setItem(USED_ARCH_KEY, JSON.stringify(Array.from(used)));
+}
+
 function cleanSubject(headline: string): string {
-  const words = headline.replace(/\([^)]*\)/g, '').replace(/[^A-Za-z0-9\s'-]/g, ' ').trim().split(/\s+/).filter((w) => w.length > 1);
-  return words.slice(0, 3).join(' ').toUpperCase() || 'GLOBAL NEWS';
+  const words = headline.replace(/\([^)]*\)/g, '').replace(/—.*/g, '').replace(/[^A-Za-z0-9\s'-]/g, ' ').trim().split(/\s+/).filter((w) => w.length > 1);
+  return words.slice(0, 3).join(' ').toUpperCase() || 'WORLD NEWS';
 }
 
 export function synthesizeTopicsFromHeadlines(
   headlines: Array<{ title: string; source: string }>,
   batchNonce: number,
+  externalUsedArch?: Set<string>,
 ): TopicOption[] {
   const stamp = Date.now().toString(36);
-  const templates: Array<{ angle: string; makeTitle: (s: string) => string; makePitch: (s: string, t: string) => string }> = [
-    { angle: 'over-engineer', makeTitle: (s) => `ELON OVER-ENGINEERS ${s}`, makePitch: (s, t) => `Inspired by "${t}", engineers bolt 12 orbital thrusters onto ${s.toLowerCase()} — only for a ₹10 switch to fix it first.` },
-    { angle: 'fake-origin', makeTitle: (s) => `THE SECRET 1998 ORIGIN OF ${s}`, makePitch: (s, t) => `Before "${t}" made headlines, a bored 9-year-old accidentally invented ${s.toLowerCase()} during a school lunch trade.` },
-    { angle: 'breaking-news', makeTitle: (s) => `EMERGENCY PRESS BRIEFING ON ${s}`, makePitch: (s, t) => `After "${t}", twenty officials spend 4 hours debating ${s.toLowerCase()} live on air before voting to call it "Item 4".` },
-    { angle: 'fake-tutorial', makeTitle: (s) => `3-STEP HACK FOR ${s}`, makePitch: (s, t) => `Step 1 read "${t}". Step 2 buy a ₹50 diary. Step 3 quietly google what ${s.toLowerCase()} actually means.` },
-    { angle: 'petty-spiral', makeTitle: (s) => `SUMMIT HALTS OVER ${s}`, makePitch: (s, t) => `World leaders pause a climate treaty over "${t}" — solely because nobody in the room can pronounce ${s.toLowerCase()}.` },
-    { angle: 'weird-science', makeTitle: (s) => `LAB TEST: CAN ${s} BOIL ONE CHAI?`, makePitch: (_s, t) => `Scientists replicate "${t}" inside a concrete lab; after burning ₹40 crore, the rig boils exactly one cup of cutting chai.` },
-  ];
+  const usedArch = externalUsedArch ?? loadUsedArchetypes();
+  let available = cryptoShuffle(LIVE_ARCHETYPES.filter((a) => !usedArch.has(a.id)), cryptoRng);
+  if (available.length < 8) {
+    usedArch.clear();
+    available = cryptoShuffle(LIVE_ARCHETYPES, cryptoRng);
+  }
 
-  return headlines.slice(0, 8).map((h, idx) => {
+  const picked = available.slice(0, Math.min(8, headlines.length));
+  for (const a of picked) usedArch.add(a.id);
+  if (!externalUsedArch) saveUsedArchetypes(usedArch);
+
+  return picked.map((arch, idx) => {
+    const h = headlines[idx];
     const subj = cleanSubject(h.title);
-    const tpl = templates[(batchNonce + idx) % templates.length];
     const synth = synthesizeTrendCard(subj, batchNonce + idx);
     return {
       ...synth,
-      id: `live_${stamp}_${idx}`,
-      title: tpl.makeTitle(subj),
-      angle: tpl.angle,
+      id: `live_${stamp}_${arch.id}_${idx}`,
+      title: arch.makeTitle(subj),
+      angle: arch.angle,
       brand: h.source,
       trendHook: `Live: ${h.source}`,
-      pitch: tpl.makePitch(subj, h.title),
+      pitch: arch.makePitch(subj, h.title),
     };
   });
 }

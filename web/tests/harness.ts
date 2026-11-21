@@ -3,7 +3,7 @@ import { scoreComedyCraft } from '../src/engine/comedy_craft';
 import { renderStoryboardText, renderVideoText } from '../src/engine/prompt_renderer';
 import { ALL_BESPOKE_STORIES, generateFreshDiverseBatch, worldFamily } from '../src/engine/topic_generator';
 import { markTopicGenerated, removeSavedTopic, saveLikedTopic } from '../src/engine/saved_store';
-import { synthesizeTrendCard } from '../src/engine/trend_synthesizer';
+import { synthesizeTopicsFromHeadlines, synthesizeTrendCard } from '../src/engine/trend_synthesizer';
 import type { RatingLogEntry } from '../src/types';
 
 // Top-1% Anti-Pattern, Comedy Craft & F5-Reload Persistence Harness:
@@ -86,7 +86,22 @@ assert.ok(afterGen.generatedIds.has(sample.id));
 savedList = removeSavedTopic(afterGen.saved, sample.id);
 assert.equal(savedList.length, 0);
 
+// Verify 4 consecutive rapid-fire refreshes (32 cards) have ZERO repeated archetypes or titles
+const usedArch = new Set<string>();
+const liveTitles = new Set<string>();
+for (let batchIdx = 1; batchIdx <= 4; batchIdx += 1) {
+  const fakeNews = Array.from({ length: 8 }, (_, k) => ({ title: `Live Story ${batchIdx}-${k} Launch Discovery`, source: 'HN' }));
+  const cards = synthesizeTopicsFromHeadlines(fakeNews, batchIdx, usedArch);
+  assert.equal(cards.length, 8);
+  for (const c of cards) {
+    assert.ok(!liveTitles.has(c.title), `Repeated live title across 4 rapid refreshes: ${c.title}`);
+    liveTitles.add(c.title);
+  }
+}
+assert.equal(liveTitles.size, 32, 'Expected 32/32 unique titles across 4 consecutive rapid refreshes');
+assert.equal(usedArch.size, 32, 'Expected 32/32 unique comedy archetypes across 4 consecutive rapid refreshes');
+
 console.log(
   `HARNESS PASS: ${ALL_BESPOKE_STORIES.length} stories × ${RELOADS} F5 reloads = ${RELOADS * 8} cards ` +
-    `(6/6 formats, 8/8 unique worlds, 0 adjacent same-format, 0/8 repeats, Hook/Situation filters & Saved/Pending/Done verified).`,
+    `(6/6 formats, 8/8 unique worlds, 0/32 repeats across 4 rapid live refreshes, Hook/Situation & Saved verified).`,
 );
