@@ -1,9 +1,10 @@
 import type { HookCategory, RatingLogEntry, ScoredTopic, SituationCategory, StoryboardFrameData, TopicOption, VideoShotData } from '../types';
 import { pickComedyMechanism, scoreComedyCraft, WRITERS_ROOM_RULES } from './comedy_craft';
+import { expandCustomIdeaLocally } from './custom_builder';
 import { fetchFreshOnlineNews } from './live_news';
 import { cryptoRng, pickCinematographyRig } from './randomizer';
 import { classifyHook, classifySituation, getHookLabel, getSituationLabel } from './taxonomy';
-import { synthesizeTopicsFromHeadlines, synthesizeTrendCard } from './trend_synthesizer';
+import { synthesizeTopicsFromHeadlines } from './trend_synthesizer';
 
 const POLLINATIONS_URL = 'https://text.pollinations.ai/openai';
 const PLLNS_TS_KEY = 'absurd_studio_pllns_ts';
@@ -144,6 +145,5 @@ export async function generateFreeLiveScriptSpec(topic: TopicOption): Promise<{ 
   } catch {
     // Fallback cleanly below
   }
-  const synth = synthesizeTrendCard(topic.brand || topic.title.slice(0, 20), Math.floor(cryptoRng() * 100));
-  return { frames: synth.frames ?? [], shots: synth.shots ?? [] };
+  return expandCustomIdeaLocally(topic);
 }
