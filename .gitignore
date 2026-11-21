@@ -10,7 +10,7 @@ dist/
 build/
 *.egg-info/
 .env
-output/
-data/
+/output/
+/data/
 web/node_modules/
 web/dist/
