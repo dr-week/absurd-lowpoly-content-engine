@@ -176,25 +176,25 @@ def lint_episode(
             )
         )
 
-    for beat, shot in zip(VIDEO_BEATS, video.spec.shots, strict=True):
-        if f"[{beat.label}]" not in video.rendered_prompt:
+    for forbidden in ("9:16", "16:9", "20-second", "20 second", "[0:00"):
+        if forbidden in vid_lower:
             issues.append(
                 LintIssue(
                     severity="error",
-                    code="VIDEO_TIMING_MISMATCH",
-                    message=f"Rendered video prompt missing beat window [{beat.label}].",
-                    location=f"video.shots[{beat.shot_number - 1}]",
+                    code="VIDEO_FORBIDDEN_TIME_OR_SIZE",
+                    message=f"Video prompt must not mention video size, duration, or timestamps (found '{forbidden}').",
+                    location="video.rendered_prompt",
                 )
             )
-        # Normalize hyphen vs en-dash when validating the spec's own time_window
-        normalized_window = shot.time_window.replace("-", "–").strip()
-        if normalized_window != beat.label:
+
+    for beat, shot in zip(VIDEO_BEATS, video.spec.shots, strict=True):
+        if f"Shot {beat.shot_number}:" not in video.rendered_prompt:
             issues.append(
                 LintIssue(
-                    severity="warning",
-                    code="VIDEO_SPEC_WINDOW_DRIFT",
-                    message=f"Shot {beat.shot_number} spec has time_window '{shot.time_window}', expected '{beat.label}'.",
-                    location=f"video.shots[{beat.shot_number - 1}].time_window",
+                    severity="error",
+                    code="VIDEO_MISSING_SHOT_LABEL",
+                    message=f"Rendered video prompt missing 'Shot {beat.shot_number}:'.",
+                    location=f"video.shots[{beat.shot_number - 1}]",
                 )
             )
         words = _count_words(shot.hindi_dialogue)
@@ -204,7 +204,7 @@ def lint_episode(
                     severity="warning",
                     code="VIDEO_DIALOGUE_TOO_LONG",
                     message=(
-                        f"Shot {beat.shot_number} ({beat.label}, {beat.duration_sec}s) Hindi line has "
+                        f"Shot {beat.shot_number} Hindi line has "
                         f"{words} words (target <= {beat.max_words} words for tight deadpan pacing)."
                     ),
                     location=f"video.shots[{beat.shot_number - 1}].hindi_dialogue",

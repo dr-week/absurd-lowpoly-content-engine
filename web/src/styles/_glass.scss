@@ -1,0 +1,47 @@
+// Apple Liquid Glass & Contrasting Boxiness Surfaces
+
+.zuari-surface-elevated {
+  background: var(--nova-color-surface);
+  border: 1px solid var(--nova-color-border);
+  border-radius: var(--nova-radius-squircle);
+  box-shadow: var(--zuari-glass-rim-shadow), var(--zuari-elevation-soft);
+}
+
+.zuari-surface-frosted {
+  background: var(--nova-color-surface-floating);
+  border: 1px solid var(--nova-color-border);
+  backdrop-filter: blur(var(--zuari-glass-blur)) saturate(var(--zuari-glass-saturation));
+  -webkit-backdrop-filter: blur(var(--zuari-glass-blur)) saturate(var(--zuari-glass-saturation));
+  box-shadow: var(--zuari-glass-rim-shadow), var(--zuari-elevation-float);
+}
+
+.zuari-surface-liquid {
+  position: relative;
+  background: var(--nova-color-surface-floating);
+  border: 1px solid var(--nova-color-border);
+  border-radius: var(--nova-radius-squircle);
+  backdrop-filter: blur(var(--zuari-glass-blur)) saturate(var(--zuari-glass-saturation));
+  -webkit-backdrop-filter: blur(var(--zuari-glass-blur)) saturate(var(--zuari-glass-saturation));
+  box-shadow: var(--zuari-glass-rim-shadow), var(--zuari-elevation-float);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 1px 12% auto;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--nova-color-specular-highlight),
+      transparent
+    );
+    pointer-events: none;
+  }
+}
+
+.card-subpanel {
+  background: var(--nova-color-subpanel);
+  border: 1px solid var(--nova-color-border);
+  border-radius: var(--nova-radius-md);
+  padding: 14px 16px;
+}

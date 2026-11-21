@@ -1,0 +1,92 @@
+import { computeAnalytics } from '../engine/telemetry';
+import { Glyphs } from '../glyphs';
+import type { ActiveTab, EngineConfig, RatingLogEntry } from '../types';
+import { esc } from './escape';
+
+export function renderAppShell(params: {
+  config: EngineConfig;
+  activeTab: ActiveTab;
+  drawerOpen: boolean;
+  logs: RatingLogEntry[];
+  surfaceHtml: string;
+}): string {
+  const { config, activeTab, drawerOpen, logs, surfaceHtml } = params;
+  const stats = computeAnalytics(logs);
+
+  return `
+    <div class="app-shell">
+      <header class="ambient-header zuari-surface-frosted">
+        <div class="ambient-header__inner">
+          <div class="ambient-header__brand">
+            <div class="brand-mark">${Glyphs.layers(16)}</div>
+            <h1>Absurd Studio</h1>
+          </div>
+          <div class="ambient-header__metrics">
+            <span class="pill"><strong>${stats.totalVotes}</strong></span>
+            <span class="pill pill--positive"><strong>${stats.approvalRate}%</strong></span>
+            <button type="button" class="btn btn--icon" data-action="export-jsonl" title="Download JSONL Logs">
+              ${Glyphs.download(15)}
+            </button>
+            <button type="button" class="btn btn--icon" data-action="toggle-theme" title="Theme">
+              ${config.theme === 'studio' ? Glyphs.moon(15) : Glyphs.sun(15)}
+            </button>
+            <button type="button" class="btn btn--icon" data-action="open-drawer" title="Settings">
+              ${Glyphs.sliders(15)}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main class="surface-main">${surfaceHtml}</main>
+
+      <nav class="dock-plane zuari-surface-liquid" aria-label="Navigation">
+        <button type="button" class="dock-btn ${activeTab === 'studio' ? 'is-active' : ''}" data-action="tab" data-tab="studio" title="Studio">
+          ${Glyphs.sparkle(16)}<span>Studio</span>
+        </button>
+        <button type="button" class="dock-btn ${activeTab === 'analytics' ? 'is-active' : ''}" data-action="tab" data-tab="analytics" title="Viral Evaluator">
+          ${Glyphs.barChart(16)}<span>Viral</span>
+        </button>
+        <button type="button" class="dock-btn ${activeTab === 'logs' ? 'is-active' : ''}" data-action="tab" data-tab="logs" title="Training Logs">
+          ${Glyphs.fileText(16)}<span>Logs</span>
+        </button>
+      </nav>
+
+      <div class="drawer-backdrop ${drawerOpen ? 'is-open' : ''}" id="drawer-backdrop">
+        <aside class="drawer-panel" role="dialog" aria-label="Settings">
+          <div class="section-header">
+            <div class="section-header__title-group">
+              <span class="section-header__step">Config</span>
+              <h2>Settings</h2>
+            </div>
+            <button type="button" class="btn btn--icon" data-action="close-drawer" aria-label="Close">
+              ${Glyphs.close(16)}
+            </button>
+          </div>
+
+          <div class="field-group">
+            <label for="cfg-theme">Theme</label>
+            <select id="cfg-theme">
+              <option value="studio" ${config.theme === 'studio' ? 'selected' : ''}>Studio (Light)</option>
+              <option value="noir" ${config.theme === 'noir' ? 'selected' : ''}>Noir (Dark)</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label for="cfg-source">Engine</label>
+            <select id="cfg-source">
+              <option value="standalone" ${config.sourceMode === 'standalone' ? 'selected' : ''}>Standalone (GitHub Pages)</option>
+              <option value="backend" ${config.sourceMode === 'backend' ? 'selected' : ''}>Local FastAPI</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label for="cfg-backend-url">Backend URL</label>
+            <input id="cfg-backend-url" type="text" value="${esc(config.backendUrl)}" />
+          </div>
+        </aside>
+      </div>
+
+      <div class="toast-plane" id="toast-plane" aria-live="polite"></div>
+    </div>
+  `;
+}

@@ -15,13 +15,13 @@ STORYBOARD_GLOBAL_HEADER = (
 )
 
 VIDEO_GLOBAL_HEADER = (
-    "20-second, 9:16 vertical absurdist comedy video. Apply one unified style throughout: raw "
-    "1998 PlayStation 1 (PS1) / Nintendo 64 (N64) ultra low-poly 3D game graphics—angular "
-    "faceted polygons, blurry pixelated bitmap textures, stiff robotic animations with jerky "
-    "low-FPS movement, crude Gouraud shading, jagged aliased edges, and muddy retro colors. "
-    "Strictly NO 2D cartoon art, NO comic ink outlines, NO cel-shading, NO smooth modern CGI. "
-    "Audio: deadpan, serious Indian male narrator speaking ultra-short Hindi lines matched "
-    "tightly to each shot, paired with retro PS1 SFX and sharp hard cuts."
+    "Absurdist comedy video. Apply one unified style throughout: raw 1998 PlayStation 1 (PS1) / "
+    "Nintendo 64 (N64) ultra low-poly 3D game graphics—angular faceted polygons, blurry pixelated "
+    "bitmap textures, stiff robotic animations with jerky low-FPS movement, crude Gouraud shading, "
+    "jagged aliased edges, and muddy retro colors. Strictly NO 2D cartoon art, NO comic ink "
+    "outlines, NO cel-shading, NO smooth modern CGI. Audio: deadpan, serious Indian male narrator "
+    "speaking ultra-short Hindi lines matched tightly to each shot, paired with retro PS1 SFX "
+    "and sharp hard cuts."
 )
 
 REQUIRED_PS1_TOKENS = (

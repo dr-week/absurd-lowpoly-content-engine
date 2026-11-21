@@ -39,13 +39,16 @@ async def test_full_episode_pipeline_passes_playbook_lint(tmp_path: Path) -> Non
     assert "Frame 6 (Bottom Right): Absurd wide shot into grey distance fog." in sb
     assert "Raw 1998 PS1 low-poly 3D screenshot." not in sb
 
-    # Video prompt follows concise 20s 9:16 Playbook template
+    # Video prompt follows clean Playbook template (NO time, duration, or size mentions)
     vid = bundle.video.rendered_prompt
-    assert "20-second, 9:16 vertical absurdist comedy video" in vid
+    assert "Absurdist comedy video." in vid
     assert "NO cel-shading" in vid
     assert "deadpan, serious Indian male narrator speaking ultra-short Hindi lines" in vid
-    for window in ("0:00–0:03", "0:03–0:07", "0:07–0:10", "0:10–0:14", "0:14–0:17", "0:17–0:20"):
-        assert f"[{window}]" in vid
+    for shot_num in range(1, 7):
+        assert f"Shot {shot_num}:" in vid
+    assert "9:16" not in vid
+    assert "20-second" not in vid
+    assert "[0:00" not in vid
     assert "instant hard cut to black" in vid.lower()
 
     # Playbook lint passes cleanly with 100/100

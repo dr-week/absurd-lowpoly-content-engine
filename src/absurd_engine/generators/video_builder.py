@@ -74,7 +74,7 @@ def _merge_transition_and_action(transition: str, action: str) -> str:
 
 
 def render_video_prompt(spec: VideoScriptSpec) -> str:
-    """Render a VideoScriptSpec into the concise, token-efficient 20s 9:16 Playbook prompt."""
+    """Render a VideoScriptSpec into a clean video prompt with NO time, duration, or size mentions."""
     lines = [VIDEO_GLOBAL_HEADER, ""]
 
     for beat, shot in zip(VIDEO_BEATS, spec.shots, strict=True):
@@ -86,7 +86,7 @@ def render_video_prompt(spec: VideoScriptSpec) -> str:
             sfx = f"{sfx}, instant hard cut to black"
 
         dialogue = shot.hindi_dialogue.strip().strip('"')
-        lines.append(f"[{beat.label}] Shot {beat.shot_number}: {shot_body} SFX: {sfx}.")
+        lines.append(f"Shot {beat.shot_number}: {shot_body} SFX: {sfx}.")
         lines.append(f'Hindi Dialogue: "{dialogue}"')
         lines.append("")
 

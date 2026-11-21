@@ -12,3 +12,5 @@ build/
 .env
 output/
 data/
+web/node_modules/
+web/dist/
