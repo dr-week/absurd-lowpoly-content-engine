@@ -2,11 +2,11 @@ export type VoteValue = 'up' | 'down';
 export type TargetKind = 'topic' | 'storyboard' | 'video';
 export type ActiveTab = 'studio' | 'analytics' | 'logs';
 export type ThemeName = 'studio' | 'noir';
-export type SourceMode = 'standalone' | 'backend';
+export type SourceMode = 'standalone' | 'gemini' | 'groq' | 'openrouter' | 'backend';
 
 export interface BrandSignal {
   brand: string;
-  spendHeat: number; // 1-100 marketing & meme-spend heat
+  spendHeat: number;
   hook: string;
   agencyStyle: string;
 }
@@ -33,8 +33,8 @@ export interface TopicOption {
   brand: string;
   trendHook: string;
   pitch: string;
-  frames: StoryboardFrameData[];
-  shots: VideoShotData[];
+  frames?: StoryboardFrameData[];
+  shots?: VideoShotData[];
 }
 
 export interface ScoredTopic extends TopicOption {
@@ -68,6 +68,8 @@ export interface RatingLogEntry {
 export interface EngineConfig {
   theme: ThemeName;
   sourceMode: SourceMode;
+  apiKey: string;
+  model: string;
   backendUrl: string;
   batchSize: number;
 }

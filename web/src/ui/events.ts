@@ -9,6 +9,7 @@ export interface AppState {
   batchNonce: number;
   seenPairs: Set<string>;
   topics: ScoredTopic[];
+  loadingTopics: boolean;
   selectedId: string | null;
   prompts: GeneratedPrompts | null;
   loading: boolean;
@@ -20,7 +21,7 @@ export function bindAppEvents(
   state: AppState,
   hooks: {
     render: () => void;
-    refreshTopics: () => void;
+    refreshTopics: () => Promise<void>;
     selectTopic: (id: string) => Promise<void>;
     toast: (msg: string) => void;
   },
@@ -35,7 +36,7 @@ export function bindAppEvents(
       if (a === 'toggle-theme') { state.config.theme = state.config.theme === 'studio' ? 'noir' : 'studio'; saveConfig(state.config); hooks.render(); return; }
       if (a === 'open-drawer') { state.drawerOpen = true; hooks.render(); return; }
       if (a === 'close-drawer') { state.drawerOpen = false; hooks.render(); return; }
-      if (a === 'regenerate-topics') { state.batchNonce += 1; hooks.refreshTopics(); hooks.render(); hooks.toast('8 fresh topics'); return; }
+      if (a === 'regenerate-topics') { state.batchNonce += 1; void hooks.refreshTopics(); return; }
       if (a === 'select-topic' && el.dataset.id) { void hooks.selectTopic(el.dataset.id); return; }
       if (a === 'vote-topic' && el.dataset.id && el.dataset.vote) {
         const t = state.topics.find((x) => x.id === el.dataset.id);
@@ -69,25 +70,17 @@ export function bindAppEvents(
     });
   });
 
-  document.getElementById('seed-input')?.addEventListener('input', (ev) => {
+  document.getElementById('seed-input')?.addEventListener('change', (ev) => {
     state.seedQuery = (ev.target as HTMLInputElement).value;
     state.batchNonce += 1;
-    hooks.refreshTopics();
-    hooks.render();
-    const inp = document.getElementById('seed-input') as HTMLInputElement | null;
-    if (inp) { inp.focus(); inp.setSelectionRange(inp.value.length, inp.value.length); }
-  });
-  document.getElementById('batch-size-select')?.addEventListener('change', (ev) => {
-    state.config.batchSize = Number((ev.target as HTMLSelectElement).value) || 8;
-    saveConfig(state.config);
-    state.batchNonce += 1;
-    hooks.refreshTopics();
-    hooks.render();
+    void hooks.refreshTopics();
   });
   document.getElementById('drawer-backdrop')?.addEventListener('click', (ev) => {
     if ((ev.target as HTMLElement).id === 'drawer-backdrop') { state.drawerOpen = false; hooks.render(); }
   });
   document.getElementById('cfg-theme')?.addEventListener('change', (ev) => { state.config.theme = (ev.target as HTMLSelectElement).value as EngineConfig['theme']; saveConfig(state.config); hooks.render(); });
   document.getElementById('cfg-source')?.addEventListener('change', (ev) => { state.config.sourceMode = (ev.target as HTMLSelectElement).value as EngineConfig['sourceMode']; saveConfig(state.config); hooks.render(); });
+  document.getElementById('cfg-api-key')?.addEventListener('change', (ev) => { state.config.apiKey = (ev.target as HTMLInputElement).value.trim(); saveConfig(state.config); hooks.toast('Key saved locally'); });
+  document.getElementById('cfg-model')?.addEventListener('change', (ev) => { state.config.model = (ev.target as HTMLInputElement).value.trim(); saveConfig(state.config); hooks.toast('Model saved'); });
   document.getElementById('cfg-backend-url')?.addEventListener('change', (ev) => { state.config.backendUrl = (ev.target as HTMLInputElement).value.trim() || 'http://localhost:8000'; saveConfig(state.config); hooks.toast('Saved'); });
 }

@@ -55,8 +55,8 @@ for (let r = 1; r <= REFRESHES; r += 1) {
 
   // Validate prompt output constraints on every generated topic
   for (const topic of batch) {
-    const sb = renderStoryboardText(topic);
-    const vid = renderVideoText(topic);
+    const sb = renderStoryboardText(topic.title, topic.frames ?? []);
+    const vid = renderVideoText(topic.shots ?? []);
 
     assert.ok(sb.includes('3x2 grid'), 'Storyboard missing 3x2 grid');
     assert.ok(sb.includes('NO cel-shading'), 'Storyboard missing NO cel-shading');

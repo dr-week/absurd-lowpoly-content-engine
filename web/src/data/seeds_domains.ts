@@ -1,5 +1,6 @@
 import { DOMAIN_SEEDS_A } from './seeds_domains_a';
 import { DOMAIN_SEEDS_B } from './seeds_domains_b';
+import { DOMAIN_SEEDS_C } from './seeds_domains_c';
 
 export interface DomainSeed {
   angle: string;
@@ -14,4 +15,4 @@ export interface DomainSeed {
   payoffHindi: string;
 }
 
-export const DOMAIN_SEEDS: DomainSeed[] = [...DOMAIN_SEEDS_A, ...DOMAIN_SEEDS_B];
+export const DOMAIN_SEEDS: DomainSeed[] = [...DOMAIN_SEEDS_A, ...DOMAIN_SEEDS_B, ...DOMAIN_SEEDS_C];

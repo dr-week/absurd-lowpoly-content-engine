@@ -8,11 +8,14 @@ import type {
 } from '../types';
 
 const LOGS_KEY = 'absurd_studio_logs_v2';
-const CFG_KEY = 'absurd_studio_cfg_v3';
+const CFG_KEY = 'absurd_studio_cfg_v4';
+const SEEN_KEY = 'absurd_studio_seen_v1';
 
 export const DEFAULT_CONFIG: EngineConfig = {
   theme: 'studio',
   sourceMode: 'standalone',
+  apiKey: '',
+  model: 'gemini-2.5-flash',
   backendUrl: 'http://localhost:8000',
   batchSize: 8,
 };
@@ -28,6 +31,20 @@ export function loadConfig(): EngineConfig {
 
 export function saveConfig(cfg: EngineConfig): void {
   localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+}
+
+export function loadSeenPairs(): Set<string> {
+  try {
+    const raw = localStorage.getItem(SEEN_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return new Set(Array.isArray(parsed) ? (parsed as string[]) : []);
+  } catch {
+    return new Set();
+  }
+}
+
+export function saveSeenPairs(seen: Set<string>): void {
+  localStorage.setItem(SEEN_KEY, JSON.stringify(Array.from(seen).slice(-160)));
 }
 
 export function loadLogs(): RatingLogEntry[] {
@@ -76,13 +93,8 @@ export function computeAnalytics(logs: RatingLogEntry[]): TasteAnalytics {
   let downVotes = 0;
 
   for (const e of logs) {
-    if (e.vote === 'up') {
-      upVotes += 1;
-      byKind[e.kind].up += 1;
-    } else {
-      downVotes += 1;
-      byKind[e.kind].down += 1;
-    }
+    if (e.vote === 'up') { upVotes += 1; byKind[e.kind].up += 1; }
+    else { downVotes += 1; byKind[e.kind].down += 1; }
     const cur = angleMap.get(e.angle) ?? { up: 0, down: 0 };
     if (e.vote === 'up') cur.up += 1;
     else cur.down += 1;
@@ -90,23 +102,11 @@ export function computeAnalytics(logs: RatingLogEntry[]): TasteAnalytics {
   }
 
   const byAngle: AngleStat[] = Array.from(angleMap.entries())
-    .map(([angle, c]) => ({
-      angle,
-      up: c.up,
-      down: c.down,
-      rate: c.up + c.down > 0 ? Math.round((c.up / (c.up + c.down)) * 100) : 0,
-    }))
+    .map(([angle, c]) => ({ angle, up: c.up, down: c.down, rate: c.up + c.down > 0 ? Math.round((c.up / (c.up + c.down)) * 100) : 0 }))
     .sort((a, b) => b.rate - a.rate || b.up - a.up);
 
   const totalVotes = upVotes + downVotes;
-  return {
-    totalVotes,
-    upVotes,
-    downVotes,
-    approvalRate: totalVotes > 0 ? Math.round((upVotes / totalVotes) * 100) : 0,
-    byKind,
-    byAngle,
-  };
+  return { totalVotes, upVotes, downVotes, approvalRate: totalVotes > 0 ? Math.round((upVotes / totalVotes) * 100) : 0, byKind, byAngle };
 }
 
 function triggerDownload(filename: string, content: string, mime: string): void {
@@ -127,6 +127,5 @@ export function exportJsonl(logs: RatingLogEntry[]): void {
 
 export function exportJson(logs: RatingLogEntry[]): void {
   const stamp = new Date().toISOString().slice(0, 10);
-  const payload = { exported_at: new Date().toISOString(), analytics: computeAnalytics(logs), logs };
-  triggerDownload(`absurd-analysis-${stamp}.json`, JSON.stringify(payload, null, 2), 'application/json');
+  triggerDownload(`absurd-analysis-${stamp}.json`, JSON.stringify({ exported_at: new Date().toISOString(), analytics: computeAnalytics(logs), logs }, null, 2), 'application/json');
 }
