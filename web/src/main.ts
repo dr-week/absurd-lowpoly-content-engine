@@ -1,5 +1,6 @@
 import './styles/main.scss';
 import { generateLiveTopics } from './engine/live_ai';
+import { loadLiveTrends } from './engine/live_feeds';
 import { generatePromptsForTopic } from './engine/prompt_renderer';
 import { loadConfig, loadLogs, loadSeenPairs, saveSeenPairs } from './engine/telemetry';
 import { evaluateTopics } from './engine/viral_evaluator';
@@ -24,6 +25,7 @@ const state: AppState = {
   batchNonce: Date.now(),
   seenPairs: seen0,
   topics: initialTopics,
+  liveTrends: [],
   loadingTopics: false,
   selectedId: null,
   prompts: null,
@@ -87,7 +89,7 @@ function render(): void {
   document.documentElement.setAttribute('data-theme', state.config.theme);
   const surfaceHtml =
     state.activeTab === 'studio'
-      ? renderStudioView({ topics: state.topics, logs: state.logs, selectedId: state.selectedId, prompts: state.prompts, loadingTopics: state.loadingTopics, loading: state.loading, seedQuery: state.seedQuery, copiedTarget: state.copiedTarget })
+      ? renderStudioView({ topics: state.topics, logs: state.logs, selectedId: state.selectedId, prompts: state.prompts, loadingTopics: state.loadingTopics, loading: state.loading, seedQuery: state.seedQuery, liveTrends: state.liveTrends, copiedTarget: state.copiedTarget })
       : state.activeTab === 'analytics'
         ? renderAnalyticsView(state.logs)
         : renderLogsView(state.logs);
@@ -96,3 +98,9 @@ function render(): void {
 }
 
 render();
+void loadLiveTrends().then((feed) => {
+  if (feed?.keywords?.length) {
+    state.liveTrends = feed.keywords.slice(0, 6);
+    render();
+  }
+});

@@ -9,6 +9,7 @@ export interface AppState {
   batchNonce: number;
   seenPairs: Set<string>;
   topics: ScoredTopic[];
+  liveTrends: string[];
   loadingTopics: boolean;
   selectedId: string | null;
   prompts: GeneratedPrompts | null;
@@ -37,6 +38,7 @@ export function bindAppEvents(
       if (a === 'open-drawer') { state.drawerOpen = true; hooks.render(); return; }
       if (a === 'close-drawer') { state.drawerOpen = false; hooks.render(); return; }
       if (a === 'regenerate-topics') { state.batchNonce += 1; void hooks.refreshTopics(); return; }
+      if (a === 'pick-trend' && el.dataset.trend) { state.seedQuery = el.dataset.trend; state.batchNonce += 1; void hooks.refreshTopics(); return; }
       if (a === 'select-topic' && el.dataset.id) { void hooks.selectTopic(el.dataset.id); return; }
       if (a === 'vote-topic' && el.dataset.id && el.dataset.vote) {
         const t = state.topics.find((x) => x.id === el.dataset.id);

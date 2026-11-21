@@ -100,3 +100,15 @@
     font-size: 13px;
   }
 }
+
+.trend-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  .pill {
+    cursor: pointer;
+    transition: border-color 120ms ease, color 120ms ease;
+    &:hover { border-color: var(--nova-accent); color: var(--nova-color-text); }
+  }
+}

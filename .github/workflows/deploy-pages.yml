@@ -3,6 +3,9 @@ name: Deploy Absurd Studio to GitHub Pages
 on:
   push:
     branches: [main]
+  workflow_run:
+    workflows: ['Sync Live India Trends & News']
+    types: [completed]
   workflow_dispatch:
 
 permissions:

@@ -9,6 +9,8 @@ export interface TwistSeed {
   joltCaption: string;
   joltHindi: string;
   joltSfx: string;
+  reactCaption: string;
+  reactHindi: string;
   chaosAction: string;
   chaosCaption: string;
   chaosHindi: string;

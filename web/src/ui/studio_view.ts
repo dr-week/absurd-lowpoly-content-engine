@@ -43,9 +43,20 @@ export function renderStudioView(params: {
   loadingTopics: boolean;
   loading: boolean;
   seedQuery: string;
+  liveTrends: string[];
   copiedTarget: 'storyboard' | 'video' | null;
 }): string {
-  const { topics, logs, selectedId, prompts, loadingTopics, loading, seedQuery, copiedTarget } = params;
+  const { topics, logs, selectedId, prompts, loadingTopics, loading, seedQuery, liveTrends, copiedTarget } = params;
+
+  const trendChips = liveTrends.length
+    ? `<div class="trend-strip">${liveTrends
+        .slice(0, 6)
+        .map(
+          (kw) =>
+            `<button type="button" class="pill" data-action="pick-trend" data-trend="${esc(kw)}" title="Seed from live trend">${esc(kw)}</button>`,
+        )
+        .join('')}</div>`
+    : '';
 
   const cards = loadingTopics
     ? '<div class="empty-state" style="grid-column:1/-1;">Generating 8 fresh AI topics...</div>'
@@ -108,6 +119,7 @@ export function renderStudioView(params: {
           </button>
         </div>
       </div>
+      ${trendChips}
       <div class="topics-grid">${cards}</div>
     </section>
 

@@ -1,5 +1,5 @@
 import { getBrandHeat } from '../data/brands';
-import { INDIAN_PROPS, pickRandom, SURREAL_MODIFIERS } from '../data/dictionaries';
+import { INDIAN_PROPS, pickRandom } from '../data/dictionaries';
 import { DOMAIN_SEEDS, type DomainSeed } from '../data/seeds_domains';
 import { TWIST_SEEDS, type TwistSeed } from '../data/seeds_twists';
 import type { RatingLogEntry, ScoredTopic } from '../types';
@@ -23,10 +23,10 @@ function buildTopic(
   trendTag?: string,
 ): Omit<ScoredTopic, 'viralScore' | 'brandHeat'> {
   const prop = pickRandom(INDIAN_PROPS, rng);
-  const mod = pickRandom(SURREAL_MODIFIERS, rng);
+  const actor = /\bholding\b/i.test(domain.protagonist) ? domain.protagonist : `${domain.protagonist} with a ${prop}`;
   const id = `${domain.angle}_${twist.key}_${batchNonce}`;
   const title = `${domain.brand.toUpperCase()}: ${twist.titleTag}`;
-  const pitch = `${domain.protagonist} holding a ${prop} ${domain.trigger}; ${twist.pitchVerb} ${mod}, then ${domain.payoffSpeaker} deadpans "${domain.payoffLine}"`;
+  const pitch = `${actor} ${domain.trigger}; ${twist.pitchVerb}, then ${domain.payoffSpeaker} deadpans "${domain.payoffLine}"`;
 
   return {
     id,
@@ -36,17 +36,17 @@ function buildTopic(
     trendHook: trendTag || `${domain.brand} × ${twist.key}`,
     pitch,
     frames: [
-      { frame: 1, position: 'Top Left', framing: 'Wide static shot', action: `In a ${domain.setting}, ${domain.protagonist} holding a ${prop} ${domain.trigger}.`, caption: domain.triggerCaption },
-      { frame: 2, position: 'Top Center', framing: 'Medium angle', action: `Suddenly, ${twist.joltAction} ${mod}.`, caption: twist.joltCaption },
-      { frame: 3, position: 'Top Right', framing: 'Close-up detail', action: `Stark reaction as ${domain.protagonist} stares blankly while clutching the ${prop}.`, caption: 'Ye kya ho gaya?' },
+      { frame: 1, position: 'Top Left', framing: 'Wide static shot', action: `In a ${domain.setting}, ${actor} ${domain.trigger}.`, caption: domain.triggerCaption },
+      { frame: 2, position: 'Top Center', framing: 'Medium angle', action: `Suddenly, ${twist.joltAction}.`, caption: twist.joltCaption },
+      { frame: 3, position: 'Top Right', framing: 'Close-up detail', action: `Stark reaction as ${domain.protagonist} stares blankly at the bizarre shift.`, caption: twist.reactCaption },
       { frame: 4, position: 'Bottom Left', framing: 'Low-angle wide shot', action: `Across the ${domain.setting}, ${twist.chaosAction}.`, caption: twist.chaosCaption },
       { frame: 5, position: 'Bottom Center', framing: 'Deadpan medium shot', action: `In total silence, ${twist.calmAction}.`, caption: twist.calmCaption },
       { frame: 6, position: 'Bottom Right', framing: 'Absurd close-up', action: `The ${domain.payoffSpeaker} leans in stiffly with zero emotion.`, caption: domain.payoffLine },
     ],
     shots: [
-      { shot: 1, visual: `Static shot in ${domain.setting} as ${domain.protagonist} with a ${prop} ${domain.trigger}.`, sfx: 'Subtle ambient Indian street hum', hindi: domain.triggerHindi },
-      { shot: 2, visual: `Hard cut as ${twist.joltAction} ${mod}.`, sfx: twist.joltSfx, hindi: twist.joltHindi },
-      { shot: 3, visual: `Close-up on ${domain.protagonist} blinking once with zero expression.`, sfx: 'Awkward silent room tone', hindi: 'सब एक सेकंड के लिए रुक गए।' },
+      { shot: 1, visual: `Static shot in ${domain.setting} as ${actor} ${domain.trigger}.`, sfx: 'Subtle ambient room tone', hindi: domain.triggerHindi },
+      { shot: 2, visual: `Hard cut as ${twist.joltAction}.`, sfx: twist.joltSfx, hindi: twist.joltHindi },
+      { shot: 3, visual: `Close-up on ${domain.protagonist} blinking once with zero expression.`, sfx: 'Awkward silent pause', hindi: twist.reactHindi },
       { shot: 4, visual: `Hard cut to wide shot where ${twist.chaosAction}.`, sfx: twist.chaosSfx, hindi: twist.chaosHindi },
       { shot: 5, visual: `Hard cut to medium shot as ${twist.calmAction}.`, sfx: 'Quiet hollow wind loop', hindi: twist.calmHindi },
       { shot: 6, visual: `Sudden snap-zoom to ${domain.payoffSpeaker} delivering a flat stare.`, sfx: 'Compressed bass hit, instant hard cut to black', hindi: domain.payoffHindi },
