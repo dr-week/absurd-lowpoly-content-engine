@@ -4,6 +4,7 @@ import { generateLiveTopics } from './engine/live_ai';
 import { loadLiveTrends, pickTrendChips } from './engine/live_feeds';
 import { generatePromptsForTopic } from './engine/prompt_renderer';
 import { loadGeneratedIds, loadSaved, markTopicGenerated } from './engine/saved_store';
+import { computeTasteDna } from './engine/taste_dna';
 import { loadConfig, loadLogs, loadSeenPairs, loadSeenTitles, saveSeenPairs, saveSeenTitles } from './engine/telemetry';
 import { evaluateTopics } from './engine/viral_evaluator';
 import { Glyphs } from './glyphs';
@@ -30,11 +31,14 @@ const state: AppState = {
   situationFilter: 'all',
   batchNonce: Date.now(),
   seenPairs: seen0,
+  seenTitles,
   topics: initialTopics,
   liveTrends: [],
   loadingTopics: cfg0.sourceMode === 'live-free',
   selectedId: null,
   prompts: null,
+  rigStep: 0,
+  punchStep: 0,
   loading: false,
   logs: logs0,
   saved: loadSaved(),
@@ -44,8 +48,8 @@ const state: AppState = {
 };
 
 function rememberTitles(topics: { title: string }[]): void {
-  for (const t of topics) seenTitles.add(t.title.trim().toLowerCase());
-  saveSeenTitles(seenTitles);
+  for (const t of topics) state.seenTitles.add(t.title.trim().toLowerCase());
+  saveSeenTitles(state.seenTitles);
 }
 
 function toast(msg: string): void {
@@ -69,10 +73,11 @@ async function refreshTopics(): Promise<void> {
     state.loadingTopics = true;
     render();
     try {
+      const tasteSummary = computeTasteDna(state.logs, state.saved).promptSummary;
       if (mode === 'live-free') {
-        state.topics = await generateFreshLiveNewsTopics({ query: state.seedQuery, logs: state.logs, seenTitles, batchNonce: state.batchNonce, hookFilter: state.hookFilter, situationFilter: state.situationFilter });
+        state.topics = await generateFreshLiveNewsTopics({ query: state.seedQuery, logs: state.logs, seenTitles: state.seenTitles, batchNonce: state.batchNonce, hookFilter: state.hookFilter, situationFilter: state.situationFilter, tasteSummary });
       } else {
-        const avoid = [...Array.from(seenTitles).slice(-30), ...state.topics.map((t) => t.title)];
+        const avoid = [...Array.from(state.seenTitles).slice(-30), ...state.topics.map((t) => t.title)];
         state.topics = await generateLiveTopics(state.config, state.seedQuery, state.logs, avoid, state.liveTrends, state.hookFilter, state.situationFilter);
       }
       rememberTitles(state.topics);

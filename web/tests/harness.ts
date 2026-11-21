@@ -1,8 +1,12 @@
 import assert from 'node:assert/strict';
+import { restoreStudioBackup } from '../src/engine/backup_sync';
 import { scoreComedyCraft } from '../src/engine/comedy_craft';
+import { scoreHeadlineComedyPotential } from '../src/engine/headline_filter';
 import { renderStoryboardText, renderVideoText } from '../src/engine/prompt_renderer';
-import { ALL_BESPOKE_STORIES, generateFreshDiverseBatch, worldFamily } from '../src/engine/topic_generator';
+import { cycleAlternatePunchline, rerollCameraRig } from '../src/engine/prompt_tools';
 import { markTopicGenerated, removeSavedTopic, saveLikedTopic } from '../src/engine/saved_store';
+import { computeTasteDna } from '../src/engine/taste_dna';
+import { ALL_BESPOKE_STORIES, generateFreshDiverseBatch, worldFamily } from '../src/engine/topic_generator';
 import { synthesizeTopicsFromHeadlines, synthesizeTrendCard } from '../src/engine/trend_synthesizer';
 import type { RatingLogEntry } from '../src/types';
 
@@ -101,7 +105,28 @@ for (let batchIdx = 1; batchIdx <= 4; batchIdx += 1) {
 assert.equal(liveTitles.size, 32, 'Expected 32/32 unique titles across 4 consecutive rapid refreshes');
 assert.equal(usedArch.size, 32, 'Expected 32/32 unique comedy archetypes across 4 consecutive rapid refreshes');
 
+// Verify Phase 1 (Headline Filter), Phase 3 (Taste DNA), Phase 4 (Camera/Punchline), Phase 5 (Backup)
+assert.ok(scoreHeadlineComedyPotential('KVM x86 kernel patch CVE-2026-1234') < 0, 'Dry kernel CVE must be filtered');
+assert.ok(scoreHeadlineComedyPotential('Elon Musk builds Mars rocket for $40 million coffee cup') >= 70);
+const dna = computeTasteDna(biasedLogs, [{ topic: sample, savedAt: new Date().toISOString(), generated: true }]);
+assert.ok(dna.topHooks.length >= 1 && dna.promptSummary.includes('Favorite Hooks:'));
+const mockPrompts = {
+  topicId: sample.id,
+  topicTitle: sample.title,
+  angle: sample.angle,
+  brand: sample.brand,
+  storyboardPrompt: renderStoryboardText(sample.title, sample.frames ?? []),
+  videoPrompt: renderVideoText(sample.shots ?? []),
+  generatedAt: new Date().toISOString(),
+};
+const rerolled = rerollCameraRig(mockPrompts, 2);
+assert.ok(rerolled.prompts.storyboardPrompt.includes('broadcast') && rerolled.prompts.videoPrompt.includes('broadcast'));
+const punched = cycleAlternatePunchline(mockPrompts, 1);
+assert.ok(punched.prompts.videoPrompt.includes('कमेटी अगली मीटिंग अगले साल रखेगी।'));
+const restored = restoreStudioBackup(JSON.stringify({ version: 1, saved: [], generatedIds: ['x1'], logs: [], seenTitles: ['t1'], seenPairs: [] }));
+assert.ok(restored.generatedIds.has('x1') && restored.seenTitles.has('t1'));
+
 console.log(
   `HARNESS PASS: ${ALL_BESPOKE_STORIES.length} stories × ${RELOADS} F5 reloads = ${RELOADS * 8} cards ` +
-    `(6/6 formats, 8/8 unique worlds, 0/32 repeats across 4 rapid live refreshes, Hook/Situation & Saved verified).`,
+    `(0/32 rapid live repeats, Headline Filter, Taste DNA, Camera/Punchline tools & Backup verified).`,
 );

@@ -73,8 +73,9 @@ export async function generateFreshLiveNewsTopics(params: {
   batchNonce: number;
   hookFilter: HookCategory | 'all';
   situationFilter: SituationCategory | 'all';
+  tasteSummary?: string;
 }): Promise<ScoredTopic[]> {
-  const { query, logs, seenTitles, batchNonce, hookFilter, situationFilter } = params;
+  const { query, logs, seenTitles, batchNonce, hookFilter, situationFilter, tasteSummary = '' } = params;
   const headlines = await fetchFreshOnlineNews(8);
   const liked = logs.filter((l) => l.vote === 'up').slice(0, 5).map((l) => l.title);
   const avoid = Array.from(seenTitles).slice(-40);
@@ -93,6 +94,7 @@ export async function generateFreshLiveNewsTopics(params: {
     `FRESH LIVE ONLINE NEWS RIGHT NOW (twist at least 5 of these into brand-new absurd comedy stories):\n${newsBlock || 'Invent 8 totally fresh world/science/Goa/iconic-figure stories.'}`,
     hookFilter !== 'all' ? `Focus HOOK CATEGORY on: ${getHookLabel(hookFilter)}.` : '',
     situationFilter !== 'all' ? `Focus SITUATION CATEGORY on: ${getSituationLabel(situationFilter)}.` : '',
+    tasteSummary ? `USER TASTE DNA: ${tasteSummary}` : '',
     query.trim() ? `At least 2 topics MUST riff on: ${query.trim()}.` : '',
     liked.length ? `User liked: ${liked.join('; ')}` : '',
     avoid.length ? `NEVER repeat or closely resemble ANY of these past titles:\n${avoid.join(' | ')}` : '',

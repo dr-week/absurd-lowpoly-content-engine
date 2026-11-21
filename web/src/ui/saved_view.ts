@@ -62,6 +62,7 @@ export function renderSavedView(params: {
           <button type="button" class="pill ${filter === 'all' ? 'pill--accent' : ''}" data-action="saved-filter" data-filter="all">All ${saved.length}</button>
           <button type="button" class="pill ${filter === 'pending' ? 'pill--accent' : ''}" data-action="saved-filter" data-filter="pending">Pending ${pendingCount}</button>
           <button type="button" class="pill ${filter === 'done' ? 'pill--positive' : ''}" data-action="saved-filter" data-filter="done">Done ${doneCount}</button>
+          ${saved.length ? `<button type="button" class="btn btn--icon" data-action="export-saved-md" title="Export Saved Pack (.md)">${Glyphs.download(14)}</button>` : ''}
         </div>
       </div>
       <div class="topics-grid">${cards}</div>

@@ -1,3 +1,4 @@
+import { scoreHeadlineComedyPotential } from './headline_filter';
 import { loadLiveTrends } from './live_feeds';
 import { cryptoRng, cryptoShuffle } from './randomizer';
 
@@ -88,11 +89,15 @@ export async function fetchFreshOnlineNews(count = 8): Promise<LiveHeadline[]> {
   ]);
 
   const rss: LiveHeadline[] = (feed?.trends ?? []).map((t) => ({ title: t.title, source: t.source }));
-  const combined = cryptoShuffle([...hn, ...space, ...wiki, ...rss], cryptoRng);
+  const scored = cryptoShuffle([...hn, ...space, ...wiki, ...rss], cryptoRng)
+    .map((item) => ({ item, score: scoreHeadlineComedyPotential(item.title) }))
+    .filter((x) => x.score >= 0)
+    .sort((a, b) => b.score - a.score);
+
   const fresh: LiveHeadline[] = [];
   const seenLocal = new Set<string>();
 
-  for (const item of combined) {
+  for (const { item } of scored) {
     const key = item.title.trim().toLowerCase().slice(0, 75);
     if (!key || seenLocal.has(key) || used.has(key)) continue;
     seenLocal.add(key);

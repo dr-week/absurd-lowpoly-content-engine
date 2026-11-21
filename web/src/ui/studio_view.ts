@@ -120,6 +120,14 @@ export function renderStudioView(params: {
           <span class="section-header__step">02</span>
           <h2>Prompts</h2>
         </div>
+        ${
+          prompts
+            ? `<div class="section-header__actions">
+                <button type="button" class="btn" data-action="reroll-rig" title="Swap 1998 Camera & Lighting Rig">${Glyphs.refresh(14)}<span>Camera</span></button>
+                <button type="button" class="btn" data-action="reroll-punchline" title="Try Alternate Shot 6 Punchline">${Glyphs.sparkle(14)}<span>Punchline</span></button>
+              </div>`
+            : ''
+        }
       </div>
       ${promptBody}
     </section>

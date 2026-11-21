@@ -1,3 +1,5 @@
+import { exportStudioBackup, restoreStudioBackup } from '../engine/backup_sync';
+import { cycleAlternatePunchline, exportSavedMarkdown, rerollCameraRig } from '../engine/prompt_tools';
 import { removeSavedTopic, saveLikedTopic } from '../engine/saved_store';
 import { exportJson, exportJsonl, saveConfig, saveLogs, upsertVote } from '../engine/telemetry';
 import type { ActiveTab, EngineConfig, GeneratedPrompts, HookCategory, RatingLogEntry, SavedFilter, SavedItem, ScoredTopic, SituationCategory, VoteValue } from '../types';
@@ -11,11 +13,14 @@ export interface AppState {
   situationFilter: SituationCategory | 'all';
   batchNonce: number;
   seenPairs: Set<string>;
+  seenTitles: Set<string>;
   topics: ScoredTopic[];
   liveTrends: string[];
   loadingTopics: boolean;
   selectedId: string | null;
   prompts: GeneratedPrompts | null;
+  rigStep: number;
+  punchStep: number;
   loading: boolean;
   logs: RatingLogEntry[];
   saved: SavedItem[];
@@ -87,30 +92,35 @@ export function bindAppEvents(
         });
         return;
       }
+      if (a === 'reroll-rig' && state.prompts) {
+        const out = rerollCameraRig(state.prompts, (state.rigStep += 1));
+        state.prompts = out.prompts; hooks.render(); hooks.toast(`Camera: ${out.rigLabel}`); return;
+      }
+      if (a === 'reroll-punchline' && state.prompts) {
+        const out = cycleAlternatePunchline(state.prompts, (state.punchStep += 1));
+        state.prompts = out.prompts; hooks.render(); hooks.toast(`Punchline: ${out.style}`); return;
+      }
+      if (a === 'export-saved-md') { exportSavedMarkdown(state.saved); hooks.toast('Exported Saved .md'); return; }
+      if (a === 'export-backup') { exportStudioBackup(state); hooks.toast('Backup downloaded'); return; }
       if (a === 'export-jsonl') { exportJsonl(state.logs); hooks.toast('Exported JSONL'); return; }
       if (a === 'export-json') { exportJson(state.logs); hooks.toast('Exported JSON'); return; }
       if (a === 'clear-logs') { state.logs = []; saveLogs([]); hooks.render(); hooks.toast('Cleared'); }
     });
   });
 
-  document.getElementById('seed-input')?.addEventListener('change', (ev) => {
-    state.seedQuery = (ev.target as HTMLInputElement).value;
-    state.batchNonce += 1;
-    void hooks.refreshTopics();
+  document.getElementById('restore-backup-input')?.addEventListener('change', (ev) => {
+    const file = (ev.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    void file.text().then((txt) => {
+      Object.assign(state, restoreStudioBackup(txt), { drawerOpen: false });
+      hooks.render(); hooks.toast('Studio restored');
+    }).catch(() => hooks.toast('Invalid backup JSON'));
   });
-  document.getElementById('filter-hook')?.addEventListener('change', (ev) => {
-    state.hookFilter = (ev.target as HTMLSelectElement).value as HookCategory | 'all';
-    state.batchNonce += 1;
-    void hooks.refreshTopics();
-  });
-  document.getElementById('filter-situation')?.addEventListener('change', (ev) => {
-    state.situationFilter = (ev.target as HTMLSelectElement).value as SituationCategory | 'all';
-    state.batchNonce += 1;
-    void hooks.refreshTopics();
-  });
-  document.getElementById('drawer-backdrop')?.addEventListener('click', (ev) => {
-    if ((ev.target as HTMLElement).id === 'drawer-backdrop') { state.drawerOpen = false; hooks.render(); }
-  });
+
+  document.getElementById('seed-input')?.addEventListener('change', (ev) => { state.seedQuery = (ev.target as HTMLInputElement).value; state.batchNonce += 1; void hooks.refreshTopics(); });
+  document.getElementById('filter-hook')?.addEventListener('change', (ev) => { state.hookFilter = (ev.target as HTMLSelectElement).value as HookCategory | 'all'; state.batchNonce += 1; void hooks.refreshTopics(); });
+  document.getElementById('filter-situation')?.addEventListener('change', (ev) => { state.situationFilter = (ev.target as HTMLSelectElement).value as SituationCategory | 'all'; state.batchNonce += 1; void hooks.refreshTopics(); });
+  document.getElementById('drawer-backdrop')?.addEventListener('click', (ev) => { if ((ev.target as HTMLElement).id === 'drawer-backdrop') { state.drawerOpen = false; hooks.render(); } });
   document.getElementById('cfg-theme')?.addEventListener('change', (ev) => { state.config.theme = (ev.target as HTMLSelectElement).value as EngineConfig['theme']; saveConfig(state.config); hooks.render(); });
   document.getElementById('cfg-source')?.addEventListener('change', (ev) => { state.config.sourceMode = (ev.target as HTMLSelectElement).value as EngineConfig['sourceMode']; saveConfig(state.config); hooks.render(); });
   document.getElementById('cfg-api-key')?.addEventListener('input', (ev) => { state.config.apiKey = (ev.target as HTMLInputElement).value.trim(); saveConfig(state.config); });

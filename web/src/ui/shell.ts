@@ -91,6 +91,15 @@ export function renderAppShell(params: {
                 </div>`
               : ''
           }
+
+          <div class="field-group">
+            <label>Cross-Device Sync (Saved, Done & History)</label>
+            <div class="vote-group">
+              <button type="button" class="btn" data-action="export-backup">${Glyphs.download(14)}<span>Backup JSON</span></button>
+              <label class="btn" for="restore-backup-input" style="cursor:pointer;"><span>Restore</span></label>
+              <input id="restore-backup-input" type="file" accept=".json,application/json" hidden />
+            </div>
+          </div>
         </aside>
       </div>
 
