@@ -1,4 +1,3 @@
-import { ALL_TOPICS } from '../data';
 import { exportJson, exportJsonl, saveConfig, saveLogs, upsertVote } from '../engine/telemetry';
 import type { ActiveTab, EngineConfig, GeneratedPrompts, RatingLogEntry, ScoredTopic, VoteValue } from '../types';
 
@@ -7,7 +6,8 @@ export interface AppState {
   activeTab: ActiveTab;
   drawerOpen: boolean;
   seedQuery: string;
-  offset: number;
+  batchNonce: number;
+  seenPairs: Set<string>;
   topics: ScoredTopic[];
   selectedId: string | null;
   prompts: GeneratedPrompts | null;
@@ -35,13 +35,12 @@ export function bindAppEvents(
       if (a === 'toggle-theme') { state.config.theme = state.config.theme === 'studio' ? 'noir' : 'studio'; saveConfig(state.config); hooks.render(); return; }
       if (a === 'open-drawer') { state.drawerOpen = true; hooks.render(); return; }
       if (a === 'close-drawer') { state.drawerOpen = false; hooks.render(); return; }
-      if (a === 'regenerate-topics') { state.offset = (state.offset + 3) % ALL_TOPICS.length; hooks.refreshTopics(); hooks.render(); hooks.toast('Refreshed'); return; }
+      if (a === 'regenerate-topics') { state.batchNonce += 1; hooks.refreshTopics(); hooks.render(); hooks.toast('8 fresh topics'); return; }
       if (a === 'select-topic' && el.dataset.id) { void hooks.selectTopic(el.dataset.id); return; }
       if (a === 'vote-topic' && el.dataset.id && el.dataset.vote) {
         const t = state.topics.find((x) => x.id === el.dataset.id);
         if (!t) return;
         state.logs = upsertVote(state.logs, { kind: 'topic', targetId: t.id, title: t.title, angle: t.angle, brand: t.brand, viralScore: t.viralScore, vote: el.dataset.vote as VoteValue, contentSnapshot: t.pitch });
-        hooks.refreshTopics();
         hooks.render();
         hooks.toast(el.dataset.vote === 'up' ? 'Liked' : 'Disliked');
         return;
@@ -66,20 +65,22 @@ export function bindAppEvents(
       }
       if (a === 'export-jsonl') { exportJsonl(state.logs); hooks.toast('Exported JSONL'); return; }
       if (a === 'export-json') { exportJson(state.logs); hooks.toast('Exported JSON'); return; }
-      if (a === 'clear-logs') { state.logs = []; saveLogs([]); hooks.refreshTopics(); hooks.render(); hooks.toast('Cleared'); }
+      if (a === 'clear-logs') { state.logs = []; saveLogs([]); hooks.render(); hooks.toast('Cleared'); }
     });
   });
 
   document.getElementById('seed-input')?.addEventListener('input', (ev) => {
     state.seedQuery = (ev.target as HTMLInputElement).value;
+    state.batchNonce += 1;
     hooks.refreshTopics();
     hooks.render();
     const inp = document.getElementById('seed-input') as HTMLInputElement | null;
     if (inp) { inp.focus(); inp.setSelectionRange(inp.value.length, inp.value.length); }
   });
   document.getElementById('batch-size-select')?.addEventListener('change', (ev) => {
-    state.config.batchSize = Number((ev.target as HTMLSelectElement).value) || 6;
+    state.config.batchSize = Number((ev.target as HTMLSelectElement).value) || 8;
     saveConfig(state.config);
+    state.batchNonce += 1;
     hooks.refreshTopics();
     hooks.render();
   });

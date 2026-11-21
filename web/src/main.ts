@@ -1,5 +1,4 @@
 import './styles/main.scss';
-import { ALL_TOPICS } from './data';
 import { generatePromptsForTopic } from './engine/prompt_renderer';
 import { loadConfig, loadLogs } from './engine/telemetry';
 import { evaluateTopics } from './engine/viral_evaluator';
@@ -12,14 +11,16 @@ import { renderStudioView } from './ui/studio_view';
 
 const cfg0 = loadConfig();
 const logs0 = loadLogs();
+const seen0 = new Set<string>();
 
 const state: AppState = {
   config: cfg0,
   activeTab: 'studio',
   drawerOpen: false,
   seedQuery: '',
-  offset: 0,
-  topics: evaluateTopics(ALL_TOPICS, logs0, cfg0.batchSize, '', 0),
+  batchNonce: 1,
+  seenPairs: seen0,
+  topics: evaluateTopics({ count: cfg0.batchSize, query: '', logs: logs0, seenPairs: seen0, batchNonce: 1 }),
   selectedId: null,
   prompts: null,
   loading: false,
@@ -38,7 +39,13 @@ function toast(msg: string): void {
 }
 
 function refreshTopics(): void {
-  state.topics = evaluateTopics(ALL_TOPICS, state.logs, state.config.batchSize, state.seedQuery, state.offset);
+  state.topics = evaluateTopics({
+    count: state.config.batchSize,
+    query: state.seedQuery,
+    logs: state.logs,
+    seenPairs: state.seenPairs,
+    batchNonce: state.batchNonce,
+  });
 }
 
 async function selectTopic(id: string): Promise<void> {

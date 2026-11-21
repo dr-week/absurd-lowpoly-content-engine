@@ -32,6 +32,10 @@ jobs:
         working-directory: web
         run: npm install
 
+      - name: Run diversity & quality harness
+        working-directory: web
+        run: npm run test:harness
+
       - name: Build static web studio
         working-directory: web
         run: npm run build
