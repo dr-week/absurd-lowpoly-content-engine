@@ -3,6 +3,7 @@ import { pullUnseenDailyEpisodes } from './engine/daily_pool';
 import { generateFreshLiveNewsTopics } from './engine/free_ai';
 import { generateLiveTopics } from './engine/live_ai';
 import { loadLiveTrends, pickTrendChips } from './engine/live_feeds';
+import { buildCrossoverEpisode } from './engine/mashup_engine';
 import { generatePromptsForTopic } from './engine/prompt_renderer';
 import { loadGeneratedIds, loadSaved, markTopicGenerated } from './engine/saved_store';
 import { buildPart2Topic } from './engine/sequel_engine';
@@ -112,6 +113,14 @@ async function createSequel(topic: ScoredTopic): Promise<void> {
   toast(sequel.title);
 }
 
+async function createMashup(): Promise<void> {
+  const mash = buildCrossoverEpisode(state.saved.map((s) => s.topic));
+  if (!mash) return;
+  rememberTitles([mash]);
+  await generateFor(mash, true);
+  toast(mash.title);
+}
+
 function render(): void {
   const root = document.getElementById('app');
   if (!root) return;
@@ -125,7 +134,7 @@ function render(): void {
           ? renderAnalyticsView(state.logs, state.saved)
           : renderLogsView(state.logs);
   root.innerHTML = renderAppShell({ config: state.config, activeTab: state.activeTab, drawerOpen: state.drawerOpen, logs: state.logs, savedCount: state.saved.length, surfaceHtml });
-  bindAppEvents(state, { render, refreshTopics, selectTopic, createSequel, toast });
+  bindAppEvents(state, { render, refreshTopics, selectTopic, createSequel, createMashup, toast });
 }
 
 window.addEventListener('keydown', (ev) => {

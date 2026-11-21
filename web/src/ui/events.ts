@@ -38,6 +38,7 @@ export function bindAppEvents(
     refreshTopics: () => Promise<void>;
     selectTopic: (id: string, fromSaved?: boolean) => Promise<void>;
     createSequel: (topic: ScoredTopic) => Promise<void>;
+    createMashup: () => Promise<void>;
     toast: (msg: string) => void;
   },
 ): void {
@@ -62,6 +63,7 @@ export function bindAppEvents(
         hooks.render(); hooks.toast(`Marked ${el.dataset.outcome}`); return;
       }
       if (a === 'make-sequel' && state.activeTopic) { void hooks.createSequel(state.activeTopic); return; }
+      if (a === 'make-mashup') { void hooks.createMashup(); return; }
       if (a === 'sequel-saved' && el.dataset.id) {
         const found = state.saved.find((s) => s.topic.id === el.dataset.id)?.topic;
         if (found) void hooks.createSequel(found);
