@@ -68,6 +68,7 @@ for (let r = 1; r <= RELOADS; r += 1) {
   for (const topic of batch) {
     const sb = renderStoryboardText(topic.title, topic.frames ?? []);
     const vid = renderVideoText(topic.shots ?? []);
+    assert.ok(!/delhi|mumbai|bombay/i.test(`${topic.title} ${topic.pitch}`), `City lock-in leaked: ${topic.title}`);
     assert.ok(sb.includes('3x2 grid') && sb.includes('NO cel-shading'));
     assert.ok(!vid.includes('9:16') && !vid.includes('20-second') && !vid.includes('[0:00'));
     assert.ok(vid.includes('Shot 1:') && vid.includes('Shot 6:'));

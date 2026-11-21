@@ -61,9 +61,10 @@ export async function generateLiveTopics(
   const disliked = logs.filter((l) => l.vote === 'down').slice(0, 6).map((l) => l.title);
 
   const system =
-    'You invent 8 wildly creative, completely UNRELATED Indian absurdist comedy topics for 1998 PS1/N64 low-poly 3D videos. ' +
-    'Every single one of the 8 topics MUST use a DIFFERENT everyday Indian setting/brand and a DIFFERENT absurd twist. ' +
-    'Return ONLY JSON: {"topics":[{"title":"UPPERCASE HINGLISH TITLE","angle":"short-tag","brand":"Brand or Setting","pitch":"1-sentence hook + surreal twist + deadpan payoff","viralScore":88}]}';
+    'You invent 8 wildly creative, completely UNRELATED absurdist comedy topics for 1998 PS1/N64 low-poly 3D videos with a deadpan Hindi narrator. ' +
+    'Mix across ALL of these categories (1 per category): World News, Political Satire, Weird Scientific Research/Studies, Space/Tech/AI, Goa/Coastal Life, Economy/Startups, Viral Internet Culture, and Universal Everyday Life. ' +
+    'DO NOT make topics specific to Delhi or Mumbai. Keep every topic distinct and unpredictable. ' +
+    'Return ONLY JSON: {"topics":[{"title":"UPPERCASE PUNCHY TITLE","angle":"short-tag","brand":"Topic/World Tag","pitch":"1-sentence hook + surreal twist + deadpan payoff","viralScore":88}]}';
 
   const user = [
     `Generate 8 completely fresh, unrelated Indian absurd comedy topics. Seed nonce: ${Date.now()}-${Math.random().toString(36).slice(2, 7)}.`,

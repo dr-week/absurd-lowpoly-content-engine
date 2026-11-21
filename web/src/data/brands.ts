@@ -1,63 +1,27 @@
 import type { BrandSignal } from '../types';
 
-// Live India Brand-in-News & Social Marketing Spend Signals (Nov 2026)
+// Global + Goa + Science + Politics + Modern Culture Viral Heat Signals
 export const BRAND_SIGNALS: Record<string, BrandSignal> = {
-  Zepto: {
-    brand: 'Zepto',
-    spendHeat: 96,
-    hook: '10-min Q-comm meme wars',
-    agencyStyle: 'High-velocity Reels + quirky OOH',
-  },
-  Blinkit: {
-    brand: 'Blinkit',
-    spendHeat: 94,
-    hook: 'Zomato-Blinkit festive & heatwave banter',
-    agencyStyle: 'Moment marketing + creator collabs',
-  },
-  Zomato: {
-    brand: 'Zomato',
-    spendHeat: 95,
-    hook: 'Playful OOH + viral push notifications',
-    agencyStyle: 'Sarcastic brevity + city meme pages',
-  },
-  Airbnb: {
-    brand: 'Airbnb',
-    spendHeat: 92,
-    hook: 'K3G Raichand Mansion campaign (Nov 2026)',
-    agencyStyle: 'Nostalgia Bollywood creator stunt',
-  },
-  Paytm: {
-    brand: 'Paytm',
-    spendHeat: 88,
-    hook: 'Soundbox ubiquity across Tier 1-3 streets',
-    agencyStyle: 'Hyper-local street audio recall',
-  },
-  Ola: {
-    brand: 'Ola',
-    spendHeat: 86,
-    hook: 'Cab cancellation & pin-location rage memes',
-    agencyStyle: 'Organic commuter frustration trend',
-  },
-  Truecaller: {
-    brand: 'Truecaller',
-    spendHeat: 82,
-    hook: 'Spam loan call & robocall fatigue',
-    agencyStyle: 'Everyday utility comedy',
-  },
-  Netflix: {
-    brand: 'Netflix',
-    spendHeat: 91,
-    hook: '10-year India creator campaigns & memes',
-    agencyStyle: 'Real-time comment-section banter',
-  },
-  Local: {
-    brand: 'Local',
-    spendHeat: 76,
-    hook: 'Evergreen Indian street & family friction',
-    agencyStyle: 'High-share relatable regional Reels',
-  },
+  'Goa Shack': { brand: 'Goa Shack', spendHeat: 93, hook: 'Goa tourist & coastal lifestyle viral reels', agencyStyle: 'Relatable travel satire' },
+  'Goa Ferry': { brand: 'Goa Ferry', spendHeat: 89, hook: 'Goan scooter & river ferry culture', agencyStyle: 'Deadpan regional comedy' },
+  'NASA Study': { brand: 'NASA Study', spendHeat: 94, hook: 'Space & zero-gravity research headlines', agencyStyle: 'Absurd science explainer' },
+  'Sleep Study': { brand: 'Sleep Study', spendHeat: 91, hook: 'Viral university psychology/sleep studies', agencyStyle: 'Deadpan weird science' },
+  'Quantum Lab': { brand: 'Quantum Lab', spendHeat: 90, hook: 'Particle physics & weird lab breakthroughs', agencyStyle: 'Sci-fi deadpan twist' },
+  'Ocean Research': { brand: 'Ocean Research', spendHeat: 87, hook: 'Deep-sea creature & submarine discoveries', agencyStyle: 'Curiosity hook' },
+  'UN Summit': { brand: 'UN Summit', spendHeat: 92, hook: 'World diplomacy & global summit bloopers', agencyStyle: 'Political satire' },
+  'Live Debate': { brand: 'Live Debate', spendHeat: 95, hook: 'Chaotic prime-time news panels', agencyStyle: 'High-energy media satire' },
+  'Central Bank': { brand: 'Central Bank', spendHeat: 86, hook: 'Global inflation & interest rate memes', agencyStyle: 'Deadpan economy humor' },
+  'AI Demo Day': { brand: 'AI Demo Day', spendHeat: 96, hook: 'AI startup launches & founder hype', agencyStyle: 'Tech culture parody' },
+  'Mars Colony': { brand: 'Mars Colony', spendHeat: 92, hook: 'Billionaire space colonization news', agencyStyle: 'Surreal sci-fi satire' },
+  'Alpha Podcast': { brand: 'Alpha Podcast', spendHeat: 91, hook: '4 AM cold-plunge hustle podcast memes', agencyStyle: 'Creator parody' },
+  '10-Min App': { brand: '10-Min App', spendHeat: 95, hook: '3 AM express delivery absurdity', agencyStyle: 'High-speed visual gag' },
+  'Airport Check': { brand: 'Airport Check', spendHeat: 88, hook: 'Universal airport security stress', agencyStyle: 'Relatable global humor' },
+  'Barber Chair': { brand: 'Barber Chair', spendHeat: 89, hook: 'Universal haircut betrayal', agencyStyle: 'Deadpan visual twist' },
+  'Fitness Lab': { brand: 'Fitness Lab', spendHeat: 87, hook: 'Cheap protein & gym bro satire', agencyStyle: 'Fitness parody' },
+  'Spam Call': { brand: 'Spam Call', spendHeat: 85, hook: 'Robocall & loan spam absurdity', agencyStyle: 'Creepy-funny tech' },
+  'Luxury Villa': { brand: 'Luxury Villa', spendHeat: 90, hook: 'Discount coupon vs luxury Airbnb', agencyStyle: 'Lifestyle contrast' },
 };
 
 export function getBrandHeat(brand: string): number {
-  return BRAND_SIGNALS[brand]?.spendHeat ?? 72;
+  return BRAND_SIGNALS[brand]?.spendHeat ?? 82;
 }
