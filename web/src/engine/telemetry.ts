@@ -8,13 +8,13 @@ import type {
 } from '../types';
 
 const LOGS_KEY = 'absurd_studio_logs_v2';
-const CFG_KEY = 'absurd_studio_cfg_v2';
+const CFG_KEY = 'absurd_studio_cfg_v3';
 
 export const DEFAULT_CONFIG: EngineConfig = {
   theme: 'studio',
   sourceMode: 'standalone',
   backendUrl: 'http://localhost:8000',
-  batchSize: 6,
+  batchSize: 8,
 };
 
 export function loadConfig(): EngineConfig {
