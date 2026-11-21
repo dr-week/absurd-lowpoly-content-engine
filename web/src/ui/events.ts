@@ -1,5 +1,6 @@
+import { removeSavedTopic, saveLikedTopic } from '../engine/saved_store';
 import { exportJson, exportJsonl, saveConfig, saveLogs, upsertVote } from '../engine/telemetry';
-import type { ActiveTab, EngineConfig, GeneratedPrompts, RatingLogEntry, ScoredTopic, VoteValue } from '../types';
+import type { ActiveTab, EngineConfig, GeneratedPrompts, RatingLogEntry, SavedFilter, SavedItem, ScoredTopic, VoteValue } from '../types';
 
 export interface AppState {
   config: EngineConfig;
@@ -15,6 +16,9 @@ export interface AppState {
   prompts: GeneratedPrompts | null;
   loading: boolean;
   logs: RatingLogEntry[];
+  saved: SavedItem[];
+  generatedIds: Set<string>;
+  savedFilter: SavedFilter;
   copiedTarget: 'storyboard' | 'video' | null;
 }
 
@@ -23,7 +27,7 @@ export function bindAppEvents(
   hooks: {
     render: () => void;
     refreshTopics: () => Promise<void>;
-    selectTopic: (id: string) => Promise<void>;
+    selectTopic: (id: string, fromSaved?: boolean) => Promise<void>;
     toast: (msg: string) => void;
   },
 ): void {
@@ -44,13 +48,23 @@ export function bindAppEvents(
         void hooks.refreshTopics();
         return;
       }
-      if (a === 'select-topic' && el.dataset.id) { void hooks.selectTopic(el.dataset.id); return; }
+      if (a === 'select-topic' && el.dataset.id) { void hooks.selectTopic(el.dataset.id, false); return; }
+      if (a === 'select-saved' && el.dataset.id) { void hooks.selectTopic(el.dataset.id, true); return; }
+      if (a === 'saved-filter' && el.dataset.filter) { state.savedFilter = el.dataset.filter as SavedFilter; hooks.render(); return; }
+      if (a === 'remove-saved' && el.dataset.id) {
+        state.saved = removeSavedTopic(state.saved, el.dataset.id);
+        hooks.render();
+        hooks.toast('Removed');
+        return;
+      }
       if (a === 'vote-topic' && el.dataset.id && el.dataset.vote) {
         const t = state.topics.find((x) => x.id === el.dataset.id);
         if (!t) return;
-        state.logs = upsertVote(state.logs, { kind: 'topic', targetId: t.id, title: t.title, angle: t.angle, brand: t.brand, viralScore: t.viralScore, vote: el.dataset.vote as VoteValue, contentSnapshot: t.pitch });
+        const vote = el.dataset.vote as VoteValue;
+        state.logs = upsertVote(state.logs, { kind: 'topic', targetId: t.id, title: t.title, angle: t.angle, brand: t.brand, viralScore: t.viralScore, vote, contentSnapshot: t.pitch });
+        state.saved = vote === 'up' ? saveLikedTopic(state.saved, state.generatedIds, t) : removeSavedTopic(state.saved, t.id);
         hooks.render();
-        hooks.toast(el.dataset.vote === 'up' ? 'Liked' : 'Disliked');
+        hooks.toast(vote === 'up' ? 'Saved' : 'Disliked');
         return;
       }
       if (a === 'vote-prompt' && el.dataset.kind && el.dataset.vote && state.prompts) {

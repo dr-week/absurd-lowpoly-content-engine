@@ -38,6 +38,7 @@ function renderCodeRow(
 export function renderStudioView(params: {
   topics: ScoredTopic[];
   logs: RatingLogEntry[];
+  generatedIds: Set<string>;
   selectedId: string | null;
   prompts: GeneratedPrompts | null;
   loadingTopics: boolean;
@@ -46,7 +47,7 @@ export function renderStudioView(params: {
   liveTrends: string[];
   copiedTarget: 'storyboard' | 'video' | null;
 }): string {
-  const { topics, logs, selectedId, prompts, loadingTopics, loading, seedQuery, liveTrends, copiedTarget } = params;
+  const { topics, logs, generatedIds, selectedId, prompts, loadingTopics, loading, seedQuery, liveTrends, copiedTarget } = params;
 
   const trendChips = liveTrends.length
     ? `<div class="trend-strip">${liveTrends
@@ -64,6 +65,7 @@ export function renderStudioView(params: {
         .map((t) => {
           const vote = getVote(logs, 'topic', t.id);
           const selected = selectedId === t.id;
+          const isGen = generatedIds.has(t.id);
           const cls = ['topic-card', selected ? 'is-selected' : '', vote === 'up' ? 'is-liked' : '', vote === 'down' ? 'is-disliked' : '']
             .filter(Boolean)
             .join(' ');
@@ -72,7 +74,10 @@ export function renderStudioView(params: {
               <div class="topic-card__body">
                 <div class="topic-card__top">
                   <span class="topic-card__tag">${esc(t.brand)}</span>
-                  <span class="pill pill--accent" title="Viral score">${t.viralScore}</span>
+                  <div class="vote-group">
+                    ${isGen ? `<span class="pill pill--positive" title="Generated">${Glyphs.check(11)}</span>` : ''}
+                    <span class="pill pill--accent" title="Viral score">${t.viralScore}</span>
+                  </div>
                 </div>
                 <h3 class="topic-card__title">${esc(t.title)}</h3>
                 <p class="topic-card__pitch">${esc(t.pitch)}</p>

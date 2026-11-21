@@ -68,4 +68,5 @@ export const Glyphs = {
       size,
     ),
   arrowRight: (size = 16) => svg('<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>', size),
+  bookmark: (size = 16) => svg('<path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>', size),
 };

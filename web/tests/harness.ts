@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { scoreComedyCraft } from '../src/engine/comedy_craft';
 import { renderStoryboardText, renderVideoText } from '../src/engine/prompt_renderer';
 import { ALL_BESPOKE_STORIES, generateFreshDiverseBatch, worldFamily } from '../src/engine/topic_generator';
+import { markTopicGenerated, removeSavedTopic, saveLikedTopic } from '../src/engine/saved_store';
 import { synthesizeTrendCard } from '../src/engine/trend_synthesizer';
 import type { RatingLogEntry } from '../src/types';
 
@@ -67,7 +68,19 @@ for (let r = 1; r <= RELOADS; r += 1) {
 }
 
 assert.equal(new Set([0, 1, 2].map((n) => synthesizeTrendCard('Anthropic', n).angle)).size, 3);
+
+// Verify Saved (Thumbs Up) -> Pending -> Generated via Arrow (Done) -> Remove lifecycle
+const sample = generateFreshDiverseBatch({ count: 8, query: '', logs: [], seenPairs: new Set(), batchNonce: 777 })[0];
+let savedList = saveLikedTopic([], new Set(), sample);
+assert.equal(savedList.length, 1);
+assert.equal(savedList[0].generated, false, 'Newly liked topic should start as Pending (generated: false)');
+const afterGen = markTopicGenerated(savedList, new Set(), sample.id);
+assert.equal(afterGen.saved[0].generated, true, 'Arrow-generated topic must flip to Done (generated: true)');
+assert.ok(afterGen.generatedIds.has(sample.id));
+savedList = removeSavedTopic(afterGen.saved, sample.id);
+assert.equal(savedList.length, 0);
+
 console.log(
   `HARNESS PASS: ${ALL_BESPOKE_STORIES.length} stories × ${RELOADS} F5 reloads = ${RELOADS * 8} cards ` +
-    `(6/6 formats, 8/8 unique worlds, 0 adjacent same-format, 0/8 repeats, 0 genre-prefix clichés).`,
+    `(6/6 formats, 8/8 unique worlds, 0 adjacent same-format, 0/8 repeats, 0 genre-prefix clichés, Saved/Pending/Done verified).`,
 );

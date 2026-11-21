@@ -8,9 +8,10 @@ export function renderAppShell(params: {
   activeTab: ActiveTab;
   drawerOpen: boolean;
   logs: RatingLogEntry[];
+  savedCount: number;
   surfaceHtml: string;
 }): string {
-  const { config, activeTab, drawerOpen, logs, surfaceHtml } = params;
+  const { config, activeTab, drawerOpen, logs, savedCount, surfaceHtml } = params;
   const stats = computeAnalytics(logs);
   const isLiveAi = config.sourceMode === 'gemini' || config.sourceMode === 'groq' || config.sourceMode === 'openrouter';
 
@@ -37,6 +38,7 @@ export function renderAppShell(params: {
 
       <nav class="dock-plane zuari-surface-liquid" aria-label="Navigation">
         <button type="button" class="dock-btn ${activeTab === 'studio' ? 'is-active' : ''}" data-action="tab" data-tab="studio" title="Studio">${Glyphs.sparkle(16)}<span>Studio</span></button>
+        <button type="button" class="dock-btn ${activeTab === 'saved' ? 'is-active' : ''}" data-action="tab" data-tab="saved" title="Saved">${Glyphs.bookmark(16)}<span>Saved${savedCount > 0 ? ` · ${savedCount}` : ''}</span></button>
         <button type="button" class="dock-btn ${activeTab === 'analytics' ? 'is-active' : ''}" data-action="tab" data-tab="analytics" title="Viral">${Glyphs.barChart(16)}<span>Viral</span></button>
         <button type="button" class="dock-btn ${activeTab === 'logs' ? 'is-active' : ''}" data-action="tab" data-tab="logs" title="Logs">${Glyphs.fileText(16)}<span>Logs</span></button>
       </nav>

@@ -1,8 +1,16 @@
 export type VoteValue = 'up' | 'down';
 export type TargetKind = 'topic' | 'storyboard' | 'video';
-export type ActiveTab = 'studio' | 'analytics' | 'logs';
+export type ActiveTab = 'studio' | 'saved' | 'analytics' | 'logs';
+export type SavedFilter = 'all' | 'pending' | 'done';
 export type ThemeName = 'studio' | 'noir';
 export type SourceMode = 'standalone' | 'gemini' | 'groq' | 'openrouter' | 'backend';
+
+export interface SavedItem {
+  topic: ScoredTopic;
+  savedAt: string;
+  generated: boolean;
+  generatedAt?: string;
+}
 
 export interface BrandSignal {
   brand: string;
