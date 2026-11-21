@@ -57,22 +57,16 @@ async function refreshTopics(): Promise<void> {
 
   if (mode === 'live-free' && !state.seedQuery.trim() && state.hookFilter === 'all' && state.situationFilter === 'all') {
     const daily = await pullUnseenDailyEpisodes(state.seenTitles, 8);
-    if (daily.length >= 4) {
-      state.topics = daily; rememberTitles(daily); state.loadingTopics = false; render(); toast('8 fresh Daily AI episodes'); return;
-    }
+    if (daily.length >= 4) { state.topics = daily; rememberTitles(daily); state.loadingTopics = false; render(); toast('8 fresh Daily AI episodes'); return; }
   }
 
   if (mode === 'live-free' || (isByok && state.config.apiKey.trim())) {
-    state.loadingTopics = true;
-    render();
+    state.loadingTopics = true; render();
     try {
       const tasteSummary = computeTasteDna(state.logs, state.saved).promptSummary;
-      if (mode === 'live-free') {
-        state.topics = await generateFreshLiveNewsTopics({ query: state.seedQuery, logs: state.logs, seenTitles: state.seenTitles, batchNonce: state.batchNonce, hookFilter: state.hookFilter, situationFilter: state.situationFilter, tasteSummary });
-      } else {
-        const avoid = [...Array.from(state.seenTitles).slice(-30), ...state.topics.map((t) => t.title)];
-        state.topics = await generateLiveTopics(state.config, state.seedQuery, state.logs, avoid, state.liveTrends, state.hookFilter, state.situationFilter);
-      }
+      state.topics = mode === 'live-free'
+        ? await generateFreshLiveNewsTopics({ query: state.seedQuery, logs: state.logs, seenTitles: state.seenTitles, batchNonce: state.batchNonce, hookFilter: state.hookFilter, situationFilter: state.situationFilter, tasteSummary })
+        : await generateLiveTopics(state.config, state.seedQuery, state.logs, [...Array.from(state.seenTitles).slice(-30), ...state.topics.map((t) => t.title)], state.liveTrends, state.hookFilter, state.situationFilter);
       rememberTitles(state.topics); state.loadingTopics = false; render(); toast('8 brand-new live topics'); return;
     } catch (err) {
       state.loadingTopics = false; toast(`Live fallback: ${err instanceof Error ? err.message : 'offline'}`);
@@ -84,20 +78,12 @@ async function refreshTopics(): Promise<void> {
 
 async function generateFor(topic: ScoredTopic, switchStudio: boolean): Promise<void> {
   if (switchStudio) state.activeTab = 'studio';
-  state.selectedId = topic.id;
-  state.activeTopic = topic;
-  state.loading = true;
-  const marked = markTopicGenerated(state.saved, state.generatedIds, topic.id);
-  state.saved = marked.saved;
-  state.generatedIds = marked.generatedIds;
+  state.selectedId = topic.id; state.activeTopic = topic; state.loading = true;
+  Object.assign(state, markTopicGenerated(state.saved, state.generatedIds, topic.id));
   render();
-  try {
-    state.prompts = await generatePromptsForTopic(topic, state.config);
-  } catch (err) {
-    toast(`Prompt error: ${err instanceof Error ? err.message : 'failed'}`);
-  }
-  state.loading = false;
-  render();
+  try { state.prompts = await generatePromptsForTopic(topic, state.config); }
+  catch (err) { toast(`Prompt error: ${err instanceof Error ? err.message : 'failed'}`); }
+  state.loading = false; render();
   document.getElementById('section-prompts')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
@@ -108,17 +94,13 @@ async function selectTopic(id: string, fromSaved = false): Promise<void> {
 
 async function createSequel(topic: ScoredTopic): Promise<void> {
   const sequel = buildPart2Topic(topic);
-  rememberTitles([sequel]);
-  await generateFor(sequel, true);
-  toast(sequel.title);
+  rememberTitles([sequel]); await generateFor(sequel, true); toast(sequel.title);
 }
 
 async function createMashup(): Promise<void> {
   const mash = buildCrossoverEpisode(state.saved.map((s) => s.topic));
   if (!mash) return;
-  rememberTitles([mash]);
-  await generateFor(mash, true);
-  toast(mash.title);
+  rememberTitles([mash]); await generateFor(mash, true); toast(mash.title);
 }
 
 function render(): void {
