@@ -38,7 +38,12 @@ export function bindAppEvents(
       if (a === 'open-drawer') { state.drawerOpen = true; hooks.render(); return; }
       if (a === 'close-drawer') { state.drawerOpen = false; hooks.render(); return; }
       if (a === 'regenerate-topics') { state.batchNonce += 1; void hooks.refreshTopics(); return; }
-      if (a === 'pick-trend' && el.dataset.trend) { state.seedQuery = el.dataset.trend; state.batchNonce += 1; void hooks.refreshTopics(); return; }
+      if (a === 'pick-trend' && el.dataset.trend) {
+        state.seedQuery = state.seedQuery === el.dataset.trend ? '' : el.dataset.trend;
+        state.batchNonce += 1;
+        void hooks.refreshTopics();
+        return;
+      }
       if (a === 'select-topic' && el.dataset.id) { void hooks.selectTopic(el.dataset.id); return; }
       if (a === 'vote-topic' && el.dataset.id && el.dataset.vote) {
         const t = state.topics.find((x) => x.id === el.dataset.id);
@@ -82,7 +87,7 @@ export function bindAppEvents(
   });
   document.getElementById('cfg-theme')?.addEventListener('change', (ev) => { state.config.theme = (ev.target as HTMLSelectElement).value as EngineConfig['theme']; saveConfig(state.config); hooks.render(); });
   document.getElementById('cfg-source')?.addEventListener('change', (ev) => { state.config.sourceMode = (ev.target as HTMLSelectElement).value as EngineConfig['sourceMode']; saveConfig(state.config); hooks.render(); });
-  document.getElementById('cfg-api-key')?.addEventListener('change', (ev) => { state.config.apiKey = (ev.target as HTMLInputElement).value.trim(); saveConfig(state.config); hooks.toast('Key saved locally'); });
-  document.getElementById('cfg-model')?.addEventListener('change', (ev) => { state.config.model = (ev.target as HTMLInputElement).value.trim(); saveConfig(state.config); hooks.toast('Model saved'); });
-  document.getElementById('cfg-backend-url')?.addEventListener('change', (ev) => { state.config.backendUrl = (ev.target as HTMLInputElement).value.trim() || 'http://localhost:8000'; saveConfig(state.config); hooks.toast('Saved'); });
+  document.getElementById('cfg-api-key')?.addEventListener('input', (ev) => { state.config.apiKey = (ev.target as HTMLInputElement).value.trim(); saveConfig(state.config); });
+  document.getElementById('cfg-model')?.addEventListener('input', (ev) => { state.config.model = (ev.target as HTMLInputElement).value.trim(); saveConfig(state.config); });
+  document.getElementById('cfg-backend-url')?.addEventListener('input', (ev) => { state.config.backendUrl = (ev.target as HTMLInputElement).value.trim() || 'http://localhost:8000'; saveConfig(state.config); });
 }

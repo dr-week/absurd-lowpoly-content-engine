@@ -53,7 +53,7 @@ export function renderStudioView(params: {
         .slice(0, 6)
         .map(
           (kw) =>
-            `<button type="button" class="pill" data-action="pick-trend" data-trend="${esc(kw)}" title="Seed from live trend">${esc(kw)}</button>`,
+            `<button type="button" class="pill ${seedQuery === kw ? 'pill--accent' : ''}" data-action="pick-trend" data-trend="${esc(kw)}" title="Toggle live trend">${esc(kw)}</button>`,
         )
         .join('')}</div>`
     : '';

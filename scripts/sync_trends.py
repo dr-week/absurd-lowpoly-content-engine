@@ -23,6 +23,16 @@ _STOPWORDS = {
     "news", "today", "video", "viral", "watch", "after", "before", "with", "from",
     "that", "this", "over", "into", "about", "what", "when", "where", "live",
     "updates", "says", "amid", "gets", "makes", "takes", "shows", "here", "study",
+    "have", "were", "been", "years", "year", "another", "away", "across", "calls",
+    "being", "their", "there", "would", "could", "should", "will", "more", "most",
+    "some", "than", "then", "them", "they", "your", "just", "first", "last",
+    "biggest", "new", "city", "cities", "deal", "leader", "apparent", "aftermath",
+}
+
+_SENSITIVE_FILTER = {
+    "assassinate", "assassination", "killed", "killing", "murder", "dead", "death",
+    "sentenced", "arrested", "strikes", "strike", "attack", "bomb", "war", "prison",
+    "beating", "besieged", "shooting", "terror", "suicide", "abuse", "rape",
 }
 
 
@@ -30,8 +40,8 @@ def extract_keywords(titles: list[str], limit: int = 35) -> list[str]:
     counts: dict[str, int] = {}
     for title in titles:
         for word in re.findall(r"[A-Za-z][A-Za-z0-9'-]{3,}", title):
-            key = word.lower()
-            if key in _STOPWORDS:
+            key = word.lower().strip("'-")
+            if len(key) < 4 or key in _STOPWORDS or key in _SENSITIVE_FILTER:
                 continue
             counts[key] = counts.get(key, 0) + 1
     ranked = sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))

@@ -77,7 +77,19 @@ for (let r = 1; r <= RELOADS; r += 1) {
   }
 }
 
+// Verify custom live-trend chip synthesis (e.g. clicking "Anthropic")
+const trendBatch = generateFreshDiverseBatch({
+  count: 8,
+  query: 'Anthropic',
+  logs: [],
+  seenPairs: new Set<string>(),
+  batchNonce: 99,
+});
+assert.equal(trendBatch.length, 8);
+assert.ok(trendBatch[0].title.includes('ANTHROPIC'), `Expected custom trend card #1, got ${trendBatch[0].title}`);
+assert.equal(new Set(trendBatch.map((t) => t.angle)).size, 8);
+
 console.log(
-  `HARNESS PASS: ${RELOADS} F5 reloads × 8 topics = ${RELOADS * 8} topics verified ` +
-    `(${allUniqueTitles.size} unique titles, 0/8 brand overlap between reloads, 0/8 title overlap, 0 time/size leaks).`,
+  `HARNESS PASS: ${RELOADS} F5 reloads × 8 topics = ${RELOADS * 8} topics + custom trend chip verified ` +
+    `(${allUniqueTitles.size} unique titles, 0/8 brand overlap, 0/8 title overlap, 0 time/size leaks).`,
 );

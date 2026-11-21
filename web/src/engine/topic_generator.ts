@@ -54,12 +54,7 @@ function buildTopic(
   };
 }
 
-/**
- * Generates 8 completely unrelated, fresh topics on EVERY refresh AND F5 reload:
- * - Excludes ALL 8 domains shown in the previous batch -> 0/8 brand/domain overlap!
- * - Guaranteed 8 unique angles, 8 unique brands, and 8 unique twists per batch.
- * - Tracks seen (domain, twist) pairs in persistent Set so titles don't repeat.
- */
+/** Generates 8 unrelated topics with 0/8 brand/domain overlap across refreshes & F5 reloads. */
 export function generateFreshDiverseBatch(params: {
   count: number;
   query: string;
@@ -91,6 +86,21 @@ export function generateFreshDiverseBatch(params: {
     );
     if (matched.length > 0) {
       ordered = [...matched, ...ordered.filter((d) => !matched.includes(d))];
+    } else {
+      const label = query.trim().slice(0, 22);
+      const customDomain: DomainSeed = {
+        angle: `trend-${q.replace(/[^a-z0-9]+/g, '-').slice(0, 16)}`,
+        brand: label,
+        setting: `live press room covering "${label}"`,
+        protagonist: `deadpan commentator discussing ${label}`,
+        trigger: `taps a glowing screen showing breaking news about ${label}`,
+        triggerHindi: `ब्रेकिंग न्यूज़ में ${label} दिखाया गया।`,
+        triggerCaption: `${label} pe breaking news aayi.`,
+        payoffSpeaker: 'anchor',
+        payoffLine: 'Update agle bulletin mein denge.',
+        payoffHindi: 'बोले, अपडेट अगले बुलेटिन में देंगे।',
+      };
+      ordered = [customDomain, ...ordered];
     }
   }
 
