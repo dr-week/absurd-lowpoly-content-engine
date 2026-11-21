@@ -2,6 +2,7 @@ export type VoteValue = 'up' | 'down';
 export type TargetKind = 'topic' | 'storyboard' | 'video';
 export type ActiveTab = 'studio' | 'saved' | 'analytics' | 'logs';
 export type SavedFilter = 'all' | 'pending' | 'done';
+export type OutcomeTag = 'flop' | 'good' | 'viral';
 export type HookCategory = 'iconic' | 'build' | 'origin' | 'science' | 'tutorial' | 'news';
 export type SituationCategory = 'global' | 'coastal' | 'tech' | 'ego' | 'lab' | 'childhood';
 export type ThemeName = 'studio' | 'noir';
@@ -12,6 +13,7 @@ export interface SavedItem {
   savedAt: string;
   generated: boolean;
   generatedAt?: string;
+  outcome?: OutcomeTag;
 }
 
 export interface BrandSignal {

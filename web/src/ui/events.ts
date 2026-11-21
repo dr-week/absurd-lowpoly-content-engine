@@ -1,8 +1,9 @@
 import { exportStudioBackup, restoreStudioBackup } from '../engine/backup_sync';
 import { cycleAlternatePunchline, exportSavedMarkdown, rerollCameraRig } from '../engine/prompt_tools';
-import { removeSavedTopic, saveLikedTopic } from '../engine/saved_store';
+import { removeSavedTopic, saveLikedTopic, setSavedOutcome } from '../engine/saved_store';
 import { exportJson, exportJsonl, saveConfig, saveLogs, upsertVote } from '../engine/telemetry';
-import type { ActiveTab, EngineConfig, GeneratedPrompts, HookCategory, RatingLogEntry, SavedFilter, SavedItem, ScoredTopic, SituationCategory, VoteValue } from '../types';
+import { buildViralPackage } from '../engine/viral_packaging';
+import type { ActiveTab, EngineConfig, GeneratedPrompts, HookCategory, OutcomeTag, RatingLogEntry, SavedFilter, SavedItem, ScoredTopic, SituationCategory, VoteValue } from '../types';
 
 export interface AppState {
   config: EngineConfig;
@@ -18,6 +19,7 @@ export interface AppState {
   liveTrends: string[];
   loadingTopics: boolean;
   selectedId: string | null;
+  activeTopic?: ScoredTopic;
   prompts: GeneratedPrompts | null;
   rigStep: number;
   punchStep: number;
@@ -26,7 +28,7 @@ export interface AppState {
   saved: SavedItem[];
   generatedIds: Set<string>;
   savedFilter: SavedFilter;
-  copiedTarget: 'storyboard' | 'video' | null;
+  copiedTarget: 'storyboard' | 'video' | 'packaging' | null;
 }
 
 export function bindAppEvents(
@@ -35,6 +37,7 @@ export function bindAppEvents(
     render: () => void;
     refreshTopics: () => Promise<void>;
     selectTopic: (id: string, fromSaved?: boolean) => Promise<void>;
+    createSequel: (topic: ScoredTopic) => Promise<void>;
     toast: (msg: string) => void;
   },
 ): void {
@@ -49,19 +52,19 @@ export function bindAppEvents(
       if (a === 'open-drawer') { state.drawerOpen = true; hooks.render(); return; }
       if (a === 'close-drawer') { state.drawerOpen = false; hooks.render(); return; }
       if (a === 'regenerate-topics') { state.batchNonce += 1; void hooks.refreshTopics(); return; }
-      if (a === 'pick-trend' && el.dataset.trend) {
-        state.seedQuery = state.seedQuery === el.dataset.trend ? '' : el.dataset.trend;
-        state.batchNonce += 1;
-        void hooks.refreshTopics();
-        return;
-      }
+      if (a === 'pick-trend' && el.dataset.trend) { state.seedQuery = state.seedQuery === el.dataset.trend ? '' : el.dataset.trend; state.batchNonce += 1; void hooks.refreshTopics(); return; }
       if (a === 'select-topic' && el.dataset.id) { void hooks.selectTopic(el.dataset.id, false); return; }
       if (a === 'select-saved' && el.dataset.id) { void hooks.selectTopic(el.dataset.id, true); return; }
       if (a === 'saved-filter' && el.dataset.filter) { state.savedFilter = el.dataset.filter as SavedFilter; hooks.render(); return; }
-      if (a === 'remove-saved' && el.dataset.id) {
-        state.saved = removeSavedTopic(state.saved, el.dataset.id);
-        hooks.render();
-        hooks.toast('Removed');
+      if (a === 'remove-saved' && el.dataset.id) { state.saved = removeSavedTopic(state.saved, el.dataset.id); hooks.render(); hooks.toast('Removed'); return; }
+      if (a === 'set-outcome' && el.dataset.id && el.dataset.outcome) {
+        state.saved = setSavedOutcome(state.saved, el.dataset.id, el.dataset.outcome as OutcomeTag);
+        hooks.render(); hooks.toast(`Marked ${el.dataset.outcome}`); return;
+      }
+      if (a === 'make-sequel' && state.activeTopic) { void hooks.createSequel(state.activeTopic); return; }
+      if (a === 'sequel-saved' && el.dataset.id) {
+        const found = state.saved.find((s) => s.topic.id === el.dataset.id)?.topic;
+        if (found) void hooks.createSequel(found);
         return;
       }
       if (a === 'vote-topic' && el.dataset.id && el.dataset.vote) {
@@ -70,36 +73,29 @@ export function bindAppEvents(
         const vote = el.dataset.vote as VoteValue;
         state.logs = upsertVote(state.logs, { kind: 'topic', targetId: t.id, title: t.title, angle: t.angle, brand: t.brand, viralScore: t.viralScore, vote, contentSnapshot: t.pitch });
         state.saved = vote === 'up' ? saveLikedTopic(state.saved, state.generatedIds, t) : removeSavedTopic(state.saved, t.id);
-        hooks.render();
-        hooks.toast(vote === 'up' ? 'Saved' : 'Disliked');
-        return;
+        hooks.render(); hooks.toast(vote === 'up' ? 'Saved' : 'Disliked'); return;
       }
       if (a === 'vote-prompt' && el.dataset.kind && el.dataset.vote && state.prompts) {
         const kind = el.dataset.kind as 'storyboard' | 'video';
-        const score = state.topics.find((x) => x.id === state.prompts?.topicId)?.viralScore ?? 80;
+        const score = state.activeTopic?.viralScore ?? 85;
         state.logs = upsertVote(state.logs, { kind, targetId: state.prompts.topicId, title: state.prompts.topicTitle, angle: state.prompts.angle, brand: state.prompts.brand, viralScore: score, vote: el.dataset.vote as VoteValue, contentSnapshot: kind === 'storyboard' ? state.prompts.storyboardPrompt : state.prompts.videoPrompt });
-        hooks.render();
-        hooks.toast(el.dataset.vote === 'up' ? 'Prompt liked' : 'Prompt disliked');
-        return;
+        hooks.render(); hooks.toast(el.dataset.vote === 'up' ? 'Prompt liked' : 'Prompt disliked'); return;
       }
       if (a === 'copy-prompt' && el.dataset.kind && state.prompts) {
         const kind = el.dataset.kind as 'storyboard' | 'video';
         void navigator.clipboard.writeText(kind === 'storyboard' ? state.prompts.storyboardPrompt : state.prompts.videoPrompt).then(() => {
-          state.copiedTarget = kind;
-          hooks.render();
-          hooks.toast('Copied');
+          state.copiedTarget = kind; hooks.render(); hooks.toast('Copied');
           window.setTimeout(() => { state.copiedTarget = null; hooks.render(); }, 1200);
-        });
-        return;
+        }); return;
       }
-      if (a === 'reroll-rig' && state.prompts) {
-        const out = rerollCameraRig(state.prompts, (state.rigStep += 1));
-        state.prompts = out.prompts; hooks.render(); hooks.toast(`Camera: ${out.rigLabel}`); return;
+      if (a === 'copy-packaging' && state.prompts && state.activeTopic) {
+        void navigator.clipboard.writeText(buildViralPackage(state.activeTopic, state.prompts).copyText).then(() => {
+          state.copiedTarget = 'packaging'; hooks.render(); hooks.toast('Copied Viral Pack');
+          window.setTimeout(() => { state.copiedTarget = null; hooks.render(); }, 1200);
+        }); return;
       }
-      if (a === 'reroll-punchline' && state.prompts) {
-        const out = cycleAlternatePunchline(state.prompts, (state.punchStep += 1));
-        state.prompts = out.prompts; hooks.render(); hooks.toast(`Punchline: ${out.style}`); return;
-      }
+      if (a === 'reroll-rig' && state.prompts) { const out = rerollCameraRig(state.prompts, (state.rigStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Camera: ${out.rigLabel}`); return; }
+      if (a === 'reroll-punchline' && state.prompts) { const out = cycleAlternatePunchline(state.prompts, (state.punchStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Punchline: ${out.style}`); return; }
       if (a === 'export-saved-md') { exportSavedMarkdown(state.saved); hooks.toast('Exported Saved .md'); return; }
       if (a === 'export-backup') { exportStudioBackup(state); hooks.toast('Backup downloaded'); return; }
       if (a === 'export-jsonl') { exportJsonl(state.logs); hooks.toast('Exported JSONL'); return; }
@@ -111,12 +107,8 @@ export function bindAppEvents(
   document.getElementById('restore-backup-input')?.addEventListener('change', (ev) => {
     const file = (ev.target as HTMLInputElement).files?.[0];
     if (!file) return;
-    void file.text().then((txt) => {
-      Object.assign(state, restoreStudioBackup(txt), { drawerOpen: false });
-      hooks.render(); hooks.toast('Studio restored');
-    }).catch(() => hooks.toast('Invalid backup JSON'));
+    void file.text().then((txt) => { Object.assign(state, restoreStudioBackup(txt), { drawerOpen: false }); hooks.render(); hooks.toast('Studio restored'); }).catch(() => hooks.toast('Invalid backup JSON'));
   });
-
   document.getElementById('seed-input')?.addEventListener('change', (ev) => { state.seedQuery = (ev.target as HTMLInputElement).value; state.batchNonce += 1; void hooks.refreshTopics(); });
   document.getElementById('filter-hook')?.addEventListener('change', (ev) => { state.hookFilter = (ev.target as HTMLSelectElement).value as HookCategory | 'all'; state.batchNonce += 1; void hooks.refreshTopics(); });
   document.getElementById('filter-situation')?.addEventListener('change', (ev) => { state.situationFilter = (ev.target as HTMLSelectElement).value as SituationCategory | 'all'; state.batchNonce += 1; void hooks.refreshTopics(); });

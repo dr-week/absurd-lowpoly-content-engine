@@ -3,6 +3,7 @@ import { getVote } from '../engine/telemetry';
 import { Glyphs } from '../glyphs';
 import type { GeneratedPrompts, HookCategory, RatingLogEntry, ScoredTopic, SituationCategory } from '../types';
 import { esc } from './escape';
+import { renderViralPackagingCard } from './packaging_card';
 
 function renderCodeRow(kind: 'storyboard' | 'video', label: string, meta: string, content: string, vote: 'up' | 'down' | null, copied: boolean): string {
   return `
@@ -28,6 +29,7 @@ export function renderStudioView(params: {
   logs: RatingLogEntry[];
   generatedIds: Set<string>;
   selectedId: string | null;
+  activeTopic?: ScoredTopic;
   prompts: GeneratedPrompts | null;
   loadingTopics: boolean;
   loading: boolean;
@@ -35,9 +37,9 @@ export function renderStudioView(params: {
   hookFilter: HookCategory | 'all';
   situationFilter: SituationCategory | 'all';
   liveTrends: string[];
-  copiedTarget: 'storyboard' | 'video' | null;
+  copiedTarget: 'storyboard' | 'video' | 'packaging' | null;
 }): string {
-  const { topics, logs, generatedIds, selectedId, prompts, loadingTopics, loading, seedQuery, hookFilter, situationFilter, liveTrends, copiedTarget } = params;
+  const { topics, logs, generatedIds, selectedId, activeTopic, prompts, loadingTopics, loading, seedQuery, hookFilter, situationFilter, liveTrends, copiedTarget } = params;
 
   const hookOpts = ['<option value="all">All Hooks</option>', ...HOOK_CATEGORIES.map((h) => `<option value="${h.id}" ${hookFilter === h.id ? 'selected' : ''}>${esc(h.label)}</option>`)].join('');
   const sitOpts = ['<option value="all">All Situations</option>', ...SITUATION_CATEGORIES.map((s) => `<option value="${s.id}" ${situationFilter === s.id ? 'selected' : ''}>${esc(s.label)}</option>`)].join('');
@@ -92,6 +94,7 @@ export function renderStudioView(params: {
       <div class="prompt-stack">
         ${renderCodeRow('storyboard', 'Storyboard (3x2)', prompts.topicTitle, prompts.storyboardPrompt, sbVote, copiedTarget === 'storyboard')}
         ${renderCodeRow('video', 'Video Prompt', 'No time / No size', prompts.videoPrompt, vidVote, copiedTarget === 'video')}
+        ${renderViralPackagingCard(activeTopic, prompts, copiedTarget === 'packaging')}
       </div>
     `;
   }
@@ -125,6 +128,7 @@ export function renderStudioView(params: {
             ? `<div class="section-header__actions">
                 <button type="button" class="btn" data-action="reroll-rig" title="Swap 1998 Camera & Lighting Rig">${Glyphs.refresh(14)}<span>Camera</span></button>
                 <button type="button" class="btn" data-action="reroll-punchline" title="Try Alternate Shot 6 Punchline">${Glyphs.sparkle(14)}<span>Punchline</span></button>
+                <button type="button" class="btn btn--primary" data-action="make-sequel" title="Generate Part 2 Callback Sequel">${Glyphs.arrowRight(14)}<span>Part 2</span></button>
               </div>`
             : ''
         }

@@ -1,13 +1,16 @@
 import './styles/main.scss';
+import { pullUnseenDailyEpisodes } from './engine/daily_pool';
 import { generateFreshLiveNewsTopics } from './engine/free_ai';
 import { generateLiveTopics } from './engine/live_ai';
 import { loadLiveTrends, pickTrendChips } from './engine/live_feeds';
 import { generatePromptsForTopic } from './engine/prompt_renderer';
 import { loadGeneratedIds, loadSaved, markTopicGenerated } from './engine/saved_store';
+import { buildPart2Topic } from './engine/sequel_engine';
 import { computeTasteDna } from './engine/taste_dna';
 import { loadConfig, loadLogs, loadSeenPairs, loadSeenTitles, saveSeenPairs, saveSeenTitles } from './engine/telemetry';
 import { evaluateTopics } from './engine/viral_evaluator';
 import { Glyphs } from './glyphs';
+import type { ScoredTopic } from './types';
 import { renderAnalyticsView, renderLogsView } from './ui/analytics_view';
 import { esc } from './ui/escape';
 import { bindAppEvents, type AppState } from './ui/events';
@@ -18,33 +21,15 @@ import { renderStudioView } from './ui/studio_view';
 const cfg0 = loadConfig();
 const logs0 = loadLogs();
 const seen0 = loadSeenPairs();
-const seenTitles = loadSeenTitles();
 const initialTopics = evaluateTopics({ count: 8, query: '', logs: logs0, seenPairs: seen0, batchNonce: Date.now() });
 saveSeenPairs(seen0);
 
 const state: AppState = {
-  config: cfg0,
-  activeTab: 'studio',
-  drawerOpen: false,
-  seedQuery: '',
-  hookFilter: 'all',
-  situationFilter: 'all',
-  batchNonce: Date.now(),
-  seenPairs: seen0,
-  seenTitles,
-  topics: initialTopics,
-  liveTrends: [],
-  loadingTopics: cfg0.sourceMode === 'live-free',
-  selectedId: null,
-  prompts: null,
-  rigStep: 0,
-  punchStep: 0,
-  loading: false,
-  logs: logs0,
-  saved: loadSaved(),
-  generatedIds: loadGeneratedIds(),
-  savedFilter: 'all',
-  copiedTarget: null,
+  config: cfg0, activeTab: 'studio', drawerOpen: false, seedQuery: '', hookFilter: 'all', situationFilter: 'all',
+  batchNonce: Date.now(), seenPairs: seen0, seenTitles: loadSeenTitles(), topics: initialTopics, liveTrends: [],
+  loadingTopics: cfg0.sourceMode === 'live-free', selectedId: null, activeTopic: undefined, prompts: null,
+  rigStep: 0, punchStep: 0, loading: false, logs: logs0, saved: loadSaved(), generatedIds: loadGeneratedIds(),
+  savedFilter: 'all', copiedTarget: null,
 };
 
 function rememberTitles(topics: { title: string }[]): void {
@@ -69,6 +54,13 @@ async function refreshTopics(): Promise<void> {
   const mode = state.config.sourceMode;
   const isByok = mode === 'gemini' || mode === 'groq' || mode === 'openrouter';
 
+  if (mode === 'live-free' && !state.seedQuery.trim() && state.hookFilter === 'all' && state.situationFilter === 'all') {
+    const daily = await pullUnseenDailyEpisodes(state.seenTitles, 8);
+    if (daily.length >= 4) {
+      state.topics = daily; rememberTitles(daily); state.loadingTopics = false; render(); toast('8 fresh Daily AI episodes'); return;
+    }
+  }
+
   if (mode === 'live-free' || (isByok && state.config.apiKey.trim())) {
     state.loadingTopics = true;
     render();
@@ -80,28 +72,19 @@ async function refreshTopics(): Promise<void> {
         const avoid = [...Array.from(state.seenTitles).slice(-30), ...state.topics.map((t) => t.title)];
         state.topics = await generateLiveTopics(state.config, state.seedQuery, state.logs, avoid, state.liveTrends, state.hookFilter, state.situationFilter);
       }
-      rememberTitles(state.topics);
-      state.loadingTopics = false;
-      render();
-      toast('8 brand-new live topics');
-      return;
+      rememberTitles(state.topics); state.loadingTopics = false; render(); toast('8 brand-new live topics'); return;
     } catch (err) {
-      state.loadingTopics = false;
-      toast(`Live fallback: ${err instanceof Error ? err.message : 'offline'}`);
+      state.loadingTopics = false; toast(`Live fallback: ${err instanceof Error ? err.message : 'offline'}`);
     }
   }
   state.topics = evaluateTopics({ count: 8, query: state.seedQuery, logs: state.logs, seenPairs: state.seenPairs, batchNonce: state.batchNonce, hookFilter: state.hookFilter, situationFilter: state.situationFilter });
-  saveSeenPairs(state.seenPairs);
-  rememberTitles(state.topics);
-  render();
-  toast('8 fresh topics');
+  saveSeenPairs(state.seenPairs); rememberTitles(state.topics); render(); toast('8 fresh topics');
 }
 
-async function selectTopic(id: string, fromSaved = false): Promise<void> {
-  const topic = state.topics.find((t) => t.id === id) ?? state.saved.find((s) => s.topic.id === id)?.topic;
-  if (!topic) return;
-  if (fromSaved) state.activeTab = 'studio';
+async function generateFor(topic: ScoredTopic, switchStudio: boolean): Promise<void> {
+  if (switchStudio) state.activeTab = 'studio';
   state.selectedId = topic.id;
+  state.activeTopic = topic;
   state.loading = true;
   const marked = markTopicGenerated(state.saved, state.generatedIds, topic.id);
   state.saved = marked.saved;
@@ -117,30 +100,36 @@ async function selectTopic(id: string, fromSaved = false): Promise<void> {
   document.getElementById('section-prompts')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+async function selectTopic(id: string, fromSaved = false): Promise<void> {
+  const topic = state.topics.find((t) => t.id === id) ?? state.saved.find((s) => s.topic.id === id)?.topic;
+  if (topic) await generateFor(topic, fromSaved);
+}
+
+async function createSequel(topic: ScoredTopic): Promise<void> {
+  const sequel = buildPart2Topic(topic);
+  rememberTitles([sequel]);
+  await generateFor(sequel, true);
+  toast(sequel.title);
+}
+
 function render(): void {
   const root = document.getElementById('app');
   if (!root) return;
   document.documentElement.setAttribute('data-theme', state.config.theme);
-  let surfaceHtml = '';
-  if (state.activeTab === 'studio') {
-    surfaceHtml = renderStudioView({ topics: state.topics, logs: state.logs, generatedIds: state.generatedIds, selectedId: state.selectedId, prompts: state.prompts, loadingTopics: state.loadingTopics, loading: state.loading, seedQuery: state.seedQuery, hookFilter: state.hookFilter, situationFilter: state.situationFilter, liveTrends: state.liveTrends, copiedTarget: state.copiedTarget });
-  } else if (state.activeTab === 'saved') {
-    surfaceHtml = renderSavedView({ saved: state.saved, filter: state.savedFilter, selectedId: state.selectedId });
-  } else if (state.activeTab === 'analytics') {
-    surfaceHtml = renderAnalyticsView(state.logs);
-  } else {
-    surfaceHtml = renderLogsView(state.logs);
-  }
+  const surfaceHtml =
+    state.activeTab === 'studio'
+      ? renderStudioView({ topics: state.topics, logs: state.logs, generatedIds: state.generatedIds, selectedId: state.selectedId, activeTopic: state.activeTopic, prompts: state.prompts, loadingTopics: state.loadingTopics, loading: state.loading, seedQuery: state.seedQuery, hookFilter: state.hookFilter, situationFilter: state.situationFilter, liveTrends: state.liveTrends, copiedTarget: state.copiedTarget })
+      : state.activeTab === 'saved'
+        ? renderSavedView({ saved: state.saved, filter: state.savedFilter, selectedId: state.selectedId })
+        : state.activeTab === 'analytics'
+          ? renderAnalyticsView(state.logs)
+          : renderLogsView(state.logs);
   root.innerHTML = renderAppShell({ config: state.config, activeTab: state.activeTab, drawerOpen: state.drawerOpen, logs: state.logs, savedCount: state.saved.length, surfaceHtml });
-  bindAppEvents(state, { render, refreshTopics, selectTopic, toast });
+  bindAppEvents(state, { render, refreshTopics, selectTopic, createSequel, toast });
 }
 
 render();
 void loadLiveTrends().then((feed) => {
-  if (feed?.keywords?.length) {
-    allLiveTrendPool = feed.keywords;
-    state.liveTrends = pickTrendChips(allLiveTrendPool, 6);
-    render();
-  }
+  if (feed?.keywords?.length) { allLiveTrendPool = feed.keywords; state.liveTrends = pickTrendChips(allLiveTrendPool, 6); render(); }
 });
 if (state.config.sourceMode === 'live-free') void refreshTopics();

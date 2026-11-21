@@ -25,6 +25,13 @@ export function renderSavedView(params: {
           const statusPill = item.generated
             ? `<span class="pill pill--positive">${Glyphs.check(12)} Done</span>`
             : `<span class="pill">Pending</span>`;
+          const outcomeRow = item.generated
+            ? `<div class="trend-strip" style="margin-top:6px;">
+                <button type="button" class="pill ${item.outcome === 'flop' ? 'pill--accent' : ''}" data-action="set-outcome" data-id="${esc(t.id)}" data-outcome="flop">Flop</button>
+                <button type="button" class="pill ${item.outcome === 'good' ? 'pill--accent' : ''}" data-action="set-outcome" data-id="${esc(t.id)}" data-outcome="good">Good</button>
+                <button type="button" class="pill ${item.outcome === 'viral' ? 'pill--positive' : ''}" data-action="set-outcome" data-id="${esc(t.id)}" data-outcome="viral">Viral</button>
+              </div>`
+            : '';
           return `
             <article class="topic-card ${selected ? 'is-selected' : ''} is-liked">
               <div class="topic-card__body">
@@ -34,12 +41,14 @@ export function renderSavedView(params: {
                 </div>
                 <h3 class="topic-card__title">${esc(t.title)}</h3>
                 <p class="topic-card__pitch">${esc(t.pitch)}</p>
+                ${outcomeRow}
               </div>
               <div class="topic-card__footer">
-                <button type="button" class="vote-btn" data-action="remove-saved" data-id="${esc(t.id)}" title="Remove from Saved">
-                  ${Glyphs.close(14)}
-                </button>
-                <button type="button" class="btn ${selected ? 'btn--primary' : ''}" data-action="select-saved" data-id="${esc(t.id)}" title="${item.generated ? 'View or Re-generate Prompts' : 'Generate Prompts'}">
+                <div class="vote-group">
+                  <button type="button" class="vote-btn" data-action="remove-saved" data-id="${esc(t.id)}" title="Remove">${Glyphs.close(14)}</button>
+                  ${item.generated ? `<button type="button" class="btn" data-action="sequel-saved" data-id="${esc(t.id)}" title="Create Part 2 Sequel">Part 2</button>` : ''}
+                </div>
+                <button type="button" class="btn ${selected ? 'btn--primary' : ''}" data-action="select-saved" data-id="${esc(t.id)}" title="${item.generated ? 'View Prompts' : 'Generate Prompts'}">
                   ${Glyphs.arrowRight(15)}
                 </button>
               </div>

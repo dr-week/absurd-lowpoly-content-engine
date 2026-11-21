@@ -1,4 +1,4 @@
-import type { SavedItem, ScoredTopic } from '../types';
+import type { OutcomeTag, SavedItem, ScoredTopic } from '../types';
 
 const SAVED_KEY = 'absurd_studio_saved_v1';
 const GENERATED_KEY = 'absurd_studio_generated_v1';
@@ -74,4 +74,12 @@ export function markTopicGenerated(
   );
   saveSaved(nextSaved);
   return { saved: nextSaved, generatedIds: nextIds };
+}
+
+export function setSavedOutcome(items: SavedItem[], topicId: string, outcome: OutcomeTag): SavedItem[] {
+  const next = items.map((i) =>
+    i.topic.id === topicId ? { ...i, outcome: i.outcome === outcome ? undefined : outcome } : i,
+  );
+  saveSaved(next);
+  return next;
 }
