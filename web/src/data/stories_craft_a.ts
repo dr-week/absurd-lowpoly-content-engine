@@ -55,7 +55,7 @@ export const CRAFT_STORIES_A: TopicOption[] = [
     angle: 'fake-origin',
     brand: 'Gandhiji',
     trendHook: 'Fake Childhood Origin + Rule of Three',
-    pitch: 'Fake childhood origin: A school bully steals 8-year-old Gandhiji’s aloo paratha. Young Gandhi sits completely silent staring at him until the bully cracks and surrenders his lunch, compass box, and bicycle.',
+    pitch: 'A school bully steals 8-year-old Gandhiji’s aloo paratha. Young Gandhi sits completely silent staring at him until the bully cracks and surrenders his lunch, compass box, and bicycle.',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'Classroom wide shot', action: 'A boxy school bully snatches an aloo paratha straight from 8-year-old Gandhiji’s steel tiffin.', caption: 'Bully ne aloo paratha chheen liya.' },
       { frame: 2, position: 'Top Center', framing: 'Flat bench close-up', action: 'Young Gandhi does not shout; he sits cross-legged and stares calmly without blinking.', caption: 'Ladai nahi, bas shaant ghoorna.' },
@@ -79,7 +79,7 @@ export const CRAFT_STORIES_A: TopicOption[] = [
     angle: 'fake-origin',
     brand: 'Elon Musk',
     trendHook: 'Fake Childhood Origin + Broken Assumption',
-    pitch: 'Fake childhood origin: 9-year-old Elon’s bicycle chain slips on the way to school. Instead of fixing the chain, he tapes two Diwali rockets to the seat and lands vertically on the principal’s roof.',
+    pitch: '9-year-old Elon’s bicycle chain slips on the way to school. Instead of fixing the chain, he tapes two Diwali rockets to the seat and lands vertically on the principal’s roof.',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'Suburban street shot', action: '9-year-old Elon stands beside a small blue bicycle whose rusty chain lies on the road.', caption: 'School jaate waqt chain utar gayi.' },
       { frame: 2, position: 'Top Center', framing: 'Garage close-up', action: 'Instead of touching the chain, he duct-tapes two giant red bottle rockets under the seat.', caption: 'Chain chhodi, do rocket baandhe.' },

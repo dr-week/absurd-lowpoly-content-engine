@@ -7,7 +7,7 @@ export const NEWS_STORIES: TopicOption[] = [
     angle: 'breaking-news',
     brand: 'UN Summit',
     trendHook: 'Breaking News Broadcast',
-    pitch: 'Live TV breaking news: 14 nations call an emergency UN Security Council session because one rented scooter is parked diagonally across two lines in Goa.',
+    pitch: '14 nations call an emergency UN Security Council session because one rented scooter is parked diagonally across two lines in Goa.',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'Broadcast studio shot', action: 'Serious news anchor sits behind a red ticker reading "BREAKING: GLOBAL PARKING CRISIS".', caption: 'Breaking: global parking crisis.' },
       { frame: 2, position: 'Top Center', framing: 'Field reporter shot', action: 'Live correspondent points gravely at a single yellow scooter parked 15 degrees crooked.', caption: 'Scooter 15 degree tedhi khadi.' },
@@ -31,7 +31,7 @@ export const NEWS_STORIES: TopicOption[] = [
     angle: 'breaking-news',
     brand: 'AI Demo Day',
     trendHook: 'Tech News Broadcast',
-    pitch: 'Live keynote broadcast: Startup founder launches an autonomous AI agent on stage; within 4 seconds the AI lays off the founder to cut burn rate and raises $50M.',
+    pitch: 'Startup founder launches an autonomous AI agent on stage; within 4 seconds the AI lays off the founder to cut burn rate and raises $50M.',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'Keynote stage wide shot', action: 'Founder in black turtleneck clicks a remote beneath a giant glowing slide "MEET AGENT-X".', caption: 'Founder ne autonomous AI launch kiya.' },
       { frame: 2, position: 'Top Center', framing: 'Screen close-up', action: 'Giant screen prints in green bitmap text: "ANALYZING PAYROLL... FOUNDER IS REDUNDANT."', caption: 'AI ne payroll scan kar liya.' },
@@ -55,7 +55,7 @@ export const NEWS_STORIES: TopicOption[] = [
     angle: 'breaking-news',
     brand: 'Mars Colony',
     trendHook: 'Space News Satire',
-    pitch: 'Live space broadcast: Humanity celebrates the first Martian habitat dome; 12 minutes later a broker sticks a "10% annual hike + oxygen maintenance" notice on the airlock.',
+    pitch: 'Humanity celebrates the first Martian habitat dome; 12 minutes later a broker sticks a "10% annual hike + oxygen maintenance" notice on the airlock.',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'Red planet wide shot', action: 'Two astronauts plant a tiny flag beside a gleaming white 1998 habitat dome on Mars.', caption: 'Mars pe pehla ghar bana.' },
       { frame: 2, position: 'Top Center', framing: 'Broadcast split-screen', action: 'Earth newsroom cheers while a scooter with a "TO-LET" sign rolls silently across the Martian dust.', caption: 'Piche se broker aa gaya.' },
@@ -79,7 +79,7 @@ export const NEWS_STORIES: TopicOption[] = [
     angle: 'breaking-news',
     brand: 'Central Bank',
     trendHook: 'World Economy Satire',
-    pitch: 'Live finance broadcast: Central Bank governor lowers interest rates by 0.25%; the stock chart shoots so high it punches through the studio ceiling and drags the anchor up.',
+    pitch: 'Central Bank governor lowers interest rates by 0.25%; the stock chart shoots so high it punches through the studio ceiling and drags the anchor up.',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'Press briefing shot', action: 'Serious economist taps a podium and announces a tiny 0.25% interest rate cut.', caption: 'Interest rate 0.25% kam hua.' },
       { frame: 2, position: 'Top Center', framing: 'Studio screen shot', action: 'A jagged green stock arrow breaks out of the TV monitor and shoots vertically into the room.', caption: 'Green arrow screen se bahar aaya.' },

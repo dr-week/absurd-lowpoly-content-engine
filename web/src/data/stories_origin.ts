@@ -7,7 +7,7 @@ export const ORIGIN_STORIES: TopicOption[] = [
     angle: 'fake-origin',
     brand: 'Trump',
     trendHook: 'Fake Celebrity Childhood',
-    pitch: 'Fake biopic: In 1st grade, classmate refuses to share his aloo paratha. Six-year-old Trump erects a cardboard desk wall and slaps a 200% crayon tariff on lunch.',
+    pitch: 'In 1st grade, classmate refuses to share his aloo paratha. Six-year-old Trump erects a cardboard desk wall and slaps a 200% crayon tariff on lunch.',
     frames: [
       { frame: 1, position: 'Top Left', framing: '1990s classroom wide shot', action: 'Six-year-old Trump in an oversized suit stares at a classmate’s steaming tiffin box.', caption: 'Class 1 mein paratha dekha.' },
       { frame: 2, position: 'Top Center', framing: 'Desk close-up', action: 'Classmate slides the steel tiffin two inches away refusing to share.', caption: 'Dost ne share karne se mana kiya.' },
@@ -31,7 +31,7 @@ export const ORIGIN_STORIES: TopicOption[] = [
     angle: 'fake-origin',
     brand: 'Gandhiji',
     trendHook: 'Fake Historical Origin',
-    pitch: 'Fake biopic: Neighbors complain the wooden spinning wheel is too noisy at 5 AM. Young Gandhiji quietly upgrades it with stealth bearings until it runs at 9,000 RPM in dead silence.',
+    pitch: 'Neighbors complain the wooden spinning wheel is too noisy at 5 AM. Young Gandhiji quietly upgrades it with stealth bearings until it runs at 9,000 RPM in dead silence.',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'Dawn courtyard wide shot', action: 'Young Gandhiji sits cross-legged spinning a squeaky wooden charkha at 5 AM.', caption: 'Subah 5 baje charkha chala.' },
       { frame: 2, position: 'Top Center', framing: 'Window close-up', action: 'Sleepy neighbor leans out of a wooden shutter complaining about the loud creaking.', caption: 'Padosi ne noise complaint ki.' },
@@ -55,7 +55,7 @@ export const ORIGIN_STORIES: TopicOption[] = [
     angle: 'fake-origin',
     brand: 'Fake Origin',
     trendHook: 'Fake Celebrity Childhood',
-    pitch: 'Fake biopic: In kindergarten, a ₹2 plastic sharpener snaps his pencil tip. Five-year-old Elon builds a conveyor-belt factory inside his school bag.',
+    pitch: 'In kindergarten, a ₹2 plastic sharpener snaps his pencil tip. Five-year-old Elon builds a conveyor-belt factory inside his school bag.',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'School bench shot', action: 'Five-year-old kid twists a pencil in a tiny plastic sharpener; the graphite snaps cleanly.', caption: 'Pencil ki nok toot gayi.' },
       { frame: 2, position: 'Top Center', framing: 'Close-up inside bag', action: 'He opens his canvas school bag revealing tiny gears, batteries, and copper coils.', caption: 'School bag mein lab kholi.' },
@@ -79,7 +79,7 @@ export const ORIGIN_STORIES: TopicOption[] = [
     angle: 'fake-origin',
     brand: 'Goa Shack',
     trendHook: 'Fake Local Legend',
-    pitch: 'Fake biopic: A retired Goan uncle only wanted to test his broken ceiling-fan regulator. Accidentally invented a 140 BPM techno drop that shook three beaches.',
+    pitch: 'A retired Goan uncle only wanted to test his broken ceiling-fan regulator. Accidentally invented a 140 BPM techno drop that shook three beaches.',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'Verandah wide shot', action: 'Retired uncle in floral shirt twists a stubborn wall fan regulator back and forth.', caption: 'Uncle fan regulator theek kar rahe.' },
       { frame: 2, position: 'Top Center', framing: 'Close-up on dial', action: 'The plastic knob clicks rhythmically 1-2-3-5-1 creating a hypnotic retro bass pulse.', caption: 'Click-click se beat ban gayi.' },

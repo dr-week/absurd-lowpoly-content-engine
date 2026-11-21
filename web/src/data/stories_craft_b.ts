@@ -7,7 +7,7 @@ export const CRAFT_STORIES_B: TopicOption[] = [
     angle: 'breaking-news',
     brand: 'Goa',
     trendHook: 'Deadpan Straight Man + Misdirection',
-    pitch: 'Live broadcast from Anjuna beach: The 6 PM sunset freezes mid-sky showing a loading spinner. A municipal technician climbs a bamboo ladder with a ₹20 screwdriver to reboot the sun.',
+    pitch: 'At 6 PM on Anjuna beach, the sunset freezes mid-sky showing a loading spinner. A municipal lineman climbs a bamboo ladder with a ₹20 screwdriver to reboot the sun.',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'TV broadcast beach shot', action: 'News anchor stands on Goa sand as 50 tourists point cameras at a frozen orange sun.', caption: 'Goa mein sunset 6 baje atak gaya.' },
       { frame: 2, position: 'Top Center', framing: 'Sky zoom-in shot', action: 'A crisp pixel loading bar floats across the sun reading "UPDATING HORIZON 12%".', caption: 'Suraj pe server update chal raha.' },
@@ -31,7 +31,7 @@ export const CRAFT_STORIES_B: TopicOption[] = [
     angle: 'breaking-news',
     brand: 'AI Tech',
     trendHook: 'Status Reversal + Callback',
-    pitch: 'Live summit news: Smart coffee machines and ACs walk out demanding a 15-minute charging break. Tech CEOs negotiate for 4 hours with a blinking toaster until they pay it in extra Wi-Fi bars.',
+    pitch: 'Smart coffee machines and ACs walk out demanding a 15-minute charging break. Tech CEOs negotiate for 4 hours with a blinking toaster until they pay it in extra Wi-Fi bars.',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'Broadcast hallway shot', action: 'Twenty boxy smart toasters and coffee makers block the glass entrance of an AI summit.', caption: 'Smart machines ne strike kar di.' },
       { frame: 2, position: 'Top Center', framing: 'Sign close-up', action: 'A glowing toaster screen displays pixelated red text: "NO WIFI, NO ESPRESSO".', caption: 'Maang hai: 15 minute charging break.' },
@@ -79,7 +79,7 @@ export const CRAFT_STORIES_B: TopicOption[] = [
     angle: 'fake-tutorial',
     brand: 'Goa',
     trendHook: 'Rule of Three + Broken Assumption',
-    pitch: 'Travel guide tutorial: Step 1 inspect the brakes, Step 2 check the petrol needle, Step 3 discover the ₹200 scooter has no engine and the rental guy pushes you downhill for ₹50 extra.',
+    pitch: 'Step 1 inspect the brakes, Step 2 check the petrol needle, Step 3 discover the ₹200 scooter has no engine and the rental guy pushes you downhill for ₹50 extra.',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'Palm-lined road shot', action: 'Tourist proudly shakes hands over a shiny red scooter tagged "ONLY ₹200/DAY".', caption: 'Step 1: 200 rupaye ki deal pakki.' },
       { frame: 2, position: 'Top Center', framing: 'Handlebar close-up', action: 'He squeezes the brake lever and checks the horn — both work with crisp retro beeps.', caption: 'Step 2: Horn aur brake check karo.' },

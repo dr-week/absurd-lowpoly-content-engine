@@ -27,12 +27,15 @@ _STOPWORDS = {
     "being", "their", "there", "would", "could", "should", "will", "more", "most",
     "some", "than", "then", "them", "they", "your", "just", "first", "last",
     "biggest", "new", "city", "cities", "deal", "leader", "apparent", "aftermath",
+    "accuses", "announces", "claims", "warns", "urges", "seeks", "faces", "plans",
+    "didn't", "don't", "won't", "can't", "close", "dependent", "control",
 }
 
 _SENSITIVE_FILTER = {
     "assassinate", "assassination", "killed", "killing", "murder", "dead", "death",
     "sentenced", "arrested", "strikes", "strike", "attack", "bomb", "war", "prison",
     "beating", "besieged", "shooting", "terror", "suicide", "abuse", "rape",
+    "cremated", "convicted", "criminal", "detained", "conning", "deadlock",
 }
 
 

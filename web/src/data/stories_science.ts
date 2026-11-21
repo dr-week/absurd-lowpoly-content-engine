@@ -7,7 +7,7 @@ export const SCIENCE_STORIES: TopicOption[] = [
     angle: 'weird-science',
     brand: 'Sleep Study',
     trendHook: 'Weird Science Documentary',
-    pitch: 'Deadpan science documentary: University researchers test 4-minute power naps. By minute 3, volunteer’s posture stiffens so hard he becomes an ergonomic office chair.',
+    pitch: 'University researchers test 4-minute power naps. By minute 3, volunteer’s posture stiffens so hard he becomes an ergonomic office chair.',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'Lab documentary shot', action: 'Professor in white coat introduces a tired volunteer wired with twenty glowing sleep electrodes.', caption: 'Nayi study: 4-minute power nap.' },
       { frame: 2, position: 'Top Center', framing: 'Monitor close-up', action: 'Green EEG wave flattens into a neat geometric square at minute 2:30.', caption: 'Brain wave bilkul square ho gayi.' },
@@ -31,7 +31,7 @@ export const SCIENCE_STORIES: TopicOption[] = [
     angle: 'weird-science',
     brand: 'NASA Study',
     trendHook: 'Space Science Documentary',
-    pitch: 'Science documentary: NASA spends 6 years designing a $40M zero-gravity titanium cup. In orbit, the tea forms a solid floating cube and refuses to leave the cup.',
+    pitch: 'NASA spends 6 years designing a $40M zero-gravity titanium cup. In orbit, the tea forms a solid floating cube and refuses to leave the cup.',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'Aerospace lab shot', action: 'Three scientists unveil a gleaming $40M faceted titanium teacup inside a cleanroom.', caption: 'NASA ka 40 million dollar cup.' },
       { frame: 2, position: 'Top Center', framing: 'Space station shot', action: 'Astronaut floats inside an orbital module carefully pouring hot tea into the titanium cup.', caption: 'Zero gravity mein chai daali.' },
@@ -55,7 +55,7 @@ export const SCIENCE_STORIES: TopicOption[] = [
     angle: 'weird-science',
     brand: 'Ocean Research',
     trendHook: 'Nature Documentary Parody',
-    pitch: 'Nature documentary: Biologists dive 4,000 meters to film an undiscovered deep-sea fish. The fish swims up to the glass, sighs, and holds up a cardboard sign saying "Rent due?"',
+    pitch: 'Biologists dive 4,000 meters to film an undiscovered deep-sea fish. The fish swims up to the glass, sighs, and holds up a cardboard sign saying "Rent due?"',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'Dark ocean wide shot', action: 'Tiny yellow research submarine descends into pitch-black abyssal ocean with twin headlights.', caption: '4000 meter neeche nayi khoj.' },
       { frame: 2, position: 'Top Center', framing: 'Porthole close-up', action: 'Excited marine biologist spots a glowing angular fish drifting out of the murk.', caption: 'Nayi prajati ki machhli mili.' },
@@ -79,7 +79,7 @@ export const SCIENCE_STORIES: TopicOption[] = [
     angle: 'weird-science',
     brand: 'Fitness Lab',
     trendHook: 'Investigative Documentary',
-    pitch: 'Consumer lab documentary: Scientists test a suspicious ₹999 "imported" gym protein tub. One drop on a wooden stool causes the stool to grow six-pack abs and walk out.',
+    pitch: 'Scientists test a suspicious ₹999 "imported" gym protein tub. One drop on a wooden stool causes the stool to grow six-pack abs and walk out.',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'Lab bench shot', action: 'Food scientist inspects a giant neon tub labeled "100% IMPORTED WHEY — ₹999 ONLY".', caption: '999 wale protein ka lab test.' },
       { frame: 2, position: 'Top Center', framing: 'Dropper close-up', action: 'One single glowing drop of powder falls accidentally onto a plain wooden lab stool.', caption: 'Ek boond stool pe gir gayi.' },

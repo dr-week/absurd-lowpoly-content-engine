@@ -7,7 +7,7 @@ export const TUTORIAL_STORIES: TopicOption[] = [
     angle: 'fake-tutorial',
     brand: 'Quantum Lab',
     trendHook: 'Fake Tutorial Bait-and-Switch',
-    pitch: 'Earnest tech tutorial: "Stop waiting 2 hours to charge your phone." Host plugs a USB cable into a particle collider; phone hits 9000% battery and begins hovering.',
+    pitch: '"Stop waiting 2 hours to charge your phone." Host plugs a USB cable into a particle collider; phone hits 9000% battery and begins hovering.',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'Camcorder waist-up shot', action: 'Presenter holds a 1% battery phone toward the lens promising a secret fast-charge trick.', caption: '99% log ye charging hack nahi jaante.' },
       { frame: 2, position: 'Top Center', framing: 'Tunnel wide shot', action: 'He walks briskly into an underground particle collider tunnel holding a regular USB cable.', caption: 'Step 1: collider mein cable lagao.' },
@@ -31,7 +31,7 @@ export const TUTORIAL_STORIES: TopicOption[] = [
     angle: 'fake-tutorial',
     brand: 'Alpha Podcast',
     trendHook: 'Hustle Culture Tutorial Satire',
-    pitch: 'Earnest hustle tutorial: Podcast guru demonstrates his 4 AM ice-bath productivity hack; he freezes into a solid ice cube and gets shipped to a fish market by mistake.',
+    pitch: 'Podcast guru demonstrates his 4 AM ice-bath productivity hack; he freezes into a solid ice cube and gets shipped to a fish market by mistake.',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'Neon studio shot', action: 'Podcast bro points intensely into a giant mic promising 10x focus with one morning habit.', caption: '4 AM ice bath se 10x focus.' },
       { frame: 2, position: 'Top Center', framing: 'Balcony tub shot', action: 'He steps stiffly into a plastic tub filled with jagged ice blocks holding his notebook.', caption: 'Step 1: 30 second barf mein baitho.' },
@@ -55,7 +55,7 @@ export const TUTORIAL_STORIES: TopicOption[] = [
     angle: 'fake-tutorial',
     brand: 'Airport Check',
     trendHook: 'Travel Hack Bait-and-Switch',
-    pitch: 'Earnest travel hack: "Never wait in airport security queues again." Host places himself directly onto the X-ray luggage conveyor belt; comes out wearing a barcode sticker.',
+    pitch: '"Never wait in airport security queues again." Host places himself directly onto the X-ray luggage conveyor belt; comes out wearing a barcode sticker.',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'Terminal wide shot', action: 'Travel vlogger films a mile-long airport security line shaking his head smugly.', caption: 'Airport line skip karne ka hack.' },
       { frame: 2, position: 'Top Center', framing: 'Conveyor close-up', action: 'Instead of putting his bag in the tray, he lies flat like a plank on the rubber belt.', caption: 'Step 1: seedha belt pe let jao.' },
@@ -79,7 +79,7 @@ export const TUTORIAL_STORIES: TopicOption[] = [
     angle: 'fake-tutorial',
     brand: 'Goa Shack',
     trendHook: 'Tech Hack Bait-and-Switch',
-    pitch: 'Earnest remote-work hack: Guy wraps a coconut in foil on a Goan beach to boost Wi-Fi; accidentally hijacks a passing satellite and downloads the entire ocean.',
+    pitch: 'Guy wraps a coconut in foil on a Goan beach to boost Wi-Fi; accidentally hijacks a passing satellite and downloads the entire ocean.',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'Beach table shot', action: 'Digital nomad stares at one flickering Wi-Fi bar on his laptop under a palm tree.', caption: 'Beach pe Wi-Fi slow chal raha.' },
       { frame: 2, position: 'Top Center', framing: 'DIY close-up', action: 'He wraps a green coconut in silver foil and balances a steel spoon on top.', caption: 'Step 1: nariyal ko foil mein lapeto.' },
