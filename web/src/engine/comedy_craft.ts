@@ -53,12 +53,12 @@ export function pickComedyMechanism(seed = Math.random()): ComedyMechanism {
 
 export const WRITERS_ROOM_RULES =
   'COMEDY WRITER RULES (MANDATORY): ' +
-  '1) BUT/THEREFORE CAUSALITY: Every shot transition must be "BUT" (reversal) or "THEREFORE" (escalation), NEVER "and then". ' +
-  '2) BROKEN ASSUMPTION: Setup creates one clear expectation; payoff shatters it while still making sense in hindsight (surprising, not random). ' +
-  '3) RULE OF THREE: Establish pattern (Shot 2), confirm bigger (Shot 3), shatter prediction (Shots 4-5). ' +
-  '4) PUNCH-WORD LAST & ZERO FAT: Put the reveal word at the VERY END of Shot 6 Hindi dialogue (<= 7 words). Cut everything after the reveal. ' +
-  '5) SPECIFICITY: Use concrete numbers/props ("₹10 coin", "40-foot crane", "3°C") instead of vague nouns. ' +
-  '6) CALLBACK LOOP: Re-use one planted Shot 1 detail in Shot 6 for instant rewatch value.';
+  '1) 0.8s PATTERN INTERRUPT: Open Shot 1 mid-action on an unusual visual detail (never a slow static intro). ' +
+  '2) BUT/THEREFORE CAUSALITY: Every shot transition must be "BUT" (reversal) or "THEREFORE" (escalation), NEVER "and then". ' +
+  '3) BROKEN ASSUMPTION: Setup creates one clear expectation; payoff shatters it while still making sense in hindsight (surprising, not random). ' +
+  '4) RULE OF THREE: Establish pattern (Shot 2), confirm bigger (Shot 3), shatter prediction (Shots 4-5). ' +
+  '5) PUNCH-WORD LAST & ZERO FAT: Put the reveal word at the VERY END of Shot 6 Hindi dialogue (<= 7 words). Cut everything after the reveal. ' +
+  '6) SPECIFICITY & CALLBACK LOOP: Use concrete numbers/props ("₹10 coin", "40-foot crane", "3°C") and call back Shot 1 in Shot 6 for >100% rewatch loop.';
 
 export interface CraftScore {
   total: number;

@@ -11,10 +11,12 @@ from pathlib import Path
 from absurd_engine.trends import RSSFeedSource, fetch_india_trends
 
 FEEDS: tuple[RSSFeedSource, ...] = (
+    RSSFeedSource("ScienceDaily Strange & Offbeat", "https://www.sciencedaily.com/rss/strange_offbeat.xml"),
+    RSSFeedSource("Atlas Obscura", "https://www.atlasobscura.com/feeds/latest"),
+    RSSFeedSource("Ars Technica Science", "https://feeds.arstechnica.com/arstechnica/science"),
     RSSFeedSource("BBC World News", "https://feeds.bbci.co.uk/news/world/rss.xml"),
     RSSFeedSource("ScienceDaily Top Science", "https://www.sciencedaily.com/rss/top/science.xml"),
     RSSFeedSource("Google News World", "https://news.google.com/rss/headlines/section/topic/WORLD?hl=en&gl=US&ceid=US:en"),
-    RSSFeedSource("Google News Science", "https://news.google.com/rss/headlines/section/topic/SCIENCE?hl=en&gl=US&ceid=US:en"),
     RSSFeedSource("Goa News", "https://news.google.com/rss/search?q=Goa&hl=en-IN&gl=IN&ceid=IN:en"),
     RSSFeedSource("Hacker News Tech", "https://hnrss.org/frontpage"),
 )
