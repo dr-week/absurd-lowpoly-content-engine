@@ -19,6 +19,12 @@ export const BRAND_SIGNALS: Record<string, BrandSignal> = {
   'Barber Chair': { brand: 'Barber Chair', spendHeat: 89, hook: 'Universal haircut betrayal', agencyStyle: 'Deadpan visual twist' },
   'Fitness Lab': { brand: 'Fitness Lab', spendHeat: 87, hook: 'Cheap protein & gym bro satire', agencyStyle: 'Fitness parody' },
   'Spam Call': { brand: 'Spam Call', spendHeat: 85, hook: 'Robocall & loan spam absurdity', agencyStyle: 'Creepy-funny tech' },
+  'Elon Musk': { brand: 'Elon Musk', spendHeat: 98, hook: 'Over-engineering simple tasks with rockets', agencyStyle: 'Tech-bro satire' },
+  'Trump': { brand: 'Trump', spendHeat: 97, hook: 'Absurd tariff & biggest-deal parody', agencyStyle: 'Global political satire' },
+  'Gandhiji': { brand: 'Gandhiji', spendHeat: 94, hook: 'Deadpan stubbornness & fake origin jokes', agencyStyle: 'Classic viral parody' },
+  'Putin': { brand: 'Putin', spendHeat: 95, hook: 'War-room & missile overkill for tiny tasks', agencyStyle: 'Deadpan geopolitical comedy' },
+  'Modi': { brand: 'Modi', spendHeat: 96, hook: 'Grand ribbon-cutting for absurdly tiny things', agencyStyle: 'Viral inauguration satire' },
+  'Fake Origin': { brand: 'Fake Origin', spendHeat: 93, hook: 'Fake celebrity childhood & 100x growth story', agencyStyle: 'Progression montage comedy' },
   'Luxury Villa': { brand: 'Luxury Villa', spendHeat: 90, hook: 'Discount coupon vs luxury Airbnb', agencyStyle: 'Lifestyle contrast' },
 };
 

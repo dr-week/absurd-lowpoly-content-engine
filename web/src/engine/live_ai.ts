@@ -62,9 +62,9 @@ export async function generateLiveTopics(
 
   const system =
     'You invent 8 wildly creative, completely UNRELATED absurdist comedy topics for 1998 PS1/N64 low-poly 3D videos with a deadpan Hindi narrator. ' +
-    'Mix across ALL of these categories (1 per category): World News, Political Satire, Weird Scientific Research/Studies, Space/Tech/AI, Goa/Coastal Life, Economy/Startups, Viral Internet Culture, and Universal Everyday Life. ' +
+    'Mix across ALL of these categories (1 per category): Iconic Figure Parody (Elon Musk, Trump, Putin, Modi, or Gandhiji), Over-Engineering a Simple Task (building/upgrading/growing Level 1 -> Level 999), Fake Celebrity Childhood Origin Story, Missile/War-Room Overkill for a Tiny Problem, Weird Scientific Study, Goa/Coastal Life, World News/Politics, and Universal Everyday Life. ' +
     'DO NOT make topics specific to Delhi or Mumbai. Keep every topic distinct and unpredictable. ' +
-    'Return ONLY JSON: {"topics":[{"title":"UPPERCASE PUNCHY TITLE","angle":"short-tag","brand":"Topic/World Tag","pitch":"1-sentence hook + surreal twist + deadpan payoff","viralScore":88}]}';
+    'Return ONLY JSON: {"topics":[{"title":"UPPERCASE PUNCHY TITLE","angle":"short-tag","brand":"Figure/World Tag","pitch":"1-sentence hook + build/upgrade/absurd twist + deadpan payoff","viralScore":92}]}';
 
   const user = [
     `Generate 8 completely fresh, unrelated Indian absurd comedy topics. Seed nonce: ${Date.now()}-${Math.random().toString(36).slice(2, 7)}.`,

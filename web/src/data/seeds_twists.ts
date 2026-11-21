@@ -1,5 +1,6 @@
 import { TWIST_SEEDS_A } from './seeds_twists_a';
 import { TWIST_SEEDS_B } from './seeds_twists_b';
+import { TWIST_SEEDS_C } from './seeds_twists_c';
 
 export interface TwistSeed {
   key: string;
@@ -20,4 +21,4 @@ export interface TwistSeed {
   calmHindi: string;
 }
 
-export const TWIST_SEEDS: TwistSeed[] = [...TWIST_SEEDS_A, ...TWIST_SEEDS_B];
+export const TWIST_SEEDS: TwistSeed[] = [...TWIST_SEEDS_A, ...TWIST_SEEDS_B, ...TWIST_SEEDS_C];
