@@ -4,6 +4,13 @@ The canonical ruleset for generating 1998 PS1 / N64 ultra low-poly absurdist Hin
 
 ---
 
+## 0. Output Rule (Strict Text-Only — No Images)
+
+* **Always output text only:** Generate only the **6-frame 3x2 Storyboard Prompt** and the **20s 9:16 Video Prompt with Hindi Script**.
+* **Strictly NO image or video generation:** Never generate, render, or attach images unless the user explicitly overrides this rule.
+
+---
+
 ## 1. Visual Style (Strict 1998 PS1 / N64 Aesthetic)
 
 To get the exact low-effort, gritty retro 3D look instead of smooth CGI or 2D cartoons, always enforce these traits:
@@ -50,22 +57,22 @@ When prompting for a short vertical video:
 ```text
 Create a storyboard of six frames in a 3x2 grid layout on a plain dark background, rendered strictly in authentic 1998 PlayStation 1 (PS1) and Nintendo 64 (N64) ultra low-poly 3D video game graphics. Every panel must look like raw, unpolished late-90s 3D game screenshots: extremely angular faceted polygon meshes with visible sharp edges, blurry pixelated low-resolution bitmap textures stretched over blocky geometry, stiff awkward character poses, crude vertex/Gouraud shading, jagged aliased edges, and muddy retro colors. Strictly NO 2D cartoon art, NO comic ink outlines, NO cel-shading, and NO smooth modern CGI. Place a short, bold retro pixel-font Hinglish caption underneath each panel. Title at top: "[TITLE]".
 
-Frame 1 (Top Left): Raw 1998 PS1 low-poly 3D screenshot. [Setup scene & character].
+Frame 1 (Top Left): [Framing]. [Setup scene & character].
 Caption: "[Short Hinglish line 1]"
 
-Frame 2 (Top Center): Raw 1998 PS1 low-poly 3D screenshot. [Action/escalation].
+Frame 2 (Top Center): [Framing]. [Action/escalation].
 Caption: "[Short Hinglish line 2]"
 
-Frame 3 (Top Right): Raw 1998 PS1 low-poly 3D close-up. [Weird shift/detail].
+Frame 3 (Top Right): [Close-up framing]. [Weird shift/detail].
 Caption: "[Short Hinglish line 3]"
 
-Frame 4 (Bottom Left): Raw 1998 PS1 low-poly 3D screenshot. [Consequence in environment].
+Frame 4 (Bottom Left): [Framing]. [Consequence in environment].
 Caption: "[Short Hinglish line 4]"
 
-Frame 5 (Bottom Center): Raw 1998 PS1 low-poly 3D screenshot. [Build-up right before twist].
+Frame 5 (Bottom Center): [Framing]. [Build-up right before twist].
 Caption: "[Short Hinglish line 5]"
 
-Frame 6 (Bottom Right): Raw 1998 PS1 low-poly 3D absurd wide/close shot. [Surprising absurd payoff].
+Frame 6 (Bottom Right): [Absurd wide/close framing]. [Surprising absurd payoff].
 Caption: "[Short Hinglish line 6]"
 ```
 

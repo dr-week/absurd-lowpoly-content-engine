@@ -2,13 +2,12 @@
 
 from __future__ import annotations
 
-import httpx
-
 from absurd_engine.llm.base import BaseLLMProvider, LLMProviderError
+from absurd_engine.llm.http_client import ResilientHTTPMixin
 
 
-class AnthropicProvider(BaseLLMProvider):
-    """Calls Anthropic /v1/messages endpoint via httpx."""
+class AnthropicProvider(ResilientHTTPMixin, BaseLLMProvider):
+    """Calls Anthropic /v1/messages endpoint via pooled httpx with backoff."""
 
     provider_name = "anthropic"
 
@@ -45,16 +44,12 @@ class AnthropicProvider(BaseLLMProvider):
             "messages": [{"role": "user", "content": user_prompt}],
         }
 
-        async with httpx.AsyncClient(timeout=self.timeout) as client:
-            resp = await client.post(url, headers=headers, json=body)
-            if resp.status_code >= 400:
-                raise LLMProviderError(
-                    f"[anthropic] HTTP {resp.status_code}: {resp.text[:400]}"
-                )
-            data = resp.json()
-            try:
-                return data["content"][0]["text"]
-            except (KeyError, IndexError, TypeError) as exc:
-                raise LLMProviderError(
-                    f"[anthropic] Unexpected response shape: {data}"
-                ) from exc
+        resp = await self._post_with_backoff(url, headers=headers, json_body=body)
+        if resp.status_code >= 400:
+            raise LLMProviderError(f"[anthropic] HTTP {resp.status_code}: {resp.text[:400]}")
+
+        data = resp.json()
+        try:
+            return data["content"][0]["text"]
+        except (KeyError, IndexError, TypeError) as exc:
+            raise LLMProviderError(f"[anthropic] Unexpected response shape: {data}") from exc

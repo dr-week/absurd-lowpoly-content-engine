@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
-import httpx
-
 from absurd_engine.llm.base import BaseLLMProvider, LLMProviderError
+from absurd_engine.llm.http_client import ResilientHTTPMixin
 
 
-class OpenAICompatProvider(BaseLLMProvider):
+class OpenAICompatProvider(ResilientHTTPMixin, BaseLLMProvider):
     """Calls any /chat/completions endpoint supporting the OpenAI wire format."""
 
     def __init__(
@@ -48,22 +47,20 @@ class OpenAICompatProvider(BaseLLMProvider):
         }
 
         url = f"{self.base_url}/chat/completions"
-        async with httpx.AsyncClient(timeout=self.timeout) as client:
-            resp = await client.post(url, headers=headers, json=body)
-            # Some local OpenAI-compatible servers reject response_format; fall back cleanly.
-            if resp.status_code == 400 and "response_format" in resp.text:
-                body.pop("response_format", None)
-                resp = await client.post(url, headers=headers, json=body)
+        resp = await self._post_with_backoff(url, headers=headers, json_body=body)
+        if resp.status_code == 400 and "response_format" in resp.text:
+            body.pop("response_format", None)
+            resp = await self._post_with_backoff(url, headers=headers, json_body=body)
 
-            if resp.status_code >= 400:
-                raise LLMProviderError(
-                    f"[{self.provider_name}] HTTP {resp.status_code}: {resp.text[:400]}"
-                )
+        if resp.status_code >= 400:
+            raise LLMProviderError(
+                f"[{self.provider_name}] HTTP {resp.status_code}: {resp.text[:400]}"
+            )
 
-            data = resp.json()
-            try:
-                return data["choices"][0]["message"]["content"]
-            except (KeyError, IndexError, TypeError) as exc:
-                raise LLMProviderError(
-                    f"[{self.provider_name}] Unexpected response shape: {data}"
-                ) from exc
+        data = resp.json()
+        try:
+            return data["choices"][0]["message"]["content"]
+        except (KeyError, IndexError, TypeError) as exc:
+            raise LLMProviderError(
+                f"[{self.provider_name}] Unexpected response shape: {data}"
+            ) from exc

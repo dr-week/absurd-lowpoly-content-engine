@@ -8,6 +8,8 @@ from absurd_engine.playbook import (
     CLICHE_WARNING_PHRASES,
     REQUIRED_NEGATIVE_CONSTRAINTS,
     REQUIRED_PS1_TOKENS,
+    STORYBOARD_SLOTS,
+    STYLE_SPAM_TOKENS,
     VIDEO_BEATS,
 )
 from absurd_engine.schemas import (
@@ -18,9 +20,23 @@ from absurd_engine.schemas import (
     VideoResult,
 )
 
+# Strip ASCII + Devanagari punctuation (e.g. standalone danda "।") before counting words
+_PUNCT_ONLY_RE = re.compile(r"^[\W_।॥]+$")
+
 
 def _count_words(text: str) -> int:
-    return len(re.findall(r"\S+", text.strip()))
+    tokens = re.findall(r"\S+", text.strip())
+    return sum(1 for tok in tokens if not _PUNCT_ONLY_RE.match(tok))
+
+
+def _count_style_spam_items(texts: list[str]) -> int:
+    """Count how many individual frames/shots repeat global PS1 style tokens."""
+    flagged = 0
+    for item in texts:
+        lowered = item.lower()
+        if any(token in lowered for token in STYLE_SPAM_TOKENS):
+            flagged += 1
+    return flagged
 
 
 def lint_episode(
@@ -28,7 +44,7 @@ def lint_episode(
     storyboard: StoryboardResult,
     video: VideoResult,
 ) -> LintReport:
-    """Validate an episode bundle against all Playbook style, pacing, and anti-cliché rules."""
+    """Validate an episode bundle against all Playbook style, pacing, efficiency, and anti-cliché rules."""
     issues: list[LintIssue] = []
 
     # 1. Anti-cliché checks on premise
@@ -46,7 +62,7 @@ def lint_episode(
                 )
             )
 
-    # 2. Storyboard aesthetic & negative constraints checks
+    # 2. Storyboard aesthetic, slot alignment, caption length & anti-repetition checks
     sb_lower = storyboard.rendered_prompt.lower()
     for token in REQUIRED_PS1_TOKENS:
         if token not in sb_lower:
@@ -69,7 +85,16 @@ def lint_episode(
                 )
             )
 
-    for frame in storyboard.spec.frames:
+    for slot, frame in zip(STORYBOARD_SLOTS, storyboard.spec.frames, strict=True):
+        if frame.position != slot.position:
+            issues.append(
+                LintIssue(
+                    severity="warning",
+                    code="STORYBOARD_POSITION_MISMATCH",
+                    message=f"Frame {frame.frame_number} has position '{frame.position}', expected '{slot.position}'.",
+                    location=f"storyboard.frames[{frame.frame_number - 1}]",
+                )
+            )
         cap_words = _count_words(frame.hinglish_caption)
         if cap_words > 10:
             issues.append(
@@ -81,7 +106,23 @@ def lint_episode(
                 )
             )
 
-    # 3. Video aesthetic, audio, timing & Hindi dialogue pacing checks
+    sb_spam = _count_style_spam_items(
+        [f"{f.camera_framing} {f.visual_description}" for f in storyboard.spec.frames]
+    )
+    if sb_spam >= 3:
+        issues.append(
+            LintIssue(
+                severity="warning",
+                code="STORYBOARD_STYLE_REPETITION",
+                message=(
+                    f"{sb_spam}/6 storyboard frames repeat global PS1 style terms — "
+                    "keep style in the global header for token efficiency."
+                ),
+                location="storyboard.frames",
+            )
+        )
+
+    # 3. Video aesthetic, audio, timing, Hindi dialogue pacing & anti-repetition checks
     vid_lower = video.rendered_prompt.lower()
     for token in REQUIRED_PS1_TOKENS:
         if token not in vid_lower:
@@ -132,6 +173,17 @@ def lint_episode(
                     location=f"video.shots[{beat.shot_number - 1}]",
                 )
             )
+        # Normalize hyphen vs en-dash when validating the spec's own time_window
+        normalized_window = shot.time_window.replace("-", "–").strip()
+        if normalized_window != beat.label:
+            issues.append(
+                LintIssue(
+                    severity="warning",
+                    code="VIDEO_SPEC_WINDOW_DRIFT",
+                    message=f"Shot {beat.shot_number} spec has time_window '{shot.time_window}', expected '{beat.label}'.",
+                    location=f"video.shots[{beat.shot_number - 1}].time_window",
+                )
+            )
         words = _count_words(shot.hindi_dialogue)
         if words > beat.max_words:
             issues.append(
@@ -145,6 +197,20 @@ def lint_episode(
                     location=f"video.shots[{beat.shot_number - 1}].hindi_dialogue",
                 )
             )
+
+    vid_spam = _count_style_spam_items([s.visual_action for s in video.spec.shots])
+    if vid_spam >= 3:
+        issues.append(
+            LintIssue(
+                severity="warning",
+                code="VIDEO_STYLE_REPETITION",
+                message=(
+                    f"{vid_spam}/6 video shots repeat global PS1 style terms — "
+                    "keep style in the global header for token efficiency."
+                ),
+                location="video.shots",
+            )
+        )
 
     errors = sum(1 for i in issues if i.severity == "error")
     warnings = sum(1 for i in issues if i.severity == "warning")

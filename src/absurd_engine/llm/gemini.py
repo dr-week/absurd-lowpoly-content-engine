@@ -2,13 +2,12 @@
 
 from __future__ import annotations
 
-import httpx
-
 from absurd_engine.llm.base import BaseLLMProvider, LLMProviderError
+from absurd_engine.llm.http_client import ResilientHTTPMixin
 
 
-class GeminiProvider(BaseLLMProvider):
-    """Calls Gemini generateContent REST endpoint via httpx."""
+class GeminiProvider(ResilientHTTPMixin, BaseLLMProvider):
+    """Calls Gemini generateContent REST endpoint via pooled httpx with backoff."""
 
     provider_name = "gemini"
 
@@ -42,16 +41,12 @@ class GeminiProvider(BaseLLMProvider):
             },
         }
 
-        async with httpx.AsyncClient(timeout=self.timeout) as client:
-            resp = await client.post(url, params=params, json=body)
-            if resp.status_code >= 400:
-                raise LLMProviderError(
-                    f"[gemini] HTTP {resp.status_code}: {resp.text[:400]}"
-                )
-            data = resp.json()
-            try:
-                return data["candidates"][0]["content"]["parts"][0]["text"]
-            except (KeyError, IndexError, TypeError) as exc:
-                raise LLMProviderError(
-                    f"[gemini] Unexpected response shape: {data}"
-                ) from exc
+        resp = await self._post_with_backoff(url, params=params, json_body=body)
+        if resp.status_code >= 400:
+            raise LLMProviderError(f"[gemini] HTTP {resp.status_code}: {resp.text[:400]}")
+
+        data = resp.json()
+        try:
+            return data["candidates"][0]["content"]["parts"][0]["text"]
+        except (KeyError, IndexError, TypeError) as exc:
+            raise LLMProviderError(f"[gemini] Unexpected response shape: {data}") from exc

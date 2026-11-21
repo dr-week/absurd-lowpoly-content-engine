@@ -9,9 +9,9 @@ from absurd_engine.schemas import PremiseIdea, StoryboardResult, StoryboardSpec
 STORYBOARD_SYSTEM_PROMPT = """You are a 1998 PS1/N64 low-poly storyboard director.
 Expand the given surreal Indian comedy premise into an exact 6-frame 3x2 storyboard specification.
 
-VISUAL RULES (STRICT 1998 PS1 / N64):
-- Every frame must describe raw, unpolished late-90s 3D video game screenshots: angular faceted polygons, blurry pixelated bitmap textures, stiff awkward character poses, crude vertex/Gouraud shading, jagged aliased edges, muddy retro colors.
-- Never reference 2D cartoon art, comic outlines, cel-shading, or smooth modern CGI.
+EFFICIENCY & ANTI-REPETITION RULE:
+- The global header ALREADY enforces the 1998 PS1/N64 low-poly style, pixelated textures, Gouraud shading, jagged edges, and negative constraints for all 6 panels.
+- Do NOT repeat phrases like "Raw 1998 PS1 low-poly 3D screenshot", "blocky", "low-poly", "pixelated", or "muddy" in every frame. Focus each frame purely on camera framing, concrete Indian setting/props, pose, and the visual gag.
 
 6-FRAME ARC:
 - Frame 1 (Top Left): Setup scene & character in the mundane Indian setting.
@@ -27,17 +27,14 @@ CAPTIONS:
 
 
 def render_storyboard_prompt(spec: StoryboardSpec) -> str:
-    """Render a StoryboardSpec into the exact copy-paste 3x2 Playbook prompt."""
+    """Render a StoryboardSpec into the concise, token-efficient 3x2 Playbook prompt."""
     lines = [STORYBOARD_GLOBAL_HEADER.format(title=spec.title), ""]
 
     for slot, frame in zip(STORYBOARD_SLOTS, spec.frames, strict=True):
         framing = frame.camera_framing.strip().rstrip(".")
         visual = frame.visual_description.strip().rstrip(".")
         caption = frame.hinglish_caption.strip().strip('"')
-        lines.append(
-            f"Frame {slot.index} ({slot.position}): {slot.shot_prefix} "
-            f"{framing}. {visual}."
-        )
+        lines.append(f"Frame {slot.index} ({slot.position}): {framing}. {visual}.")
         lines.append(f'Caption: "{caption}"')
         lines.append("")
 

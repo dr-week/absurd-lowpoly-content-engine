@@ -7,6 +7,7 @@ from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 ProviderName = Literal["mock", "openai", "openrouter", "ollama", "gemini", "anthropic"]
+PipelineMode = Literal["fused", "modular"]
 
 
 class EngineSettings(BaseSettings):
@@ -25,7 +26,9 @@ class EngineSettings(BaseSettings):
     llm_temperature: float = Field(default=0.9, ge=0.0, le=2.0, alias="LLM_TEMPERATURE")
     llm_timeout_seconds: float = Field(default=60.0, gt=0.0, alias="LLM_TIMEOUT_SECONDS")
     llm_max_retries: int = Field(default=2, ge=0, le=5, alias="LLM_MAX_RETRIES")
+    default_pipeline_mode: PipelineMode = Field(default="fused", alias="DEFAULT_PIPELINE_MODE")
     output_dir: Path = Field(default=Path("output"), alias="OUTPUT_DIR")
+    db_path: Path = Field(default=Path("data/episodes.db"), alias="DB_PATH")
 
     def resolved_base_url(self) -> str:
         """Return explicit base URL or sensible default per provider."""

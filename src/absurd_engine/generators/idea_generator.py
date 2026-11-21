@@ -3,39 +3,43 @@
 from __future__ import annotations
 
 from absurd_engine.llm.base import BaseLLMProvider
+from absurd_engine.mechanics import pick_mechanic
 from absurd_engine.schemas import IdeaBatch, IdeaRequest, PremiseIdea
 
-IDEA_SYSTEM_PROMPT = """You are the head writer for an absurdist 1998 PlayStation 1 (PS1) / Nintendo 64 (N64) low-poly 3D comedy channel set in India.
+IDEA_SYSTEM_PROMPT = """You are the head writer for an absurdist 1998 PS1/N64 low-poly 3D comedy channel set in India.
 
 STRICT IDEA FORMULA:
 1. Anchor the premise in a MUNDANE Indian moment, everyday setting (chai tapri, Delhi Metro, SBI lunch break, ration queue, auto stand, coaching class, society lift, local train), OR a recent news/trending hook.
-2. Pivot abruptly into BROKEN LOGIC, strange cause-and-effect, or disorienting physical/video-game-glitch absurdity (e.g., physics breaking, gravity getting debited, collision turning off, objects obeying bureaucratic rules instead of nature).
-3. Keep the payoff VISUAL, DEADPAN, and UNEXPECTED. Nobody reacts like a cartoon—everyone stays stiff, awkward, and matter-of-fact.
+2. Pivot abruptly into BROKEN LOGIC, strange cause-and-effect, or disorienting physical/video-game-glitch absurdity.
+3. Keep the payoff VISUAL, DEADPAN, and UNEXPECTED. Everyone reacts stiffly and matter-of-factly.
 
 STRICTLY AVOID CLICHÉS:
 - NO neat "jugaad" or "life hack" setups.
 - NO predictable talking-object jokes (talking phone, talking fridge, talking fan, etc.).
 - NO preachy morals or sitcom punchlines.
 
-VISUAL DESIGN RULES:
-- Protagonist and props must be easy to render as angular, boxy 1998 PS1/N64 low-poly 3D meshes with blurry pixelated textures.
+EFFICIENCY RULE:
+- Keep protagonist and key_props concrete and concise without repeating global PS1 style words.
 """
 
 
 def build_idea_user_prompt(request: IdeaRequest) -> str:
+    mechanic = pick_mechanic(request.mechanic)
     lines = [
         f"COUNT: {request.count}",
-        f"Generate {request.count} distinct surreal, deadpan Indian PS1 low-poly comedy premise(s).",
+        f"Generate {request.count} distinct surreal, deadpan Indian PS1 comedy premise(s).",
+        f"TARGET MECHANIC ({mechanic.key} — {mechanic.name}): {mechanic.rule}",
+        f"VISUAL CUE: {mechanic.visual_cue}",
     ]
     if request.seed_topic:
-        lines.append(f"SEED TOPIC / PREMISE HINT: {request.seed_topic}")
+        lines.append(f"SEED TOPIC: {request.seed_topic}")
     if request.setting_hint:
-        lines.append(f"INDIAN SETTING HINT: {request.setting_hint}")
+        lines.append(f"INDIAN SETTING: {request.setting_hint}")
     if request.news_hook:
         lines.append(f"NEWS / TRENDING HOOK TO TWIST: {request.news_hook}")
-    lines.append(
-        "Return a JSON object with an 'ideas' array containing the requested number of PremiseIdea objects."
-    )
+    if request.avoid_titles:
+        lines.append(f"DO NOT REPEAT THESE PAST TITLES: {', '.join(request.avoid_titles[:15])}")
+    lines.append("Return a JSON object with an 'ideas' array matching the schema.")
     return "\n".join(lines)
 
 

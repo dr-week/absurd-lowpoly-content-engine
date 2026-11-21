@@ -1,4 +1,4 @@
-"""Strict Pydantic v2 schemas for ideas, storyboards, video prompts, and validation reports."""
+"""Strict Pydantic v2 schemas for ideas, storyboards, video prompts, trends, and episodes."""
 
 from __future__ import annotations
 
@@ -7,6 +7,15 @@ from typing import Literal
 from uuid import uuid4
 
 from pydantic import BaseModel, Field, field_validator
+
+
+class TrendItem(BaseModel):
+    """A fresh Indian news or trending hook fetched from RSS."""
+
+    title: str
+    source: str
+    published: str = ""
+    url: str = ""
 
 
 class IdeaRequest(BaseModel):
@@ -24,6 +33,14 @@ class IdeaRequest(BaseModel):
         default=None,
         description="Optional recent news or trending internet hook to twist into surreal logic.",
     )
+    mechanic: str | None = Field(
+        default=None,
+        description="Optional PS1 broken-physics mechanic key (e.g., 'draw_distance_fog', 'scale_glitch').",
+    )
+    avoid_titles: list[str] = Field(
+        default_factory=list,
+        description="Past episode titles to avoid repeating.",
+    )
     count: int = Field(default=1, ge=1, le=5)
 
 
@@ -31,6 +48,10 @@ class PremiseIdea(BaseModel):
     """A surreal, anti-cliché premise anchored in a mundane Indian moment."""
 
     title: str = Field(..., min_length=3, max_length=80, description="Punchy Hinglish/English title.")
+    mechanic: str = Field(
+        default="gravity_debit",
+        description="Broken-physics PS1 mechanic key driving the absurd twist.",
+    )
     mundane_anchor: str = Field(
         ...,
         description="The ordinary Indian setting, everyday moment, or news/trending hook.",
@@ -45,13 +66,13 @@ class PremiseIdea(BaseModel):
     )
     protagonist: str = Field(
         ...,
-        description="Blocky 1998 PS1 character description (clothes, stiff posture, low-poly silhouette).",
+        description="Concise character description (clothes, posture, silhouette).",
     )
     key_props: list[str] = Field(
         default_factory=list,
         min_length=1,
         max_length=5,
-        description="Iconic low-poly props needed across the 6 beats.",
+        description="Iconic props needed across the 6 beats.",
     )
     tone_tags: list[str] = Field(
         default_factory=lambda: ["deadpan", "surreal", "ps1-1998"],
@@ -76,12 +97,12 @@ class StoryboardFrame(BaseModel):
     ]
     camera_framing: str = Field(
         ...,
-        description="Framing & camera angle (e.g. 'wide static shot', 'extreme jagged close-up').",
+        description="Framing & camera angle (e.g. 'Wide static shot', 'Close-up').",
     )
     visual_description: str = Field(
         ...,
         min_length=15,
-        description="Raw 1998 PS1 low-poly character pose, props, environment, and visual absurdity.",
+        description="Concrete scene, character pose, props, and visual absurdity (no repeated global style words).",
     )
     hinglish_caption: str = Field(
         ...,
@@ -123,18 +144,18 @@ class VideoShot(BaseModel):
     visual_action: str = Field(
         ...,
         min_length=15,
-        description="Camera framing, jerky low-FPS animation, and visual gag in PS1 3D.",
+        description="Camera framing, jerky movement, and visual gag (no repeated global style words).",
     )
     retro_sfx: str = Field(
         ...,
         min_length=3,
-        description="Specific 1998 PS1/N64 retro sound effect.",
+        description="Specific retro 1998 PS1/N64 sound effect.",
     )
     hindi_dialogue: str = Field(
         ...,
         min_length=2,
         max_length=80,
-        description="Ultra-short deadpan Hindi (Devanagari or Hinglish) narrator line fitting 3–4s.",
+        description="Ultra-short deadpan Hindi narrator line fitting 3–4s.",
     )
 
 
@@ -161,6 +182,14 @@ class VideoResult(BaseModel):
     rendered_prompt: str
 
 
+class FusedEpisodeDraft(BaseModel):
+    """Single-shot structured output combining premise, 6-frame storyboard, and 6-shot video script."""
+
+    idea: PremiseIdea
+    storyboard: StoryboardSpec
+    video: VideoScriptSpec
+
+
 class LintIssue(BaseModel):
     severity: Literal["error", "warning"]
     code: str
@@ -181,14 +210,44 @@ class EpisodeBundle(BaseModel):
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     provider: str
     model: str
+    mode: Literal["fused", "modular"] = "fused"
+    repaired: bool = False
     idea: PremiseIdea
     storyboard: StoryboardResult
     video: VideoResult
     lint: LintReport
 
 
+class EpisodeSummary(BaseModel):
+    """Lightweight row returned from SQLite episode history."""
+
+    episode_id: str
+    created_at: str
+    title: str
+    mechanic: str
+    provider: str
+    model: str
+    mode: str
+    lint_score: int
+    lint_passed: bool
+
+
 class EpisodeGenerateRequest(BaseModel):
     seed_topic: str | None = None
     setting_hint: str | None = None
     news_hook: str | None = None
+    mechanic: str | None = None
+    mode: Literal["fused", "modular"] = "fused"
+    auto_repair: bool = True
+    save_to_db: bool = True
+    export: bool = False
+
+
+class BatchGenerateRequest(BaseModel):
+    count: int = Field(default=3, ge=1, le=10)
+    from_trends: bool = True
+    seed_topics: list[str] = Field(default_factory=list)
+    mode: Literal["fused", "modular"] = "fused"
+    auto_repair: bool = True
+    save_to_db: bool = True
     export: bool = False

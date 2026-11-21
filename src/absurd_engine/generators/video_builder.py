@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import re
+
 from absurd_engine.llm.base import BaseLLMProvider
 from absurd_engine.playbook import VIDEO_BEATS, VIDEO_GLOBAL_HEADER
 from absurd_engine.schemas import (
@@ -13,10 +15,10 @@ from absurd_engine.schemas import (
 
 VIDEO_SYSTEM_PROMPT = """You are a director of 20-second, 9:16 vertical 1998 PS1/N64 ultra low-poly absurdist Hindi comedy videos.
 
-STRICT VISUAL & AUDIO STYLE:
-- Raw 1998 PS1/N64 low-poly 3D graphics, angular faceted meshes, blurry pixelated bitmap textures, stiff robotic animations with jerky low-FPS movement, crude vertex/Gouraud shading, jagged aliased edges, muddy retro colors.
-- NO smooth modern CGI, NO 2D cartoon art, NO comic ink outlines.
-- Audio: deadpan, serious Indian male narrator speaking ULTRA-SHORT Hindi lines (Devanagari script preferred), paired with specific retro 1998 PS1 sound effects and sharp hard cuts.
+EFFICIENCY & ANTI-REPETITION RULE:
+- The global header ALREADY locks the 1998 PS1/N64 low-poly 3D style, pixelated textures, Gouraud shading, jagged edges, jerky low-FPS animation, negative constraints, and deadpan Hindi narrator for all 6 shots.
+- Do NOT repeat "1998 PS1", "low-poly", "pixelated", "blocky", or "muddy" in every shot. Focus each shot purely on camera framing, concrete Indian setting/props, jerky movement/visual gag, specific retro SFX, and ultra-short Hindi dialogue.
+- Do NOT include transition prefixes like "Hard cut to" inside visual_action; put them only in the transition field.
 
 EXACT 6-SHOT TIMING WINDOWS (MUST MATCH EXACTLY):
 - Shot 1: "0:00–0:03" (3s) -> Setup scene + jerky action. Max 7 words Hindi dialogue.
@@ -27,24 +29,57 @@ EXACT 6-SHOT TIMING WINDOWS (MUST MATCH EXACTLY):
 - Shot 6: "0:17–0:20" (3s) -> Sudden whip-pan/snap-in to absurd payoff, SFX ends with bass drop/hit and instant hard cut to black. Max 7 words Hindi dialogue.
 
 PACING RULE:
-- Keep every Hindi dialogue line ultra-short and punchy so a serious deadpan narrator can deliver it comfortably inside 3–4 seconds.
+- Keep every Hindi dialogue line ultra-short and punchy (Devanagari preferred) so a deadpan Indian male narrator delivers it comfortably inside 3–4 seconds.
 """
+
+_COMMON_CAMERA_STARTERS = (
+    "Wide ",
+    "Medium ",
+    "Close-up ",
+    "Extreme ",
+    "Low-angle ",
+    "High-angle ",
+    "Side ",
+    "Static ",
+    "Tracking ",
+    "Upward ",
+    "Interior ",
+    "Absurd ",
+    "Deadpan ",
+    "The ",
+    "A ",
+)
+
+
+def _merge_transition_and_action(transition: str, action: str) -> str:
+    """Safely combine transition and visual_action without duplicate prefixes or broken proper nouns."""
+    clean_action = action.strip().rstrip(".")
+    clean_transition = transition.strip().rstrip(":")
+
+    if not clean_transition:
+        return f"{clean_action}."
+
+    # Prevent duplicate transition text if the model already started visual_action with it
+    if clean_action.lower().startswith(clean_transition.lower()):
+        return f"{clean_action}."
+
+    # Strip any redundant "Hard cut to " when another transition is already set
+    clean_action = re.sub(r"^(?:hard cut to|sudden whip-pan to|snap-zoom to)\s+", "", clean_action, flags=re.IGNORECASE)
+
+    # Only lowercase known generic framing/article starters; preserve proper nouns like "Ramesh", "Amit", "SBI"
+    if clean_action.startswith(_COMMON_CAMERA_STARTERS):
+        clean_action = clean_action[0].lower() + clean_action[1:]
+
+    return f"{clean_transition} {clean_action}."
 
 
 def render_video_prompt(spec: VideoScriptSpec) -> str:
-    """Render a VideoScriptSpec into the exact copy-paste 20s 9:16 Playbook prompt."""
+    """Render a VideoScriptSpec into the concise, token-efficient 20s 9:16 Playbook prompt."""
     lines = [VIDEO_GLOBAL_HEADER, ""]
 
     for beat, shot in zip(VIDEO_BEATS, spec.shots, strict=True):
         transition = (shot.transition or beat.default_transition).strip()
-        action = shot.visual_action.strip().rstrip(".")
-        if transition:
-            # Lowercase leading letter of action if it follows a transition phrase like "Hard cut to"
-            if action and action[0].isupper() and not action.startswith(("PS1", "N64", "UPI", "QR")):
-                action = action[0].lower() + action[1:]
-            shot_body = f"{transition} {action}."
-        else:
-            shot_body = f"{action}."
+        shot_body = _merge_transition_and_action(transition, shot.visual_action)
 
         sfx = shot.retro_sfx.strip().rstrip(".")
         if beat.shot_number == 6 and "hard cut to black" not in sfx.lower():
@@ -79,7 +114,8 @@ def build_video_user_prompt(
                 f'[Caption: "{frame.hinglish_caption}"]'
             )
     parts.append(
-        "\nRemember: keep every Hindi dialogue line ultra-short (<= 7 words for 3s shots, <= 9 words for 4s shots)."
+        "\nRemember: keep every Hindi dialogue line ultra-short (<= 7 words for 3s shots, <= 9 words for 4s shots) "
+        "and avoid repeating global PS1 style adjectives in every shot."
     )
     return "\n".join(parts)
 

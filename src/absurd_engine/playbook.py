@@ -6,26 +6,22 @@ from dataclasses import dataclass
 
 
 STORYBOARD_GLOBAL_HEADER = (
-    "Create a storyboard of six frames in a 3x2 grid layout on a plain dark background, "
-    "rendered strictly in authentic 1998 PlayStation 1 (PS1) and Nintendo 64 (N64) ultra "
-    "low-poly 3D video game graphics. Every panel must look like raw, unpolished late-90s "
-    "3D game screenshots: extremely angular faceted polygon meshes with visible sharp edges, "
-    "blurry pixelated low-resolution bitmap textures stretched over blocky geometry, stiff "
-    "awkward character poses, crude vertex/Gouraud shading, jagged aliased edges, and muddy "
-    "retro colors. Strictly NO 2D cartoon art, NO comic ink outlines, NO cel-shading, and "
-    "NO smooth modern CGI. Place a short, bold retro pixel-font Hinglish caption underneath "
-    'each panel. Title at top: "{title}".'
+    "6-frame storyboard in a 3x2 grid on a plain dark background. Apply one unified style to ALL "
+    "panels: raw 1998 PlayStation 1 (PS1) / Nintendo 64 (N64) ultra low-poly 3D game screenshots—"
+    "angular faceted polygons, blurry pixelated bitmap textures, stiff awkward poses, crude "
+    "Gouraud shading, jagged aliased edges, and muddy retro colors. Strictly NO 2D cartoon art, "
+    "NO comic ink outlines, NO cel-shading, NO smooth modern CGI. Place a short bold retro "
+    'pixel-font Hinglish caption under each panel. Title at top: "{title}".'
 )
 
 VIDEO_GLOBAL_HEADER = (
-    "Create a 20-second, 9:16 vertical absurdist comedy video rendered strictly in authentic "
-    "1998 PlayStation 1 (PS1) and Nintendo 64 (N64) ultra low-poly 3D video game graphics. "
-    "Maintain extremely angular faceted polygon meshes, blurry pixelated low-resolution "
-    "bitmap textures, stiff robotic character animations with jerky low-FPS movement, crude "
-    "vertex/Gouraud shading, jagged aliased edges, and muddy retro colors throughout. "
-    "Strictly NO smooth modern CGI, NO 2D cartoon art, and NO comic ink outlines. Audio "
-    "features a deadpan, serious Indian male narrator speaking ultra-short Hindi lines "
-    "matched tightly to each shot, paired with retro PS1 sound effects and sharp hard cuts."
+    "20-second, 9:16 vertical absurdist comedy video. Apply one unified style throughout: raw "
+    "1998 PlayStation 1 (PS1) / Nintendo 64 (N64) ultra low-poly 3D game graphics—angular "
+    "faceted polygons, blurry pixelated bitmap textures, stiff robotic animations with jerky "
+    "low-FPS movement, crude Gouraud shading, jagged aliased edges, and muddy retro colors. "
+    "Strictly NO 2D cartoon art, NO comic ink outlines, NO cel-shading, NO smooth modern CGI. "
+    "Audio: deadpan, serious Indian male narrator speaking ultra-short Hindi lines matched "
+    "tightly to each shot, paired with retro PS1 SFX and sharp hard cuts."
 )
 
 REQUIRED_PS1_TOKENS = (
@@ -39,7 +35,19 @@ REQUIRED_PS1_TOKENS = (
 REQUIRED_NEGATIVE_CONSTRAINTS = (
     "no 2d cartoon art",
     "no comic ink outlines",
+    "no cel-shading",
     "no smooth modern cgi",
+)
+
+# Style adjectives that belong ONCE in the global header, not spammed across every frame/shot.
+STYLE_SPAM_TOKENS = (
+    "1998 ps1",
+    "low-poly",
+    "low poly",
+    "pixelated",
+    "gouraud",
+    "faceted polygon",
+    "aliased",
 )
 
 CLICHE_WARNING_PHRASES = (
@@ -60,17 +68,16 @@ CLICHE_WARNING_PHRASES = (
 class FrameSlot:
     index: int
     position: str
-    shot_prefix: str
     role: str
 
 
 STORYBOARD_SLOTS: tuple[FrameSlot, ...] = (
-    FrameSlot(1, "Top Left", "Raw 1998 PS1 low-poly 3D screenshot.", "Setup scene & character"),
-    FrameSlot(2, "Top Center", "Raw 1998 PS1 low-poly 3D screenshot.", "Action / escalation"),
-    FrameSlot(3, "Top Right", "Raw 1998 PS1 low-poly 3D close-up.", "Weird shift / detail"),
-    FrameSlot(4, "Bottom Left", "Raw 1998 PS1 low-poly 3D screenshot.", "Consequence in environment"),
-    FrameSlot(5, "Bottom Center", "Raw 1998 PS1 low-poly 3D screenshot.", "Build-up right before twist"),
-    FrameSlot(6, "Bottom Right", "Raw 1998 PS1 low-poly 3D absurd wide/close shot.", "Surprising absurd payoff"),
+    FrameSlot(1, "Top Left", "Setup scene & character"),
+    FrameSlot(2, "Top Center", "Action / escalation"),
+    FrameSlot(3, "Top Right", "Weird shift / close-up detail"),
+    FrameSlot(4, "Bottom Left", "Consequence in environment"),
+    FrameSlot(5, "Bottom Center", "Build-up right before twist"),
+    FrameSlot(6, "Bottom Right", "Surprising absurd payoff"),
 )
 
 

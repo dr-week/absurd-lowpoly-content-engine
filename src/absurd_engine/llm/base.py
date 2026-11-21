@@ -17,24 +17,21 @@ class LLMProviderError(RuntimeError):
 
 
 def extract_json_payload(raw_text: str) -> str:
-    """Extract a JSON object/array from raw LLM output, stripping markdown fences if present."""
+    """Extract the first valid JSON object/array from raw LLM output, handling fences and trailing prose."""
     text = raw_text.strip()
 
     fenced = re.search(r"```(?:json)?\s*([\s\S]*?)```", text, flags=re.IGNORECASE)
     if fenced:
         text = fenced.group(1).strip()
 
-    # If still wrapped in prose, locate the outermost JSON object or array
-    if not (text.startswith("{") or text.startswith("[")):
-        obj_start = text.find("{")
-        arr_start = text.find("[")
-        starts = [i for i in (obj_start, arr_start) if i != -1]
-        if starts:
-            start = min(starts)
-            end_char = "}" if text[start] == "{" else "]"
-            end = text.rfind(end_char)
-            if end > start:
-                text = text[start : end + 1]
+    decoder = json.JSONDecoder()
+    for idx, ch in enumerate(text):
+        if ch in "{[":
+            try:
+                _, end = decoder.raw_decode(text, idx)
+                return text[idx:end]
+            except json.JSONDecodeError:
+                continue
 
     return text
 
@@ -59,13 +56,14 @@ class BaseLLMProvider(ABC):
         response_model: type[T],
     ) -> T:
         """Generate and validate a Pydantic model instance with automatic retry on parse errors."""
-        schema_json = json.dumps(response_model.model_json_schema(), indent=2)
+        # Compact JSON schema (no pretty-print whitespace) saves ~25-35% prompt tokens per call
+        schema_json = json.dumps(response_model.model_json_schema(), separators=(",", ":"))
         augmented_system = (
             f"{system_prompt}\n\n"
             "OUTPUT RULES:\n"
             "- Return ONLY valid JSON matching the schema below.\n"
             "- Do NOT include markdown commentary or explanations outside the JSON.\n"
-            f"JSON SCHEMA:\n{schema_json}"
+            f"JSON SCHEMA:{schema_json}"
         )
 
         last_error: Exception | None = None
