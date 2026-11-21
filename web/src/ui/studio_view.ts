@@ -40,42 +40,45 @@ export function renderStudioView(params: {
   logs: RatingLogEntry[];
   selectedId: string | null;
   prompts: GeneratedPrompts | null;
+  loadingTopics: boolean;
   loading: boolean;
   seedQuery: string;
   copiedTarget: 'storyboard' | 'video' | null;
 }): string {
-  const { topics, logs, selectedId, prompts, loading, seedQuery, copiedTarget } = params;
+  const { topics, logs, selectedId, prompts, loadingTopics, loading, seedQuery, copiedTarget } = params;
 
-  const cards = topics
-    .map((t) => {
-      const vote = getVote(logs, 'topic', t.id);
-      const selected = selectedId === t.id;
-      const cls = ['topic-card', selected ? 'is-selected' : '', vote === 'up' ? 'is-liked' : '', vote === 'down' ? 'is-disliked' : '']
-        .filter(Boolean)
-        .join(' ');
-      return `
-        <article class="${cls}">
-          <div class="topic-card__body">
-            <div class="topic-card__top">
-              <span class="topic-card__tag">${esc(t.brand)}</span>
-              <span class="pill pill--accent" title="Viral score">${t.viralScore}</span>
-            </div>
-            <h3 class="topic-card__title">${esc(t.title)}</h3>
-            <p class="topic-card__pitch">${esc(t.pitch)}</p>
-          </div>
-          <div class="topic-card__footer">
-            <div class="vote-group">
-              <button type="button" class="vote-btn ${vote === 'up' ? 'is-up' : ''}" data-action="vote-topic" data-id="${esc(t.id)}" data-vote="up" title="Thumbs Up">${Glyphs.thumbsUp(15)}</button>
-              <button type="button" class="vote-btn ${vote === 'down' ? 'is-down' : ''}" data-action="vote-topic" data-id="${esc(t.id)}" data-vote="down" title="Thumbs Down">${Glyphs.thumbsDown(15)}</button>
-            </div>
-            <button type="button" class="btn ${selected ? 'btn--primary' : ''}" data-action="select-topic" data-id="${esc(t.id)}" title="Generate Storyboard & Video Prompt">
-              ${Glyphs.arrowRight(15)}
-            </button>
-          </div>
-        </article>
-      `;
-    })
-    .join('');
+  const cards = loadingTopics
+    ? '<div class="empty-state" style="grid-column:1/-1;">Generating 8 fresh AI topics...</div>'
+    : topics
+        .map((t) => {
+          const vote = getVote(logs, 'topic', t.id);
+          const selected = selectedId === t.id;
+          const cls = ['topic-card', selected ? 'is-selected' : '', vote === 'up' ? 'is-liked' : '', vote === 'down' ? 'is-disliked' : '']
+            .filter(Boolean)
+            .join(' ');
+          return `
+            <article class="${cls}">
+              <div class="topic-card__body">
+                <div class="topic-card__top">
+                  <span class="topic-card__tag">${esc(t.brand)}</span>
+                  <span class="pill pill--accent" title="Viral score">${t.viralScore}</span>
+                </div>
+                <h3 class="topic-card__title">${esc(t.title)}</h3>
+                <p class="topic-card__pitch">${esc(t.pitch)}</p>
+              </div>
+              <div class="topic-card__footer">
+                <div class="vote-group">
+                  <button type="button" class="vote-btn ${vote === 'up' ? 'is-up' : ''}" data-action="vote-topic" data-id="${esc(t.id)}" data-vote="up" title="Thumbs Up">${Glyphs.thumbsUp(15)}</button>
+                  <button type="button" class="vote-btn ${vote === 'down' ? 'is-down' : ''}" data-action="vote-topic" data-id="${esc(t.id)}" data-vote="down" title="Thumbs Down">${Glyphs.thumbsDown(15)}</button>
+                </div>
+                <button type="button" class="btn ${selected ? 'btn--primary' : ''}" data-action="select-topic" data-id="${esc(t.id)}" title="Generate Storyboard & Video Prompt">
+                  ${Glyphs.arrowRight(15)}
+                </button>
+              </div>
+            </article>
+          `;
+        })
+        .join('');
 
   let promptBody = '<div class="empty-state">Select a topic above</div>';
   if (loading) {

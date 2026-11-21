@@ -3,6 +3,8 @@ import { DOMAIN_SEEDS, type DomainSeed } from '../data/seeds_domains';
 import { TWIST_SEEDS, type TwistSeed } from '../data/seeds_twists';
 import type { RatingLogEntry, ScoredTopic } from '../types';
 
+const PREV_DOMAIN_PREFIX = '__prevdom__';
+
 function shuffle<T>(items: T[], rng: () => number): T[] {
   const arr = [...items];
   for (let i = arr.length - 1; i > 0; i -= 1) {
@@ -44,10 +46,10 @@ function buildTopic(domain: DomainSeed, twist: TwistSeed, batchNonce: number): O
 }
 
 /**
- * Generates N completely unrelated, fresh, randomized topics on EVERY refresh:
- * - Guaranteed 100% unique angle + unique brand + unique twist within every batch of 8.
- * - Tracks seen (domain, twist) pairs so consecutive refreshes never repeat topics.
- * - Uses user logs ONLY for Viral Score display (never collapses diversity to one brand!).
+ * Generates 8 completely unrelated, fresh topics on EVERY refresh AND F5 reload:
+ * - Excludes ALL 8 domains shown in the previous batch -> 0/8 brand/domain overlap!
+ * - Guaranteed 8 unique angles, 8 unique brands, and 8 unique twists per batch.
+ * - Tracks seen (domain, twist) pairs in persistent Set so titles don't repeat.
  */
 export function generateFreshDiverseBatch(params: {
   count: number;
@@ -63,40 +65,55 @@ export function generateFreshDiverseBatch(params: {
     angleBias.set(e.angle, (angleBias.get(e.angle) ?? 0) + (e.vote === 'up' ? 8 : -8));
   }
 
-  let domains = shuffle(DOMAIN_SEEDS, rng);
+  const prevDomains = new Set(
+    Array.from(seenPairs)
+      .filter((k) => k.startsWith(PREV_DOMAIN_PREFIX))
+      .map((k) => k.slice(PREV_DOMAIN_PREFIX.length)),
+  );
+
+  const freshDomains = shuffle(DOMAIN_SEEDS.filter((d) => !prevDomains.has(d.angle)), rng);
+  const olderDomains = shuffle(DOMAIN_SEEDS.filter((d) => prevDomains.has(d.angle)), rng);
+  let ordered = [...freshDomains, ...olderDomains];
+
   const q = query.trim().toLowerCase();
   if (q) {
-    const matched = domains.filter(
+    const matched = ordered.filter(
       (d) => d.brand.toLowerCase().includes(q) || d.angle.toLowerCase().includes(q) || d.setting.toLowerCase().includes(q),
     );
     if (matched.length > 0) {
-      const rest = domains.filter((d) => !matched.includes(d));
-      domains = [...matched, ...rest];
+      ordered = [...matched, ...ordered.filter((d) => !matched.includes(d))];
     }
   }
 
-  const chosenDomains = domains.slice(0, Math.min(count, domains.length));
+  const chosenDomains = ordered.slice(0, Math.min(count, ordered.length));
+
+  // Replace previous-batch domain markers with the newly chosen 8 domains
+  for (const k of Array.from(seenPairs)) {
+    if (k.startsWith(PREV_DOMAIN_PREFIX)) seenPairs.delete(k);
+  }
+  for (const d of chosenDomains) seenPairs.add(`${PREV_DOMAIN_PREFIX}${d.angle}`);
+
   const twists = shuffle(TWIST_SEEDS, rng);
   const usedTwists = new Set<string>();
   const results: ScoredTopic[] = [];
 
   for (const domain of chosenDomains) {
-    const lastKeyPrefix = `__last__${domain.angle}::`;
-    const lastPair = Array.from(seenPairs).find((k) => k.startsWith(lastKeyPrefix));
-    const lastTwistKey = lastPair ? lastPair.slice(lastKeyPrefix.length) : '';
+    const lastPrefix = `__last__${domain.angle}::`;
+    const lastPair = Array.from(seenPairs).find((k) => k.startsWith(lastPrefix));
+    const lastTwist = lastPair ? lastPair.slice(lastPrefix.length) : '';
 
     let twist = twists.find(
-      (tw) => !usedTwists.has(tw.key) && tw.key !== lastTwistKey && !seenPairs.has(`${domain.angle}::${tw.key}`),
+      (tw) => !usedTwists.has(tw.key) && tw.key !== lastTwist && !seenPairs.has(`${domain.angle}::${tw.key}`),
     );
     if (!twist) {
       for (const k of Array.from(seenPairs)) {
         if (k.startsWith(`${domain.angle}::`)) seenPairs.delete(k);
       }
-      twist = twists.find((tw) => !usedTwists.has(tw.key) && tw.key !== lastTwistKey) ?? twists[0];
+      twist = twists.find((tw) => !usedTwists.has(tw.key) && tw.key !== lastTwist) ?? twists[0];
     }
 
     if (lastPair) seenPairs.delete(lastPair);
-    seenPairs.add(`${lastKeyPrefix}${twist.key}`);
+    seenPairs.add(`${lastPrefix}${twist.key}`);
     usedTwists.add(twist.key);
     seenPairs.add(`${domain.angle}::${twist.key}`);
 

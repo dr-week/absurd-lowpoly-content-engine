@@ -87,7 +87,7 @@ function render(): void {
   document.documentElement.setAttribute('data-theme', state.config.theme);
   const surfaceHtml =
     state.activeTab === 'studio'
-      ? renderStudioView({ topics: state.topics, logs: state.logs, selectedId: state.selectedId, prompts: state.prompts, loading: state.loading, seedQuery: state.seedQuery, copiedTarget: state.copiedTarget })
+      ? renderStudioView({ topics: state.topics, logs: state.logs, selectedId: state.selectedId, prompts: state.prompts, loadingTopics: state.loadingTopics, loading: state.loading, seedQuery: state.seedQuery, copiedTarget: state.copiedTarget })
       : state.activeTab === 'analytics'
         ? renderAnalyticsView(state.logs)
         : renderLogsView(state.logs);
