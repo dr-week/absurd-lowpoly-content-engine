@@ -1,12 +1,14 @@
 import { removeSavedTopic, saveLikedTopic } from '../engine/saved_store';
 import { exportJson, exportJsonl, saveConfig, saveLogs, upsertVote } from '../engine/telemetry';
-import type { ActiveTab, EngineConfig, GeneratedPrompts, RatingLogEntry, SavedFilter, SavedItem, ScoredTopic, VoteValue } from '../types';
+import type { ActiveTab, EngineConfig, GeneratedPrompts, HookCategory, RatingLogEntry, SavedFilter, SavedItem, ScoredTopic, SituationCategory, VoteValue } from '../types';
 
 export interface AppState {
   config: EngineConfig;
   activeTab: ActiveTab;
   drawerOpen: boolean;
   seedQuery: string;
+  hookFilter: HookCategory | 'all';
+  situationFilter: SituationCategory | 'all';
   batchNonce: number;
   seenPairs: Set<string>;
   topics: ScoredTopic[];
@@ -93,6 +95,16 @@ export function bindAppEvents(
 
   document.getElementById('seed-input')?.addEventListener('change', (ev) => {
     state.seedQuery = (ev.target as HTMLInputElement).value;
+    state.batchNonce += 1;
+    void hooks.refreshTopics();
+  });
+  document.getElementById('filter-hook')?.addEventListener('change', (ev) => {
+    state.hookFilter = (ev.target as HTMLSelectElement).value as HookCategory | 'all';
+    state.batchNonce += 1;
+    void hooks.refreshTopics();
+  });
+  document.getElementById('filter-situation')?.addEventListener('change', (ev) => {
+    state.situationFilter = (ev.target as HTMLSelectElement).value as SituationCategory | 'all';
     state.batchNonce += 1;
     void hooks.refreshTopics();
   });

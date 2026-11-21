@@ -8,11 +8,14 @@ import { OVERENGINEER_STORIES } from '../data/stories_overengineer';
 import { SCIENCE_STORIES } from '../data/stories_science';
 import { SPIRAL_STORIES } from '../data/stories_spiral';
 import { TUTORIAL_STORIES } from '../data/stories_tutorial';
-import type { RatingLogEntry, ScoredTopic, TopicOption } from '../types';
+import type { HookCategory, RatingLogEntry, ScoredTopic, SituationCategory, TopicOption } from '../types';
 import { scoreComedyCraft } from './comedy_craft';
+import { cryptoRng, cryptoShuffle } from './randomizer';
+import { classifyHook, classifySituation } from './taxonomy';
 import { synthesizeTrendCard } from './trend_synthesizer';
 
 const PREV_ID_PREFIX = '__previd__';
+const COOL_ID_PREFIX = '__coolid__';
 
 export const ALL_BESPOKE_STORIES: readonly TopicOption[] = [
   ...OVERENGINEER_STORIES,
@@ -32,7 +35,6 @@ export const STORY_FORMAT_PACKS: readonly (readonly TopicOption[])[] = FORMAT_KE
   ALL_BESPOKE_STORIES.filter((s) => s.angle === key),
 );
 
-/** Normalizes overlapping brand/world labels so Goa & Goa Shack never collide in the same batch. */
 export function worldFamily(brand: string): string {
   const b = brand.toLowerCase();
   if (b.includes('goa')) return 'goa';
@@ -46,18 +48,8 @@ export function worldFamily(brand: string): string {
   return b.replace(/[^a-z0-9]+/g, '-');
 }
 
-function shuffle<T>(items: readonly T[], rng: () => number): T[] {
-  const arr = [...items];
-  for (let i = arr.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(rng() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
-
-/** Reorders chosen cards so no two adjacent cards ever share the same story format. */
 function spreadAdjacentFormats(items: TopicOption[], rng: () => number): TopicOption[] {
-  const pool = shuffle(items, rng);
+  const pool = cryptoShuffle(items, rng);
   const out: TopicOption[] = [];
   while (pool.length > 0) {
     const lastAngle = out.length > 0 ? out[out.length - 1].angle : '';
@@ -74,66 +66,76 @@ function spreadAdjacentFormats(items: TopicOption[], rng: () => number): TopicOp
   return out;
 }
 
-/**
- * Stratified 6-Format Comedy-Craft Selector (36 bespoke stories, Zero Mad-Libs):
- * - Pulls from ALL 6 structurally different story formats in every 8-card batch.
- * - Enforces MAX 1 card per world/brand family (e.g. never 2 Goa or 2 Gandhiji cards in one batch).
- * - Guarantees ZERO adjacent same-format cards and 0/8 consecutive repeats across F5 reloads.
- */
 export function generateFreshDiverseBatch(params: {
   count: number;
   query: string;
   logs: RatingLogEntry[];
   seenPairs: Set<string>;
   batchNonce: number;
+  hookFilter?: HookCategory | 'all';
+  situationFilter?: SituationCategory | 'all';
   rng?: () => number;
 }): ScoredTopic[] {
-  const { count, query, logs, seenPairs, batchNonce, rng = Math.random } = params;
+  const { count, query, logs, seenPairs, batchNonce, hookFilter = 'all', situationFilter = 'all', rng = cryptoRng } = params;
   const angleBias = new Map<string, number>();
   for (const e of logs) angleBias.set(e.angle, (angleBias.get(e.angle) ?? 0) + (e.vote === 'up' ? 8 : -8));
 
-  const prevIds = new Set(
-    Array.from(seenPairs).filter((k) => k.startsWith(PREV_ID_PREFIX)).map((k) => k.slice(PREV_ID_PREFIX.length)),
-  );
-
+  const prevIds = new Set(Array.from(seenPairs).filter((k) => k.startsWith(PREV_ID_PREFIX)).map((k) => k.slice(PREV_ID_PREFIX.length)));
+  const coolIds = new Set(Array.from(seenPairs).filter((k) => k.startsWith(COOL_ID_PREFIX)).map((k) => k.slice(COOL_ID_PREFIX.length)));
   const chosen: TopicOption[] = [];
   const usedIds = new Set<string>();
   const usedWorlds = new Set<string>();
+  const usedSituations = new Set<SituationCategory>();
   const q = query.trim().toLowerCase();
 
   const take = (story: TopicOption): void => {
     chosen.push(story);
     usedIds.add(story.id);
     usedWorlds.add(worldFamily(story.brand));
+    usedSituations.add(classifySituation(story));
   };
 
+  const matchesFilters = (s: TopicOption): boolean =>
+    (hookFilter === 'all' || classifyHook(s) === hookFilter) &&
+    (situationFilter === 'all' || classifySituation(s) === situationFilter);
+
   if (q) {
-    const hit = shuffle(ALL_BESPOKE_STORIES, rng).find(
-      (s) => !prevIds.has(s.id) && (s.title.toLowerCase().includes(q) || s.brand.toLowerCase().includes(q) || s.pitch.toLowerCase().includes(q)),
+    const hit = cryptoShuffle(ALL_BESPOKE_STORIES, rng).find(
+      (s) => !prevIds.has(s.id) && matchesFilters(s) && (s.title.toLowerCase().includes(q) || s.brand.toLowerCase().includes(q) || s.pitch.toLowerCase().includes(q)),
     );
     take(hit ?? synthesizeTrendCard(query.trim(), batchNonce));
   }
 
-  // Round 1: guarantee 1 fresh story from EACH of the 6 distinct formats with unique world families
-  for (const pack of shuffle(STORY_FORMAT_PACKS, rng)) {
-    if (chosen.length >= count) break;
-    const strict = shuffle(pack.filter((s) => !usedIds.has(s.id) && !prevIds.has(s.id) && !usedWorlds.has(worldFamily(s.brand))), rng);
-    const relaxed = shuffle(pack.filter((s) => !usedIds.has(s.id) && !prevIds.has(s.id)), rng);
-    const fallback = shuffle(pack.filter((s) => !usedIds.has(s.id)), rng);
-    const pick = strict[0] ?? relaxed[0] ?? fallback[0];
-    if (pick) take(pick);
+  const filteredPool = ALL_BESPOKE_STORIES.filter(matchesFilters);
+  if (hookFilter !== 'all' || situationFilter !== 'all') {
+    for (const s of cryptoShuffle(filteredPool.filter((x) => !usedIds.has(x.id) && !prevIds.has(x.id)), rng)) {
+      if (chosen.length >= count) break;
+      take(s);
+    }
+  } else {
+    // Round 1: 1 fresh story from EACH of 6 formats prioritizing 2-batch cooldown + unique worlds + unique situations
+    for (const pack of cryptoShuffle(STORY_FORMAT_PACKS, rng)) {
+      if (chosen.length >= count) break;
+      const tier1 = cryptoShuffle(pack.filter((s) => !usedIds.has(s.id) && !prevIds.has(s.id) && !coolIds.has(s.id) && !usedWorlds.has(worldFamily(s.brand)) && !usedSituations.has(classifySituation(s))), rng);
+      const tier2 = cryptoShuffle(pack.filter((s) => !usedIds.has(s.id) && !prevIds.has(s.id) && !usedWorlds.has(worldFamily(s.brand))), rng);
+      const tier3 = cryptoShuffle(pack.filter((s) => !usedIds.has(s.id) && !prevIds.has(s.id)), rng);
+      const pick = tier1[0] ?? tier2[0] ?? tier3[0];
+      if (pick) take(pick);
+    }
   }
 
-  // Round 2: fill remaining slots with fresh stories from unused world families
-  const leftovers = shuffle(
-    ALL_BESPOKE_STORIES.filter((s) => !usedIds.has(s.id) && !prevIds.has(s.id) && !usedWorlds.has(worldFamily(s.brand))),
-    rng,
-  );
-  for (const s of leftovers) {
+  const fillPool = hookFilter !== 'all' || situationFilter !== 'all' ? filteredPool : ALL_BESPOKE_STORIES;
+  for (const s of cryptoShuffle(fillPool.filter((x) => !usedIds.has(x.id) && !prevIds.has(x.id)), rng)) {
     if (chosen.length >= count) break;
     if (!usedWorlds.has(worldFamily(s.brand))) take(s);
   }
+  for (const s of cryptoShuffle(fillPool.filter((x) => !usedIds.has(x.id)), rng)) {
+    if (chosen.length >= count) break;
+    if (hookFilter !== 'all' || situationFilter !== 'all' || !usedWorlds.has(worldFamily(s.brand))) take(s);
+  }
 
+  for (const k of Array.from(seenPairs)) if (k.startsWith(COOL_ID_PREFIX)) seenPairs.delete(k);
+  for (const id of prevIds) seenPairs.add(`${COOL_ID_PREFIX}${id}`);
   for (const k of Array.from(seenPairs)) if (k.startsWith(PREV_ID_PREFIX)) seenPairs.delete(k);
   for (const s of chosen) seenPairs.add(`${PREV_ID_PREFIX}${s.id}`);
 
@@ -142,6 +144,6 @@ export function generateFreshDiverseBatch(params: {
     const craft = scoreComedyCraft(story);
     const taste = angleBias.get(story.angle) ?? 0;
     const viralScore = Math.max(35, Math.min(99, Math.round(brandHeat * 0.45 + craft.total * 0.52 + taste * 0.4)));
-    return { ...story, brandHeat, viralScore };
+    return { ...story, brandHeat, viralScore, hookCategory: classifyHook(story), situationCategory: classifySituation(story) };
   });
 }

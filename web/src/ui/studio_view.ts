@@ -1,16 +1,10 @@
+import { getHookLabel, getSituationLabel, HOOK_CATEGORIES, SITUATION_CATEGORIES } from '../engine/taxonomy';
 import { getVote } from '../engine/telemetry';
 import { Glyphs } from '../glyphs';
-import type { GeneratedPrompts, RatingLogEntry, ScoredTopic } from '../types';
+import type { GeneratedPrompts, HookCategory, RatingLogEntry, ScoredTopic, SituationCategory } from '../types';
 import { esc } from './escape';
 
-function renderCodeRow(
-  kind: 'storyboard' | 'video',
-  label: string,
-  meta: string,
-  content: string,
-  vote: 'up' | 'down' | null,
-  copied: boolean,
-): string {
+function renderCodeRow(kind: 'storyboard' | 'video', label: string, meta: string, content: string, vote: 'up' | 'down' | null, copied: boolean): string {
   return `
     <div class="prompt-row">
       <div class="code-block-card">
@@ -21,15 +15,9 @@ function renderCodeRow(
         <pre id="code-${kind}">${esc(content)}</pre>
       </div>
       <aside class="side-rail" aria-label="Rate ${kind}">
-        <button type="button" class="vote-btn ${vote === 'up' ? 'is-up' : ''}" data-action="vote-prompt" data-kind="${kind}" data-vote="up" title="Good ${kind}">
-          ${Glyphs.thumbsUp(16)}
-        </button>
-        <button type="button" class="vote-btn ${vote === 'down' ? 'is-down' : ''}" data-action="vote-prompt" data-kind="${kind}" data-vote="down" title="Weak ${kind}">
-          ${Glyphs.thumbsDown(16)}
-        </button>
-        <button type="button" class="vote-btn" data-action="copy-prompt" data-kind="${kind}" title="Copy">
-          ${copied ? Glyphs.check(16) : Glyphs.copy(16)}
-        </button>
+        <button type="button" class="vote-btn ${vote === 'up' ? 'is-up' : ''}" data-action="vote-prompt" data-kind="${kind}" data-vote="up" title="Good ${kind}">${Glyphs.thumbsUp(16)}</button>
+        <button type="button" class="vote-btn ${vote === 'down' ? 'is-down' : ''}" data-action="vote-prompt" data-kind="${kind}" data-vote="down" title="Weak ${kind}">${Glyphs.thumbsDown(16)}</button>
+        <button type="button" class="vote-btn" data-action="copy-prompt" data-kind="${kind}" title="Copy">${copied ? Glyphs.check(16) : Glyphs.copy(16)}</button>
       </aside>
     </div>
   `;
@@ -44,18 +32,20 @@ export function renderStudioView(params: {
   loadingTopics: boolean;
   loading: boolean;
   seedQuery: string;
+  hookFilter: HookCategory | 'all';
+  situationFilter: SituationCategory | 'all';
   liveTrends: string[];
   copiedTarget: 'storyboard' | 'video' | null;
 }): string {
-  const { topics, logs, generatedIds, selectedId, prompts, loadingTopics, loading, seedQuery, liveTrends, copiedTarget } = params;
+  const { topics, logs, generatedIds, selectedId, prompts, loadingTopics, loading, seedQuery, hookFilter, situationFilter, liveTrends, copiedTarget } = params;
+
+  const hookOpts = ['<option value="all">All Hooks</option>', ...HOOK_CATEGORIES.map((h) => `<option value="${h.id}" ${hookFilter === h.id ? 'selected' : ''}>${esc(h.label)}</option>`)].join('');
+  const sitOpts = ['<option value="all">All Situations</option>', ...SITUATION_CATEGORIES.map((s) => `<option value="${s.id}" ${situationFilter === s.id ? 'selected' : ''}>${esc(s.label)}</option>`)].join('');
 
   const trendChips = liveTrends.length
     ? `<div class="trend-strip">${liveTrends
         .slice(0, 6)
-        .map(
-          (kw) =>
-            `<button type="button" class="pill ${seedQuery === kw ? 'pill--accent' : ''}" data-action="pick-trend" data-trend="${esc(kw)}" title="Toggle live trend">${esc(kw)}</button>`,
-        )
+        .map((kw) => `<button type="button" class="pill ${seedQuery === kw ? 'pill--accent' : ''}" data-action="pick-trend" data-trend="${esc(kw)}" title="Toggle live trend">${esc(kw)}</button>`)
         .join('')}</div>`
     : '';
 
@@ -66,14 +56,12 @@ export function renderStudioView(params: {
           const vote = getVote(logs, 'topic', t.id);
           const selected = selectedId === t.id;
           const isGen = generatedIds.has(t.id);
-          const cls = ['topic-card', selected ? 'is-selected' : '', vote === 'up' ? 'is-liked' : '', vote === 'down' ? 'is-disliked' : '']
-            .filter(Boolean)
-            .join(' ');
+          const cls = ['topic-card', selected ? 'is-selected' : '', vote === 'up' ? 'is-liked' : '', vote === 'down' ? 'is-disliked' : ''].filter(Boolean).join(' ');
           return `
             <article class="${cls}">
               <div class="topic-card__body">
                 <div class="topic-card__top">
-                  <span class="topic-card__tag">${esc(t.brand)}</span>
+                  <span class="topic-card__tag">${esc(getHookLabel(t.hookCategory))} · ${esc(getSituationLabel(t.situationCategory))}</span>
                   <div class="vote-group">
                     ${isGen ? `<span class="pill pill--positive" title="Generated">${Glyphs.check(11)}</span>` : ''}
                     <span class="pill pill--accent" title="Viral score">${t.viralScore}</span>
@@ -84,12 +72,10 @@ export function renderStudioView(params: {
               </div>
               <div class="topic-card__footer">
                 <div class="vote-group">
-                  <button type="button" class="vote-btn ${vote === 'up' ? 'is-up' : ''}" data-action="vote-topic" data-id="${esc(t.id)}" data-vote="up" title="Thumbs Up">${Glyphs.thumbsUp(15)}</button>
-                  <button type="button" class="vote-btn ${vote === 'down' ? 'is-down' : ''}" data-action="vote-topic" data-id="${esc(t.id)}" data-vote="down" title="Thumbs Down">${Glyphs.thumbsDown(15)}</button>
+                  <button type="button" class="vote-btn ${vote === 'up' ? 'is-up' : ''}" data-action="vote-topic" data-id="${esc(t.id)}" data-vote="up" title="Save">${Glyphs.thumbsUp(15)}</button>
+                  <button type="button" class="vote-btn ${vote === 'down' ? 'is-down' : ''}" data-action="vote-topic" data-id="${esc(t.id)}" data-vote="down" title="Dislike">${Glyphs.thumbsDown(15)}</button>
                 </div>
-                <button type="button" class="btn ${selected ? 'btn--primary' : ''}" data-action="select-topic" data-id="${esc(t.id)}" title="Generate Storyboard & Video Prompt">
-                  ${Glyphs.arrowRight(15)}
-                </button>
+                <button type="button" class="btn ${selected ? 'btn--primary' : ''}" data-action="select-topic" data-id="${esc(t.id)}" title="Generate Prompts">${Glyphs.arrowRight(15)}</button>
               </div>
             </article>
           `;
@@ -118,10 +104,10 @@ export function renderStudioView(params: {
           <h2>Topics</h2>
         </div>
         <div class="section-header__actions">
+          <select id="filter-hook" class="compact-select" aria-label="Hook category">${hookOpts}</select>
+          <select id="filter-situation" class="compact-select" aria-label="Situation category">${sitOpts}</select>
           <input type="text" id="seed-input" class="compact-input" placeholder="Brand or topic..." value="${esc(seedQuery)}" />
-          <button type="button" class="btn btn--primary btn--icon" data-action="regenerate-topics" title="8 New Topics">
-            ${Glyphs.refresh(15)}
-          </button>
+          <button type="button" class="btn btn--primary btn--icon" data-action="regenerate-topics" title="8 New Topics">${Glyphs.refresh(15)}</button>
         </div>
       </div>
       ${trendChips}

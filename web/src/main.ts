@@ -24,6 +24,8 @@ const state: AppState = {
   activeTab: 'studio',
   drawerOpen: false,
   seedQuery: '',
+  hookFilter: 'all',
+  situationFilter: 'all',
   batchNonce: Date.now(),
   seenPairs: seen0,
   topics: initialTopics,
@@ -72,7 +74,7 @@ async function refreshTopics(): Promise<void> {
     render();
     try {
       const avoid = [...state.topics.map((t) => t.title), ...state.logs.map((l) => l.title)];
-      state.topics = await generateLiveTopics(state.config, state.seedQuery, state.logs, avoid, state.liveTrends);
+      state.topics = await generateLiveTopics(state.config, state.seedQuery, state.logs, avoid, state.liveTrends, state.hookFilter, state.situationFilter);
       state.loadingTopics = false;
       render();
       toast('8 fresh AI topics');
@@ -82,7 +84,7 @@ async function refreshTopics(): Promise<void> {
       toast(`AI error: ${err instanceof Error ? err.message : 'fallback'}`);
     }
   }
-  state.topics = evaluateTopics({ count: 8, query: state.seedQuery, logs: state.logs, seenPairs: state.seenPairs, batchNonce: state.batchNonce });
+  state.topics = evaluateTopics({ count: 8, query: state.seedQuery, logs: state.logs, seenPairs: state.seenPairs, batchNonce: state.batchNonce, hookFilter: state.hookFilter, situationFilter: state.situationFilter });
   saveSeenPairs(state.seenPairs);
   render();
   toast('8 fresh topics');
@@ -114,7 +116,7 @@ function render(): void {
   document.documentElement.setAttribute('data-theme', state.config.theme);
   let surfaceHtml = '';
   if (state.activeTab === 'studio') {
-    surfaceHtml = renderStudioView({ topics: state.topics, logs: state.logs, generatedIds: state.generatedIds, selectedId: state.selectedId, prompts: state.prompts, loadingTopics: state.loadingTopics, loading: state.loading, seedQuery: state.seedQuery, liveTrends: state.liveTrends, copiedTarget: state.copiedTarget });
+    surfaceHtml = renderStudioView({ topics: state.topics, logs: state.logs, generatedIds: state.generatedIds, selectedId: state.selectedId, prompts: state.prompts, loadingTopics: state.loadingTopics, loading: state.loading, seedQuery: state.seedQuery, hookFilter: state.hookFilter, situationFilter: state.situationFilter, liveTrends: state.liveTrends, copiedTarget: state.copiedTarget });
   } else if (state.activeTab === 'saved') {
     surfaceHtml = renderSavedView({ saved: state.saved, filter: state.savedFilter, selectedId: state.selectedId });
   } else if (state.activeTab === 'analytics') {

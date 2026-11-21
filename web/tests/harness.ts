@@ -69,6 +69,12 @@ for (let r = 1; r <= RELOADS; r += 1) {
 
 assert.equal(new Set([0, 1, 2].map((n) => synthesizeTrendCard('Anthropic', n).angle)).size, 3);
 
+// Verify Hook & Situation categorization and filtering
+const scienceOnly = generateFreshDiverseBatch({ count: 8, query: '', logs: [], seenPairs: new Set(), batchNonce: 88, hookFilter: 'science' });
+assert.ok(scienceOnly.length >= 4 && scienceOnly.every((t) => t.hookCategory === 'science'), 'Hook filter failed');
+const coastalOnly = generateFreshDiverseBatch({ count: 8, query: '', logs: [], seenPairs: new Set(), batchNonce: 89, situationFilter: 'coastal' });
+assert.ok(coastalOnly.length >= 4 && coastalOnly.every((t) => t.situationCategory === 'coastal'), 'Situation filter failed');
+
 // Verify Saved (Thumbs Up) -> Pending -> Generated via Arrow (Done) -> Remove lifecycle
 const sample = generateFreshDiverseBatch({ count: 8, query: '', logs: [], seenPairs: new Set(), batchNonce: 777 })[0];
 let savedList = saveLikedTopic([], new Set(), sample);
@@ -82,5 +88,5 @@ assert.equal(savedList.length, 0);
 
 console.log(
   `HARNESS PASS: ${ALL_BESPOKE_STORIES.length} stories × ${RELOADS} F5 reloads = ${RELOADS * 8} cards ` +
-    `(6/6 formats, 8/8 unique worlds, 0 adjacent same-format, 0/8 repeats, 0 genre-prefix clichés, Saved/Pending/Done verified).`,
+    `(6/6 formats, 8/8 unique worlds, 0 adjacent same-format, 0/8 repeats, Hook/Situation filters & Saved/Pending/Done verified).`,
 );

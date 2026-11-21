@@ -1,5 +1,5 @@
 import { generateFreshDiverseBatch } from './topic_generator';
-import type { RatingLogEntry, ScoredTopic } from '../types';
+import type { HookCategory, RatingLogEntry, ScoredTopic, SituationCategory } from '../types';
 
 export function evaluateTopics(params: {
   count: number;
@@ -7,6 +7,8 @@ export function evaluateTopics(params: {
   logs: RatingLogEntry[];
   seenPairs: Set<string>;
   batchNonce: number;
+  hookFilter?: HookCategory | 'all';
+  situationFilter?: SituationCategory | 'all';
 }): ScoredTopic[] {
   return generateFreshDiverseBatch(params);
 }

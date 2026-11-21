@@ -2,6 +2,8 @@ export type VoteValue = 'up' | 'down';
 export type TargetKind = 'topic' | 'storyboard' | 'video';
 export type ActiveTab = 'studio' | 'saved' | 'analytics' | 'logs';
 export type SavedFilter = 'all' | 'pending' | 'done';
+export type HookCategory = 'iconic' | 'build' | 'origin' | 'science' | 'tutorial' | 'news';
+export type SituationCategory = 'global' | 'coastal' | 'tech' | 'ego' | 'lab' | 'childhood';
 export type ThemeName = 'studio' | 'noir';
 export type SourceMode = 'standalone' | 'gemini' | 'groq' | 'openrouter' | 'backend';
 
@@ -48,6 +50,8 @@ export interface TopicOption {
 export interface ScoredTopic extends TopicOption {
   viralScore: number;
   brandHeat: number;
+  hookCategory: HookCategory;
+  situationCategory: SituationCategory;
 }
 
 export interface GeneratedPrompts {
