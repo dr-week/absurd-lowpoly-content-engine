@@ -116,24 +116,27 @@ async def fetch_india_trends(
     collected: list[TrendItem] = []
     seen_keys: set[str] = set()
 
-    async with httpx.AsyncClient(
-        timeout=timeout,
-        follow_redirects=True,
-        headers={"User-Agent": "absurd-lowpoly-content-engine/0.2"},
-    ) as client:
-        for feed in feeds:
-            try:
-                resp = await client.get(feed.url)
-                if resp.status_code >= 400:
+    try:
+        async with httpx.AsyncClient(
+            timeout=timeout,
+            follow_redirects=True,
+            headers={"User-Agent": "absurd-lowpoly-content-engine/0.2"},
+        ) as client:
+            for feed in feeds:
+                try:
+                    resp = await client.get(feed.url)
+                    if resp.status_code >= 400:
+                        continue
+                    parsed = parse_rss_xml(resp.text, source_name=feed.name, limit=limit)
+                    for item in parsed:
+                        key = re.sub(r"[^a-z0-9]+", "", item.title.lower())[:48]
+                        if key and key not in seen_keys:
+                            seen_keys.add(key)
+                            collected.append(item)
+                except (httpx.HTTPError, httpx.InvalidURL):
                     continue
-                parsed = parse_rss_xml(resp.text, source_name=feed.name, limit=limit)
-                for item in parsed:
-                    key = re.sub(r"[^a-z0-9]+", "", item.title.lower())[:48]
-                    if key and key not in seen_keys:
-                        seen_keys.add(key)
-                        collected.append(item)
-            except httpx.HTTPError:
-                continue
+    except (httpx.HTTPError, httpx.InvalidURL, ValueError):
+        pass
 
     if not collected and allow_fallback:
         return list(_FALLBACK_TRENDS[:limit])
