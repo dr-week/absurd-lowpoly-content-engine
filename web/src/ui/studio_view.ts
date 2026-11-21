@@ -42,10 +42,9 @@ export function renderStudioView(params: {
   prompts: GeneratedPrompts | null;
   loading: boolean;
   seedQuery: string;
-  batchSize: number;
   copiedTarget: 'storyboard' | 'video' | null;
 }): string {
-  const { topics, logs, selectedId, prompts, loading, seedQuery, batchSize, copiedTarget } = params;
+  const { topics, logs, selectedId, prompts, loading, seedQuery, copiedTarget } = params;
 
   const cards = topics
     .map((t) => {
@@ -101,12 +100,7 @@ export function renderStudioView(params: {
         </div>
         <div class="section-header__actions">
           <input type="text" id="seed-input" class="compact-input" placeholder="Brand or topic..." value="${esc(seedQuery)}" />
-          <select id="batch-size-select" class="compact-select" aria-label="Count">
-            <option value="6" ${batchSize === 6 ? 'selected' : ''}>6</option>
-            <option value="8" ${batchSize === 8 ? 'selected' : ''}>8</option>
-            <option value="10" ${batchSize === 10 ? 'selected' : ''}>10</option>
-          </select>
-          <button type="button" class="btn btn--primary btn--icon" data-action="regenerate-topics" title="New Options">
+          <button type="button" class="btn btn--primary btn--icon" data-action="regenerate-topics" title="8 New Topics">
             ${Glyphs.refresh(15)}
           </button>
         </div>

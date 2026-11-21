@@ -73,7 +73,6 @@ function render(): void {
           prompts: state.prompts,
           loading: state.loading,
           seedQuery: state.seedQuery,
-          batchSize: state.config.batchSize,
           copiedTarget: state.copiedTarget,
         })
       : state.activeTab === 'analytics'
