@@ -10,6 +10,7 @@ export interface AppState {
   activeTab: ActiveTab;
   drawerOpen: boolean;
   seedQuery: string;
+  customDraft: string;
   hookFilter: HookCategory | 'all';
   situationFilter: SituationCategory | 'all';
   batchNonce: number;
@@ -39,6 +40,7 @@ export function bindAppEvents(
     selectTopic: (id: string, fromSaved?: boolean) => Promise<void>;
     createSequel: (topic: ScoredTopic) => Promise<void>;
     createMashup: () => Promise<void>;
+    runCustomIdea: () => Promise<void>;
     toast: (msg: string) => void;
   },
 ): void {
@@ -54,6 +56,8 @@ export function bindAppEvents(
       if (a === 'close-drawer') { state.drawerOpen = false; hooks.render(); return; }
       if (a === 'regenerate-topics') { state.batchNonce += 1; void hooks.refreshTopics(); return; }
       if (a === 'pick-trend' && el.dataset.trend) { state.seedQuery = state.seedQuery === el.dataset.trend ? '' : el.dataset.trend; state.batchNonce += 1; void hooks.refreshTopics(); return; }
+      if (a === 'pick-char' && el.dataset.starter) { state.customDraft = el.dataset.starter; hooks.render(); document.getElementById('custom-idea-input')?.focus(); return; }
+      if (a === 'run-custom-idea') { void hooks.runCustomIdea(); return; }
       if (a === 'select-topic' && el.dataset.id) { void hooks.selectTopic(el.dataset.id, false); return; }
       if (a === 'select-saved' && el.dataset.id) { void hooks.selectTopic(el.dataset.id, true); return; }
       if (a === 'saved-filter' && el.dataset.filter) { state.savedFilter = el.dataset.filter as SavedFilter; hooks.render(); return; }
@@ -116,6 +120,9 @@ export function bindAppEvents(
     if (!file) return;
     void file.text().then((txt) => { Object.assign(state, restoreStudioBackup(txt), { drawerOpen: false }); hooks.render(); hooks.toast('Studio restored'); }).catch(() => hooks.toast('Invalid backup JSON'));
   });
+  const customInput = document.getElementById('custom-idea-input') as HTMLInputElement | null;
+  customInput?.addEventListener('input', () => { state.customDraft = customInput.value; });
+  customInput?.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') void hooks.runCustomIdea(); });
   document.getElementById('seed-input')?.addEventListener('change', (ev) => { state.seedQuery = (ev.target as HTMLInputElement).value; state.batchNonce += 1; void hooks.refreshTopics(); });
   document.getElementById('filter-hook')?.addEventListener('change', (ev) => { state.hookFilter = (ev.target as HTMLSelectElement).value as HookCategory | 'all'; state.batchNonce += 1; void hooks.refreshTopics(); });
   document.getElementById('filter-situation')?.addEventListener('change', (ev) => { state.situationFilter = (ev.target as HTMLSelectElement).value as SituationCategory | 'all'; state.batchNonce += 1; void hooks.refreshTopics(); });

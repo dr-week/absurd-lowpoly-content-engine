@@ -1,11 +1,12 @@
 import './styles/main.scss';
+import { buildCustomEpisode } from './engine/custom_builder';
 import { pullUnseenDailyEpisodes } from './engine/daily_pool';
 import { generateFreshLiveNewsTopics } from './engine/free_ai';
 import { generateLiveTopics } from './engine/live_ai';
 import { loadLiveTrends, pickTrendChips } from './engine/live_feeds';
 import { buildCrossoverEpisode } from './engine/mashup_engine';
 import { generatePromptsForTopic } from './engine/prompt_renderer';
-import { loadGeneratedIds, loadSaved, markTopicGenerated } from './engine/saved_store';
+import { loadGeneratedIds, loadSaved, markTopicGenerated, saveLikedTopic } from './engine/saved_store';
 import { buildPart2Topic } from './engine/sequel_engine';
 import { computeTasteDna } from './engine/taste_dna';
 import { loadConfig, loadLogs, loadSeenPairs, loadSeenTitles, saveSeenPairs, saveSeenTitles } from './engine/telemetry';
@@ -26,7 +27,7 @@ const initialTopics = evaluateTopics({ count: 8, query: '', logs: logs0, seenPai
 saveSeenPairs(seen0);
 
 const state: AppState = {
-  config: cfg0, activeTab: 'studio', drawerOpen: false, seedQuery: '', hookFilter: 'all', situationFilter: 'all',
+  config: cfg0, activeTab: 'studio', drawerOpen: false, seedQuery: '', customDraft: '', hookFilter: 'all', situationFilter: 'all',
   batchNonce: Date.now(), seenPairs: seen0, seenTitles: loadSeenTitles(), topics: initialTopics, liveTrends: [],
   loadingTopics: cfg0.sourceMode === 'live-free', selectedId: null, activeTopic: undefined, prompts: null,
   rigStep: 0, punchStep: 0, loading: false, logs: logs0, saved: loadSaved(), generatedIds: loadGeneratedIds(),
@@ -103,20 +104,28 @@ async function createMashup(): Promise<void> {
   rememberTitles([mash]); await generateFor(mash, true); toast(mash.title);
 }
 
+async function runCustomIdea(): Promise<void> {
+  if (!state.customDraft.trim()) { toast('Type an idea first'); return; }
+  const custom = buildCustomEpisode(state.customDraft, state.hookFilter);
+  state.saved = saveLikedTopic(state.saved, state.generatedIds, custom);
+  state.customDraft = '';
+  rememberTitles([custom]); await generateFor(custom, true); toast('Created & Saved');
+}
+
 function render(): void {
   const root = document.getElementById('app');
   if (!root) return;
   document.documentElement.setAttribute('data-theme', state.config.theme);
   const surfaceHtml =
     state.activeTab === 'studio'
-      ? renderStudioView({ topics: state.topics, logs: state.logs, generatedIds: state.generatedIds, selectedId: state.selectedId, activeTopic: state.activeTopic, prompts: state.prompts, loadingTopics: state.loadingTopics, loading: state.loading, seedQuery: state.seedQuery, hookFilter: state.hookFilter, situationFilter: state.situationFilter, liveTrends: state.liveTrends, copiedTarget: state.copiedTarget })
+      ? renderStudioView({ topics: state.topics, logs: state.logs, generatedIds: state.generatedIds, selectedId: state.selectedId, activeTopic: state.activeTopic, prompts: state.prompts, loadingTopics: state.loadingTopics, loading: state.loading, seedQuery: state.seedQuery, customDraft: state.customDraft, hookFilter: state.hookFilter, situationFilter: state.situationFilter, liveTrends: state.liveTrends, copiedTarget: state.copiedTarget })
       : state.activeTab === 'saved'
         ? renderSavedView({ saved: state.saved, filter: state.savedFilter, selectedId: state.selectedId })
         : state.activeTab === 'analytics'
           ? renderAnalyticsView(state.logs, state.saved)
           : renderLogsView(state.logs);
   root.innerHTML = renderAppShell({ config: state.config, activeTab: state.activeTab, drawerOpen: state.drawerOpen, logs: state.logs, savedCount: state.saved.length, surfaceHtml });
-  bindAppEvents(state, { render, refreshTopics, selectTopic, createSequel, createMashup, toast });
+  bindAppEvents(state, { render, refreshTopics, selectTopic, createSequel, createMashup, runCustomIdea, toast });
 }
 
 window.addEventListener('keydown', (ev) => {

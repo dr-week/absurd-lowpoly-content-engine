@@ -3,6 +3,7 @@ import { getVote } from '../engine/telemetry';
 import { Glyphs } from '../glyphs';
 import type { GeneratedPrompts, HookCategory, RatingLogEntry, ScoredTopic, SituationCategory } from '../types';
 import { esc } from './escape';
+import { renderCustomIdeaBar } from './custom_bar';
 import { renderViralPackagingCard } from './packaging_card';
 
 function renderCodeRow(kind: 'storyboard' | 'video', label: string, meta: string, content: string, vote: 'up' | 'down' | null, copied: boolean): string {
@@ -34,12 +35,13 @@ export function renderStudioView(params: {
   loadingTopics: boolean;
   loading: boolean;
   seedQuery: string;
+  customDraft: string;
   hookFilter: HookCategory | 'all';
   situationFilter: SituationCategory | 'all';
   liveTrends: string[];
   copiedTarget: 'storyboard' | 'video' | 'packaging' | null;
 }): string {
-  const { topics, logs, generatedIds, selectedId, activeTopic, prompts, loadingTopics, loading, seedQuery, hookFilter, situationFilter, liveTrends, copiedTarget } = params;
+  const { topics, logs, generatedIds, selectedId, activeTopic, prompts, loadingTopics, loading, seedQuery, customDraft, hookFilter, situationFilter, liveTrends, copiedTarget } = params;
 
   const hookOpts = ['<option value="all">All Hooks</option>', ...HOOK_CATEGORIES.map((h) => `<option value="${h.id}" ${hookFilter === h.id ? 'selected' : ''}>${esc(h.label)}</option>`)].join('');
   const sitOpts = ['<option value="all">All Situations</option>', ...SITUATION_CATEGORIES.map((s) => `<option value="${s.id}" ${situationFilter === s.id ? 'selected' : ''}>${esc(s.label)}</option>`)].join('');
@@ -114,6 +116,7 @@ export function renderStudioView(params: {
         </div>
       </div>
       ${trendChips}
+      ${renderCustomIdeaBar(customDraft)}
       <div class="topics-grid">${cards}</div>
     </section>
 

@@ -1,7 +1,9 @@
 import assert from 'node:assert/strict';
 import { restoreStudioBackup } from '../src/engine/backup_sync';
 import { scoreComedyCraft } from '../src/engine/comedy_craft';
+import { buildCustomEpisode } from '../src/engine/custom_builder';
 import { scoreHeadlineComedyPotential } from '../src/engine/headline_filter';
+import { buildCrossoverEpisode } from '../src/engine/mashup_engine';
 import { renderStoryboardText, renderVideoText } from '../src/engine/prompt_renderer';
 import { cycleAlternatePunchline, rerollCameraRig } from '../src/engine/prompt_tools';
 import { markTopicGenerated, removeSavedTopic, saveLikedTopic, setSavedOutcome } from '../src/engine/saved_store';
@@ -132,7 +134,12 @@ assert.ok(pack.titles.length === 3 && pack.hashtags.length >= 4 && pack.pinnedCo
 const restored = restoreStudioBackup(JSON.stringify({ version: 1, saved: [], generatedIds: ['x1'], logs: [], seenTitles: ['t1'], seenPairs: [] }));
 assert.ok(restored.generatedIds.has('x1') && restored.seenTitles.has('t1'));
 
+const customEp = buildCustomEpisode('Trump buys a Goa beach shack for ₹200', 'iconic');
+assert.ok(customEp.title.includes('TRUMP') && customEp.situationCategory === 'coastal' && customEp.hookCategory === 'iconic');
+const mash = buildCrossoverEpisode([sample, customEp]);
+assert.ok(mash && mash.title.startsWith('CROSSOVER:') && mash.frames?.length === 6 && mash.shots?.length === 6);
+
 console.log(
   `HARNESS PASS: ${ALL_BESPOKE_STORIES.length} stories × ${RELOADS} F5 reloads = ${RELOADS * 8} cards ` +
-    `(0/32 rapid live repeats, Part 2 Sequels, Viral Pack, 5x Viral DNA, Camera/Punchline & Backup verified).`,
+    `(0/32 rapid live repeats, Custom Idea, Mashup, Part 2, Viral Pack, 5x Viral DNA & Backup verified).`,
 );
