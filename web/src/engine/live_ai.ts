@@ -95,13 +95,16 @@ export async function generateLiveScriptSpec(
   config: EngineConfig,
   topic: TopicOption,
 ): Promise<{ frames: StoryboardFrameData[]; shots: VideoShotData[] }> {
+  const styles = ['high-corner CCTV security cam + fluorescent green-grey tint', 'shaky 1998 handheld camcorder + washed-out daylight', 'symmetrical flat deadpan framing + overcast lighting', 'low-angle worm-eye drama + dim sodium-yellow glow', 'live TV news broadcast + sterile halogen glare'];
+  const pickedStyle = styles[Math.floor(Math.random() * styles.length)];
   const system =
-    'Expand this Indian absurdist comedy topic into a 6-frame 3x2 storyboard and a 6-shot video script. ' +
+    'Expand this absurdist comedy topic into a 6-frame 3x2 storyboard and a 6-shot video script. ' +
+    `Use this exact camera & lighting grammar so it never looks like a generic repeated cartoon: ${pickedStyle}. ` +
     'DO NOT repeat global PS1/low-poly style words inside individual frames/shots. ' +
     'NEVER mention video duration, time, timestamps, or aspect ratio (no 9:16, no 20s). Keep Hindi lines <= 7 words. ' +
     'Return ONLY JSON: {"frames":[{"frame":1,"position":"Top Left","framing":"...","action":"...","caption":"short Hinglish"}],"shots":[{"shot":1,"visual":"...","sfx":"...","hindi":"short Devanagari Hindi"}]}';
 
-  const user = `Title: ${topic.title}\nSetting/Brand: ${topic.brand}\nPremise: ${topic.pitch}\nUse exact positions: Top Left, Top Center, Top Right, Bottom Left, Bottom Center, Bottom Right.`;
+  const user = `Title: ${topic.title}\nWorld: ${topic.brand}\nPremise: ${topic.pitch}\nUse exact positions: Top Left, Top Center, Top Right, Bottom Left, Bottom Center, Bottom Right.`;
   const raw = await callBrowserLLM(config, system, user);
   return JSON.parse(extractJson(raw)) as { frames: StoryboardFrameData[]; shots: VideoShotData[] };
 }

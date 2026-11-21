@@ -65,6 +65,9 @@ for (let r = 1; r <= RELOADS; r += 1) {
   prevBrands = brands;
   prevTitles = titles;
 
+  const frame1Framings = new Set(batch.map((t) => t.frames?.[0]?.framing ?? ''));
+  assert.ok(frame1Framings.size >= 5, `Reload ${r}: camera grammar too repetitive (${frame1Framings.size} unique Frame 1 framings)`);
+
   for (const topic of batch) {
     const sb = renderStoryboardText(topic.title, topic.frames ?? []);
     const vid = renderVideoText(topic.shots ?? []);
