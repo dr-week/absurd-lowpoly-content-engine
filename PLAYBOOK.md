@@ -21,21 +21,31 @@ To get the exact low-effort, gritty retro 3D look instead of smooth CGI or 2D ca
 
 ---
 
-## 2. Idea Formula (The "Zepto Standard" — High-Voltage Modern Indian Absurdity)
+## 2. Comedy Craft & Story Architecture (The 7 Laws + 6 Distinct Formats)
 
-Every concept must match the intensity of the **"Late Night 10-Minute Zepto Delivery"** benchmark. 
+Every concept must be built like a real stand-up joke or sketch room script — never a Mad-Libs clone.
 
-### The 4 Mandatory Pillars:
-1. **Hyper-Modern Urban Hook (No Boomer Tropes):** Must revolve around modern Indian obsessions—10-minute quick commerce (Zepto/Blinkit), Cab cancellation standoffs (Ola/Uber), Gym protein culture, UPI payment soundbox addiction, iPhone EMI desperation, Co-working space cold wars.
-2. **Trivial Cause -> Catastrophic Destruction:** Ordering a ₹14 Maggi or asking for an AC cab leads to **sudden, violent, catastrophic property destruction** in raw 3D PS1 physics (scooters flying through 9th-floor balconies, metro trains derailing into bedrooms, roads splitting in half).
-3. **High-Speed Aggression (Zero Fluff):** No slow build-ups or peaceful tea sips. The jolt hits fast, hard, and loud within 3 seconds.
-4. **Petty Transactional Payoff:** In the middle of total destruction, the character only cares about a **hyper-specific trivial Indian detail** (e.g. asking for OTP, demanding a 5-star rating, insisting on ₹2 cash change, checking if the packet leaked).
+### The 7 Comedy Writer Laws (Mandatory):
+1. **Setup → False Assumption → Shatter:** Build one clear audience expectation in Shots 1–3, then shatter ONE assumption while staying 100% logically true to the setup (*surprising, yet inevitable in hindsight*).
+2. **"But / Therefore" Causality:** Never chain shots with *"and then"*. Every cut between Shots 1–6 must be **BUT** (reversal) or **THEREFORE** (escalating consequence).
+3. **UCB Game of the Scene:** Shot 1 grounded Base Reality → Shot 2 one Unusual Thing → Shots 3–5 Heighten & Explore with deadpan internal logic → Shot 6 Button & instant cut.
+4. **The Rule of Three:** Establish a pattern, confirm it bigger, then break the prediction on beat 3.
+5. **Punch-Word Last & Zero-Fat Economy:** Put the reveal word at the very end of Shot 6 Hindi dialogue (`≤ 7 words`) and cut everything after the laugh. Use specific props/numbers (`₹10 coin`, `40-foot crane`, `3°C`).
+6. **Shot 1 → Shot 6 Callback Loop:** Plant one tiny concrete detail in Shot 1 and bring it back in Shot 6 with new meaning to trigger natural rewatch loops.
+7. **Benign Violation + Status Gap:** High-status deadpan Straight Man (world leader, scientist, news anchor) treating a massive absurdity as normal or obsessing over a microscopic petty detail.
+
+### The 6 Structurally Different Formats:
+- `over-engineer` (Level 1 → Level 999 build/upgrade for a tiny problem)
+- `fake-origin` (Fake celebrity childhood origin story: Gandhiji, Elon, Trump, Putin, Modi)
+- `breaking-news` (Deadpan 1998 TV broadcast covering absurd global/Goa/tech news)
+- `fake-tutorial` (3-Step Rule-of-Three guide whose Step 3 shatters expectation)
+- `petty-spiral` (UCB heightening escalation from a microscopic annoyance)
+- `weird-science` (Absurd MIT/CERN lab experiment with deadpan conclusion)
 
 ### STRICT BANLIST (Instant Reject):
-- **NO Boomer / Tame Domestic Tropes:** No boiling milk, no pressure cooker dal, no drying clothes on terrace, no TV remote fights, no society uncle maintenance jokes, no talking lizards/geckos.
-- **NO Cute / Gentle Humor:** If there is no violent physical disruption or extreme shock value, the idea is rejected.
-- **NO Video Game Tropes:** No health bars, cheat codes, or characters knowing they are in 3D.
-
+- **NO City Lock-in:** Never lock stories to Delhi or Mumbai. Mix Global/World News, Goa, Science, Iconic Figures, and Universal Modern Life.
+- **NO Tame Domestic Boomer Tropes:** No boiling milk, pressure cooker dal, terrace clothes, or house lizards.
+- **NO Video Game Meta Logic:** No health bars, cheat codes, respawns, or characters knowing they are in 3D.
 
 ---
 
@@ -43,24 +53,22 @@ Every concept must match the intensity of the **"Late Night 10-Minute Zepto Deli
 
 When prompting for a storyboard grid, structure it like this:
 
-1. **Global Setup:** Specify a 3x2 grid layout on a plain dark background, retro PS1/N64 low-poly style, negative constraints (no 2D/ink/smooth CGI), a title at the top, and a short retro pixel-font Hinglish caption under each frame.
-2. **Per-Frame Breakdown (Frames 1–6):** Give camera framing/location, low-poly character/prop action, visual absurdity, and a short Hinglish caption.
+1. **Global Setup (Declared ONCE):** Specify a 3x2 grid layout on a plain dark background, retro PS1/N64 low-poly style, negative constraints (no 2D/ink/smooth CGI), a title at the top, and a short retro pixel-font Hinglish caption under each frame.
+2. **Per-Frame Breakdown (Frames 1–6):** Give camera framing/location, low-poly character/prop action, visual absurdity, and a short Hinglish caption. Never repeat style filler inside individual frames.
 
 ---
 
-## 4. Video Prompt Structure (20s, 9:16 Vertical) — The Attention-Wave Formula
+## 4. Video Prompt Structure (Clean 6-Shot Sequential Script)
 
-To keep short-form retention pinned and prevent drop-off, every 20-second script follows the **Attention-Wave (Sine-Wave Rhythm)**:
-* As soon as a shot feels mundane or familiar, **an abrupt unexpected jolt hits before the viewer's attention dips**.
-* Rhythm alternates: **Mundane Hook -> Micro-Twist -> Normal Escalation -> Unhinged Shock -> Deadpan Snap-Back**.
+**STRICT RULE:** Video prompts must **NEVER** mention video duration (`20-second`), aspect ratio/size (`9:16 vertical`), or timestamps (`[0:00–0:03]`). Use clean sequential `Shot 1:` … `Shot 6:` with retro SFX and ultra-short Devanagari Hindi lines (`≤ 7 words`).
 
-### The 6-Beat Attention-Wave Timing:
-1. **`[0:00–0:03]` Beat 1 (Mundane Hook):** Everyday slice-of-life action that looks completely normal (waiting for OTP, pouring chai, bargaining, tightening a screw).
-2. **`[0:03–0:07]` Beat 2 (First Micro-Jolt):** Just as the viewer thinks they know what's happening, a sudden bizarre visual surprise hits (the screw tightens the entire room, the chai boils downward).
-3. **`[0:07–0:10]` Beat 3 (Temporary False Normalcy):** The character reacts with deadpan calm, normalizing the weirdness to lull the viewer into false security.
-4. **`[0:10–0:14]` Beat 4 (Massive Escalation Wave):** Sudden hard cut to a bigger, completely unexpected chain-reaction affecting the environment.
-5. **`[0:14–0:17]` Beat 5 (Pre-Twist Suspense Wave):** A tight, awkward pause where the tension peaks.
-6. **`[0:17–0:20]` Beat 6 (The Unhinged Snap-Back Payoff):** Sudden snap-zoom to a ridiculous, trivial everyday Indian punchline delivered with zero emotion, ending with an instant hard cut to black.
+### The 6-Shot Causal Arc ("But / Therefore"):
+1. **Shot 1 (Immediate Hook & Planted Detail):** Grounded Base Reality with one tiny concrete prop/detail planted for the Shot 6 callback.
+2. **Shot 2 (The Unusual Thing):** First reversal (**BUT**) introduces the absurd premise.
+3. **Shot 3 (Pattern Confirmation / Heighten 1):** **THEREFORE** stakes rise with deadpan commitment.
+4. **Shot 4 (Peak Escalation / Heighten 2):** **THEREFORE** scale hits maximum absurdity.
+5. **Shot 5 (Broken Prediction / Turn):** **BUT** the setup assumption shatters logically.
+6. **Shot 6 (Punch-Word-Last Callback Button):** Reveal word sits at the very end of the Hindi line, referencing Shot 1, followed by an instant hard cut to black.
 
 ---
 

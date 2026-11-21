@@ -1,14 +1,22 @@
 import assert from 'node:assert/strict';
+import { scoreComedyCraft } from '../src/engine/comedy_craft';
 import { renderStoryboardText, renderVideoText } from '../src/engine/prompt_renderer';
-import { generateFreshDiverseBatch } from '../src/engine/topic_generator';
+import { ALL_BESPOKE_STORIES, generateFreshDiverseBatch } from '../src/engine/topic_generator';
+import { synthesizeTrendCard } from '../src/engine/trend_synthesizer';
 import type { RatingLogEntry } from '../src/types';
 
-// Top-1% Anti-Pattern, 6-Format Diversity & F5-Reload Persistence Harness:
-// Proves across 15 simulated browser F5 reloads (120 cards) that:
-// 1. Every batch returns 8 cards covering ALL 6 structurally different story formats.
-// 2. ZERO card repeats between consecutive F5 reloads (0/8 overlap).
-// 3. ZERO Mad-Libs clone skeletons ("deadpans \""), ZERO Delhi/Mumbai lock-in, ZERO time/size leaks.
-// 4. Clicking any custom live trend chip (e.g. "Anthropic") synthesizes a breaking-news card cleanly.
+// Top-1% Comedy Craft, 6-Format Diversity & F5-Reload Persistence Harness:
+// 1. Verifies all 36 bespoke stories pass Comedy Craft scoring (6 beats, crisp punchline <= 9 words, zero city lock-in).
+// 2. Proves across 15 simulated browser F5 reloads (120 cards) that every batch covers 6/6 formats with 0/8 consecutive repeats.
+// 3. Proves live trend chip synthesis rotates across 3 distinct comedy mechanisms (breaking-news, fake-tutorial, petty-spiral).
+
+assert.ok(ALL_BESPOKE_STORIES.length >= 36, `Expected >= 36 bespoke stories, got ${ALL_BESPOKE_STORIES.length}`);
+for (const story of ALL_BESPOKE_STORIES) {
+  const craft = scoreComedyCraft(story);
+  assert.ok(craft.hasSixBeats, `Story "${story.id}" missing 6 frames/shots`);
+  assert.ok(craft.punchlineWords >= 3 && craft.punchlineWords <= 9, `Story "${story.id}" punchline too long/short: ${craft.punchlineWords} words`);
+  assert.ok(craft.total >= 80, `Story "${story.id}" craft score too low: ${craft.total}`);
+}
 
 const biasedLogs: RatingLogEntry[] = Array.from({ length: 10 }, (_, idx) => ({
   id: `topic_bias_${idx}`,
@@ -39,8 +47,7 @@ for (let r = 1; r <= RELOADS; r += 1) {
   persistedJson = JSON.stringify(Array.from(seenPairs).slice(-120));
 
   assert.equal(batch.length, 8, `Reload ${r}: expected 8 topics`);
-  const formats = new Set(batch.map((t) => t.angle));
-  assert.equal(formats.size, 6, `Reload ${r}: expected all 6 distinct story formats, got ${formats.size}`);
+  assert.equal(new Set(batch.map((t) => t.angle)).size, 6, `Reload ${r}: expected all 6 distinct story formats`);
 
   const ids = new Set(batch.map((t) => t.id));
   assert.equal(ids.size, 8, `Reload ${r}: duplicate card inside same batch`);
@@ -61,18 +68,10 @@ for (let r = 1; r <= RELOADS; r += 1) {
   }
 }
 
-const trendBatch = generateFreshDiverseBatch({
-  count: 8,
-  query: 'Anthropic',
-  logs: [],
-  seenPairs: new Set<string>(),
-  batchNonce: 99,
-});
-assert.equal(trendBatch.length, 8);
-assert.ok(trendBatch.some((t) => t.title.includes('ANTHROPIC')), 'Custom trend chip failed to synthesize');
-assert.equal(new Set(trendBatch.map((t) => t.angle)).size, 6, 'Custom trend batch lost 6-format diversity');
+const trendAngles = new Set([0, 1, 2].map((n) => synthesizeTrendCard('Anthropic', n).angle));
+assert.equal(trendAngles.size, 3, 'Trend synthesizer must rotate across 3 distinct comedy formats');
 
 console.log(
-  `HARNESS PASS: ${RELOADS} F5 reloads × 8 topics = ${RELOADS * 8} cards verified ` +
-    `(${allSeenIds.size} bespoke stories, 6/6 distinct story formats per batch, 0/8 consecutive repeats, 0 Mad-Libs clones, 0 time/size leaks).`,
+  `HARNESS PASS: ${ALL_BESPOKE_STORIES.length} comedy-crafted stories verified; ` +
+    `${RELOADS} F5 reloads × 8 = ${RELOADS * 8} cards (6/6 formats/batch, 0/8 repeats, 3 rotating trend mechanisms, 0 time/size leaks).`,
 );

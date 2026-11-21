@@ -1,4 +1,5 @@
 import type { EngineConfig, RatingLogEntry, ScoredTopic, StoryboardFrameData, TopicOption, VideoShotData } from '../types';
+import { pickComedyMechanism, WRITERS_ROOM_RULES } from './comedy_craft';
 
 function extractJson(raw: string): string {
   const s = raw.trim().replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim();
@@ -61,17 +62,18 @@ export async function generateLiveTopics(
   const disliked = logs.filter((l) => l.vote === 'down').slice(0, 6).map((l) => l.title);
 
   const system =
-    'You invent 8 wildly creative, completely UNRELATED absurdist comedy topics for 1998 PS1/N64 low-poly 3D videos with a deadpan Hindi narrator. ' +
-    'Mix across ALL of these categories (1 per category): Iconic Figure Parody (Elon Musk, Trump, Putin, Modi, or Gandhiji), Over-Engineering a Simple Task (building/upgrading/growing Level 1 -> Level 999), Fake Celebrity Childhood Origin Story, Missile/War-Room Overkill for a Tiny Problem, Weird Scientific Study, Goa/Coastal Life, World News/Politics, and Universal Everyday Life. ' +
-    'DO NOT make topics specific to Delhi or Mumbai. Keep every topic distinct and unpredictable. ' +
-    'Return ONLY JSON: {"topics":[{"title":"UPPERCASE PUNCHY TITLE","angle":"short-tag","brand":"Figure/World Tag","pitch":"1-sentence hook + build/upgrade/absurd twist + deadpan payoff","viralScore":92}]}';
+    'You are a top stand-up & sketch comedy head writer inventing 8 structurally DIFFERENT absurdist comedy premises for 1998 PS1/N64 low-poly 3D videos with a deadpan Hindi narrator. ' +
+    'Cover ALL 6 distinct story formats: over-engineer (Level 1 -> Level 999 build), fake-origin (fake celebrity childhood story), breaking-news (serious TV broadcast), fake-tutorial (3-step Rule-of-Three guide), petty-spiral (UCB heightening escalation), weird-science (absurd lab study). ' +
+    'Feature Iconic Figures (Elon Musk, Trump, Gandhiji, Putin, Modi), Goa, World News, and Science. NEVER lock topics to Delhi or Mumbai. ' +
+    `${WRITERS_ROOM_RULES} ` +
+    'Return ONLY JSON: {"topics":[{"title":"UPPERCASE PUNCHY TITLE","angle":"over-engineer|fake-origin|breaking-news|fake-tutorial|petty-spiral|weird-science","brand":"Figure/World Tag","pitch":"Setup -> False Assumption -> Shatter payoff (1 crisp sentence)","viralScore":92}]}';
 
   const user = [
-    `Generate 8 completely fresh, unrelated Indian absurd comedy topics. Seed nonce: ${Date.now()}-${Math.random().toString(36).slice(2, 7)}.`,
-    query.trim() ? `Include at least 1 topic related to: ${query.trim()} (keep the other 7 completely unrelated!).` : '',
-    liked.length ? `User previously LIKED these vibes: ${liked.join('; ')}` : '',
-    disliked.length ? `User previously DISLIKED these vibes (avoid similar): ${disliked.join('; ')}` : '',
-    avoidTitles.length ? `NEVER repeat any of these past titles: ${avoidTitles.slice(0, 24).join('; ')}` : '',
+    `Generate 8 completely fresh, structurally distinct comedy topics. Seed nonce: ${Date.now()}-${Math.random().toString(36).slice(2, 7)}.`,
+    query.trim() ? `Include at least 1 topic about: ${query.trim()} (keep the other 7 completely unrelated!).` : '',
+    liked.length ? `User previously LIKED: ${liked.join('; ')}` : '',
+    disliked.length ? `User previously DISLIKED (avoid): ${disliked.join('; ')}` : '',
+    avoidTitles.length ? `NEVER repeat these past titles: ${avoidTitles.slice(0, 24).join('; ')}` : '',
   ]
     .filter(Boolean)
     .join('\n');
@@ -82,12 +84,12 @@ export async function generateLiveTopics(
   return parsed.topics.slice(0, 8).map((t, idx) => ({
     id: `ai_${stamp}_${idx}`,
     title: t.title,
-    angle: t.angle || 'surreal',
-    brand: t.brand || 'India',
-    trendHook: 'Live AI',
+    angle: t.angle || 'over-engineer',
+    brand: t.brand || 'Global',
+    trendHook: 'Live AI Craft',
     pitch: t.pitch,
-    brandHeat: t.viralScore ?? 85,
-    viralScore: Math.max(40, Math.min(99, Math.round(t.viralScore ?? 85))),
+    brandHeat: t.viralScore ?? 88,
+    viralScore: Math.max(40, Math.min(99, Math.round(t.viralScore ?? 88))),
   }));
 }
 
@@ -97,11 +99,14 @@ export async function generateLiveScriptSpec(
 ): Promise<{ frames: StoryboardFrameData[]; shots: VideoShotData[] }> {
   const styles = ['high-corner CCTV security cam + fluorescent green-grey tint', 'shaky 1998 handheld camcorder + washed-out daylight', 'symmetrical flat deadpan framing + overcast lighting', 'low-angle worm-eye drama + dim sodium-yellow glow', 'live TV news broadcast + sterile halogen glare'];
   const pickedStyle = styles[Math.floor(Math.random() * styles.length)];
+  const mech = pickComedyMechanism();
   const system =
-    'Expand this absurdist comedy topic into a 6-frame 3x2 storyboard and a 6-shot video script. ' +
-    `Use this exact camera & lighting grammar so it never looks like a generic repeated cartoon: ${pickedStyle}. ` +
+    'You are a master comedy scriptwriter expanding this premise into a 6-frame 3x2 storyboard and a 6-shot video script. ' +
+    `PRIMARY COMEDY MECHANISM (${mech.name}): ${mech.rule} PUNCHLINE RULE: ${mech.punchlineRule} ` +
+    `${WRITERS_ROOM_RULES} ` +
+    `CAMERA & LIGHTING GRAMMAR: ${pickedStyle}. ` +
     'DO NOT repeat global PS1/low-poly style words inside individual frames/shots. ' +
-    'NEVER mention video duration, time, timestamps, or aspect ratio (no 9:16, no 20s). Keep Hindi lines <= 7 words. ' +
+    'NEVER mention video duration, time, timestamps, or aspect ratio (no 9:16, no 20s). Keep Shot 6 Hindi <= 7 words with reveal word LAST. ' +
     'Return ONLY JSON: {"frames":[{"frame":1,"position":"Top Left","framing":"...","action":"...","caption":"short Hinglish"}],"shots":[{"shot":1,"visual":"...","sfx":"...","hindi":"short Devanagari Hindi"}]}';
 
   const user = `Title: ${topic.title}\nWorld: ${topic.brand}\nPremise: ${topic.pitch}\nUse exact positions: Top Left, Top Center, Top Right, Bottom Left, Bottom Center, Bottom Right.`;
