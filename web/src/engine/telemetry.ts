@@ -8,12 +8,13 @@ import type {
 } from '../types';
 
 const LOGS_KEY = 'absurd_studio_logs_v2';
-const CFG_KEY = 'absurd_studio_cfg_v4';
+const CFG_KEY = 'absurd_studio_cfg_v5';
 const SEEN_KEY = 'absurd_studio_seen_v1';
+const TITLES_KEY = 'absurd_studio_titles_v1';
 
 export const DEFAULT_CONFIG: EngineConfig = {
   theme: 'studio',
-  sourceMode: 'standalone',
+  sourceMode: 'live-free',
   apiKey: '',
   model: 'gemini-2.5-flash',
   backendUrl: 'http://localhost:8000',
@@ -45,6 +46,20 @@ export function loadSeenPairs(): Set<string> {
 
 export function saveSeenPairs(seen: Set<string>): void {
   localStorage.setItem(SEEN_KEY, JSON.stringify(Array.from(seen).slice(-160)));
+}
+
+export function loadSeenTitles(): Set<string> {
+  try {
+    const raw = localStorage.getItem(TITLES_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return new Set(Array.isArray(parsed) ? (parsed as string[]) : []);
+  } catch {
+    return new Set();
+  }
+}
+
+export function saveSeenTitles(titles: Set<string>): void {
+  localStorage.setItem(TITLES_KEY, JSON.stringify(Array.from(titles).slice(-500)));
 }
 
 export function loadLogs(): RatingLogEntry[] {

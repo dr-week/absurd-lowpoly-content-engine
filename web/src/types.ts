@@ -5,7 +5,7 @@ export type SavedFilter = 'all' | 'pending' | 'done';
 export type HookCategory = 'iconic' | 'build' | 'origin' | 'science' | 'tutorial' | 'news';
 export type SituationCategory = 'global' | 'coastal' | 'tech' | 'ego' | 'lab' | 'childhood';
 export type ThemeName = 'studio' | 'noir';
-export type SourceMode = 'standalone' | 'gemini' | 'groq' | 'openrouter' | 'backend';
+export type SourceMode = 'live-free' | 'standalone' | 'gemini' | 'groq' | 'openrouter' | 'backend';
 
 export interface SavedItem {
   topic: ScoredTopic;

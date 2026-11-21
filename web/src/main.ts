@@ -1,9 +1,10 @@
 import './styles/main.scss';
+import { generateFreshLiveNewsTopics } from './engine/free_ai';
 import { generateLiveTopics } from './engine/live_ai';
-import { loadLiveTrends } from './engine/live_feeds';
+import { loadLiveTrends, pickTrendChips } from './engine/live_feeds';
 import { generatePromptsForTopic } from './engine/prompt_renderer';
 import { loadGeneratedIds, loadSaved, markTopicGenerated } from './engine/saved_store';
-import { loadConfig, loadLogs, loadSeenPairs, saveSeenPairs } from './engine/telemetry';
+import { loadConfig, loadLogs, loadSeenPairs, loadSeenTitles, saveSeenPairs, saveSeenTitles } from './engine/telemetry';
 import { evaluateTopics } from './engine/viral_evaluator';
 import { Glyphs } from './glyphs';
 import { renderAnalyticsView, renderLogsView } from './ui/analytics_view';
@@ -16,6 +17,7 @@ import { renderStudioView } from './ui/studio_view';
 const cfg0 = loadConfig();
 const logs0 = loadLogs();
 const seen0 = loadSeenPairs();
+const seenTitles = loadSeenTitles();
 const initialTopics = evaluateTopics({ count: 8, query: '', logs: logs0, seenPairs: seen0, batchNonce: Date.now() });
 saveSeenPairs(seen0);
 
@@ -30,7 +32,7 @@ const state: AppState = {
   seenPairs: seen0,
   topics: initialTopics,
   liveTrends: [],
-  loadingTopics: false,
+  loadingTopics: cfg0.sourceMode === 'live-free',
   selectedId: null,
   prompts: null,
   loading: false,
@@ -40,6 +42,11 @@ const state: AppState = {
   savedFilter: 'all',
   copiedTarget: null,
 };
+
+function rememberTitles(topics: { title: string }[]): void {
+  for (const t of topics) seenTitles.add(t.title.trim().toLowerCase());
+  saveSeenTitles(seenTitles);
+}
 
 function toast(msg: string): void {
   const host = document.getElementById('toast-plane');
@@ -51,41 +58,36 @@ function toast(msg: string): void {
   window.setTimeout(() => node.remove(), 2000);
 }
 
-const CHIP_NOISE = new Set(['accuses', 'announces', 'claims', 'warns', "didn't", 'cremated', 'convicted', 'criminal', 'detained', 'conning', 'deadlock', 'close', 'dependent']);
 let allLiveTrendPool: string[] = [];
 
-function pickTrendChips(pool: string[], count = 6): string[] {
-  const clean = pool.filter((k) => !CHIP_NOISE.has(k.toLowerCase()));
-  const arr = [...(clean.length >= count ? clean : pool)];
-  for (let i = arr.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr.slice(0, count);
-}
-
 async function refreshTopics(): Promise<void> {
-  if (allLiveTrendPool.length > 6 && !state.seedQuery.trim()) {
-    state.liveTrends = pickTrendChips(allLiveTrendPool, 6);
-  }
-  const isLive = state.config.sourceMode === 'gemini' || state.config.sourceMode === 'groq' || state.config.sourceMode === 'openrouter';
-  if (isLive && state.config.apiKey.trim()) {
+  if (allLiveTrendPool.length > 6 && !state.seedQuery.trim()) state.liveTrends = pickTrendChips(allLiveTrendPool, 6);
+  const mode = state.config.sourceMode;
+  const isByok = mode === 'gemini' || mode === 'groq' || mode === 'openrouter';
+
+  if (mode === 'live-free' || (isByok && state.config.apiKey.trim())) {
     state.loadingTopics = true;
     render();
     try {
-      const avoid = [...state.topics.map((t) => t.title), ...state.logs.map((l) => l.title)];
-      state.topics = await generateLiveTopics(state.config, state.seedQuery, state.logs, avoid, state.liveTrends, state.hookFilter, state.situationFilter);
+      if (mode === 'live-free') {
+        state.topics = await generateFreshLiveNewsTopics({ query: state.seedQuery, logs: state.logs, seenTitles, batchNonce: state.batchNonce, hookFilter: state.hookFilter, situationFilter: state.situationFilter });
+      } else {
+        const avoid = [...Array.from(seenTitles).slice(-30), ...state.topics.map((t) => t.title)];
+        state.topics = await generateLiveTopics(state.config, state.seedQuery, state.logs, avoid, state.liveTrends, state.hookFilter, state.situationFilter);
+      }
+      rememberTitles(state.topics);
       state.loadingTopics = false;
       render();
-      toast('8 fresh AI topics');
+      toast('8 brand-new live topics');
       return;
     } catch (err) {
       state.loadingTopics = false;
-      toast(`AI error: ${err instanceof Error ? err.message : 'fallback'}`);
+      toast(`Live fallback: ${err instanceof Error ? err.message : 'offline'}`);
     }
   }
   state.topics = evaluateTopics({ count: 8, query: state.seedQuery, logs: state.logs, seenPairs: state.seenPairs, batchNonce: state.batchNonce, hookFilter: state.hookFilter, situationFilter: state.situationFilter });
   saveSeenPairs(state.seenPairs);
+  rememberTitles(state.topics);
   render();
   toast('8 fresh topics');
 }
@@ -136,3 +138,4 @@ void loadLiveTrends().then((feed) => {
     render();
   }
 });
+if (state.config.sourceMode === 'live-free') void refreshTopics();

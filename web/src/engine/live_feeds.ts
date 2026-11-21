@@ -38,3 +38,15 @@ export async function fetchDatamuseKeywords(seedWord: string, max = 8): Promise<
     return [];
   }
 }
+
+const CHIP_NOISE = new Set(['accuses', 'announces', 'claims', 'warns', "didn't", 'cremated', 'convicted', 'criminal', 'detained', 'conning', 'deadlock', 'close', 'dependent']);
+
+export function pickTrendChips(pool: string[], count = 6): string[] {
+  const clean = pool.filter((k) => !CHIP_NOISE.has(k.toLowerCase()));
+  const arr = [...(clean.length >= count ? clean : pool)];
+  for (let i = arr.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr.slice(0, count);
+}

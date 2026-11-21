@@ -1,4 +1,5 @@
 import type { EngineConfig, GeneratedPrompts, StoryboardFrameData, TopicOption, VideoShotData } from '../types';
+import { generateFreeLiveScriptSpec } from './free_ai';
 import { generateLiveScriptSpec } from './live_ai';
 import { pickCinematographyRig } from './randomizer';
 
@@ -35,6 +36,8 @@ export async function generatePromptsForTopic(
   topic: TopicOption,
   config: EngineConfig,
 ): Promise<GeneratedPrompts> {
+  const rig = pickCinematographyRig().directive;
+
   if (config.sourceMode === 'gemini' || config.sourceMode === 'groq' || config.sourceMode === 'openrouter') {
     const spec = await generateLiveScriptSpec(config, topic);
     return {
@@ -42,8 +45,8 @@ export async function generatePromptsForTopic(
       topicTitle: topic.title,
       angle: topic.angle,
       brand: topic.brand,
-      storyboardPrompt: renderStoryboardText(topic.title, spec.frames),
-      videoPrompt: renderVideoText(spec.shots),
+      storyboardPrompt: renderStoryboardText(topic.title, spec.frames, rig),
+      videoPrompt: renderVideoText(spec.shots, rig),
       generatedAt: new Date().toISOString(),
     };
   }
@@ -72,13 +75,15 @@ export async function generatePromptsForTopic(
     }
   }
 
+  const hasPrebuilt = (topic.frames?.length ?? 0) === 6 && (topic.shots?.length ?? 0) === 6;
+  const spec = hasPrebuilt ? { frames: topic.frames!, shots: topic.shots! } : await generateFreeLiveScriptSpec(topic);
   return {
     topicId: topic.id,
     topicTitle: topic.title,
     angle: topic.angle,
     brand: topic.brand,
-    storyboardPrompt: renderStoryboardText(topic.title, topic.frames ?? []),
-    videoPrompt: renderVideoText(topic.shots ?? []),
+    storyboardPrompt: renderStoryboardText(topic.title, spec.frames, rig),
+    videoPrompt: renderVideoText(spec.shots, rig),
     generatedAt: new Date().toISOString(),
   };
 }
