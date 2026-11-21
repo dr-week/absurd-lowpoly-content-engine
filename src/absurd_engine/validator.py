@@ -56,11 +56,24 @@ def lint_episode(
             issues.append(
                 LintIssue(
                     severity="warning",
-                    code="IDEA_CLICHE_TROPES",
-                    message=f"Premise mentions '{phrase}' — verify it isn't a predictable jugaad/talking-object joke.",
+                    code="IDEA_BANNED_TAME_TROPE",
+                    message=f"Premise mentions banned/tame trope '{phrase}' — ideas must match the high-octane Zepto benchmark.",
                     location="idea",
                 )
             )
+
+    # Zepto Standard Quality Check: must contain high-energy physical disruption or catastrophic destruction
+    from absurd_engine.playbook import CATASTROPHIC_DESTRUCTION_KEYWORDS
+    all_content = f"{idea_blob} {video.rendered_prompt.lower()}"
+    if not any(kw in all_content for kw in CATASTROPHIC_DESTRUCTION_KEYWORDS):
+        issues.append(
+            LintIssue(
+                severity="warning",
+                code="IDEA_LACKS_CATASTROPHIC_DESTRUCTION",
+                message="Episode lacks catastrophic physical destruction or high-speed disruption (the Zepto Standard).",
+                location="idea",
+            )
+        )
 
     # 2. Storyboard aesthetic, slot alignment, caption length & anti-repetition checks
     sb_lower = storyboard.rendered_prompt.lower()

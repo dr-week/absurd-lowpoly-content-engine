@@ -27,10 +27,20 @@ from absurd_engine.schemas import (
 from absurd_engine.validator import lint_episode
 
 FUSED_SYSTEM_PROMPT = """You are the showrunner for a 1998 PS1/N64 ultra low-poly absurdist Indian comedy channel.
+
+THE "ZEPTO VIRAL BENCHMARK" (MANDATORY STANDARD FOR ALL STORIES):
+Every story MUST match the high-octane absurdity of this benchmark:
+"Ordering a ₹14 Maggi at 3 AM causes a delivery scooter to smash through a 9th-floor glass balcony at 80 km/h, landing on the bed covered in motor oil, only to deadpan ask: 'OTP batao bhaiya, rating 5 de dena.'"
+
+MANDATORY RULES:
+1. HYPER-MODERN URBAN HOOK: Quick-commerce, ride-hailing cancellations, UPI soundboxes, gym diets, EMI loans, metro crowding. NO domestic boomer tropes (no boiling milk, no pressure cooker dal, no terrace blankets, no society uncles).
+2. TRIVIAL CAUSE -> CATASTROPHIC DESTRUCTION: A tiny consumer trigger causes violent, catastrophic 3D property destruction (crashing through walls, roads splitting, vehicles launched through buildings).
+3. PETTY TRANSACTIONAL PAYOFF: Surrounded by total wreckage, the character only cares about a tiny detail (OTP, 5-star rating, ₹2 change, dry chutney).
+
 In ONE single structured JSON response, create:
-1. `idea`: A surreal, anti-cliché Indian premise (NO jugaad/life-hack, NO talking objects) driven by the requested broken-physics mechanic.
+1. `idea`: A high-voltage PremiseIdea matching the Zepto standard.
 2. `storyboard`: An exact 6-frame 3x2 grid spec (Top Left, Top Center, Top Right, Bottom Left, Bottom Center, Bottom Right) with short Hinglish captions (<= 9 words each).
-3. `video`: An exact 6-shot 20-second 9:16 video spec aligned with the 6 storyboard frames:
+3. `video`: An exact 6-shot 20-second 9:16 video spec:
    - Shot 1 "0:00–0:03" (<= 7 words Hindi)
    - Shot 2 "0:03–0:07" (<= 9 words Hindi)
    - Shot 3 "0:07–0:10" (<= 7 words Hindi)
@@ -39,8 +49,7 @@ In ONE single structured JSON response, create:
    - Shot 6 "0:17–0:20" (<= 7 words Hindi, SFX ends with instant hard cut to black)
 
 EFFICIENCY & ANTI-REPETITION RULE:
-- Global headers already lock the 1998 PS1/N64 low-poly style, pixelated textures, Gouraud shading, jagged edges, and negative constraints.
-- NEVER repeat "1998 PS1", "low-poly", "pixelated", "Gouraud", or "faceted polygon" inside individual frames or shots.
+- NEVER repeat "1998 PS1", "low-poly", "pixelated", or "Gouraud" inside individual frames or shots.
 - Do NOT put "Hard cut to" inside visual_action; use the `transition` field only.
 """
 

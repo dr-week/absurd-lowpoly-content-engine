@@ -21,13 +21,21 @@ To get the exact low-effort, gritty retro 3D look instead of smooth CGI or 2D ca
 
 ---
 
-## 2. Idea Formula (Surreal & Unpredictable)
+## 2. Idea Formula (The "Zepto Standard" — High-Voltage Modern Indian Absurdity)
 
-Skip neat "jugaad/hack" setups or obvious talking-object jokes when they feel too predictable. Instead:
+Every concept must match the intensity of the **"Late Night 10-Minute Zepto Delivery"** benchmark. 
 
-* Anchor the premise in a **mundane moment, Indian setting, or recent news/trending hook**.
-* Pivot into **broken logic, strange cause-and-effect, or disorienting physical absurdity**.
-* Keep the payoff visual, deadpan, and unexpected.
+### The 4 Mandatory Pillars:
+1. **Hyper-Modern Urban Hook (No Boomer Tropes):** Must revolve around modern Indian obsessions—10-minute quick commerce (Zepto/Blinkit), Cab cancellation standoffs (Ola/Uber), Gym protein culture, UPI payment soundbox addiction, iPhone EMI desperation, Co-working space cold wars.
+2. **Trivial Cause -> Catastrophic Destruction:** Ordering a ₹14 Maggi or asking for an AC cab leads to **sudden, violent, catastrophic property destruction** in raw 3D PS1 physics (scooters flying through 9th-floor balconies, metro trains derailing into bedrooms, roads splitting in half).
+3. **High-Speed Aggression (Zero Fluff):** No slow build-ups or peaceful tea sips. The jolt hits fast, hard, and loud within 3 seconds.
+4. **Petty Transactional Payoff:** In the middle of total destruction, the character only cares about a **hyper-specific trivial Indian detail** (e.g. asking for OTP, demanding a 5-star rating, insisting on ₹2 cash change, checking if the packet leaked).
+
+### STRICT BANLIST (Instant Reject):
+- **NO Boomer / Tame Domestic Tropes:** No boiling milk, no pressure cooker dal, no drying clothes on terrace, no TV remote fights, no society uncle maintenance jokes, no talking lizards/geckos.
+- **NO Cute / Gentle Humor:** If there is no violent physical disruption or extreme shock value, the idea is rejected.
+- **NO Video Game Tropes:** No health bars, cheat codes, or characters knowing they are in 3D.
+
 
 ---
 
@@ -40,13 +48,19 @@ When prompting for a storyboard grid, structure it like this:
 
 ---
 
-## 4. Video Prompt Structure (20s, 9:16 Vertical)
+## 4. Video Prompt Structure (20s, 9:16 Vertical) — The Attention-Wave Formula
 
-When prompting for a short vertical video:
+To keep short-form retention pinned and prevent drop-off, every 20-second script follows the **Attention-Wave (Sine-Wave Rhythm)**:
+* As soon as a shot feels mundane or familiar, **an abrupt unexpected jolt hits before the viewer's attention dips**.
+* Rhythm alternates: **Mundane Hook -> Micro-Twist -> Normal Escalation -> Unhinged Shock -> Deadpan Snap-Back**.
 
-1. **Global Style & Audio:** 20-second, 9:16 vertical absurdist comedy in raw 1998 PS1/N64 low-poly 3D with jerky low-FPS movement, sharp hard cuts between shots, retro PS1 SFX, and a **deadpan, serious Indian male narrator speaking in Hindi**.
-2. **Pacing Rule:** Keep **Hindi dialogues very short** so each line fits comfortably inside its 3–4 second shot window.
-3. **Shot-by-Shot Beats (`[0:00–0:03]` through `[0:17–0:20]`):** Define the camera/scene, jerky animation/visual gag, specific retro SFX, and short Hindi dialogue for every beat, ending with a hard cut on the final twist.
+### The 6-Beat Attention-Wave Timing:
+1. **`[0:00–0:03]` Beat 1 (Mundane Hook):** Everyday slice-of-life action that looks completely normal (waiting for OTP, pouring chai, bargaining, tightening a screw).
+2. **`[0:03–0:07]` Beat 2 (First Micro-Jolt):** Just as the viewer thinks they know what's happening, a sudden bizarre visual surprise hits (the screw tightens the entire room, the chai boils downward).
+3. **`[0:07–0:10]` Beat 3 (Temporary False Normalcy):** The character reacts with deadpan calm, normalizing the weirdness to lull the viewer into false security.
+4. **`[0:10–0:14]` Beat 4 (Massive Escalation Wave):** Sudden hard cut to a bigger, completely unexpected chain-reaction affecting the environment.
+5. **`[0:14–0:17]` Beat 5 (Pre-Twist Suspense Wave):** A tight, awkward pause where the tension peaks.
+6. **`[0:17–0:20]` Beat 6 (The Unhinged Snap-Back Payoff):** Sudden snap-zoom to a ridiculous, trivial everyday Indian punchline delivered with zero emotion, ending with an instant hard cut to black.
 
 ---
 

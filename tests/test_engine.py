@@ -90,7 +90,7 @@ async def test_linter_flags_cliche_long_dialogue_and_style_repetition() -> None:
 
     report = lint_episode(bad_idea, bad_sb, bad_video)
     codes = {i.code for i in report.issues}
-    assert "IDEA_CLICHE_TROPES" in codes
+    assert "IDEA_BANNED_TAME_TROPE" in codes
     assert "VIDEO_DIALOGUE_TOO_LONG" in codes
     assert "STORYBOARD_STYLE_REPETITION" in codes
     assert report.score < 100

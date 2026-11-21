@@ -50,7 +50,21 @@ STYLE_SPAM_TOKENS = (
     "aliased",
 )
 
-CLICHE_WARNING_PHRASES = (
+# Tame, boring boomer domestic tropes and predictable clichés that are strictly banned.
+BANNED_TAME_TROPES = (
+    "boiling milk",
+    "doodh ubal",
+    "pressure cooker",
+    "cooker whistle",
+    "clothesline",
+    "drying clothes",
+    "terrace blanket",
+    "kambal",
+    "tv remote",
+    "society uncle",
+    "maintenance cheque",
+    "lizard",
+    "chipkali",
     "jugaad",
     "life hack",
     "lifehack",
@@ -58,10 +72,30 @@ CLICHE_WARNING_PHRASES = (
     "talking phone",
     "talking fridge",
     "talking fan",
-    "talking chair",
-    "talking cup",
-    "smart hack",
 )
+
+# Mandatory high-energy modern concepts: must feature violent physical disruption or catastrophic property destruction.
+CATASTROPHIC_DESTRUCTION_KEYWORDS = (
+    "crash",
+    "smash",
+    "shatter",
+    "explode",
+    "fly through",
+    "split",
+    "launch",
+    "derail",
+    "rip through",
+    "destroy",
+    "collapse",
+    "slam",
+    "detach",
+    "sink",
+    "vanish",
+    "hover",
+    "float",
+)
+
+CLICHE_WARNING_PHRASES = BANNED_TAME_TROPES
 
 
 @dataclass(frozen=True)
