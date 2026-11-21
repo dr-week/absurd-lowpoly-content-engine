@@ -57,6 +57,7 @@ export async function generateLiveTopics(
   query: string,
   logs: RatingLogEntry[],
   avoidTitles: string[],
+  liveTrends: string[] = [],
 ): Promise<ScoredTopic[]> {
   const liked = logs.filter((l) => l.vote === 'up').slice(0, 6).map((l) => l.title);
   const disliked = logs.filter((l) => l.vote === 'down').slice(0, 6).map((l) => l.title);
@@ -71,6 +72,7 @@ export async function generateLiveTopics(
   const user = [
     `Generate 8 completely fresh, structurally distinct comedy topics. Seed nonce: ${Date.now()}-${Math.random().toString(36).slice(2, 7)}.`,
     query.trim() ? `Include at least 1 topic about: ${query.trim()} (keep the other 7 completely unrelated!).` : '',
+    liveTrends.length ? `Today's live trending hooks you may riff on for 1-2 topics: ${liveTrends.slice(0, 6).join(', ')}` : '',
     liked.length ? `User previously LIKED: ${liked.join('; ')}` : '',
     disliked.length ? `User previously DISLIKED (avoid): ${disliked.join('; ')}` : '',
     avoidTitles.length ? `NEVER repeat these past titles: ${avoidTitles.slice(0, 24).join('; ')}` : '',

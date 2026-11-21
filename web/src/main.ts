@@ -51,7 +51,7 @@ async function refreshTopics(): Promise<void> {
     render();
     try {
       const avoid = [...state.topics.map((t) => t.title), ...state.logs.map((l) => l.title)];
-      state.topics = await generateLiveTopics(state.config, state.seedQuery, state.logs, avoid);
+      state.topics = await generateLiveTopics(state.config, state.seedQuery, state.logs, avoid, state.liveTrends);
       state.loadingTopics = false;
       render();
       toast('8 fresh AI topics');
