@@ -1,0 +1,98 @@
+// Category-Coded Liquid Glass Gradient Flashcards (studio light & noir dark)
+// Each content HookCategory maps to a distinct OKLCH gradient palette + matching swatch pill.
+
+:root,
+[data-theme='studio'] {
+  --fc-iconic: linear-gradient(150deg, oklch(98.5% 0.04 72 / 0.86), oklch(95.5% 0.065 52 / 0.78));
+  --fc-iconic-rim: oklch(64% 0.17 58);
+  --fc-build: linear-gradient(150deg, oklch(98.2% 0.036 238 / 0.86), oklch(95% 0.062 212 / 0.78));
+  --fc-build-rim: oklch(54% 0.17 232);
+  --fc-origin: linear-gradient(150deg, oklch(98.4% 0.038 14 / 0.86), oklch(95.2% 0.06 352 / 0.78));
+  --fc-origin-rim: oklch(58% 0.18 14);
+  --fc-science: linear-gradient(150deg, oklch(98.2% 0.04 162 / 0.86), oklch(95% 0.065 182 / 0.78));
+  --fc-science-rim: oklch(52% 0.16 162);
+  --fc-tutorial: linear-gradient(150deg, oklch(98.2% 0.038 292 / 0.86), oklch(95% 0.062 272 / 0.78));
+  --fc-tutorial-rim: oklch(54% 0.18 286);
+  --fc-news: linear-gradient(150deg, oklch(98.4% 0.042 28 / 0.86), oklch(95.2% 0.068 22 / 0.78));
+  --fc-news-rim: oklch(56% 0.2 26);
+}
+
+[data-theme='noir'] {
+  --fc-iconic: linear-gradient(150deg, oklch(27% 0.07 60 / 0.76), oklch(20% 0.045 42 / 0.72));
+  --fc-iconic-rim: oklch(76% 0.16 62);
+  --fc-build: linear-gradient(150deg, oklch(26% 0.072 238 / 0.76), oklch(19.5% 0.048 214 / 0.72));
+  --fc-build-rim: oklch(74% 0.15 224);
+  --fc-origin: linear-gradient(150deg, oklch(27% 0.072 10 / 0.76), oklch(20% 0.048 348 / 0.72));
+  --fc-origin-rim: oklch(74% 0.16 12);
+  --fc-science: linear-gradient(150deg, oklch(26% 0.072 162 / 0.76), oklch(19.5% 0.048 184 / 0.72));
+  --fc-science-rim: oklch(75% 0.16 162);
+  --fc-tutorial: linear-gradient(150deg, oklch(26.5% 0.074 290 / 0.76), oklch(20% 0.05 268 / 0.72));
+  --fc-tutorial-rim: oklch(74% 0.16 288);
+  --fc-news: linear-gradient(150deg, oklch(27.5% 0.082 26 / 0.76), oklch(20.5% 0.052 18 / 0.72));
+  --fc-news-rim: oklch(72% 0.19 26);
+}
+
+.cat-rail {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  padding: 2px 0 4px;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+.cat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--nova-color-border);
+  background: var(--grad-card-glass, var(--nova-color-surface-elevated));
+  color: var(--nova-color-text);
+  backdrop-filter: blur(12px);
+  transition: transform 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+
+  &:hover { transform: translateY(-1px); border-color: var(--nova-color-border-strong); }
+  &.is-active { border-color: var(--cat-rim, var(--nova-accent)); box-shadow: 0 0 0 1px var(--cat-rim, var(--nova-accent)); }
+
+  &__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--cat-rim, var(--nova-accent));
+    flex-shrink: 0;
+  }
+}
+
+.cat-pill[data-hook='iconic'], .topic-card[data-hook='iconic'] { --cat-rim: var(--fc-iconic-rim); --cat-bg: var(--fc-iconic); }
+.cat-pill[data-hook='build'], .topic-card[data-hook='build'] { --cat-rim: var(--fc-build-rim); --cat-bg: var(--fc-build); }
+.cat-pill[data-hook='origin'], .topic-card[data-hook='origin'] { --cat-rim: var(--fc-origin-rim); --cat-bg: var(--fc-origin); }
+.cat-pill[data-hook='science'], .topic-card[data-hook='science'] { --cat-rim: var(--fc-science-rim); --cat-bg: var(--fc-science); }
+.cat-pill[data-hook='tutorial'], .topic-card[data-hook='tutorial'] { --cat-rim: var(--fc-tutorial-rim); --cat-bg: var(--fc-tutorial); }
+.cat-pill[data-hook='news'], .topic-card[data-hook='news'] { --cat-rim: var(--fc-news-rim); --cat-bg: var(--fc-news); }
+
+.cat-pill[data-hook].is-active {
+  background: var(--cat-bg);
+}
+
+.topic-card[data-hook] {
+  background: var(--cat-bg);
+  border-top: 2.5px solid var(--cat-rim);
+
+  .topic-card__tag {
+    border-color: color-mix(in oklch, var(--cat-rim) 45%, transparent);
+    color: var(--nova-color-text);
+  }
+
+  &.is-selected {
+    border-color: var(--cat-rim);
+    box-shadow: var(--zuari-glass-rim-shadow), 0 0 0 1.5px var(--cat-rim), var(--zuari-elevation-float);
+  }
+}

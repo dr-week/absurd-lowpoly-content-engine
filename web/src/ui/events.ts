@@ -62,6 +62,7 @@ export function bindAppEvents(
       if (a === 'open-drawer') { state.drawerOpen = true; hooks.render(); return; }
       if (a === 'close-drawer') { state.drawerOpen = false; hooks.render(); return; }
       if (a === 'regenerate-topics') { state.batchNonce += 1; void hooks.refreshTopics(); return; }
+      if (a === 'pick-hook' && el.dataset.hook) { const next = el.dataset.hook as HookCategory | 'all'; state.hookFilter = state.hookFilter === next ? 'all' : next; state.batchNonce += 1; void hooks.refreshTopics(); return; }
       if (a === 'pick-trend' && el.dataset.trend) { state.seedQuery = state.seedQuery === el.dataset.trend ? '' : el.dataset.trend; state.batchNonce += 1; void hooks.refreshTopics(); return; }
       if (a === 'pick-char' && el.dataset.starter) { state.customDraft = el.dataset.starter; hooks.render(); document.getElementById('custom-idea-input')?.focus(); return; }
       if (a === 'run-custom-idea') { void hooks.runCustomIdea(); return; }

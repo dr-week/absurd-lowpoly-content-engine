@@ -57,6 +57,11 @@ export function renderStudioView(params: {
         .join('')}</div>`
     : '';
 
+  const catRail = `<div class="cat-rail" role="tablist" aria-label="Content Type Gradients">
+    <button type="button" class="cat-pill ${hookFilter === 'all' ? 'is-active' : ''}" data-action="pick-hook" data-hook="all"><span class="cat-pill__dot"></span>All Types</button>
+    ${HOOK_CATEGORIES.map((c) => `<button type="button" class="cat-pill ${hookFilter === c.id ? 'is-active' : ''}" data-action="pick-hook" data-hook="${c.id}"><span class="cat-pill__dot"></span>${esc(c.label)}</button>`).join('')}
+  </div>`;
+
   const cards = loadingTopics
     ? '<div class="empty-state" style="grid-column:1/-1;">Generating 8 fresh AI topics...</div>'
     : topics
@@ -67,7 +72,7 @@ export function renderStudioView(params: {
           const styleBadge = getVisualStyleMeta(t.visualStyle).badge;
           const cls = ['topic-card', selected ? 'is-selected' : '', vote === 'up' ? 'is-liked' : '', vote === 'down' ? 'is-disliked' : ''].filter(Boolean).join(' ');
           return `
-            <article class="${cls}">
+            <article class="${cls}" data-hook="${esc(t.hookCategory)}" data-situation="${esc(t.situationCategory)}">
               <div class="topic-card__body">
                 <div class="topic-card__top">
                   <span class="topic-card__tag">${esc(getHookLabel(t.hookCategory))} · ${esc(styleBadge)}</span>
@@ -125,8 +130,7 @@ export function renderStudioView(params: {
           <button type="button" class="btn btn--primary btn--icon" data-action="regenerate-topics" title="8 New Topics (Shortcut: R)">${Glyphs.refresh(15)}</button>
         </div>
       </div>
-      ${trendChips}
-      ${renderCustomIdeaBar(customDraft)}
+      ${trendChips}${catRail}${renderCustomIdeaBar(customDraft)}
       <div class="topics-grid">${cards}</div>
     </section>
 
