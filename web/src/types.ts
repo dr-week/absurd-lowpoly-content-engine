@@ -12,7 +12,10 @@ export type VisualStyle =
   | 'hybrid-1998-gta6'
   | 'cctv-dashcam'
   | 'claymation-stopmo'
-  | 'retro-80s-concept';
+  | 'retro-80s-concept'
+  | 'isometric-diorama'
+  | 'vhs-found-footage'
+  | 'noir-monochrome';
 export type SourceMode = 'live-free' | 'standalone' | 'gemini' | 'groq' | 'openrouter' | 'backend';
 
 export interface SavedItem {

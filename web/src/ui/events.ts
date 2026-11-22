@@ -1,3 +1,4 @@
+import { cycleDirectorsStack } from '../data/creative_matrix';
 import { exportStudioBackup, restoreStudioBackup } from '../engine/backup_sync';
 import { cycleDesiCharacterName } from '../engine/desi_nomenclature';
 import { cycleAlternatePunchline, exportSavedMarkdown, rerollCameraRig, switchPromptVisualStyle } from '../engine/prompt_tools';
@@ -27,6 +28,9 @@ export interface AppState {
   prompts: GeneratedPrompts | null;
   rigStep: number;
   punchStep: number;
+  twistStep: number;
+  nameStep: number;
+  stackStep: number;
   loading: boolean;
   logs: RatingLogEntry[];
   saved: SavedItem[];
@@ -98,18 +102,17 @@ export function bindAppEvents(
         }); return;
       }
       if (a === 'copy-packaging' && state.prompts && state.activeTopic) {
-        void navigator.clipboard.writeText(buildViralPackage(state.activeTopic, state.prompts).copyText).then(() => {
-          state.copiedTarget = 'packaging'; hooks.render(); hooks.toast('Copied Viral Pack');
-          window.setTimeout(() => { state.copiedTarget = null; hooks.render(); }, 1200);
-        }); return;
+        void navigator.clipboard.writeText(buildViralPackage(state.activeTopic, state.prompts).copyText).then(() => { state.copiedTarget = 'packaging'; hooks.render(); hooks.toast('Copied Viral Pack'); window.setTimeout(() => { state.copiedTarget = null; hooks.render(); }, 1200); });
+        return;
       }
       if (a === 'copy-all' && state.prompts) {
         const pack = state.activeTopic ? `\n\n---\n\n${buildViralPackage(state.activeTopic, state.prompts).copyText}` : '';
         void navigator.clipboard.writeText(`${state.prompts.storyboardPrompt}\n\n---\n\n${state.prompts.videoPrompt}${pack}`).then(() => hooks.toast('Copied Full Bundle'));
         return;
       }
-      if (a === 'reroll-twist' && state.prompts) { const out = cycleTwistBlueprint(state.prompts, (state.rigStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Twist: ${out.label}`); return; }
-      if (a === 'reroll-name' && state.prompts) { const out = cycleDesiCharacterName(state.prompts, (state.punchStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Name: ${out.name}`); return; }
+      if (a === 'reroll-twist' && state.prompts) { const out = cycleTwistBlueprint(state.prompts, (state.twistStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Twist: ${out.label}`); return; }
+      if (a === 'reroll-stack' && state.prompts) { const out = cycleDirectorsStack(state.prompts, (state.stackStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Film: ${out.label}`); return; }
+      if (a === 'reroll-name' && state.prompts) { const out = cycleDesiCharacterName(state.prompts, (state.nameStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Name: ${out.name}`); return; }
       if (a === 'reroll-rig' && state.prompts) { const out = rerollCameraRig(state.prompts, (state.rigStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Camera: ${out.rigLabel}`); return; }
       if (a === 'reroll-punchline' && state.prompts) { const out = cycleAlternatePunchline(state.prompts, (state.punchStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Punchline: ${out.style}`); return; }
       if (a === 'export-saved-md') { exportSavedMarkdown(state.saved); hooks.toast('Exported Saved .md'); return; }
@@ -131,11 +134,7 @@ export function bindAppEvents(
   document.getElementById('seed-input')?.addEventListener('change', (ev) => { state.seedQuery = (ev.target as HTMLInputElement).value; state.batchNonce += 1; void hooks.refreshTopics(); });
   document.getElementById('filter-hook')?.addEventListener('change', (ev) => { state.hookFilter = (ev.target as HTMLSelectElement).value as HookCategory | 'all'; state.batchNonce += 1; void hooks.refreshTopics(); });
   document.getElementById('filter-situation')?.addEventListener('change', (ev) => { state.situationFilter = (ev.target as HTMLSelectElement).value as SituationCategory | 'all'; state.batchNonce += 1; void hooks.refreshTopics(); });
-  document.getElementById('visual-style')?.addEventListener('change', (ev) => {
-    state.visualStyle = (ev.target as HTMLSelectElement).value as VisualStyle;
-    if (state.prompts) state.prompts = switchPromptVisualStyle(state.prompts, state.visualStyle);
-    hooks.render(); hooks.toast(`Style: ${state.visualStyle}`);
-  });
+  document.getElementById('visual-style')?.addEventListener('change', (ev) => { state.visualStyle = (ev.target as HTMLSelectElement).value as VisualStyle; if (state.prompts) state.prompts = switchPromptVisualStyle(state.prompts, state.visualStyle); hooks.render(); hooks.toast(`Style: ${state.visualStyle}`); });
   document.getElementById('drawer-backdrop')?.addEventListener('click', (ev) => { if ((ev.target as HTMLElement).id === 'drawer-backdrop') { state.drawerOpen = false; hooks.render(); } });
   document.getElementById('cfg-theme')?.addEventListener('change', (ev) => { state.config.theme = (ev.target as HTMLSelectElement).value as EngineConfig['theme']; saveConfig(state.config); hooks.render(); });
   document.getElementById('cfg-source')?.addEventListener('change', (ev) => { state.config.sourceMode = (ev.target as HTMLSelectElement).value as EngineConfig['sourceMode']; saveConfig(state.config); hooks.render(); });

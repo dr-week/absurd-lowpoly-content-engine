@@ -75,4 +75,6 @@ export const Glyphs = {
   camera: (size = 16) =>
     svg('<path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/>', size),
   zap: (size = 16) => svg('<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>', size),
+  film: (size = 16) =>
+    svg('<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M17 3v18"/><path d="M3 12h18"/><path d="M3 7.5h4"/><path d="M3 16.5h4"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/>', size),
 };

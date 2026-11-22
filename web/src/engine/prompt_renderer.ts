@@ -32,6 +32,9 @@ export function renderStoryboardText(
   return lines.join('\n').trim();
 }
 
+const FORBIDDEN_VID_RE = /\b(9:16|16:9|20-second|20 seconds?)\b|\[\d:\d{2}[^\]]*\]|[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/giu;
+const cleanVideoLine = (s: string): string => sanitizeCopyrightNames(s).replace(FORBIDDEN_VID_RE, '').replace(/\s{2,}/g, ' ').trim();
+
 export function renderVideoText(
   shots: VideoShotData[],
   rigDirective?: string,
@@ -41,8 +44,8 @@ export function renderVideoText(
   const lock = detectCharacterLock(shots.map((s) => s.visual).join(' '));
   const lines: string[] = [VIDEO_HEADER(rig, lock, visualStyle), ''];
   for (const shot of shots) {
-    lines.push(`Shot ${shot.shot}: ${sanitizeCopyrightNames(shot.visual)} SFX: ${shot.sfx}.`);
-    lines.push(`Hindi Dialogue: "${shot.hindi}"`);
+    lines.push(`Shot ${shot.shot}: ${cleanVideoLine(shot.visual)} SFX: ${cleanVideoLine(shot.sfx)}.`);
+    lines.push(`Hindi Dialogue: "${shot.hindi.replace(/[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/gu, '').trim()}"`);
     lines.push('');
   }
   return lines.join('\n').trim();
@@ -73,17 +76,17 @@ export async function generatePromptsForTopic(
       const resp = await fetch(`${config.backendUrl.replace(/\/$/, '')}/episodes/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ seed_topic: `${topic.title} — ${topic.pitch}`, mode: 'fused', auto_repair: true, save_to_db: true }),
+        body: JSON.stringify({ seed_topic: `${topic.title} — ${topic.pitch}`, mode: 'fused', visual_style: visualStyle, auto_repair: true, save_to_db: true }),
       });
       if (resp.ok) {
         const data = (await resp.json()) as { episode: { storyboard: { rendered_prompt: string }; video: { rendered_prompt: string } } };
         return {
           topicId: topic.id,
-          topicTitle: topic.title,
+          topicTitle: sanitizeCopyrightNames(topic.title),
           angle: topic.angle,
           brand: topic.brand,
-          storyboardPrompt: data.episode.storyboard.rendered_prompt,
-          videoPrompt: data.episode.video.rendered_prompt,
+          storyboardPrompt: sanitizeCopyrightNames(data.episode.storyboard.rendered_prompt),
+          videoPrompt: cleanVideoLine(data.episode.video.rendered_prompt),
           generatedAt: new Date().toISOString(),
         };
       }

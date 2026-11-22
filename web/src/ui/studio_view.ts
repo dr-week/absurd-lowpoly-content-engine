@@ -101,6 +101,7 @@ export function renderStudioView(params: {
       <div class="remix-bar">
         <span class="remix-bar__label">Remix Lab</span>
         <button type="button" class="btn" data-action="reroll-twist" title="Swap Expectation-Subversion Twist Blueprint">${Glyphs.shuffle(14)}<span>Twist</span></button>
+        <button type="button" class="btn" data-action="reroll-stack" title="Swap Book + Lens + Film Editing Stack">${Glyphs.film(14)}<span>Film</span></button>
         <button type="button" class="btn" data-action="reroll-name" title="Cycle Funny Desi Character Name">${Glyphs.user(14)}<span>Name</span></button>
         <button type="button" class="btn" data-action="reroll-rig" title="Swap Camera & Lighting Rig">${Glyphs.camera(14)}<span>Camera</span></button>
         <button type="button" class="btn" data-action="reroll-punchline" title="Try Alternate Shot 6 Punchline">${Glyphs.zap(14)}<span>Punchline</span></button>
@@ -116,10 +117,7 @@ export function renderStudioView(params: {
   return `
     <section class="section-card zuari-surface-elevated" id="section-topics">
       <div class="section-header">
-        <div class="section-header__title-group">
-          <span class="section-header__step">01</span>
-          <h2>Topics</h2>
-        </div>
+        <div class="section-header__title-group"><span class="section-header__step">01</span><h2>Topics</h2></div>
         <div class="section-header__actions">
           <select id="filter-hook" class="compact-select" aria-label="Hook category">${hookOpts}</select>
           <select id="filter-situation" class="compact-select" aria-label="Situation category">${sitOpts}</select>
@@ -134,10 +132,7 @@ export function renderStudioView(params: {
 
     <section class="section-card zuari-surface-elevated" id="section-prompts">
       <div class="section-header">
-        <div class="section-header__title-group">
-          <span class="section-header__step">02</span>
-          <h2>Prompts</h2>
-        </div>
+        <div class="section-header__title-group"><span class="section-header__step">02</span><h2>Prompts</h2></div>
         <div class="section-header__actions">
           <select id="visual-style" class="compact-select" aria-label="Visual Engine Style" title="Switch Visual Engine">${styleOpts}</select>
           ${prompts ? `<button type="button" class="btn" data-action="copy-all" title="Copy Storyboard + Video + Viral Pack">${Glyphs.copy(14)}<span>Copy All</span></button><button type="button" class="btn btn--primary" data-action="make-sequel" title="Generate Part 2 Callback Sequel">${Glyphs.arrowRight(14)}<span>Part 2</span></button>` : ''}

@@ -15,8 +15,11 @@ def _slugify(value: str) -> str:
 
 def export_episode(bundle: EpisodeBundle, output_root: Path) -> Path:
     """Write episode.json, storyboard_prompt.txt, video_prompt.txt, and episode.md."""
-    folder_name = f"{bundle.episode_id}_{_slugify(bundle.idea.title)}"
-    target_dir = output_root / folder_name
+    safe_id = _slugify(bundle.episode_id)
+    folder_name = f"{safe_id}_{_slugify(bundle.idea.title)}"
+    target_dir = (output_root / folder_name).resolve()
+    if output_root.resolve() not in target_dir.parents:
+        raise ValueError("Unsafe export path detected")
     target_dir.mkdir(parents=True, exist_ok=True)
 
     (target_dir / "episode.json").write_text(

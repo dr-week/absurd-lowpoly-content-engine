@@ -64,6 +64,33 @@ export const VISUAL_STYLE_OPTIONS: readonly VisualStyleMeta[] = [
     vidDesc:
       'living 1980s vintage hand-painted Indian sci-fi & pulp airbrush concept art in motion—textured gouache brushwork, dramatic retro-futuristic rim lighting, subtle vintage film grain, and deadpan retro-industrial contraptions operating in an Indian neighborhood.',
   },
+  {
+    id: 'isometric-diorama',
+    label: 'Isometric Miniature Diorama',
+    badge: 'Isometric Toy',
+    sbDesc:
+      'tilt-shift isometric miniature architectural diorama photography—overhead 45-degree toy-scale Indian street block, crisp tabletop studio lighting, tiny detailed plastic miniature figures and vehicles, and shallow macro depth of field.',
+    vidDesc:
+      'living tilt-shift isometric miniature diorama in motion—overhead 45-degree toy-scale Indian neighborhood, crisp tabletop studio lighting, tiny miniature vehicles and characters moving with hyper-real stop-motion precision.',
+  },
+  {
+    id: 'vhs-found-footage',
+    label: '1990s VHS Found Footage',
+    badge: '90s VHS',
+    sbDesc:
+      'raw 1990s home-video VHS camcorder found footage screenshots—analog magnetic tape tracking lines, washed-out chromatic aberration, harsh direct on-camera flash glare, handheld off-center framing, and candid unscripted street chaos.',
+    vidDesc:
+      'raw 1990s home-video VHS camcorder found footage capture—shaky handheld zoom-ins, analog tape hiss and tracking flicker, harsh direct flash lighting, and authentic unscripted Indian street comedy.',
+  },
+  {
+    id: 'noir-monochrome',
+    label: 'Noir Monochrome + Neon',
+    badge: 'Noir Neon',
+    sbDesc:
+      'high-contrast neo-noir monochrome cinema screenshots—deep Venetian-blind black shadows, wet rain-slicked street reflections, sharp chiaroscuro rim lighting, and one single vivid neon-amber accent color popping against stark black-and-white.',
+    vidDesc:
+      'high-contrast neo-noir monochrome cinema capture—dramatic chiaroscuro shadows, pouring rain on wet asphalt, slow moody tracking shots, and one vivid neon-amber accent color contrasting deadpan Indian street comedy.',
+  },
 ];
 
 export function getVisualStyleMeta(style: VisualStyle): VisualStyleMeta {

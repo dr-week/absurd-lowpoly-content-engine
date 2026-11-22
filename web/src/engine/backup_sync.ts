@@ -49,11 +49,15 @@ export function restoreStudioBackup(jsonText: string): {
   const parsed = JSON.parse(jsonText) as Partial<StudioBackupPayload>;
   if (!parsed || typeof parsed !== 'object') throw new Error('Invalid backup file');
 
-  const saved = Array.isArray(parsed.saved) ? parsed.saved : [];
-  const generatedIds = new Set(Array.isArray(parsed.generatedIds) ? parsed.generatedIds : []);
-  const logs = Array.isArray(parsed.logs) ? parsed.logs : [];
-  const seenTitles = new Set(Array.isArray(parsed.seenTitles) ? parsed.seenTitles : []);
-  const seenPairs = new Set(Array.isArray(parsed.seenPairs) ? parsed.seenPairs : []);
+  const saved = Array.isArray(parsed.saved)
+    ? parsed.saved.filter((item): item is SavedItem => Boolean(item && typeof item === 'object' && item.topic && typeof item.topic.id === 'string' && typeof item.topic.title === 'string'))
+    : [];
+  const generatedIds = new Set(Array.isArray(parsed.generatedIds) ? parsed.generatedIds.filter((x): x is string => typeof x === 'string') : []);
+  const logs = Array.isArray(parsed.logs)
+    ? parsed.logs.filter((l): l is RatingLogEntry => Boolean(l && typeof l === 'object' && typeof l.id === 'string' && typeof l.title === 'string'))
+    : [];
+  const seenTitles = new Set(Array.isArray(parsed.seenTitles) ? parsed.seenTitles.filter((x): x is string => typeof x === 'string') : []);
+  const seenPairs = new Set(Array.isArray(parsed.seenPairs) ? parsed.seenPairs.filter((x): x is string => typeof x === 'string') : []);
 
   if (typeof localStorage !== 'undefined') {
     saveSaved(saved);

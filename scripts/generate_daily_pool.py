@@ -13,9 +13,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 SYSTEM_PROMPT = (
-    "You are a stand-up & sketch comedy head writer inventing 16 BRAND-NEW absurdist comedy episodes "
+    "You are a stand-up & sketch comedy head writer inventing 16 BRAND-NEW, dead-simple, suspenseful, expectation-subverting comedy episodes "
     "with full 6-frame storyboards and 6-shot video scripts. Crisp ENGLISH titles/pitches; ultra-short Devanagari Hindi dialogue (<=7 words, reveal word LAST). "
-    "NEVER mention 9:16, 20-second, timestamps, low-poly, PS1, or Delhi/Mumbai. "
+    "NEVER use exact proper names (use phonetic parody names like Elone Maask, Doland Trumpe, Hulke, Spooder-Maan, Sooper-Babu, Thoorwa, GTA-Sixe). "
+    "NEVER mention 9:16, 20-second, timestamps, low-poly, PS1, Delhi, Mumbai, Goa, Uncle, or ANY emojis. "
     "Cover all 6 angles: over-engineer, fake-origin, breaking-news, fake-tutorial, petty-spiral, weird-science. "
     'Return ONLY valid JSON: {"episodes":[{"id":"daily_1","title":"UPPERCASE","angle":"over-engineer","brand":"Tag","trendHook":"Daily AI","pitch":"1 sentence",'
     '"frames":[{"frame":1,"position":"Top Left","framing":"...","action":"...","caption":"Hinglish"}],'
@@ -80,13 +81,19 @@ def main() -> None:
         taste_line = "\nUSER TASTE DIRECTIVE: " + json.loads(taste_path.read_text(encoding="utf-8")).get("prompt_directive", "")
 
     prompt = (
-        "Twist these live world/science/Goa headlines into 16 completely different episodes:\n"
+        "Twist these live world/science/tech themes (NEVER quote raw headlines, NEVER mention Goa or Uncle) into 16 completely different episodes:\n"
         + "\n".join(f"{i + 1}. {h}" for i, h in enumerate(headlines))
         + taste_line
     )
     raw = _call_gemini(gemini_key, prompt) if gemini_key else _call_groq(groq_key, prompt)
     parsed = json.loads(_extract_json(raw))
-    episodes = [e for e in parsed.get("episodes", []) if e.get("title") and len(e.get("frames", [])) == 6 and len(e.get("shots", [])) == 6]
+    import re
+    banned = re.compile(r"\b(goa|goan|uncle|uncles|delhi|mumbai|elon|musk|trump|modi|gandhi|hulk|batman|spider-man|superman|thor)\b|[\U0001F300-\U0001FAFF\u2600-\u27BF]", re.I)
+    episodes = [
+        e for e in parsed.get("episodes", [])
+        if e.get("title") and len(e.get("frames", [])) == 6 and len(e.get("shots", [])) == 6
+        and not banned.search(f"{e.get('title', '')} {e.get('pitch', '')}")
+    ]
     if not episodes:
         print("No valid episodes returned; keeping existing daily_episodes.json.")
         return

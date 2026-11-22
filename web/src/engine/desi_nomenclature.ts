@@ -65,7 +65,7 @@ export function cycleDesiCharacterName(
     const matched = variants.find((v) => combined.includes(v.toLowerCase()));
     if (!matched) continue;
     const nextName = variants[Math.abs(step) % variants.length];
-    const rx = new RegExp(matched.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&'), 'gi');
+    const rx = new RegExp(`\\b${matched.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')}\\b`, 'gi');
     const swap = (txt: string): string =>
       txt.replace(rx, (m) => (m === m.toUpperCase() && m.length > 2 ? nextName.toUpperCase() : nextName));
     return {

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { cycleDirectorsStack } from '../src/data/creative_matrix';
 import { detectCharacterLock, sanitizeCopyrightNames } from '../src/engine/alias_sanitizer';
 import { restoreStudioBackup } from '../src/engine/backup_sync';
 import { scoreComedyCraft } from '../src/engine/comedy_craft';
@@ -122,7 +123,12 @@ const hulkMock = { ...mockPrompts, topicTitle: 'HULKE FIGHTS AUTO', storyboardPr
 assert.equal(cycleDesiCharacterName(hulkMock, 1).name, 'Hulkeshwar');
 const twistOut = cycleTwistBlueprint(mockPrompts, 0);
 assert.ok(twistOut.label === 'Zoom-Out Context Flip' && twistOut.prompts.storyboardPrompt.includes('Expectation Subversion:'));
-assert.ok(buildViralPackage(sample, mockPrompts).twistAudit.includes('->'));
+const stackOut = cycleDirectorsStack(mockPrompts, 0);
+assert.ok(stackOut.prompts.storyboardPrompt.includes('Director Stack:'));
+assert.ok(buildViralPackage(sample, mockPrompts).copyText.includes('BOOK & EDIT:'));
+assert.equal(restoreStudioBackup(JSON.stringify({ version: 1, saved: [null, {}, { bad: true }], generatedIds: ['x1', 123], logs: [null], seenTitles: [], seenPairs: [] })).saved.length, 0);
+const dirtyVid = renderVideoText([{ shot: 1, visual: '[0:00-0:03] 9:16 20-second chase 🔥', sfx: 'boom', hindi: 'चलो 🔥' }]);
+assert.ok(!dirtyVid.includes('9:16') && !dirtyVid.includes('20-second') && !dirtyVid.includes('[0:00') && !dirtyVid.includes('🔥'));
 assert.ok(buildCrossoverEpisode([sample, customEp])?.title.startsWith('CROSSOVER:'));
 
 console.log(

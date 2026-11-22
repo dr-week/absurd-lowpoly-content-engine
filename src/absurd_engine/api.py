@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from absurd_engine import __version__
@@ -69,9 +70,15 @@ def create_app(settings: EngineSettings | None = None) -> FastAPI:
         title="Absurd Low-Poly Content Engine API",
         version=__version__,
         description=(
-            "Text-only backend script & prompt engine for 1998 PS1/N64 ultra low-poly "
-            "absurdist Hindi/Hinglish storyboards (3x2) and 20s 9:16 vertical videos."
+            "Text-only backend script & prompt engine for multi-style viral comedy "
+            "storyboards (3x2) and deadpan Hindi/Hinglish short videos."
         ),
+    )
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["https://dr-week.github.io", "http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:4173", "http://127.0.0.1:4173"],
+        allow_methods=["*"],
+        allow_headers=["*"],
     )
 
     @app.get("/health")

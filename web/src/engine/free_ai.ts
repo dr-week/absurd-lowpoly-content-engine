@@ -100,8 +100,10 @@ export async function generateFreshLiveNewsTopics(params: {
   try {
     const raw = await callFreeAI(system, user);
     const parsed = JSON.parse(extractJson(raw)) as { topics?: Array<{ title: string; angle: string; brand: string; pitch: string; viralScore?: number }> };
-    const list = (parsed.topics ?? []).filter(
-      (t) => t.title && t.pitch && !/inspired by "|after "|reading "|following "/i.test(t.pitch) && !seenTitles.has(t.title.trim().toLowerCase()),
+    const list = (parsed.topics ?? []).filter((t) =>
+      t.title && t.pitch && !/inspired by "|after "|reading "|following /i.test(t.pitch) &&
+      !/\b(goa|goan|uncle|uncles|delhi|mumbai)\b|[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/iu.test(`${t.title} ${t.pitch}`) &&
+      !seenTitles.has(t.title.trim().toLowerCase()),
     );
     if (list.length < 6) throw new Error('Fallback to clean vault');
 
