@@ -85,6 +85,15 @@ export function pickDirectorsStack(seed = 0): DirectorsStack {
   return DIRECTORS_STACKS[Math.abs(seed) % DIRECTORS_STACKS.length];
 }
 
+export function detectActiveDirectorsStack(promptText: string, fallbackSeed = 0): DirectorsStack {
+  const match = promptText.match(STACK_RE);
+  if (match) {
+    const found = DIRECTORS_STACKS.find((s) => s.directive === match[0]);
+    if (found) return found;
+  }
+  return pickDirectorsStack(fallbackSeed);
+}
+
 export function cycleDirectorsStack(
   prompts: GeneratedPrompts,
   step: number,
@@ -92,7 +101,11 @@ export function cycleDirectorsStack(
   const stack = pickDirectorsStack(step);
   const inject = (text: string): string => {
     if (STACK_RE.test(text)) return text.replace(STACK_RE, stack.directive);
-    return text.replace(/(Strictly NO 2D cartoon art)/, `${stack.directive} $1`);
+    if (/(Strictly NO 2D cartoon art)/.test(text)) {
+      return text.replace(/(Strictly NO 2D cartoon art)/, `${stack.directive} $1`);
+    }
+    const nl = text.indexOf('\n');
+    return nl > 0 ? `${text.slice(0, nl)} ${stack.directive}${text.slice(nl)}` : `${text} ${stack.directive}`;
   };
   return {
     label: stack.label,

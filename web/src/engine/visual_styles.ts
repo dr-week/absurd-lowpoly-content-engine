@@ -107,22 +107,33 @@ export function assignDiverseVisualStyles<T extends TopicOption>(
   rng: () => number = cryptoRng,
 ): (T & { visualStyle: VisualStyle })[] {
   const allIds = VISUAL_STYLE_OPTIONS.map((s) => s.id);
-  const used = new Set<VisualStyle>();
-  for (const t of topics) {
-    if (t.visualStyle) used.add(t.visualStyle);
-  }
-  const unseen = cryptoShuffle(allIds.filter((id) => !used.has(id)), rng);
-  const deck = [...unseen, ...cryptoShuffle(allIds, rng), ...cryptoShuffle(allIds, rng)];
+  const deck = [...cryptoShuffle(allIds, rng), ...cryptoShuffle(allIds, rng)];
+  const counts = new Map<VisualStyle, number>();
   let cursor = 0;
 
-  return topics.map((t) => {
-    if (t.visualStyle) return { ...t, visualStyle: t.visualStyle };
-    const text = `${t.brand} ${t.title}`.toLowerCase();
-    if (/gta/.test(text)) {
-      return { ...t, visualStyle: rng() > 0.4 ? 'gta6-vice' : 'hybrid-1998-gta6' };
+  const takeUnique = (): VisualStyle => {
+    for (let i = 0; i < deck.length; i += 1) {
+      const candidate = deck[(cursor + i) % deck.length];
+      if ((counts.get(candidate) ?? 0) === 0) {
+        cursor = (cursor + i + 1) % deck.length;
+        counts.set(candidate, 1);
+        return candidate;
+      }
     }
-    const picked = deck[cursor % deck.length];
+    const fallback = deck[cursor % deck.length];
     cursor += 1;
-    return { ...t, visualStyle: picked };
+    counts.set(fallback, (counts.get(fallback) ?? 0) + 1);
+    return fallback;
+  };
+
+  return topics.map((t) => {
+    const preferred =
+      t.visualStyle ??
+      (/gta/i.test(`${t.brand} ${t.title}`) ? (rng() > 0.4 ? 'gta6-vice' : 'hybrid-1998-gta6') : undefined);
+    if (preferred && (counts.get(preferred) ?? 0) < 1) {
+      counts.set(preferred, 1);
+      return { ...t, visualStyle: preferred };
+    }
+    return { ...t, visualStyle: takeUnique() };
   });
 }

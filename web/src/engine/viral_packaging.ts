@@ -1,4 +1,4 @@
-import { pickDirectorsStack } from '../data/creative_matrix';
+import { detectActiveDirectorsStack } from '../data/creative_matrix';
 import type { GeneratedPrompts, ScoredTopic } from '../types';
 import { getHookLabel, getSituationLabel } from './taxonomy';
 import { detectTwistBlueprint } from './twist_architect';
@@ -44,7 +44,7 @@ export function buildViralPackage(topic: ScoredTopic, prompts: GeneratedPrompts)
   const loopStatus = words > 0 && words <= 7 ? `Tight Loop (${words}w)` : `Crisp Cut (${words}w)`;
   const bp = detectTwistBlueprint(topic);
   const twistAudit = `${bp.label}: ${bp.assumedTrack} -> ${bp.subversionSnap}`;
-  const stack = pickDirectorsStack(topic.title.length);
+  const stack = detectActiveDirectorsStack(prompts.storyboardPrompt, topic.title.length);
 
   const hashtags = Array.from(
     new Set([
