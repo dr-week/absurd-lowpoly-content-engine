@@ -1,21 +1,24 @@
 import type { EngineConfig, GeneratedPrompts, StoryboardFrameData, TopicOption, VideoShotData } from '../types';
+import { detectCharacterLock, sanitizeCopyrightNames } from './alias_sanitizer';
 import { generateFreeLiveScriptSpec } from './free_ai';
 import { generateLiveScriptSpec } from './live_ai';
 import { pickCinematographyRig } from './randomizer';
 
-const STORYBOARD_HEADER = (title: string, rigDirective: string): string =>
-  `6-frame storyboard in a 3x2 grid on a plain dark background. Apply one unified style to ALL panels: raw 1998 PlayStation 1 (PS1) / Nintendo 64 (N64) ultra low-poly 3D game screenshots—angular faceted polygons, blurry pixelated bitmap textures, stiff awkward poses, crude Gouraud shading, jagged aliased edges, and muddy retro colors. ${rigDirective} Strictly NO 2D cartoon art, NO comic ink outlines, NO cel-shading, NO smooth modern CGI. Place a short bold retro pixel-font Hinglish caption under each panel. Title at top: "${title}".`;
+const STORYBOARD_HEADER = (title: string, rigDirective: string, charLock: string): string =>
+  `6-frame storyboard in a 3x2 grid on a plain dark background. Apply one unified style to ALL panels: raw 1998 PlayStation 1 (PS1) / Nintendo 64 (N64) ultra low-poly 3D game screenshots—angular faceted polygons, blurry pixelated bitmap textures, stiff awkward poses, crude Gouraud shading, jagged aliased edges, and muddy retro colors. ${rigDirective}${charLock ? ` ${charLock}` : ''} Strictly NO 2D cartoon art, NO comic ink outlines, NO cel-shading, NO smooth modern CGI. Place a short bold retro pixel-font Hinglish caption under each panel. Title at top: "${title}".`;
 
 // Strictly NO time, NO duration, NO video size / aspect ratio mentions!
-const VIDEO_HEADER = (rigDirective: string): string =>
-  `Absurdist comedy video. Apply one unified style throughout: raw 1998 PlayStation 1 (PS1) / Nintendo 64 (N64) ultra low-poly 3D game graphics—angular faceted polygons, blurry pixelated bitmap textures, stiff robotic animations with jerky low-FPS movement, crude Gouraud shading, jagged aliased edges, and muddy retro colors. ${rigDirective} Strictly NO 2D cartoon art, NO comic ink outlines, NO cel-shading, NO smooth modern CGI. Audio: deadpan, serious Indian male narrator with slightly compressed lo-fi 1998 PS1-era voice fidelity speaking ultra-short Hindi lines matched tightly to each shot, paired with retro PS1 SFX and sharp hard cuts.`;
+const VIDEO_HEADER = (rigDirective: string, charLock: string): string =>
+  `Absurdist comedy video. Apply one unified style throughout: raw 1998 PlayStation 1 (PS1) / Nintendo 64 (N64) ultra low-poly 3D game graphics—angular faceted polygons, blurry pixelated bitmap textures, stiff robotic animations with jerky low-FPS movement, crude Gouraud shading, jagged aliased edges, and muddy retro colors. ${rigDirective}${charLock ? ` ${charLock}` : ''} Strictly NO 2D cartoon art, NO comic ink outlines, NO cel-shading, NO smooth modern CGI. Audio: deadpan, serious Indian male narrator with slightly compressed lo-fi 1998 PS1-era voice fidelity speaking ultra-short Hindi lines matched tightly to each shot, paired with retro PS1 SFX and sharp hard cuts.`;
 
 export function renderStoryboardText(title: string, frames: StoryboardFrameData[], rigDirective?: string): string {
+  const safeTitle = sanitizeCopyrightNames(title);
   const rig = rigDirective ?? pickCinematographyRig().directive;
-  const lines: string[] = [STORYBOARD_HEADER(title, rig), ''];
+  const lock = detectCharacterLock(`${safeTitle} ${frames.map((f) => f.action).join(' ')}`);
+  const lines: string[] = [STORYBOARD_HEADER(safeTitle, rig, lock), ''];
   for (const frame of frames) {
-    lines.push(`Frame ${frame.frame} (${frame.position}): ${frame.framing}. ${frame.action}`);
-    lines.push(`Caption: "${frame.caption}"`);
+    lines.push(`Frame ${frame.frame} (${frame.position}): ${frame.framing}. ${sanitizeCopyrightNames(frame.action)}`);
+    lines.push(`Caption: "${sanitizeCopyrightNames(frame.caption)}"`);
     lines.push('');
   }
   return lines.join('\n').trim();
@@ -23,9 +26,10 @@ export function renderStoryboardText(title: string, frames: StoryboardFrameData[
 
 export function renderVideoText(shots: VideoShotData[], rigDirective?: string): string {
   const rig = rigDirective ?? pickCinematographyRig().directive;
-  const lines: string[] = [VIDEO_HEADER(rig), ''];
+  const lock = detectCharacterLock(shots.map((s) => s.visual).join(' '));
+  const lines: string[] = [VIDEO_HEADER(rig, lock), ''];
   for (const shot of shots) {
-    lines.push(`Shot ${shot.shot}: ${shot.visual} SFX: ${shot.sfx}.`);
+    lines.push(`Shot ${shot.shot}: ${sanitizeCopyrightNames(shot.visual)} SFX: ${shot.sfx}.`);
     lines.push(`Hindi Dialogue: "${shot.hindi}"`);
     lines.push('');
   }

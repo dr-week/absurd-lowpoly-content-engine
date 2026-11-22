@@ -31,7 +31,7 @@ export function getSituationLabel(id: SituationCategory): string {
   return SITUATION_CATEGORIES.find((s) => s.id === id)?.label ?? id;
 }
 
-const ICONIC_RE = /\b(elon|musk|trump|gandhi|gandhiji|putin|modi)\b/i;
+const ICONIC_RE = /\b(elon|musk|trump|doland|gandhi|gandhiji|bapu|putin|putinder|modi|zuck|motabhai|giga|chaddha|doge|spooder|sigma)\b/i;
 
 export function classifyHook(topic: TopicOption): HookCategory {
   if (topic.angle === 'fake-origin') return 'origin';

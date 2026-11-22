@@ -19,15 +19,21 @@ export const BRAND_SIGNALS: Record<string, BrandSignal> = {
   'Barber Chair': { brand: 'Barber Chair', spendHeat: 89, hook: 'Universal haircut betrayal', agencyStyle: 'Deadpan visual twist' },
   'Fitness Lab': { brand: 'Fitness Lab', spendHeat: 87, hook: 'Cheap protein & gym bro satire', agencyStyle: 'Fitness parody' },
   'Spam Call': { brand: 'Spam Call', spendHeat: 85, hook: 'Robocall & loan spam absurdity', agencyStyle: 'Creepy-funny tech' },
-  'Elon Musk': { brand: 'Elon Musk', spendHeat: 98, hook: 'Over-engineering simple tasks with rockets', agencyStyle: 'Tech-bro satire' },
-  'Trump': { brand: 'Trump', spendHeat: 97, hook: 'Absurd tariff & biggest-deal parody', agencyStyle: 'Global political satire' },
-  'Gandhiji': { brand: 'Gandhiji', spendHeat: 94, hook: 'Deadpan stubbornness & fake origin jokes', agencyStyle: 'Classic viral parody' },
-  'Putin': { brand: 'Putin', spendHeat: 95, hook: 'War-room & missile overkill for tiny tasks', agencyStyle: 'Deadpan geopolitical comedy' },
-  'Modi': { brand: 'Modi', spendHeat: 96, hook: 'Grand ribbon-cutting for absurdly tiny things', agencyStyle: 'Viral inauguration satire' },
+  'Elon Bhai': { brand: 'Elon Bhai', spendHeat: 98, hook: 'Over-engineering simple tasks with rockets', agencyStyle: 'Tech-bro parody' },
+  'Doland Bhau': { brand: 'Doland Bhau', spendHeat: 97, hook: 'Absurd tariff & biggest-deal parody', agencyStyle: 'Global political parody' },
+  'Bapu-G': { brand: 'Bapu-G', spendHeat: 94, hook: 'Deadpan stubbornness & fake origin jokes', agencyStyle: 'Classic viral parody' },
+  'Putinder': { brand: 'Putinder', spendHeat: 95, hook: 'War-room & bunker overkill for tiny tasks', agencyStyle: 'Deadpan geopolitical comedy' },
+  'Modi-G': { brand: 'Modi-G', spendHeat: 96, hook: 'Grand ribbon-cutting for absurdly tiny things', agencyStyle: 'Viral inauguration parody' },
+  'Zucku Bhai': { brand: 'Zucku Bhai', spendHeat: 94, hook: 'Robotic metaverse & VR overkill parody', agencyStyle: 'Silicon Valley satire' },
+  'Motabhai': { brand: 'Motabhai', spendHeat: 95, hook: 'Billionaire telecom & mega-wedding scale parody', agencyStyle: 'Tycoon comedy' },
+  'Giga-Chaddha': { brand: 'Giga-Chaddha', spendHeat: 97, hook: '90-degree jawline deadpan gym overkill', agencyStyle: 'Viral meme parody' },
+  'Doge-esh': { brand: 'Doge-esh', spendHeat: 96, hook: 'Deadpan Shiba dog outsmarting executives', agencyStyle: 'Internet meme comedy' },
+  'Spooder-Bhai': { brand: 'Spooder-Bhai', spendHeat: 95, hook: 'Desi knockoff superhero in rubber chappals', agencyStyle: 'Superhero parody' },
+  'Sigma Tauji': { brand: 'Sigma Tauji', spendHeat: 93, hook: '3:45 AM hustle routine taken to absurd extremes', agencyStyle: 'Sigma grindset parody' },
   'Fake Origin': { brand: 'Fake Origin', spendHeat: 93, hook: 'Fake celebrity childhood & 100x growth story', agencyStyle: 'Progression montage comedy' },
   'Luxury Villa': { brand: 'Luxury Villa', spendHeat: 90, hook: 'Discount coupon vs luxury Airbnb', agencyStyle: 'Lifestyle contrast' },
 };
 
 export function getBrandHeat(brand: string): number {
-  return BRAND_SIGNALS[brand]?.spendHeat ?? 82;
+  return BRAND_SIGNALS[brand]?.spendHeat ?? 85;
 }

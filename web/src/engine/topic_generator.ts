@@ -2,6 +2,7 @@ import { getBrandHeat } from '../data/brands';
 import { CRAFT_STORIES_A } from '../data/stories_craft_a';
 import { CRAFT_STORIES_B } from '../data/stories_craft_b';
 import { CRAFT_STORIES_C } from '../data/stories_craft_c';
+import { MEME_STORIES } from '../data/stories_meme';
 import { NEWS_STORIES } from '../data/stories_news';
 import { ORIGIN_STORIES } from '../data/stories_origin';
 import { OVERENGINEER_STORIES } from '../data/stories_overengineer';
@@ -9,6 +10,7 @@ import { SCIENCE_STORIES } from '../data/stories_science';
 import { SPIRAL_STORIES } from '../data/stories_spiral';
 import { TUTORIAL_STORIES } from '../data/stories_tutorial';
 import type { HookCategory, RatingLogEntry, ScoredTopic, SituationCategory, TopicOption } from '../types';
+import { sanitizeTopic } from './alias_sanitizer';
 import { scoreComedyCraft } from './comedy_craft';
 import { cryptoRng, cryptoShuffle } from './randomizer';
 import { classifyHook, classifySituation } from './taxonomy';
@@ -18,16 +20,9 @@ const PREV_ID_PREFIX = '__previd__';
 const COOL_ID_PREFIX = '__coolid__';
 
 export const ALL_BESPOKE_STORIES: readonly TopicOption[] = [
-  ...OVERENGINEER_STORIES,
-  ...ORIGIN_STORIES,
-  ...NEWS_STORIES,
-  ...TUTORIAL_STORIES,
-  ...SPIRAL_STORIES,
-  ...SCIENCE_STORIES,
-  ...CRAFT_STORIES_A,
-  ...CRAFT_STORIES_B,
-  ...CRAFT_STORIES_C,
-];
+  ...OVERENGINEER_STORIES, ...ORIGIN_STORIES, ...NEWS_STORIES, ...TUTORIAL_STORIES, ...SPIRAL_STORIES,
+  ...SCIENCE_STORIES, ...CRAFT_STORIES_A, ...CRAFT_STORIES_B, ...CRAFT_STORIES_C, ...MEME_STORIES,
+].map(sanitizeTopic);
 
 const FORMAT_KEYS = ['over-engineer', 'fake-origin', 'breaking-news', 'fake-tutorial', 'petty-spiral', 'weird-science'] as const;
 
@@ -37,14 +32,13 @@ export const STORY_FORMAT_PACKS: readonly (readonly TopicOption[])[] = FORMAT_KE
 
 export function worldFamily(brand: string): string {
   const b = brand.toLowerCase();
-  if (b.includes('goa')) return 'goa';
-  if (b.includes('elon') || b.includes('musk')) return 'elon';
-  if (b.includes('gandhi')) return 'gandhi';
-  if (b.includes('trump')) return 'trump';
-  if (b.includes('putin')) return 'putin';
-  if (b.includes('modi')) return 'modi';
-  if (b.includes('ai ') || b === 'ai' || b.includes('tech')) return 'ai-tech';
-  if (b.includes('mars') || b.includes('nasa') || b.includes('space')) return 'space';
+  for (const [rx, fam] of [
+    [/goa/, 'goa'], [/elon|musk/, 'elon'], [/gandhi|bapu/, 'gandhi'], [/trump|doland/, 'trump'],
+    [/putin/, 'putin'], [/modi/, 'modi'], [/zuck/, 'zuck'], [/giga/, 'gigachad'], [/doge/, 'doge'],
+    [/spooder/, 'spooder'], [/ai |^ai$|tech/, 'ai-tech'], [/mars|nasa|space/, 'space'],
+  ] as const) {
+    if (rx.test(b)) return fam;
+  }
   return b.replace(/[^a-z0-9]+/g, '-');
 }
 

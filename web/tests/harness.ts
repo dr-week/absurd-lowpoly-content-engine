@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { detectCharacterLock, sanitizeCopyrightNames } from '../src/engine/alias_sanitizer';
 import { restoreStudioBackup } from '../src/engine/backup_sync';
 import { scoreComedyCraft } from '../src/engine/comedy_craft';
 import { buildCustomEpisode } from '../src/engine/custom_builder';
@@ -32,15 +33,8 @@ for (const story of ALL_BESPOKE_STORIES) {
 }
 
 const biasedLogs: RatingLogEntry[] = Array.from({ length: 10 }, (_, idx) => ({
-  id: `topic_bias_${idx}`,
-  timestamp: new Date().toISOString(),
-  kind: 'topic',
-  targetId: `bias_${idx}`,
-  title: 'BIAS TEST',
-  angle: 'over-engineer',
-  brand: 'Elon Musk',
-  viralScore: 98,
-  vote: 'up',
+  id: `topic_bias_${idx}`, timestamp: new Date().toISOString(), kind: 'topic', targetId: `bias_${idx}`,
+  title: 'BIAS TEST', angle: 'over-engineer', brand: 'Elon Bhai', viralScore: 98, vote: 'up',
 }));
 
 let persistedJson = '[]';
@@ -135,11 +129,16 @@ const restored = restoreStudioBackup(JSON.stringify({ version: 1, saved: [], gen
 assert.ok(restored.generatedIds.has('x1') && restored.seenTitles.has('t1'));
 
 const customEp = buildCustomEpisode('Trump buys a Goa beach shack for ₹200', 'iconic');
-assert.ok(customEp.title.includes('TRUMP') && customEp.situationCategory === 'coastal' && customEp.hookCategory === 'iconic');
+assert.ok(customEp.title.includes('DOLAND BHAU') && !customEp.title.includes('TRUMP'), 'Custom idea must auto-sanitize Trump -> Doland Bhau');
+assert.equal(sanitizeCopyrightNames('Elon Musk and Donald Trump meet Spider-Man'), 'Elon Bhai and Doland Bhau meet Spooder-Bhai');
+assert.ok(detectCharacterLock('Giga-Chaddha lifts the gym').includes('90-degree hexagonal polygon jawline'));
+for (const story of ALL_BESPOKE_STORIES) {
+  assert.ok(!/\b(elon musk|donald trump|vladimir putin|spider-man|mark zuckerberg)\b/i.test(`${story.title} ${story.pitch}`), `Raw copyright name leaked in ${story.id}`);
+}
 const mash = buildCrossoverEpisode([sample, customEp]);
 assert.ok(mash && mash.title.startsWith('CROSSOVER:') && mash.frames?.length === 6 && mash.shots?.length === 6);
 
 console.log(
   `HARNESS PASS: ${ALL_BESPOKE_STORIES.length} stories × ${RELOADS} F5 reloads = ${RELOADS * 8} cards ` +
-    `(0/32 rapid live repeats, Custom Idea, Mashup, Part 2, Viral Pack, 5x Viral DNA & Backup verified).`,
+    `(0/32 rapid live repeats, 12 Parody Meme Characters + Silhouette Locks, Custom Idea, Mashup & Backup verified).`,
 );

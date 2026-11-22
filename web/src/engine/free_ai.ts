@@ -1,4 +1,5 @@
 import type { HookCategory, RatingLogEntry, ScoredTopic, SituationCategory, StoryboardFrameData, TopicOption, VideoShotData } from '../types';
+import { sanitizeTopic } from './alias_sanitizer';
 import { pickComedyMechanism, scoreComedyCraft, WRITERS_ROOM_RULES } from './comedy_craft';
 import { expandCustomIdeaLocally } from './custom_builder';
 import { fetchFreshOnlineNews } from './live_news';
@@ -59,11 +60,8 @@ async function callFreeAI(system: string, user: string, timeoutMs = 22000): Prom
 
 function fallbackFromHeadlines(headlines: Array<{ title: string; source: string }>, batchNonce: number): ScoredTopic[] {
   return synthesizeTopicsFromHeadlines(headlines, batchNonce).map((topic) => ({
-    ...topic,
-    brandHeat: 88,
-    viralScore: Math.min(98, Math.round(scoreComedyCraft(topic).total * 0.96)),
-    hookCategory: classifyHook(topic),
-    situationCategory: classifySituation(topic),
+    ...topic, brandHeat: 88, viralScore: Math.min(98, Math.round(scoreComedyCraft(topic).total * 0.96)),
+    hookCategory: classifyHook(topic), situationCategory: classifySituation(topic),
   }));
 }
 
@@ -86,7 +84,7 @@ export async function generateFreshLiveNewsTopics(params: {
     'ALL titles and pitches MUST be in crisp ENGLISH ONLY (zero Hindi/Devanagari in titles or pitches). ' +
     'NEVER mention "low-poly", "PS1", "3D", "meme", or "viral". NEVER use prefixes like "Fake biopic:" or "Breaking:". ' +
     'Cover ALL 6 formats: over-engineer, fake-origin, breaking-news, fake-tutorial, petty-spiral, weird-science. ' +
-    'Include iconic figures (Elon Musk, Trump, Gandhiji, Putin, Modi), Goa, Science, and World News. NEVER lock to Delhi or Mumbai. ' +
+    'Use copyright-safe parody meme names (Elon Bhai, Doland Bhau, Bapu-G, Putinder, Modi-G, Zucku Bhai, Giga-Chaddha, Doge-esh, Spooder-Bhai, Sigma Tauji), Goa, Science, and World News. NEVER lock to Delhi or Mumbai. ' +
     `${WRITERS_ROOM_RULES} ` +
     'Return ONLY valid JSON: {"topics":[{"title":"UPPERCASE ENGLISH TITLE","angle":"over-engineer|fake-origin|breaking-news|fake-tutorial|petty-spiral|weird-science","brand":"Short World Tag","pitch":"Cold-open 1-sentence English setup + broken-assumption twist + deadpan payoff","viralScore":92}]}';
 
@@ -112,7 +110,7 @@ export async function generateFreshLiveNewsTopics(params: {
 
     const stamp = Date.now().toString(36);
     return list.slice(0, 8).map((t, idx) => {
-      const base: TopicOption = { id: `live_${stamp}_${idx}`, title: t.title.trim().toUpperCase(), angle: t.angle || 'breaking-news', brand: t.brand || 'World', trendHook: 'Live Online News', pitch: t.pitch.trim() };
+      const base = sanitizeTopic({ id: `live_${stamp}_${idx}`, title: t.title.trim().toUpperCase(), angle: t.angle || 'breaking-news', brand: t.brand || 'World', trendHook: 'Live Online News', pitch: t.pitch.trim() });
       return {
         ...base,
         brandHeat: t.viralScore ?? 90,

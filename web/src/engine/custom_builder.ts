@@ -1,4 +1,5 @@
 import type { HookCategory, ScoredTopic, StoryboardFrameData, TopicOption, VideoShotData } from '../types';
+import { sanitizeCopyrightNames } from './alias_sanitizer';
 import { classifyHook, classifySituation } from './taxonomy';
 
 const HOOK_TO_ANGLE: Record<HookCategory, string> = {
@@ -38,7 +39,7 @@ export function expandCustomIdeaLocally(topic: TopicOption): { frames: Storyboar
  * Live AI or instant 6-frame/6-shot prompt generation + Viral Pack + Part 2 sequels.
  */
 export function buildCustomEpisode(rawIdea: string, hookChoice: HookCategory | 'all' = 'all'): ScoredTopic {
-  const clean = rawIdea.trim().replace(/\s+/g, ' ');
+  const clean = sanitizeCopyrightNames(rawIdea.trim().replace(/\s+/g, ' '));
   const words = clean.split(' ');
   const title = words.slice(0, 8).join(' ').toUpperCase();
   const brand = words.slice(0, 2).join(' ').replace(/[^A-Za-z0-9\s'-]/g, '') || 'Custom';

@@ -1,4 +1,5 @@
 import type { EngineConfig, HookCategory, RatingLogEntry, ScoredTopic, SituationCategory, StoryboardFrameData, TopicOption, VideoShotData } from '../types';
+import { sanitizeTopic } from './alias_sanitizer';
 import { pickComedyMechanism, WRITERS_ROOM_RULES } from './comedy_craft';
 import { pickCinematographyRig } from './randomizer';
 import { classifyHook, classifySituation, getHookLabel, getSituationLabel } from './taxonomy';
@@ -69,7 +70,7 @@ export async function generateLiveTopics(
   const system =
     'You are a top stand-up & sketch comedy head writer inventing 8 structurally DIFFERENT absurdist comedy premises for 1998 PS1/N64 low-poly 3D videos with a deadpan Hindi narrator. ' +
     'Cover ALL 6 distinct story formats: over-engineer (Level 1 -> Level 999 build), fake-origin (fake celebrity childhood story), breaking-news (serious TV broadcast), fake-tutorial (3-step Rule-of-Three guide), petty-spiral (UCB heightening escalation), weird-science (absurd lab study). ' +
-    'Feature Iconic Figures (Elon Musk, Trump, Gandhiji, Putin, Modi), Goa, World News, and Science. NEVER lock topics to Delhi or Mumbai. ' +
+    'Use copyright-safe parody meme names (Elon Bhai, Doland Bhau, Bapu-G, Putinder, Modi-G, Zucku Bhai, Giga-Chaddha, Doge-esh, Spooder-Bhai, Sigma Tauji), Goa, World News, and Science. NEVER lock topics to Delhi or Mumbai. ' +
     `${WRITERS_ROOM_RULES} ` +
     'Return ONLY JSON: {"topics":[{"title":"UPPERCASE PUNCHY TITLE","angle":"over-engineer|fake-origin|breaking-news|fake-tutorial|petty-spiral|weird-science","brand":"Figure/World Tag","pitch":"Cold-open 1-sentence Setup -> False Assumption -> Shatter payoff (NO genre-label prefix)","viralScore":92}]}';
 
@@ -90,7 +91,7 @@ export async function generateLiveTopics(
   const parsed = JSON.parse(extractJson(raw)) as { topics: Array<{ title: string; angle: string; brand: string; pitch: string; viralScore?: number }> };
   const stamp = Date.now().toString(36);
   return parsed.topics.slice(0, 8).map((t, idx) => {
-    const base: TopicOption = { id: `ai_${stamp}_${idx}`, title: t.title, angle: t.angle || 'over-engineer', brand: t.brand || 'Global', trendHook: 'Live AI Craft', pitch: t.pitch };
+    const base = sanitizeTopic({ id: `ai_${stamp}_${idx}`, title: t.title, angle: t.angle || 'over-engineer', brand: t.brand || 'Global', trendHook: 'Live AI Craft', pitch: t.pitch });
     return {
       ...base,
       brandHeat: t.viralScore ?? 88,
