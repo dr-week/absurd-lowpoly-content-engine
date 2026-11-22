@@ -12,30 +12,30 @@ export interface VisualStyleMeta {
 export const VISUAL_STYLE_OPTIONS: readonly VisualStyleMeta[] = [
   {
     id: 'ps1-1998',
-    label: '1998 PS1 Low-Poly',
-    badge: 'PS1 Low-Poly',
+    label: '1998 Retro Low-Poly',
+    badge: '98 Low-Poly',
     sbDesc:
-      'raw 1998 PlayStation 1 (PS1) / Nintendo 64 (N64) ultra low-poly 3D game screenshots—angular faceted polygons, blurry pixelated bitmap textures, stiff awkward poses, crude Gouraud shading, jagged aliased edges, and muddy retro colors.',
+      'raw late-1990s 32-bit retro console ultra low-poly 3D game screenshots—angular faceted polygons, blurry pixelated bitmap textures, stiff awkward poses, crude Gouraud shading, jagged aliased edges, and muddy retro colors.',
     vidDesc:
-      'raw 1998 PlayStation 1 (PS1) / Nintendo 64 (N64) ultra low-poly 3D game graphics—angular faceted polygons, blurry pixelated bitmap textures, stiff robotic animations with jerky low-FPS movement, crude Gouraud shading, jagged aliased edges, and muddy retro colors.',
+      'raw late-1990s 32-bit retro console ultra low-poly 3D game graphics—angular faceted polygons, blurry pixelated bitmap textures, stiff robotic animations with jerky low-FPS movement, crude Gouraud shading, jagged aliased edges, and muddy retro colors.',
   },
   {
     id: 'gta6-vice',
-    label: 'GTA 6 Vice Gameplay',
-    badge: 'GTA 6 HUD',
+    label: 'Open-World Sandbox HUD',
+    badge: 'Sandbox HUD',
     sbDesc:
-      'authentic GTA 6 / GTA 5 open-world gameplay screenshots—classic over-the-shoulder third-person follow camera, circular GPS radar minimap in the bottom-left corner with pink mission waypoint, flashing wanted-level stars in the top-right corner, weapon/cash HUD counter, sun-drenched Vice-City tropical neon reflections on wet asphalt, and chaotic Ragdoll physics.',
+      'authentic modern coastal open-world sandbox action-game screenshots—classic over-the-shoulder third-person follow camera, circular GPS radar minimap in the bottom-left corner with pink mission waypoint, flashing wanted-level stars in the top-right corner, weapon/cash HUD counter, sun-drenched tropical neon reflections on wet asphalt, and chaotic Ragdoll physics.',
     vidDesc:
-      'authentic GTA 6 / GTA 5 open-world gameplay capture—classic third-person follow & drive camera, circular GPS radar minimap in the bottom-left corner, flashing wanted-level stars in the top-right corner, yellow mission objective text at the bottom, chaotic open-world NPC ragdoll physics, and glossy neon wet-asphalt reflections.',
+      'authentic modern coastal open-world sandbox action-game capture—classic third-person follow & drive camera, circular GPS radar minimap in the bottom-left corner, flashing wanted-level stars in the top-right corner, yellow mission objective text at the bottom, chaotic open-world NPC ragdoll physics, and glossy neon wet-asphalt reflections.',
   },
   {
     id: 'hybrid-1998-gta6',
-    label: 'PS1 × GTA 6 Hybrid',
-    badge: 'PS1 × GTA 6',
+    label: '98 Low-Poly × Sandbox HUD',
+    badge: '98 × Sandbox',
     sbDesc:
-      '1998 PlayStation 1 (PS1) ultra low-poly 3D blocky characters inside an authentic GTA 6 / GTA 5 open-world gameplay HUD—chunky faceted PS1 polygon characters with circular GPS radar minimap in the bottom-left corner, flashing wanted-level stars in the top-right corner, third-person follow camera, and glossy wet-asphalt Vice-City neon reflections.',
+      'late-1990s 32-bit ultra low-poly 3D blocky characters inside an open-world coastal sandbox action-game HUD—chunky faceted retro polygon characters with circular GPS radar minimap in the bottom-left corner, flashing wanted-level stars in the top-right corner, third-person follow camera, and glossy wet-asphalt tropical neon reflections.',
     vidDesc:
-      '1998 PlayStation 1 (PS1) ultra low-poly 3D blocky characters inside an authentic GTA 6 / GTA 5 open-world gameplay engine—stiff faceted 1998 PS1 polygon characters moving through glossy neon Vice-City streets with the GTA circular GPS minimap in the bottom-left, flashing wanted stars in the top-right, and third-person getaway camera tracking.',
+      'late-1990s 32-bit ultra low-poly 3D blocky characters inside an open-world coastal sandbox action-game engine—stiff faceted retro polygon characters moving through glossy neon coastal streets with a circular GPS minimap in the bottom-left, flashing wanted stars in the top-right, and third-person getaway camera tracking.',
   },
   {
     id: 'cctv-dashcam',
@@ -51,7 +51,7 @@ export const VISUAL_STYLE_OPTIONS: readonly VisualStyleMeta[] = [
     label: 'Handcrafted Claymation',
     badge: 'Claymation',
     sbDesc:
-      'tactile handcrafted Aardman-style stop-motion plasticine claymation miniature photography—visible thumbprints and sculpt marks on colorful clay characters, miniature physical cardboard-and-wood Indian street sets, soft macro tilt-shift depth of field, and warm practical studio lighting.',
+      'tactile handcrafted British-style stop-motion plasticine claymation miniature photography—visible thumbprints and sculpt marks on colorful clay characters, miniature physical cardboard-and-wood Indian street sets, soft macro tilt-shift depth of field, and warm practical studio lighting.',
     vidDesc:
       'tactile handcrafted stop-motion plasticine claymation animation—visible thumbprint textures shifting slightly frame-by-frame on clay characters, jerky 12-FPS physical stop-motion movement, miniature tabletop Indian street props, and shallow macro depth of field.',
   },

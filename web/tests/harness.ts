@@ -127,8 +127,13 @@ const stackOut = cycleDirectorsStack(mockPrompts, 0);
 assert.ok(stackOut.prompts.storyboardPrompt.includes('Director Stack:'));
 assert.ok(buildViralPackage(sample, mockPrompts).copyText.includes('BOOK & EDIT:'));
 assert.equal(restoreStudioBackup(JSON.stringify({ version: 1, saved: [null, {}, { bad: true }], generatedIds: ['x1', 123], logs: [null], seenTitles: [], seenPairs: [] })).saved.length, 0);
-const dirtyVid = renderVideoText([{ shot: 1, visual: '[0:00-0:03] 9:16 20-second chase 🔥', sfx: 'boom', hindi: 'चलो 🔥' }]);
+const dirtyVid = renderVideoText([{ shot: 1, visual: '[0:00-0:03] 9:16 20-second PlayStation GTA 6 Zepto chase 🔥', sfx: 'boom', hindi: 'चलो 🔥' }]);
 assert.ok(!dirtyVid.includes('9:16') && !dirtyVid.includes('20-second') && !dirtyVid.includes('[0:00') && !dirtyVid.includes('🔥'));
+const THIRD_PARTY_RE = /\b(PlayStation|PS1|Nintendo|N64|GTA\s*[56]|Vice[- ]City|Aardman|GoPro|Wes[- ]Anderson|Zepto|Swiggy|Zomato|Blinkit|iPhone|Tesla|SpaceX|Marvel|Disney|Pixar|copyrighted)\b/i;
+for (const p of [mockPrompts, gtaPrompts, switchPromptVisualStyle(mockPrompts, 'hybrid-1998-gta6'), clayPrompts]) {
+  assert.ok(!THIRD_PARTY_RE.test(p.storyboardPrompt), `Third-party trademark in storyboard: ${p.storyboardPrompt.match(THIRD_PARTY_RE)?.[0]}`);
+  assert.ok(!THIRD_PARTY_RE.test(p.videoPrompt), `Third-party trademark in video: ${p.videoPrompt.match(THIRD_PARTY_RE)?.[0]}`);
+}
 assert.ok(buildCrossoverEpisode([sample, customEp])?.title.startsWith('CROSSOVER:'));
 
 console.log(

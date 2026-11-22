@@ -48,7 +48,7 @@ export const DIRECTORS_STACKS: readonly DirectorsStack[] = [
   {
     label: 'Bodycam POV + J-Cut Lead',
     book: 'Hooked (Nir Eyal)',
-    lens: 'Wide GoPro Bodycam POV',
+    lens: 'Wide Action-Cam Bodycam POV',
     perspective: 'First-Person POV Immersion',
     editMethod: 'J-Cut Audio Lead',
     directive: 'Director Stack: Use first-person bodycam POV with J-cut SFX leading every visual cut 0.3s early for relentless forward momentum.',
@@ -57,7 +57,7 @@ export const DIRECTORS_STACKS: readonly DirectorsStack[] = [
     label: 'Symmetrical Tripod + Kuleshov',
     book: 'The Comic Toolbox (John Vorhaus)',
     lens: '35mm Deadpan Prime',
-    perspective: 'Symmetrical Wes-Anderson Static',
+    perspective: 'Symmetrical Pastel-Vintage Static',
     editMethod: 'Kuleshov Deadpan Reaction Cut',
     directive: 'Director Stack: Hold symmetrical static tripod frames and use Kuleshov reaction cuts between blank unblinking faces and absurd props.',
   },
