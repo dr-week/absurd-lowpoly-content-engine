@@ -83,4 +83,14 @@ export const VISUAL_STYLE_OPTIONS: readonly VisualStyleMeta[] = [
     sbDesc: 'tactile torn-paper cutout and magazine-collage stop-motion photography—hand-scissored characters and photographic props pinned onto layered cardboard street stages with visible paper fibers, scotch-tape edges, and warm tabletop studio shadows.',
     vidDesc: 'tactile torn-paper cutout stop-motion animation—hand-scissored collage characters and real-photo props sliding jerkily at 12-FPS across layered cardboard stages with paper-rustle foley and crisp drop shadows.',
   },
+  {
+    id: 'concept-art-gouache', label: 'Painterly Concept Art Gouache', badge: 'Concept Gouache', negRule: MIXED_CLEAN,
+    sbDesc: 'museum-grade painterly film concept art screenshots—rich impasto gouache brushstrokes, dramatic volumetric light shafts, cinematic color-key atmosphere, sculpted environmental silhouettes, and expressive hand-painted textures.',
+    vidDesc: 'living painterly film concept art in motion—visible impasto gouache brushwork shifting subtly frame-by-frame, volumetric atmospheric light shafts, cinematic matte-painted street depth, and deadpan comedic staging.',
+  },
+  {
+    id: 'ink-wash-blueprint', label: 'Ink-Wash & Sketchbook Concept', badge: 'Ink Sketchbook', negRule: MIXED_CLEAN,
+    sbDesc: 'fine-art architectural sketchbook & ink-wash concept illustrations—expressive sumi-e ink strokes, loose graphite construction lines, warm amber watercolor washes on heavy cotton paper, and dramatic silhouette contrast.',
+    vidDesc: 'living architectural sketchbook & ink-wash concept animation—fluid sumi-e brush lines, subtle graphite construction marks animating on twos, warm amber ink washes bleeding softly on textured paper, and crisp comedic pauses.',
+  },
 ];

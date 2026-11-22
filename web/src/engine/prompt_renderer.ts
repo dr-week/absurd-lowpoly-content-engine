@@ -17,7 +17,7 @@ const STORYBOARD_HEADER = (title: string, rigDirective: string, charLock: string
 // Strictly NO time, NO duration, NO video size / aspect ratio mentions!
 const VIDEO_HEADER = (rigDirective: string, charLock: string, style: VisualStyle, ensembleSeed = 0): string => {
   const m = getVisualStyleMeta(style);
-  return `Absurdist comedy video. Apply one unified style throughout: ${m.vidDesc} ${rigDirective}${charLock ? ` ${charLock}` : ''} ${m.negRule} ${pickVoiceEnsemble(ensembleSeed).audioHeader}`;
+  return `Absurdist comedy video. Apply one unified style throughout: ${m.vidDesc} ${rigDirective}${charLock ? ` ${charLock}` : ''} ${m.negRule} Pacing: unhurried, natural conversational delivery with crisp half-second comedic pauses—never rushed or speed-talked. ${pickVoiceEnsemble(ensembleSeed).audioHeader}`;
 };
 
 export function renderStoryboardText(

@@ -20,7 +20,9 @@ export type VisualStyle =
   | 'stylized-2d-anime'
   | 'mixed-2d-realworld'
   | 'mixed-2d-3d-collage'
-  | 'paper-cutout-stopmo';
+  | 'paper-cutout-stopmo'
+  | 'concept-art-gouache'
+  | 'ink-wash-blueprint';
 export type SourceMode = 'live-free' | 'standalone' | 'gemini' | 'groq' | 'openrouter' | 'backend';
 
 export interface SavedItem {

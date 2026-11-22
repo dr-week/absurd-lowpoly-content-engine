@@ -1,17 +1,12 @@
-import type { DialogueTurn, GeneratedPrompts, VideoShotData } from '../types';
+import type { GeneratedPrompts, VideoShotData } from '../types';
+
+type CastSlot = { speaker: string; voice: string; delivery: string };
 
 export interface VoiceEnsemble {
   id: string;
   label: string;
   audioHeader: string;
-  castByShot: readonly [
-    { speaker: string; voice: string; delivery: string },
-    { speaker: string; voice: string; delivery: string },
-    { speaker: string; voice: string; delivery: string },
-    { speaker: string; voice: string; delivery: string },
-    { speaker: string; voice: string; delivery: string },
-    { speaker: string; voice: string; delivery: string },
-  ];
+  castByShot: readonly [CastSlot, CastSlot, CastSlot, CastSlot, CastSlot, CastSlot];
 }
 
 export const VOICE_ENSEMBLES: readonly VoiceEnsemble[] = [
@@ -107,18 +102,25 @@ export function pickVoiceEnsemble(seed = 0): VoiceEnsemble {
 
 const cleanHindi = (s: string): string => s.replace(/[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/gu, '').trim();
 
+/** Keeps every spoken line to <= 5 crisp words so AI video models deliver jokes at an unhurried, natural pace under 10s. */
+function trimToMicroJoke(line: string, maxWords = 5): string {
+  const cleaned = cleanHindi(line);
+  const words = cleaned.split(/\s+/).filter(Boolean);
+  if (words.length <= maxWords) return cleaned;
+  // Prefer keeping the punch-word end when trimming long sentences
+  const tail = words.slice(-maxWords).join(' ');
+  return tail.endsWith('।') || tail.endsWith('?') || tail.endsWith('!') ? tail : `${tail}।`;
+}
+
 export function formatShotDialogue(shot: VideoShotData, ensembleSeed = 0): string[] {
   if (shot.turns && shot.turns.length > 0) {
-    const maxTurns = shot.shot === 2 || shot.shot === 3 ? 2 : 1;
-    return shot.turns.slice(0, maxTurns).map((turn: DialogueTurn, idx: number) => {
-      const prefix = idx === 0 ? 'Speaker' : 'Immediately';
-      return `${prefix} [${turn.speaker} — ${turn.voice}, ${turn.delivery}]: "${cleanHindi(turn.hindi)}"`;
-    });
+    const turn = shot.turns[0];
+    return [`Speaker [${turn.speaker} — ${turn.voice}, unhurried pace, ${turn.delivery}]: "${trimToMicroJoke(turn.hindi)}"`];
   }
   const ensemble = pickVoiceEnsemble(ensembleSeed);
   const slotIdx = shot.shot >= 5 ? 5 : Math.max(0, Math.min(4, shot.shot - 1));
   const slot = ensemble.castByShot[slotIdx];
-  return [`Speaker [${slot.speaker} — ${slot.voice}, ${slot.delivery}]: "${cleanHindi(shot.hindi)}"`];
+  return [`Speaker [${slot.speaker} — ${slot.voice}, unhurried pace, ${slot.delivery}]: "${trimToMicroJoke(shot.hindi)}"`];
 }
 
 const AUDIO_HEADER_RE = /Audio:[^.]+\./;
@@ -137,7 +139,7 @@ export function cycleVoiceEnsemble(
   nextVid = nextVid.replace(SPEAKER_LINE_RE, (_m, line: string) => {
     const slot = ens.castByShot[Math.min(5, idx)];
     idx += 1;
-    return `Speaker [${slot.speaker} — ${slot.voice}, ${slot.delivery}]: "${line}"`;
+    return `Speaker [${slot.speaker} — ${slot.voice}, unhurried pace, ${slot.delivery}]: "${line}"`;
   });
 
   return { label: ens.label, prompts: { ...prompts, videoPrompt: nextVid } };

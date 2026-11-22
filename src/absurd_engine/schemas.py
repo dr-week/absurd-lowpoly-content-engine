@@ -23,6 +23,8 @@ VisualStyle = Literal[
     "mixed-2d-realworld",
     "mixed-2d-3d-collage",
     "paper-cutout-stopmo",
+    "concept-art-gouache",
+    "ink-wash-blueprint",
 ]
 
 

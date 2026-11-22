@@ -381,6 +381,40 @@ VISUAL_STYLE_PROFILES: dict[str, VisualStyleProfile] = {
         ),
         required_tokens=("paper cutout", "stop-motion", "collage"),
     ),
+    "concept-art-gouache": VisualStyleProfile(
+        key="concept-art-gouache",
+        label="Painterly Concept Art Gouache",
+        storyboard_header=(
+            "6-frame storyboard in a 3x2 grid on a plain dark background. Apply one unified style to ALL "
+            "panels: museum-grade painterly concept art illustration—visible expressive gouache brushwork, "
+            "dramatic warm-vs-cool rim lighting, rich atmospheric depth, cinematic composition, and matte "
+            'gallery paper grain. Title at top: "{title}".'
+        ),
+        video_header=(
+            "Absurdist comedy video. Apply one unified style throughout: living painterly concept art animation—"
+            "rich expressive gouache brushstrokes moving smoothly in dramatic rim lighting, atmospheric haze, "
+            "cinematic framing, and unhurried comedic pacing. Audio: deadpan, serious Indian male narrator and "
+            "natural multi-character Hindi dialogue with half-second pauses, tactile foley SFX, and sharp hard cuts."
+        ),
+        required_tokens=("concept art", "gouache", "painterly"),
+    ),
+    "ink-wash-blueprint": VisualStyleProfile(
+        key="ink-wash-blueprint",
+        label="Ink-Wash & Sketchbook Concept",
+        storyboard_header=(
+            "6-frame storyboard in a 3x2 grid on a plain dark background. Apply one unified style to ALL "
+            "panels: fine-art architectural ink-wash and sketchbook concept art—razor-sharp fountain-pen linework, "
+            "dramatic charcoal ink washes, faint graphite construction lines, and one vivid vermilion accent "
+            'highlighting the comedy prop. Title at top: "{title}".'
+        ),
+        video_header=(
+            "Absurdist comedy video. Apply one unified style throughout: animated fine-art ink-wash sketchbook concept art—"
+            "expressive fountain-pen linework over wet charcoal washes, subtle drifting graphite lines, one vivid "
+            "vermilion accent prop, and unhurried comedic pacing. Audio: deadpan, serious Indian male narrator and "
+            "natural multi-character Hindi dialogue with half-second pauses, scratchy pen-and-foley SFX, and sharp hard cuts."
+        ),
+        required_tokens=("ink-wash", "concept art", "sketchbook"),
+    ),
 }
 
 BOOK_FRAMEWORKS: tuple[dict[str, str], ...] = (
