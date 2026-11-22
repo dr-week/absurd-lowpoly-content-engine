@@ -99,7 +99,7 @@ def test_multi_style_episode_generation_passes_style_aware_lint(tmp_path: Path) 
 
 
 def test_parody_sanitizer_and_video_forbidden_stripper() -> None:
-    raw = "Elon Musk meets Hulk, Spider-Man, Goku, Naruto, Gojo and Superman in 9:16 20-second [0:00–0:03] clip 🔥🚀"
+    raw = "Elon Musk meets Hulk, Spider-Man, Goku, Naruto, Gojo, John Wick, Harry Potter, Thanos and Superman in 9:16 20-second [0:00–0:03] clip 🔥🚀"
     sanitized = sanitize_parody_text(raw)
     assert "Elone Maask" in sanitized
     assert "Hulke" in sanitized
@@ -107,6 +107,9 @@ def test_parody_sanitizer_and_video_forbidden_stripper() -> None:
     assert "Gokoo-Bhai" in sanitized
     assert "Narooto-Wa" in sanitized
     assert "Goojo-Ji" in sanitized
+    assert "Jaan-Wicke" in sanitized
+    assert "Haari-Paatar" in sanitized
+    assert "Thaanos-Seth" in sanitized
     assert "Sooper-Babu" in sanitized
     assert find_exact_proper_name_leaks(sanitized) == []
     assert not has_emoji(sanitized)

@@ -1,4 +1,5 @@
 import { ANIME_CHARACTER_ROSTER } from './characters_anime';
+import { MOVIE_MEME_CHARACTER_ROSTER } from './characters_movies_memes';
 
 export interface CharacterPreset {
   id: string;
@@ -143,4 +144,5 @@ export const CHARACTER_ROSTER: readonly CharacterPreset[] = [
     starter: 'During a 5-star GTA-Sixe police chase, everyone stops for ',
   },
   ...ANIME_CHARACTER_ROSTER,
+  ...MOVIE_MEME_CHARACTER_ROSTER,
 ];

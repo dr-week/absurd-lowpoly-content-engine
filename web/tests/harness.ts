@@ -120,6 +120,7 @@ const customEp = buildCustomEpisode('Trump buys a beach shack for ₹200', 'icon
 assert.ok(customEp.title.includes('DOLAND TRUMPE'));
 assert.equal(sanitizeCopyrightNames('Elon Musk and Donald Trump meet Spider-Man and Hulk'), 'Elone Maask and Doland Trumpe meet Spooder-Maan and Hulke');
 assert.equal(sanitizeCopyrightNames('Goku, Naruto, Gojo, Saitama and Luffy'), 'Gokoo-Bhai, Narooto-Wa, Goojo-Ji, Saitaama-Seth and Loofy-Babu');
+assert.equal(sanitizeCopyrightNames('John Wick, Harry Potter, Darth Vader and Thanos'), 'Jaan-Wicke, Haari-Paatar, Daarth-Vaada and Thaanos-Seth');
 assert.ok(detectCharacterLock('Spooder-Maan and Hulke').includes('checkered gym shorts') && detectCharacterLock('Hulke').includes('pink flip-flops'));
 assert.equal(desiNameifyWord('cute', 0), 'Cutie');
 assert.equal(desiNameifyWord('Hulk', 3), 'Hulkeshwar');

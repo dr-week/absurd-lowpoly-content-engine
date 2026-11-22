@@ -15,6 +15,8 @@ import { LUGAN_STORIES_D } from './stories_lugan_d';
 import { LUGAN_STYLE_STORIES } from './stories_lugan_style';
 import { MEME_STORIES } from './stories_meme';
 import { MEME_STORIES_B } from './stories_meme_b';
+import { MOVIE_MEME_STORIES } from './stories_movies_memes';
+import { MOVIE_MEME_STORIES_B } from './stories_movies_memes_b';
 import { NEWS_STORIES } from './stories_news';
 import { ORIGIN_STORIES } from './stories_origin';
 import { OVERENGINEER_STORIES } from './stories_overengineer';
@@ -30,6 +32,8 @@ import { THEATER_STORIES_B } from './stories_theater_b';
 import { TUTORIAL_STORIES } from './stories_tutorial';
 
 export const ALL_BESPOKE_STORIES: readonly TopicOption[] = [
+  ...MOVIE_MEME_STORIES,
+  ...MOVIE_MEME_STORIES_B,
   ...ANIME_PARODY_STORIES,
   ...LUGAN_STYLE_STORIES,
   ...LUGAN_STORIES_B,

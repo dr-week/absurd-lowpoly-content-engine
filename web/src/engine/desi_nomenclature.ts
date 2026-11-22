@@ -32,6 +32,16 @@ export const DESI_NAME_VARIANTS: Record<string, readonly string[]> = {
   pikachu: ['Peekaa-Choo', 'Peekesh', 'Peeku-Babu', 'Peekwa'],
   doraemon: ['Doorae-Babu', 'Dooraesh', 'Dooru-Seth', 'Dooraewa'],
   shinchan: ['Shiin-Chaan', 'Shinchu', 'Shinchwa', 'Shiin-Babu'],
+  johnwick: ['Jaan-Wicke', 'Wickesh', 'Jaan-Babu', 'Wickwa'],
+  jacksparrow: ['Jaack-Chidiya', 'Chidiya-Seth', 'Jaackwa', 'Kaptan-Babu'],
+  darthvader: ['Daarth-Vaada', 'Vaadesh', 'Vaada-Seth', 'Vaadwa'],
+  harrypotter: ['Haari-Paatar', 'Paataresh', 'Haaru-Babu', 'Paatarwa'],
+  joker: ['Jookar-Babu', 'Jookesh', 'Jookwa', 'Jookar-Seth'],
+  shrek: ['Shreke-Paaji', 'Shrekesh', 'Shreku', 'Shrekwa'],
+  deadpool: ['Deed-Poole', 'Poolesh', 'Deedwa', 'Pool-Babu'],
+  thanos: ['Thaanos-Seth', 'Thaanesh', 'Thaanu-Babu', 'Thaanwa'],
+  kermit: ['Karmit-Bhai', 'Karmitesh', 'Karmu', 'Karmitwa'],
+  cj: ['Cee-Jaye', 'Ceeju-Babu', 'Ceejesh', 'Ceejwa'],
 };
 
 const DESI_SUFFIXES = ['ie', 'u', 'esh', 'eshwar', 'wa', '-Lal', '-Babu', '-Seth'] as const;

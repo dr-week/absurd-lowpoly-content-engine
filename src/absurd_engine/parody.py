@@ -36,6 +36,15 @@ PARODY_NAME_MAP: tuple[tuple[str, str], ...] = (
     (r"\bPikachu\b", "Peekaa-Choo"),
     (r"\bDoraemon\b", "Doorae-Babu"),
     (r"\bShin[- ]?chan\b", "Shiin-Chaan"),
+    (r"\bJohn\s+Wick\b", "Jaan-Wicke"),
+    (r"\b(?:Captain\s+)?Jack\s+Sparrow\b", "Jaack-Chidiya"),
+    (r"\bDarth\s+Vader\b", "Daarth-Vaada"),
+    (r"\bHarry\s+Potter\b", "Haari-Paatar"),
+    (r"\b(?:The\s+)?Joker\b", "Jookar-Babu"),
+    (r"\bShrek\b", "Shreke-Paaji"),
+    (r"\bDeadpool\b", "Deed-Poole"),
+    (r"\bThanos\b", "Thaanos-Seth"),
+    (r"\bKermit(?:\s+the\s+Frog)?\b", "Karmit-Bhai"),
     (r"\bElon\b", "Elone"),
     (r"\bTrump\b", "Trumpe"),
     (r"\bModi\b", "Mudi-Ji"),
@@ -53,6 +62,7 @@ EXACT_PROPER_NAME_RE = re.compile(
     r"Mukesh\s+Ambani|Puneet\s+Superstar|Dolly\s+Chaiwala|Great\s+Khali|GTA\s*6|"
     r"Son\s+Goku|Goku|Naruto\s+Uzumaki|Naruto|Monkey\s+D\.?\s+Luffy|Luffy|"
     r"Satoru\s+Gojo|Gojo\s+Satoru|Gojo|Saitama|Pikachu|Doraemon|Shin[- ]?chan|"
+    r"John\s+Wick|Jack\s+Sparrow|Darth\s+Vader|Harry\s+Potter|Joker|Shrek|Deadpool|Thanos|Kermit|"
     r"Elon|Trump|Modi|Gandhi|Putin)\b",
     re.IGNORECASE,
 )
