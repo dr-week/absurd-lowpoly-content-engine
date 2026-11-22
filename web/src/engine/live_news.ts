@@ -64,21 +64,41 @@ async function fetchSpaceNews(count = 5): Promise<LiveHeadline[]> {
     .map((r) => ({ title: r.title, source: r.news_site || 'Space News' }));
 }
 
+async function fetchOnlineComedySignals(count = 4): Promise<LiveHeadline[]> {
+  const [jokes, dad] = await Promise.all([
+    fetchJsonWithTimeout<{ jokes?: Array<{ setup?: string; delivery?: string; joke?: string }> }>(
+      'https://v2.jokeapi.dev/joke/Miscellaneous,Pun?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&amount=4',
+      3500,
+    ),
+    fetch('https://icanhazdadjoke.com/', { headers: { Accept: 'application/json' } })
+      .then((r) => (r.ok ? (r.json() as Promise<{ joke?: string }>) : null))
+      .catch(() => null),
+  ]);
+  const out: LiveHeadline[] = [];
+  for (const j of jokes?.jokes ?? []) {
+    const text = j.setup && j.delivery ? `${j.setup} — ${j.delivery}` : j.joke;
+    if (text) out.push({ title: text, source: 'Comedy Community' });
+  }
+  if (dad?.joke) out.push({ title: dad.joke, source: 'Joke Feed' });
+  return out.slice(0, count);
+}
+
 /**
- * Fetches fresh, NEVER-BEFORE-USED online headlines from 10,000+ live items across 4 zero-key CORS sources:
- * Hacker News (1,000 top+new) + Spaceflight News (1,500+ articles) + Wikipedia Random (6.9M+) + GitHub Actions RSS.
+ * Fetches fresh, NEVER-BEFORE-USED online comedy & trend signals across zero-key CORS sources:
+ * Hacker News + Spaceflight News + Live Joke/Comedy Community APIs + GitHub Actions RSS.
  */
 export async function fetchFreshOnlineNews(count = 8): Promise<LiveHeadline[]> {
   const used = loadUsedHeadlines();
-  const [feed, hn, space] = await Promise.all([
+  const [feed, hn, space, comedy] = await Promise.all([
     loadLiveTrends().catch(() => null),
-    fetchHackerNews(8),
-    fetchSpaceNews(8),
+    fetchHackerNews(6),
+    fetchSpaceNews(6),
+    fetchOnlineComedySignals(4),
   ]);
 
   const rss: LiveHeadline[] = (feed?.trends ?? []).map((t) => ({ title: t.title, source: t.source }));
-  const scored = cryptoShuffle([...hn, ...space, ...rss], cryptoRng)
-    .map((item) => ({ item, score: scoreHeadlineComedyPotential(item.title) }))
+  const scored = cryptoShuffle([...comedy, ...hn, ...space, ...rss], cryptoRng)
+    .map((item) => ({ item, score: item.source.includes('Joke') || item.source.includes('Comedy') ? 15 : scoreHeadlineComedyPotential(item.title) }))
     .filter((x) => x.score >= 0)
     .sort((a, b) => b.score - a.score);
 

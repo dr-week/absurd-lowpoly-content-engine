@@ -23,6 +23,7 @@ export function buildCrossoverEpisode(pool: readonly ScoredTopic[]): ScoredTopic
     viralScore: Math.min(99, Math.max(a.viralScore, b.viralScore) + 3),
     hookCategory: a.hookCategory,
     situationCategory: b.situationCategory,
+    visualStyle: a.visualStyle ?? 'hybrid-1998-gta6',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'Flat wide shot', action: `${titleA} arrives calmly inside ${titleB}'s chaotic setting carrying one tiny prop.`, caption: `${titleA} seedha ${titleB} pahunch gaya.` },
       { frame: 2, position: 'Top Center', framing: 'Two-shot close-up', action: `Both characters inspect the problem seriously and immediately blame each other's budget.`, caption: 'Dono ne ek-doosre ko blame kiya.' },

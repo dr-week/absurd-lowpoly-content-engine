@@ -3,6 +3,7 @@ import { sanitizeTopic } from './alias_sanitizer';
 import { pickComedyMechanism, WRITERS_ROOM_RULES } from './comedy_craft';
 import { pickCinematographyRig } from './randomizer';
 import { classifyHook, classifySituation, getHookLabel, getSituationLabel } from './taxonomy';
+import { assignDiverseVisualStyles } from './visual_styles';
 
 function extractJson(raw: string): string {
   const s = raw.trim().replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim();
@@ -90,12 +91,17 @@ export async function generateLiveTopics(
   const raw = await callBrowserLLM(config, system, user);
   const parsed = JSON.parse(extractJson(raw)) as { topics: Array<{ title: string; angle: string; brand: string; pitch: string; viralScore?: number }> };
   const stamp = Date.now().toString(36);
-  return parsed.topics.slice(0, 8).map((t, idx) => {
-    const base = sanitizeTopic({ id: `ai_${stamp}_${idx}`, title: t.title, angle: t.angle || 'over-engineer', brand: t.brand || 'Global', trendHook: 'Live AI Craft', pitch: t.pitch });
+  const bases = assignDiverseVisualStyles(
+    parsed.topics.slice(0, 8).map((t, idx) =>
+      sanitizeTopic({ id: `ai_${stamp}_${idx}`, title: t.title, angle: t.angle || 'over-engineer', brand: t.brand || 'Global', trendHook: 'Live AI Craft', pitch: t.pitch }),
+    ),
+  );
+  return bases.map((base, idx) => {
+    const score = parsed.topics[idx]?.viralScore ?? 88;
     return {
       ...base,
-      brandHeat: t.viralScore ?? 88,
-      viralScore: Math.max(40, Math.min(99, Math.round(t.viralScore ?? 88))),
+      brandHeat: score,
+      viralScore: Math.max(40, Math.min(99, Math.round(score))),
       hookCategory: classifyHook(base),
       situationCategory: classifySituation(base),
     };

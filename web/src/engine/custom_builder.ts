@@ -1,6 +1,7 @@
 import type { HookCategory, ScoredTopic, StoryboardFrameData, TopicOption, VideoShotData } from '../types';
 import { sanitizeCopyrightNames } from './alias_sanitizer';
 import { classifyHook, classifySituation } from './taxonomy';
+import { assignDiverseVisualStyles } from './visual_styles';
 
 const HOOK_TO_ANGLE: Record<HookCategory, string> = {
   iconic: 'over-engineer',
@@ -54,8 +55,9 @@ export function buildCustomEpisode(rawIdea: string, hookChoice: HookCategory | '
     pitch: clean,
   };
 
+  const styled = assignDiverseVisualStyles([base])[0];
   return {
-    ...base,
+    ...styled,
     brandHeat: 94,
     viralScore: 95,
     hookCategory: hookChoice !== 'all' ? hookChoice : classifyHook(base),

@@ -3,37 +3,16 @@ import { detectCharacterLock, sanitizeCopyrightNames } from './alias_sanitizer';
 import { generateFreeLiveScriptSpec } from './free_ai';
 import { generateLiveScriptSpec } from './live_ai';
 import { pickCinematographyRig } from './randomizer';
+import { getVisualStyleMeta, VISUAL_STYLE_OPTIONS } from './visual_styles';
 
-export const VISUAL_STYLE_OPTIONS: readonly { id: VisualStyle; label: string }[] = [
-  { id: 'ps1-1998', label: '1998 PS1 Low-Poly' },
-  { id: 'gta6-vice', label: 'GTA 6 Vice Engine' },
-  { id: 'hybrid-1998-gta6', label: 'PS1 × GTA 6 Hybrid' },
-];
-
-const STYLE_SB_DESC: Record<VisualStyle, string> = {
-  'ps1-1998':
-    'raw 1998 PlayStation 1 (PS1) / Nintendo 64 (N64) ultra low-poly 3D game screenshots—angular faceted polygons, blurry pixelated bitmap textures, stiff awkward poses, crude Gouraud shading, jagged aliased edges, and muddy retro colors.',
-  'gta6-vice':
-    'authentic GTA 6 / GTA 5 open-world gameplay screenshots—classic over-the-shoulder third-person follow camera, circular GPS radar minimap in the bottom-left corner with pink mission waypoint, flashing wanted-level stars in the top-right corner, weapon/cash HUD counter, sun-drenched Vice-City tropical neon reflections on wet asphalt, and chaotic Ragdoll physics.',
-  'hybrid-1998-gta6':
-    '1998 PlayStation 1 (PS1) ultra low-poly 3D blocky characters inside an authentic GTA 6 / GTA 5 open-world gameplay HUD—chunky faceted PS1 polygon characters with circular GPS radar minimap in the bottom-left corner, flashing wanted-level stars in the top-right corner, third-person follow camera, and glossy wet-asphalt Vice-City neon reflections.',
-};
-
-const STYLE_VID_DESC: Record<VisualStyle, string> = {
-  'ps1-1998':
-    'raw 1998 PlayStation 1 (PS1) / Nintendo 64 (N64) ultra low-poly 3D game graphics—angular faceted polygons, blurry pixelated bitmap textures, stiff robotic animations with jerky low-FPS movement, crude Gouraud shading, jagged aliased edges, and muddy retro colors.',
-  'gta6-vice':
-    'authentic GTA 6 / GTA 5 open-world gameplay capture—classic third-person follow & drive camera, circular GPS radar minimap in the bottom-left corner, flashing wanted-level stars in the top-right corner, yellow mission objective text at the bottom, chaotic open-world NPC ragdoll physics, and glossy neon wet-asphalt reflections.',
-  'hybrid-1998-gta6':
-    '1998 PlayStation 1 (PS1) ultra low-poly 3D blocky characters inside an authentic GTA 6 / GTA 5 open-world gameplay engine—stiff faceted 1998 PS1 polygon characters moving through glossy neon Vice-City streets with the GTA circular GPS minimap in the bottom-left, flashing wanted stars in the top-right, and third-person getaway camera tracking.',
-};
+export { VISUAL_STYLE_OPTIONS };
 
 const STORYBOARD_HEADER = (title: string, rigDirective: string, charLock: string, style: VisualStyle): string =>
-  `6-frame storyboard in a 3x2 grid on a plain dark background. Apply one unified style to ALL panels: ${STYLE_SB_DESC[style]} ${rigDirective}${charLock ? ` ${charLock}` : ''} Strictly NO 2D cartoon art, NO comic ink outlines, NO cel-shading. Place a short bold retro pixel-font Hinglish caption under each panel. Title at top: "${title}".`;
+  `6-frame storyboard in a 3x2 grid on a plain dark background. Apply one unified style to ALL panels: ${getVisualStyleMeta(style).sbDesc} ${rigDirective}${charLock ? ` ${charLock}` : ''} Strictly NO 2D cartoon art, NO comic ink outlines, NO cel-shading. Place a short bold retro pixel-font Hinglish caption under each panel. Title at top: "${title}".`;
 
 // Strictly NO time, NO duration, NO video size / aspect ratio mentions!
 const VIDEO_HEADER = (rigDirective: string, charLock: string, style: VisualStyle): string =>
-  `Absurdist comedy video. Apply one unified style throughout: ${STYLE_VID_DESC[style]} ${rigDirective}${charLock ? ` ${charLock}` : ''} Strictly NO 2D cartoon art, NO comic ink outlines, NO cel-shading. Audio: deadpan, serious Indian male narrator speaking ultra-short Hindi lines matched tightly to each shot, paired with punchy game SFX and sharp hard cuts.`;
+  `Absurdist comedy video. Apply one unified style throughout: ${getVisualStyleMeta(style).vidDesc} ${rigDirective}${charLock ? ` ${charLock}` : ''} Strictly NO 2D cartoon art, NO comic ink outlines, NO cel-shading. Audio: deadpan, serious Indian male narrator speaking ultra-short Hindi lines matched tightly to each shot, paired with punchy game SFX and sharp hard cuts.`;
 
 export function renderStoryboardText(
   title: string,

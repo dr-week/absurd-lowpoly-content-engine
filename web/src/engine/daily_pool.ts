@@ -2,6 +2,7 @@ import type { ScoredTopic, TopicOption } from '../types';
 import { scoreComedyCraft } from './comedy_craft';
 import { cryptoRng, cryptoShuffle } from './randomizer';
 import { classifyHook, classifySituation } from './taxonomy';
+import { assignDiverseVisualStyles } from './visual_styles';
 
 interface DailyPoolPayload {
   updated_at?: string;
@@ -39,7 +40,7 @@ export async function pullUnseenDailyEpisodes(seenTitles: Set<string>, count = 8
     cryptoRng,
   );
   if (fresh.length < 4) return [];
-  return fresh.slice(0, count).map((ep) => ({
+  return assignDiverseVisualStyles(fresh.slice(0, count), cryptoRng).map((ep) => ({
     ...ep,
     brandHeat: 92,
     viralScore: Math.min(99, Math.round(scoreComedyCraft(ep).total * 0.98)),

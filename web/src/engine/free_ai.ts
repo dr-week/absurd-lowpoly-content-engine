@@ -6,6 +6,7 @@ import { fetchFreshOnlineNews } from './live_news';
 import { pickCleanLiveNewsStories } from './news_mapper';
 import { cryptoRng, pickCinematographyRig } from './randomizer';
 import { classifyHook, classifySituation, getHookLabel, getSituationLabel } from './taxonomy';
+import { assignDiverseVisualStyles } from './visual_styles';
 
 const POLLINATIONS_URL = 'https://text.pollinations.ai/openai';
 const PLLNS_TS_KEY = 'absurd_studio_pllns_ts';
@@ -103,10 +104,15 @@ export async function generateFreshLiveNewsTopics(params: {
     if (list.length < 6) throw new Error('Fallback to clean vault');
 
     const stamp = Date.now().toString(36);
-    return list.slice(0, 8).map((t, idx) => {
-      const base = sanitizeTopic({ id: `live_${stamp}_${idx}`, title: t.title.trim().toUpperCase(), angle: t.angle || 'over-engineer', brand: t.brand || 'Elon Bhai', trendHook: 'Live AI Comedy', pitch: t.pitch.trim() });
+    const bases = assignDiverseVisualStyles(
+      list.slice(0, 8).map((t, idx) =>
+        sanitizeTopic({ id: `live_${stamp}_${idx}`, title: t.title.trim().toUpperCase(), angle: t.angle || 'over-engineer', brand: t.brand || 'Elon Bhai', trendHook: 'Live AI Comedy', pitch: t.pitch.trim() }),
+      ),
+    );
+    return bases.map((base, idx) => {
+      const score = list[idx]?.viralScore ?? 92;
       return {
-        ...base, brandHeat: t.viralScore ?? 92, viralScore: Math.max(78, Math.min(99, Math.round(t.viralScore ?? 92))),
+        ...base, brandHeat: score, viralScore: Math.max(78, Math.min(99, Math.round(score))),
         hookCategory: classifyHook(base), situationCategory: classifySituation(base),
       };
     });

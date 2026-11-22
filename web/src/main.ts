@@ -79,7 +79,7 @@ async function refreshTopics(): Promise<void> {
 
 async function generateFor(topic: ScoredTopic, switchStudio: boolean): Promise<void> {
   if (switchStudio) state.activeTab = 'studio';
-  if (/gta/i.test(`${topic.brand} ${topic.title}`) && state.visualStyle === 'ps1-1998') state.visualStyle = 'gta6-vice';
+  state.visualStyle = topic.visualStyle ?? 'ps1-1998';
   state.selectedId = topic.id; state.activeTopic = topic; state.loading = true;
   Object.assign(state, markTopicGenerated(state.saved, state.generatedIds, topic.id));
   render();

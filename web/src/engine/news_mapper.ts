@@ -3,6 +3,7 @@ import { fetchFreshOnlineNews, type LiveHeadline } from './live_news';
 import { cryptoRng, cryptoShuffle } from './randomizer';
 import { classifyHook, classifySituation } from './taxonomy';
 import { ALL_BESPOKE_STORIES, worldFamily } from './topic_generator';
+import { assignDiverseVisualStyles } from './visual_styles';
 import type { HookCategory, ScoredTopic, SituationCategory, TopicOption } from '../types';
 
 function inferThemeFromHeadlines(headlines: LiveHeadline[]): string[] {
@@ -19,9 +20,8 @@ function inferThemeFromHeadlines(headlines: LiveHeadline[]): string[] {
 
 /**
  * Clean Live-News-to-Story Mapper (Zero Raw-Headline String Slicing!):
- * - Reads real live online headlines ONLY to detect today's hot themes (Space, AI, Science, Politics, Goa).
- * - Selects 8 grammatically clean, 100% human-written stories from our 48-story vault that have NOT been seen.
- * - Attaches the live news source tag while keeping every title & pitch 100% human-clickable comedy.
+ * - Reads real live online headlines & comedy feeds ONLY to detect hot themes.
+ * - Selects 8 grammatically clean, 100% human-written stories from our 60-story vault with randomized VisualStyle engines.
  */
 export async function pickCleanLiveNewsStories(params: {
   seenTitles: Set<string>;
@@ -62,7 +62,7 @@ export async function pickCleanLiveNewsStories(params: {
     if (!chosen.some((c) => c.id === s.id)) chosen.push(s);
   }
 
-  return chosen.map((story) => {
+  return assignDiverseVisualStyles(chosen, cryptoRng).map((story) => {
     const craft = scoreComedyCraft(story);
     return {
       ...story,

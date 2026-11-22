@@ -2,6 +2,7 @@ import { getBrandHeat } from '../data/brands';
 import { CRAFT_STORIES_A } from '../data/stories_craft_a';
 import { CRAFT_STORIES_B } from '../data/stories_craft_b';
 import { CRAFT_STORIES_C } from '../data/stories_craft_c';
+import { DEBATE_STORIES } from '../data/stories_debates';
 import { GTA_STORIES } from '../data/stories_gta';
 import { ICONIC_STORIES_B } from '../data/stories_iconic_b';
 import { MEME_STORIES } from '../data/stories_meme';
@@ -19,6 +20,7 @@ import { scoreComedyCraft } from './comedy_craft';
 import { cryptoRng, cryptoShuffle } from './randomizer';
 import { classifyHook, classifySituation } from './taxonomy';
 import { synthesizeTrendCard } from './trend_synthesizer';
+import { assignDiverseVisualStyles } from './visual_styles';
 
 const PREV_ID_PREFIX = '__previd__';
 const COOL_ID_PREFIX = '__coolid__';
@@ -26,7 +28,7 @@ const COOL_ID_PREFIX = '__coolid__';
 export const ALL_BESPOKE_STORIES: readonly TopicOption[] = [
   ...OVERENGINEER_STORIES, ...ORIGIN_STORIES, ...NEWS_STORIES, ...TUTORIAL_STORIES, ...SPIRAL_STORIES,
   ...SCIENCE_STORIES, ...CRAFT_STORIES_A, ...CRAFT_STORIES_B, ...CRAFT_STORIES_C, ...MEME_STORIES,
-  ...MEME_STORIES_B, ...ICONIC_STORIES_B, ...GTA_STORIES, ...SUSPENSE_STORIES,
+  ...MEME_STORIES_B, ...ICONIC_STORIES_B, ...GTA_STORIES, ...SUSPENSE_STORIES, ...DEBATE_STORIES,
 ].map(sanitizeTopic);
 
 const FORMAT_KEYS = ['over-engineer', 'fake-origin', 'breaking-news', 'fake-tutorial', 'petty-spiral', 'weird-science'] as const;
@@ -40,7 +42,7 @@ export function worldFamily(brand: string): string {
   for (const [rx, fam] of [
     [/goa/, 'goa'], [/elon|musk/, 'elon'], [/gandhi|bapu/, 'gandhi'], [/trump|doland/, 'trump'],
     [/putin/, 'putin'], [/modi/, 'modi'], [/zuck/, 'zuck'], [/giga/, 'gigachad'], [/doge/, 'doge'],
-    [/spooder/, 'spooder'], [/gta/, 'gta'], [/ai |^ai$|tech/, 'ai-tech'], [/mars|nasa|space/, 'space'],
+    [/spooder/, 'spooder'], [/gta/, 'gta'], [/sigma/, 'sigma'], [/ai |^ai$|tech/, 'ai-tech'], [/mars|nasa|space/, 'space'],
   ] as const) {
     if (rx.test(b)) return fam;
   }
@@ -112,7 +114,6 @@ export function generateFreshDiverseBatch(params: {
       take(s);
     }
   } else {
-    // Round 1: 1 fresh story from EACH of 6 formats prioritizing 2-batch cooldown + unique worlds + unique situations
     for (const pack of cryptoShuffle(STORY_FORMAT_PACKS, rng)) {
       if (chosen.length >= count) break;
       const tier1 = cryptoShuffle(pack.filter((s) => !usedIds.has(s.id) && !prevIds.has(s.id) && !coolIds.has(s.id) && !usedWorlds.has(worldFamily(s.brand)) && !usedSituations.has(classifySituation(s))), rng);
@@ -138,7 +139,7 @@ export function generateFreshDiverseBatch(params: {
   for (const k of Array.from(seenPairs)) if (k.startsWith(PREV_ID_PREFIX)) seenPairs.delete(k);
   for (const s of chosen) seenPairs.add(`${PREV_ID_PREFIX}${s.id}`);
 
-  return spreadAdjacentFormats(chosen, rng).map((story) => {
+  return assignDiverseVisualStyles(spreadAdjacentFormats(chosen, rng), rng).map((story) => {
     const brandHeat = getBrandHeat(story.brand);
     const craft = scoreComedyCraft(story);
     const taste = angleBias.get(story.angle) ?? 0;

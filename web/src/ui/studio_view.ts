@@ -1,6 +1,7 @@
 import { VISUAL_STYLE_OPTIONS } from '../engine/prompt_renderer';
-import { getHookLabel, getSituationLabel, HOOK_CATEGORIES, SITUATION_CATEGORIES } from '../engine/taxonomy';
+import { getHookLabel, HOOK_CATEGORIES, SITUATION_CATEGORIES } from '../engine/taxonomy';
 import { getVote } from '../engine/telemetry';
+import { getVisualStyleMeta } from '../engine/visual_styles';
 import { Glyphs } from '../glyphs';
 import type { GeneratedPrompts, HookCategory, RatingLogEntry, ScoredTopic, SituationCategory, VisualStyle } from '../types';
 import { esc } from './escape';
@@ -63,12 +64,13 @@ export function renderStudioView(params: {
           const vote = getVote(logs, 'topic', t.id);
           const selected = selectedId === t.id;
           const isGen = generatedIds.has(t.id);
+          const styleBadge = getVisualStyleMeta(t.visualStyle).badge;
           const cls = ['topic-card', selected ? 'is-selected' : '', vote === 'up' ? 'is-liked' : '', vote === 'down' ? 'is-disliked' : ''].filter(Boolean).join(' ');
           return `
             <article class="${cls}">
               <div class="topic-card__body">
                 <div class="topic-card__top">
-                  <span class="topic-card__tag">${esc(getHookLabel(t.hookCategory))} · ${esc(getSituationLabel(t.situationCategory))}</span>
+                  <span class="topic-card__tag">${esc(getHookLabel(t.hookCategory))} · ${esc(styleBadge)}</span>
                   <div class="vote-group">
                     ${isGen ? `<span class="pill pill--positive" title="Generated">${Glyphs.check(11)}</span>` : ''}
                     <span class="pill pill--accent" title="Viral score">${t.viralScore}</span>

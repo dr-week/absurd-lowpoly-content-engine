@@ -1,0 +1,108 @@
+import type { TopicOption } from '../types';
+
+export const DEBATE_STORIES: readonly TopicOption[] = [
+  {
+    id: 'debate_14_year_chair_armrest_war',
+    title: '14-YEAR COLD WAR OVER A 2-INCH PLASTIC CHAIR ARMREST',
+    angle: 'petty-spiral',
+    brand: 'Sigma Tauji',
+    trendHook: 'Reddit Petty Argument: 14-Year Grudge Over Pushing a Chair',
+    visualStyle: 'cctv-dashcam',
+    pitch:
+      'At a wedding buffet, Sigma Tauji pulls a plastic chair out two inches to rest his elbow; the uncle next to him shoves it back—sparking a 14-year silent feud where they bring laser levels to every family function.',
+    frames: [
+      { frame: 1, position: 'Top Left', framing: 'Overhead CCTV wide shot', action: 'On a wedding lawn, Sigma Tauji pulls an empty white plastic chair out by two inches to rest his left elbow.', caption: '2-Inch Elbow Rest!' },
+      { frame: 2, position: 'Top Center', framing: 'Medium CCTV shot', action: 'Goa Uncle-G sitting adjacent wordlessly shoves the plastic chair two inches back flush against the table.', caption: 'Shoved Back Flush!' },
+      { frame: 3, position: 'Top Right', framing: 'Close-up', action: 'Both men lock eyes in dead silence while pulling and pushing the same plastic chair back and forth seventeen times.', caption: '17 Silent Shoves!' },
+      { frame: 4, position: 'Bottom Left', framing: 'Wide shot', action: 'Fourteen years later at another wedding, both men arrive carrying yellow steel measuring tapes and laser spirit levels.', caption: '14 Years Later!' },
+      { frame: 5, position: 'Bottom Center', framing: 'Close-up', action: 'Sigma Tauji bolts the plastic chair legs to the floor tiles with iron brackets so it stays permanently two inches out.', caption: 'Bolted To The Floor!' },
+      { frame: 6, position: 'Bottom Right', framing: 'Wide deadpan shot', action: 'Goa Uncle-G saws two inches off the dining table edge instead so the chair is flush again.', caption: 'Table Sawed Flush!' },
+    ],
+    shots: [
+      { shot: 1, visual: 'Overhead 240p CCTV view of Sigma Tauji pulling a plastic chair out two inches for his elbow.', sfx: 'Plastic chair scrape on floor', hindi: 'शादी में ताऊजी ने कोहनी रखने को कुर्सी दो इंच खींची।' },
+      { shot: 2, visual: 'Goa Uncle-G sitting next to him wordlessly pushes the chair two inches back in.', sfx: 'Sharp plastic thud', hindi: 'बगल वाले अंकल ने बिना बोले कुर्सी वापस अंदर ठेल दी।' },
+      { shot: 3, visual: 'Both uncles stare deadpan while sliding the chair out and in seventeen times.', sfx: 'Rhythmic squeak-squeak-squeak', hindi: 'दोनों ने सत्रह बार चुपचाप कुर्सी आगे-पीछे खिसकाई।' },
+      { shot: 4, visual: 'Fourteen years later both men enter a wedding hall carrying measuring tapes.', sfx: 'Dramatic metallic tape snap', hindi: 'चौदह साल बाद दोनों हर शादी में इंची-टेप लेकर आते हैं।' },
+      { shot: 5, visual: 'Sigma Tauji bolts the plastic chair legs to the floor two inches out.', sfx: 'Power drill buzz', hindi: 'ताऊजी ने कुर्सी फर्श में बोल्ट कर दी।' },
+      { shot: 6, visual: 'Goa Uncle-G saws two inches off the table so it lines up flush again.', sfx: 'Hand saw zip and dead silence', hindi: 'अंकल ने आरी से टेबल काट दी।' },
+    ],
+  },
+  {
+    id: 'debate_biryani_elaichi_supreme_court',
+    title: '3-HOUR SUPREME COURT TRIAL OVER 1 CARDAMOM IN BIRYANI',
+    angle: 'breaking-news',
+    brand: 'Modi-G',
+    trendHook: 'Viral Internet Food Argument: Biting a Whole Elaichi in Biryani',
+    visualStyle: 'claymation-stopmo',
+    pitch:
+      'After one guest bites into a hidden green elaichi pod mid-biryani, the dinner table convenes a full courtroom tribunal with velvet ropes and forensic tweezers to prosecute the cook.',
+    frames: [
+      { frame: 1, position: 'Top Left', framing: 'Extreme close-up', action: 'A spoonful of fragrant biryani hides one camouflaged green cardamom pod right under a tender piece of potato.', caption: 'Camouflaged Elaichi!' },
+      { frame: 2, position: 'Top Center', framing: 'Close-up', action: 'A guest takes a joyful bite and freezes mid-chew with wide horrified eyes as a loud crunch echoes across the hall.', caption: 'The Fatal Crunch!' },
+      { frame: 3, position: 'Top Right', framing: 'Wide courtroom shot', action: 'The dining room transforms into a tribunal with Modi-G at a wooden gavel desk and the crushed pod under a glass dome.', caption: 'Biryani Tribunal!' },
+      { frame: 4, position: 'Bottom Left', framing: 'Medium shot', action: 'Lawyers present a 12-foot X-ray chart proving green elaichi looks identical to boiled peas under yellow chandelier light.', caption: 'Forensic Elaichi Chart!' },
+      { frame: 5, position: 'Bottom Center', framing: 'Close-up', action: 'The chef is ordered to inspect every grain of rice using jeweler magnifying goggles and silver tweezers.', caption: 'Grain-By-Grain Audit!' },
+      { frame: 6, position: 'Bottom Right', framing: 'Wide deadpan shot', action: 'Modi-G takes a celebratory bite of the "certified elaichi-free" plate and immediately crunches into a whole black clove.', caption: 'Now A Whole Laung!' },
+    ],
+    shots: [
+      { shot: 1, visual: 'Close-up of a green cardamom pod hiding inside a spoonful of biryani.', sfx: 'Suspenseful low violin note', hindi: 'बिरयानी के चम्मच में हरी इलायची छुपी थी।' },
+      { shot: 2, visual: 'Guest bites down and freezes in horror as a loud crunch echoes.', sfx: 'Echoing bitter crunch and record scratch', hindi: 'दांत के नीचे आते ही सन्नाटा छा गया।' },
+      { shot: 3, visual: 'The dining table turns into a courtroom with the crushed pod in a glass box.', sfx: 'Heavy wooden gavel bang', hindi: 'डाइनिंग टेबल पर सुप्रीम कोर्ट बैठ गई।' },
+      { shot: 4, visual: 'Lawyers point sticks at a giant diagram of cardamom camouflage.', sfx: 'Paper slap and dramatic murmur', hindi: 'वकील ने साबित किया ये धोखा है।' },
+      { shot: 5, visual: 'The cook uses jeweler goggles and tweezers to check every rice grain.', sfx: 'Metallic tweezer click', hindi: 'बावरची से एक-एक चावल चेक करवाया गया।' },
+      { shot: 6, visual: 'The judge takes one bite of the cleared plate and crunches a black clove.', sfx: 'Louder crunch and freeze frame', hindi: 'अगले निवाले में साबुत लौंग आ गई।' },
+    ],
+  },
+  {
+    id: 'debate_excavator_drivers_hole_fight',
+    title: '2 JCB DRIVERS ARGUE 4 HOURS OVER WHOSE HOLE TO DIG',
+    angle: 'over-engineer',
+    brand: 'Breaking India',
+    trendHook: 'Reddit Viral Argument: Two Excavator Drivers Fighting Over One Hole',
+    visualStyle: 'cctv-dashcam',
+    pitch:
+      'Sent to fill one small pothole, two JCB excavator drivers get into a petty radio argument over who owns the dirt pile—spending four hours scooping the same mud back and forth while 200 spectators cheer.',
+    frames: [
+      { frame: 1, position: 'Top Left', framing: 'Wide street shot', action: 'Two yellow JCB excavators face each other across a single two-foot pothole in the middle of a market road.', caption: '2 JCBs, 1 Pothole!' },
+      { frame: 2, position: 'Top Center', framing: 'Medium shot', action: 'Driver A dumps a bucket of mud into the hole; Driver B glares from his cab and scoops that exact mud right back out.', caption: 'My Mud, My Hole!' },
+      { frame: 3, position: 'Top Right', framing: 'Close-up', action: 'Both drivers scream into their walkie-talkies while their supervisor waves a clipboard helplessly from the sidewalk.', caption: 'Walkie-Talkie War!' },
+      { frame: 4, position: 'Bottom Left', framing: 'Wide shot', action: 'A crowd of 200 locals pulls up plastic chairs and a chai stall opens to watch the two metal buckets sword-fight over the hole.', caption: '200 People Watching!' },
+      { frame: 5, position: 'Bottom Center', framing: 'High-angle shot', action: 'By hour four, the two-foot pothole has been dug into a 30-foot crater while both JCBs balance on the rim.', caption: '30-Foot Ego Crater!' },
+      { frame: 6, position: 'Bottom Right', framing: 'Wide deadpan shot', action: 'At 5 PM sharp both drivers lock their cabs, shake hands politely, and leave the 30-foot crater for tomorrow.', caption: 'Shift Over Bhai!' },
+    ],
+    shots: [
+      { shot: 1, visual: 'Two yellow JCB excavators face off across one tiny pothole.', sfx: 'Idling diesel engines', hindi: 'एक गड्ढे पर दो जेसीबी आमने-सामने आईं।' },
+      { shot: 2, visual: 'Left JCB fills the hole with dirt; right JCB immediately scoops it back out.', sfx: 'Hydraulic hiss and metal clang', hindi: 'पहले ने मिट्टी डाली, दूसरे ने निकाली।' },
+      { shot: 3, visual: 'Both drivers yell into walkie-talkies over whose bucket has jurisdiction.', sfx: 'Radio static and angry honk', hindi: 'रेडियो पर बहस छिड़ी गड्ढा किसका है।' },
+      { shot: 4, visual: 'Two hundred spectators drink chai watching the two JCB arms duel.', sfx: 'Crowd cheering and tea glass clink', hindi: 'दो सौ लोग कुर्सी लगाकर कुश्ती देखने बैठे।' },
+      { shot: 5, visual: 'The tiny pothole is now a massive thirty-foot crater.', sfx: 'Rumbling earth slide', hindi: 'ज़िद में दो फुट का गड्ढा तीस फुट खुदा।' },
+      { shot: 6, visual: 'At 5 PM both drivers climb down, shake hands, and walk home.', sfx: 'Factory whistle and footsteps', hindi: 'पांच बजते ही दोनों चाय पीने चले गए।' },
+    ],
+  },
+  {
+    id: 'debate_split_bill_3_rupees_audit',
+    title: 'FRIENDS HIRE CA FIRM TO SPLIT ₹11 EXTRA CHUTNEY BILL',
+    angle: 'fake-tutorial',
+    brand: 'Zucku Bhai',
+    trendHook: 'X / Reddit Viral Debate: Splitting the Restaurant Bill Down to the Paisa',
+    visualStyle: 'retro-80s-concept',
+    pitch:
+      'Six friends refuse to divide an ₹11 extra-chutney charge equally—hiring a chartered accountant with a brass scale and CCTV replay to measure who dipped their samosa deepest.',
+    frames: [
+      { frame: 1, position: 'Top Left', framing: 'Close-up', action: 'A paper restaurant bill lies on a table with a red circle around one line item: "Extra Green Chutney — ₹11.00".', caption: '₹11 Chutney Dispute!' },
+      { frame: 2, position: 'Top Center', framing: 'Wide table shot', action: 'Zucku Bhai and five friends cross their arms and refuse to scan the UPI QR code until the ₹11 is itemized by dip volume.', caption: 'Nobody Scans UPI!' },
+      { frame: 3, position: 'Top Right', framing: 'Medium shot', action: 'A chartered accountant arrives with a leather briefcase, brass jeweler scales, and a scientific calculator.', caption: 'CA Called To Table!' },
+      { frame: 4, position: 'Bottom Left', framing: 'Close-up monitor', action: 'The group reviews frame-by-frame restaurant CCTV footage zooming in 400% on each samosa corner entering the green bowl.', caption: '400% Dip Replay!' },
+      { frame: 5, position: 'Bottom Center', framing: 'Medium shot', action: 'The CA prints a 14-page pie chart billing Zucku Bhai ₹2.43 and the guy who only smelled the mint ₹0.12.', caption: '14-Page Chutney Audit!' },
+      { frame: 6, position: 'Bottom Right', framing: 'Wide deadpan shot', action: 'Everyone happily pays their exact paisa share—then receives the CA’s professional audit invoice for ₹15,000.', caption: '₹15,000 Audit Fee!' },
+    ],
+    shots: [
+      { shot: 1, visual: 'Close-up of a paper restaurant bill showing Extra Green Chutney ₹11.', sfx: 'Dramatic paper slap', hindi: 'बिल में ग्यारह रुपये की एक्स्ट्रा चटनी आई।' },
+      { shot: 2, visual: 'Zucku Bhai and five friends lock their phones refusing to split ₹11 equally.', sfx: 'Six phone screen lock clicks', hindi: 'छह दोस्तों ने बराबर बांटने से मना किया।' },
+      { shot: 3, visual: 'A chartered accountant arrives at the table with a brass scale and ledger.', sfx: 'Heavy briefcase latch click', hindi: 'हिसाब करने टेबल पर सीए बुलाया गया।' },
+      { shot: 4, visual: 'They watch slow-motion CCTV zoom of a samosa dipping into green chutney.', sfx: 'VHS rewind and zoom beep', hindi: 'सीसीटीवी ज़ूम करके समोसे का डिप नापा गया।' },
+      { shot: 5, visual: 'The CA hands out a 14-page audit sheet billing ₹2.43 per dip.', sfx: 'Dot-matrix printer screech', hindi: 'सीए ने दो रुपये तैतालीस पैसे का हिसाब बांटा।' },
+      { shot: 6, visual: 'The CA places his own ₹15,000 audit bill on the table.', sfx: 'Cash register slam', hindi: 'फिर सीए ने पंद्रह हज़ार फीस मांगी।' },
+    ],
+  },
+];

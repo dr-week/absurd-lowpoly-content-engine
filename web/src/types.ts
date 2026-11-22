@@ -6,7 +6,13 @@ export type OutcomeTag = 'flop' | 'good' | 'viral';
 export type HookCategory = 'iconic' | 'build' | 'origin' | 'science' | 'tutorial' | 'news';
 export type SituationCategory = 'global' | 'coastal' | 'tech' | 'ego' | 'lab' | 'childhood';
 export type ThemeName = 'studio' | 'noir';
-export type VisualStyle = 'ps1-1998' | 'gta6-vice' | 'hybrid-1998-gta6';
+export type VisualStyle =
+  | 'ps1-1998'
+  | 'gta6-vice'
+  | 'hybrid-1998-gta6'
+  | 'cctv-dashcam'
+  | 'claymation-stopmo'
+  | 'retro-80s-concept';
 export type SourceMode = 'live-free' | 'standalone' | 'gemini' | 'groq' | 'openrouter' | 'backend';
 
 export interface SavedItem {
@@ -46,6 +52,7 @@ export interface TopicOption {
   brand: string;
   trendHook: string;
   pitch: string;
+  visualStyle?: VisualStyle;
   frames?: StoryboardFrameData[];
   shots?: VideoShotData[];
 }
@@ -55,6 +62,7 @@ export interface ScoredTopic extends TopicOption {
   brandHeat: number;
   hookCategory: HookCategory;
   situationCategory: SituationCategory;
+  visualStyle: VisualStyle;
 }
 
 export interface GeneratedPrompts {

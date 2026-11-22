@@ -19,7 +19,7 @@ import type { RatingLogEntry } from '../src/types';
 const LABEL_PREFIX_RE = /^(?:Fake biopic|Fake childhood origin|Live [A-Za-z ]+(?:news|broadcast)|[A-Za-z ]+documentary|Earnest [a-z-]+ (?:tutorial|hack)|Travel guide tutorial):/i;
 const SLOP_QUOTE_RE = /\b(?:Inspired by|After|Reading|Following|Mid-debate on|Reacting to|Triggered by)\s+"[^"]+"/i;
 
-assert.ok(ALL_BESPOKE_STORIES.length >= 56, `Expected >= 56 bespoke stories, got ${ALL_BESPOKE_STORIES.length}`);
+assert.ok(ALL_BESPOKE_STORIES.length >= 60, `Expected >= 60 bespoke stories, got ${ALL_BESPOKE_STORIES.length}`);
 for (const story of ALL_BESPOKE_STORIES) {
   const craft = scoreComedyCraft(story);
   assert.ok(craft.hasSixBeats, `Story "${story.id}" missing 6 frames/shots`);
@@ -47,6 +47,7 @@ for (let r = 1; r <= RELOADS; r += 1) {
   assert.equal(batch.length, 8);
   assert.equal(new Set(batch.map((t) => t.angle)).size, 6);
   assert.equal(new Set(batch.map((t) => worldFamily(t.brand))).size, 8);
+  assert.ok(new Set(batch.map((t) => t.visualStyle)).size >= 5, 'Expected >= 5 distinct visual styles per 8-card batch');
   for (let i = 1; i < batch.length; i += 1) assert.notEqual(batch[i].angle, batch[i - 1].angle);
 
   const ids = new Set(batch.map((t) => t.id));
@@ -54,8 +55,8 @@ for (let r = 1; r <= RELOADS; r += 1) {
   prevIds = ids;
 
   for (const topic of batch) {
-    const sb = renderStoryboardText(topic.title, topic.frames ?? []);
-    const vid = renderVideoText(topic.shots ?? []);
+    const sb = renderStoryboardText(topic.title, topic.frames ?? [], undefined, topic.visualStyle);
+    const vid = renderVideoText(topic.shots ?? [], undefined, topic.visualStyle);
     assert.ok(!SLOP_QUOTE_RE.test(topic.pitch), `Headline quote slop detected: ${topic.pitch}`);
     assert.ok(!/delhi|mumbai|bombay/i.test(`${topic.title} ${topic.pitch}`));
     assert.ok(sb.includes('3x2 grid') && sb.includes('NO cel-shading'));
@@ -73,16 +74,17 @@ assert.equal(savedList.length, 0);
 
 // Verify 7 consecutive live-news-mapped refreshes (56 cards) return 56/56 unique human-crafted stories with ZERO headline-slicing slop
 const seenLive = new Set<string>();
-for (let b = 1; b <= 6; b += 1) {
+for (let b = 1; b <= 7; b += 1) {
   const cards = await pickCleanLiveNewsStories({ seenTitles: seenLive, hookFilter: 'all', situationFilter: 'all', count: 8 });
   assert.equal(cards.length, 8);
+  assert.ok(new Set(cards.map((c) => c.visualStyle)).size >= 5, 'Expected >= 5 distinct visual styles per live batch');
   for (const c of cards) {
     assert.ok(!SLOP_QUOTE_RE.test(c.pitch), `Slop quote in live card: ${c.pitch}`);
     assert.ok(!seenLive.has(c.title.toLowerCase()), `Repeated live title: ${c.title}`);
     seenLive.add(c.title.toLowerCase());
   }
 }
-assert.equal(seenLive.size, 48, 'Expected 48/48 unique human-crafted stories across 6 rapid live refreshes');
+assert.equal(seenLive.size, 56, 'Expected 56/56 unique human-crafted stories across 7 rapid live refreshes');
 
 assert.ok(scoreHeadlineComedyPotential('KVM x86 kernel patch CVE-2026-1234') < 0);
 const dna = computeTasteDna(biasedLogs, setSavedOutcome([{ topic: sample, savedAt: new Date().toISOString(), generated: true }], sample.id, 'viral'));
@@ -96,7 +98,12 @@ assert.ok(rerollCameraRig(mockPrompts, 2).prompts.videoPrompt.includes('broadcas
 assert.ok(cycleAlternatePunchline(mockPrompts, 1).prompts.videoPrompt.includes('कमेटी अगली मीटिंग अगले साल रखेगी।'));
 const gtaPrompts = switchPromptVisualStyle(mockPrompts, 'gta6-vice');
 assert.ok(gtaPrompts.storyboardPrompt.includes('circular GPS radar minimap') && gtaPrompts.videoPrompt.includes('flashing wanted-level stars'));
-assert.ok(!gtaPrompts.videoPrompt.includes('9:16') && !gtaPrompts.videoPrompt.includes('20-second'));
+const cctvPrompts = switchPromptVisualStyle(mockPrompts, 'cctv-dashcam');
+assert.ok(cctvPrompts.storyboardPrompt.includes('240p overhead Indian shop CCTV') && cctvPrompts.videoPrompt.includes('12-FPS surveillance'));
+const clayPrompts = switchPromptVisualStyle(mockPrompts, 'claymation-stopmo');
+assert.ok(clayPrompts.storyboardPrompt.includes('plasticine claymation'));
+const retroPrompts = switchPromptVisualStyle(mockPrompts, 'retro-80s-concept');
+assert.ok(retroPrompts.storyboardPrompt.includes('1980s vintage hand-painted'));
 assert.ok(buildPart2Topic(sample).title.startsWith('PART 2:'));
 assert.equal(buildViralPackage(sample, mockPrompts).titles.length, 3);
 assert.ok(restoreStudioBackup(JSON.stringify({ version: 1, saved: [], generatedIds: ['x1'], logs: [], seenTitles: ['t1'], seenPairs: [] })).generatedIds.has('x1'));
@@ -108,5 +115,5 @@ assert.ok(buildCrossoverEpisode([sample, customEp])?.title.startsWith('CROSSOVER
 
 console.log(
   `HARNESS PASS: ${ALL_BESPOKE_STORIES.length} human-crafted stories × ${RELOADS} F5 reloads = ${RELOADS * 8} cards ` +
-    `(0/48 rapid live repeats, GTA 6 / GTA 5 Gameplay HUD + 1998 PS1 Hybrid verified).`,
+    `(0/56 rapid live repeats, 6 Viral Visual Engines randomized per batch verified).`,
 );
