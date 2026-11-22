@@ -16,7 +16,11 @@ export type VisualStyle =
   | 'isometric-diorama'
   | 'vhs-found-footage'
   | 'noir-monochrome'
-  | 'lugan-3d-skit';
+  | 'lugan-3d-skit'
+  | 'stylized-2d-anime'
+  | 'mixed-2d-realworld'
+  | 'mixed-2d-3d-collage'
+  | 'paper-cutout-stopmo';
 export type SourceMode = 'live-free' | 'standalone' | 'gemini' | 'groq' | 'openrouter' | 'backend';
 
 export interface SavedItem {

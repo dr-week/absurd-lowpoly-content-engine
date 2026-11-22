@@ -4,13 +4,16 @@ import { getVisualStyleMeta } from './visual_styles';
 
 const CAMERA_LINE_RE = /Camera & Lighting:[^.]+\./;
 const STYLE_LINE_RE = /(Apply one unified style[^:]*:\s*)([^.]+\.)/;
+const NEG_RULE_RE = /(?:Strictly NO 2D cartoon art[^.]+\.|Keep mixed-media textures[^.]+\.)/;
 
 export function switchPromptVisualStyle(prompts: GeneratedPrompts, style: VisualStyle): GeneratedPrompts {
   const meta = getVisualStyleMeta(style);
+  const swap = (txt: string, desc: string): string =>
+    txt.replace(STYLE_LINE_RE, `$1${desc}`).replace(NEG_RULE_RE, meta.negRule);
   return {
     ...prompts,
-    storyboardPrompt: prompts.storyboardPrompt.replace(STYLE_LINE_RE, `$1${meta.sbDesc}`),
-    videoPrompt: prompts.videoPrompt.replace(STYLE_LINE_RE, `$1${meta.vidDesc}`),
+    storyboardPrompt: swap(prompts.storyboardPrompt, meta.sbDesc),
+    videoPrompt: swap(prompts.videoPrompt, meta.vidDesc),
   };
 }
 

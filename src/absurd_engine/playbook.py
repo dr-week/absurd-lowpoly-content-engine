@@ -321,6 +321,66 @@ VISUAL_STYLE_PROFILES: dict[str, VisualStyleProfile] = {
         ),
         required_tokens=("stylized", "3d", "slapstick"),
     ),
+    "stylized-2d-anime": VisualStyleProfile(
+        key="stylized-2d-anime",
+        label="Stylized 2D Graphic Animation",
+        storyboard_header=(
+            "6-frame storyboard in a 3x2 grid on a plain dark background. Apply one unified style to ALL "
+            "panels: bold stylized 2D hand-inked animation—thick expressive brush ink outlines, vibrant flat "
+            'cel-shading, dynamic speedlines, and painted watercolor street backgrounds. Title at top: "{title}".'
+        ),
+        video_header=(
+            "Absurdist comedy video. Apply one unified style throughout: bold stylized 2D hand-inked animation—"
+            "snappy 12-FPS smear frames, thick graphic ink outlines, crisp cel-shading, and painted street backdrops. "
+            "Audio: deadpan multi-character Hindi dialogue, punchy foley SFX, and sharp hard cuts."
+        ),
+        required_tokens=("2d", "hand-inked", "cel-shading"),
+    ),
+    "mixed-2d-realworld": VisualStyleProfile(
+        key="mixed-2d-realworld",
+        label="2D Character x Real World",
+        storyboard_header=(
+            "6-frame storyboard in a 3x2 grid on a plain dark background. Apply one unified style to ALL "
+            "panels: mixed-media hybrid combining flat hand-drawn 2D inked characters composited into gritty "
+            'real-world 4K handheld street photography with realistic shadows. Title at top: "{title}".'
+        ),
+        video_header=(
+            "Absurdist comedy video. Apply one unified style throughout: mixed-media live-action hybrid with a "
+            "hand-drawn 2D animated character moving inside real-world 4K handheld street footage with realistic "
+            "ground shadows and live bystanders. Audio: deadpan multi-character Hindi dialogue, punchy SFX, and sharp hard cuts."
+        ),
+        required_tokens=("mixed-media", "2d", "real-world"),
+    ),
+    "mixed-2d-3d-collage": VisualStyleProfile(
+        key="mixed-2d-3d-collage",
+        label="2D x 3D Mixed-Media Hybrid",
+        storyboard_header=(
+            "6-frame storyboard in a 3x2 grid on a plain dark background. Apply one unified style to ALL "
+            "panels: kinetic 2D-over-3D mixed-media graphic screenshots—chunky 3D street environments colliding "
+            'with hand-drawn 2D comic impact bursts, halftone dots, and sketchy chalk trails. Title at top: "{title}".'
+        ),
+        video_header=(
+            "Absurdist comedy video. Apply one unified style throughout: kinetic 2D-over-3D mixed-media animation—"
+            "snappy 3D characters and vehicles colliding with hand-drawn 2D smear lines, halftone impact flashes, and "
+            "chalk overlays. Audio: deadpan multi-character Hindi dialogue, punchy SFX, and sharp hard cuts."
+        ),
+        required_tokens=("mixed-media", "2d", "3d"),
+    ),
+    "paper-cutout-stopmo": VisualStyleProfile(
+        key="paper-cutout-stopmo",
+        label="Paper Cutout Collage Stop-Mo",
+        storyboard_header=(
+            "6-frame storyboard in a 3x2 grid on a plain dark background. Apply one unified style to ALL "
+            "panels: tactile torn-paper cutout and magazine-collage stop-motion photography—hand-scissored "
+            'characters pinned onto layered cardboard stages with warm tabletop shadows. Title at top: "{title}".'
+        ),
+        video_header=(
+            "Absurdist comedy video. Apply one unified style throughout: tactile torn-paper cutout stop-motion "
+            "animation—hand-scissored collage characters sliding jerkily at 12-FPS across layered cardboard stages. "
+            "Audio: deadpan multi-character Hindi dialogue, paper-rustle foley SFX, and sharp hard cuts."
+        ),
+        required_tokens=("paper cutout", "stop-motion", "collage"),
+    ),
 }
 
 BOOK_FRAMEWORKS: tuple[dict[str, str], ...] = (

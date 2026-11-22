@@ -1,115 +1,17 @@
+import { VISUAL_STYLE_OPTIONS, type VisualStyleMeta } from '../data/visual_styles_catalog';
 import type { TopicOption, VisualStyle } from '../types';
 import { cryptoRng, cryptoShuffle } from './randomizer';
 
-export interface VisualStyleMeta {
-  id: VisualStyle;
-  label: string;
-  badge: string;
-  sbDesc: string;
-  vidDesc: string;
-}
-
-export const VISUAL_STYLE_OPTIONS: readonly VisualStyleMeta[] = [
-  {
-    id: 'ps1-1998',
-    label: '1998 Retro Low-Poly',
-    badge: '98 Low-Poly',
-    sbDesc:
-      'raw late-1990s 32-bit retro console ultra low-poly 3D game screenshots—angular faceted polygons, blurry pixelated bitmap textures, stiff awkward poses, crude Gouraud shading, jagged aliased edges, and muddy retro colors.',
-    vidDesc:
-      'raw late-1990s 32-bit retro console ultra low-poly 3D game graphics—angular faceted polygons, blurry pixelated bitmap textures, stiff robotic animations with jerky low-FPS movement, crude Gouraud shading, jagged aliased edges, and muddy retro colors.',
-  },
-  {
-    id: 'gta6-vice',
-    label: 'Open-World Sandbox HUD',
-    badge: 'Sandbox HUD',
-    sbDesc:
-      'authentic modern coastal open-world sandbox action-game screenshots—classic over-the-shoulder third-person follow camera, circular GPS radar minimap in the bottom-left corner with pink mission waypoint, flashing wanted-level stars in the top-right corner, weapon/cash HUD counter, sun-drenched tropical neon reflections on wet asphalt, and chaotic Ragdoll physics.',
-    vidDesc:
-      'authentic modern coastal open-world sandbox action-game capture—classic third-person follow & drive camera, circular GPS radar minimap in the bottom-left corner, flashing wanted-level stars in the top-right corner, yellow mission objective text at the bottom, chaotic open-world NPC ragdoll physics, and glossy neon wet-asphalt reflections.',
-  },
-  {
-    id: 'hybrid-1998-gta6',
-    label: '98 Low-Poly × Sandbox HUD',
-    badge: '98 × Sandbox',
-    sbDesc:
-      'late-1990s 32-bit ultra low-poly 3D blocky characters inside an open-world coastal sandbox action-game HUD—chunky faceted retro polygon characters with circular GPS radar minimap in the bottom-left corner, flashing wanted-level stars in the top-right corner, third-person follow camera, and glossy wet-asphalt tropical neon reflections.',
-    vidDesc:
-      'late-1990s 32-bit ultra low-poly 3D blocky characters inside an open-world coastal sandbox action-game engine—stiff faceted retro polygon characters moving through glossy neon coastal streets with a circular GPS minimap in the bottom-left, flashing wanted stars in the top-right, and third-person getaway camera tracking.',
-  },
-  {
-    id: 'cctv-dashcam',
-    label: '240p CCTV & Dashcam',
-    badge: '240p CCTV',
-    sbDesc:
-      'ultra low-quality 240p overhead Indian shop CCTV & traffic dashcam security footage screenshots—wide-angle fisheye lens distortion, green-tinted night-vision or blown-out fluorescent glare, gritty JPEG compression macroblocks, REC blinking red dot in the corner, and raw unscripted surveillance realism.',
-    vidDesc:
-      'ultra low-quality 240p overhead Indian shop CCTV & traffic dashcam surveillance footage—fixed high-angle wide fisheye security lens, choppy 12-FPS surveillance frame drops, heavy compression artifacts, REC indicator in top corner, and deadpan candid street chaos.',
-  },
-  {
-    id: 'claymation-stopmo',
-    label: 'Handcrafted Claymation',
-    badge: 'Claymation',
-    sbDesc:
-      'tactile handcrafted British-style stop-motion plasticine claymation miniature photography—visible thumbprints and sculpt marks on colorful clay characters, miniature physical cardboard-and-wood Indian street sets, soft macro tilt-shift depth of field, and warm practical studio lighting.',
-    vidDesc:
-      'tactile handcrafted stop-motion plasticine claymation animation—visible thumbprint textures shifting slightly frame-by-frame on clay characters, jerky 12-FPS physical stop-motion movement, miniature tabletop Indian street props, and shallow macro depth of field.',
-  },
-  {
-    id: 'retro-80s-concept',
-    label: '1980s Retro Concept Art',
-    badge: '80s Concept Art',
-    sbDesc:
-      '1980s vintage hand-painted Indian sci-fi & pulp textbook airbrush concept art illustration—rich gouache and airbrush textures, dramatic retro-futuristic lighting, weathered paper grain, bold pulp-poster composition, and deadpan retro-industrial machines colliding with everyday Indian street life.',
-    vidDesc:
-      'living 1980s vintage hand-painted Indian sci-fi & pulp airbrush concept art in motion—textured gouache brushwork, dramatic retro-futuristic rim lighting, subtle vintage film grain, and deadpan retro-industrial contraptions operating in an Indian neighborhood.',
-  },
-  {
-    id: 'isometric-diorama',
-    label: 'Isometric Miniature Diorama',
-    badge: 'Isometric Toy',
-    sbDesc:
-      'tilt-shift isometric miniature architectural diorama photography—overhead 45-degree toy-scale Indian street block, crisp tabletop studio lighting, tiny detailed plastic miniature figures and vehicles, and shallow macro depth of field.',
-    vidDesc:
-      'living tilt-shift isometric miniature diorama in motion—overhead 45-degree toy-scale Indian neighborhood, crisp tabletop studio lighting, tiny miniature vehicles and characters moving with hyper-real stop-motion precision.',
-  },
-  {
-    id: 'vhs-found-footage',
-    label: '1990s VHS Found Footage',
-    badge: '90s VHS',
-    sbDesc:
-      'raw 1990s home-video VHS camcorder found footage screenshots—analog magnetic tape tracking lines, washed-out chromatic aberration, harsh direct on-camera flash glare, handheld off-center framing, and candid unscripted street chaos.',
-    vidDesc:
-      'raw 1990s home-video VHS camcorder found footage capture—shaky handheld zoom-ins, analog tape hiss and tracking flicker, harsh direct flash lighting, and authentic unscripted Indian street comedy.',
-  },
-  {
-    id: 'noir-monochrome',
-    label: 'Noir Monochrome + Neon',
-    badge: 'Noir Neon',
-    sbDesc:
-      'high-contrast neo-noir monochrome cinema screenshots—deep Venetian-blind black shadows, wet rain-slicked street reflections, sharp chiaroscuro rim lighting, and one single vivid neon-amber accent color popping against stark black-and-white.',
-    vidDesc:
-      'high-contrast neo-noir monochrome cinema capture—dramatic chiaroscuro shadows, pouring rain on wet asphalt, slow moody tracking shots, and one vivid neon-amber accent color contrasting deadpan street comedy.',
-  },
-  {
-    id: 'lugan-3d-skit',
-    label: 'Stylized 3D Viral Skit',
-    badge: '3D Viral Skit',
-    sbDesc:
-      'clean stylized indie 3D character animation screenshots—smooth simplified matte-shaded 3D figures with big expressive reaction faces, glossy stylized cars and garage props, crisp bright daylight lighting, and exaggerated slapstick vehicle physics.',
-    vidDesc:
-      'clean stylized indie 3D character animation capture—expressive simplified 3D comedy rigs with snappy squash-and-stretch timing, glossy stylized vehicles and street props, crisp daylight lighting, whip-pan reaction cuts, and chaotic slapstick physics.',
-  },
-];
+export { VISUAL_STYLE_OPTIONS, type VisualStyleMeta };
 
 export function getVisualStyleMeta(style: VisualStyle): VisualStyleMeta {
   return VISUAL_STYLE_OPTIONS.find((s) => s.id === style) ?? VISUAL_STYLE_OPTIONS[0];
 }
 
 /**
- * Assigns a diverse randomized VisualStyle across a batch of topics so every card in the grid
- * pairs its story with a distinct visual aesthetic (1998 PS1, GTA 6 HUD, PS1×GTA6, 240p CCTV, Claymation, 80s Concept Art),
- * while respecting natural story affinities (e.g. GTA-VI Bhai -> GTA 6 / Hybrid).
+ * Assigns a diverse randomized VisualStyle across a batch of topics so every card in the 8-card grid
+ * pairs its story with a completely distinct visual aesthetic drawn from all 14 Visual Engines
+ * (Low-Poly, Sandbox HUD, CCTV, Claymation, 2D Stylized, 2D × Real World, 2D × 3D Hybrid, Paper Cutout, etc.).
  */
 export function assignDiverseVisualStyles<T extends TopicOption>(
   topics: T[],

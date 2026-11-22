@@ -9,12 +9,16 @@ import { getVisualStyleMeta, VISUAL_STYLE_OPTIONS } from './visual_styles';
 
 export { VISUAL_STYLE_OPTIONS };
 
-const STORYBOARD_HEADER = (title: string, rigDirective: string, charLock: string, style: VisualStyle): string =>
-  `6-frame storyboard in a 3x2 grid on a plain dark background. Apply one unified style to ALL panels: ${getVisualStyleMeta(style).sbDesc} ${rigDirective}${charLock ? ` ${charLock}` : ''} Strictly NO 2D cartoon art, NO comic ink outlines, NO cel-shading. Place a short bold retro pixel-font Hinglish caption under each panel. Title at top: "${title}".`;
+const STORYBOARD_HEADER = (title: string, rigDirective: string, charLock: string, style: VisualStyle): string => {
+  const m = getVisualStyleMeta(style);
+  return `6-frame storyboard in a 3x2 grid on a plain dark background. Apply one unified style to ALL panels: ${m.sbDesc} ${rigDirective}${charLock ? ` ${charLock}` : ''} ${m.negRule} Place a short bold retro pixel-font Hinglish caption under each panel. Title at top: "${title}".`;
+};
 
 // Strictly NO time, NO duration, NO video size / aspect ratio mentions!
-const VIDEO_HEADER = (rigDirective: string, charLock: string, style: VisualStyle, ensembleSeed = 0): string =>
-  `Absurdist comedy video. Apply one unified style throughout: ${getVisualStyleMeta(style).vidDesc} ${rigDirective}${charLock ? ` ${charLock}` : ''} Strictly NO 2D cartoon art, NO comic ink outlines, NO cel-shading. ${pickVoiceEnsemble(ensembleSeed).audioHeader}`;
+const VIDEO_HEADER = (rigDirective: string, charLock: string, style: VisualStyle, ensembleSeed = 0): string => {
+  const m = getVisualStyleMeta(style);
+  return `Absurdist comedy video. Apply one unified style throughout: ${m.vidDesc} ${rigDirective}${charLock ? ` ${charLock}` : ''} ${m.negRule} ${pickVoiceEnsemble(ensembleSeed).audioHeader}`;
+};
 
 export function renderStoryboardText(
   title: string,

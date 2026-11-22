@@ -57,7 +57,7 @@ for (let r = 1; r <= RELOADS; r += 1) {
   assert.equal(batch.length, 8);
   assert.equal(new Set(batch.map((t) => t.angle)).size, 6);
   assert.equal(new Set(batch.map((t) => worldFamily(t.brand))).size, 8);
-  assert.ok(new Set(batch.map((t) => t.visualStyle)).size >= 5, 'Expected >= 5 distinct visual styles per 8-card batch');
+  assert.equal(new Set(batch.map((t) => t.visualStyle)).size, 8, 'Expected all 8 cards in batch to have distinct visual styles');
   for (let i = 1; i < batch.length; i += 1) assert.notEqual(batch[i].angle, batch[i - 1].angle);
 
   const ids = new Set(batch.map((t) => t.id));
@@ -69,7 +69,7 @@ for (let r = 1; r <= RELOADS; r += 1) {
     const vid = renderVideoText(topic.shots ?? [], undefined, topic.visualStyle);
     assert.ok(!SLOP_QUOTE_RE.test(topic.pitch), `Headline quote slop detected: ${topic.pitch}`);
     assert.ok(!/delhi|mumbai|bombay/i.test(`${topic.title} ${topic.pitch}`));
-    assert.ok(sb.includes('3x2 grid') && sb.includes('NO cel-shading'));
+    assert.ok(sb.includes('3x2 grid') && (sb.includes('NO cel-shading') || sb.includes('mixed-media textures')));
     assert.ok(!vid.includes('9:16') && !vid.includes('20-second') && !vid.includes('[0:00'));
   }
 }
