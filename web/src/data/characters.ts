@@ -1,3 +1,5 @@
+import { ANIME_CHARACTER_ROSTER } from './characters_anime';
+
 export interface CharacterPreset {
   id: string;
   label: string;
@@ -140,4 +142,5 @@ export const CHARACTER_ROSTER: readonly CharacterPreset[] = [
     visualLock: 'GTA-Sixe (parallel-dimension getaway driver in pineapple-print Hawaiian shirt, khaki cargo shorts, chunky gold chain, and white socks with chappals)',
     starter: 'During a 5-star GTA-Sixe police chase, everyone stops for ',
   },
+  ...ANIME_CHARACTER_ROSTER,
 ];

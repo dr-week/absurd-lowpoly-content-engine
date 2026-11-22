@@ -35,7 +35,7 @@ for (const story of ALL_BESPOKE_STORIES) {
   assert.ok(!SLOP_QUOTE_RE.test(story.pitch), `Raw headline quote slop leaked in "${story.id}": ${story.pitch}`);
   assert.ok(!/[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/u.test(`${story.title} ${story.pitch}`), `Emoji leaked in ${story.id}`);
   assert.ok(
-    !/\b(elon|musk|trump|modi|gandhi|gandhiji|putin|zuckerberg|ambani|superman|spider-man|spiderman|thor|iron man|ironman|hulk|batman)\b/i.test(`${story.title} ${story.pitch}`),
+    !/\b(elon|musk|trump|modi|gandhi|gandhiji|putin|zuckerberg|ambani|superman|spider-man|spiderman|thor|iron man|ironman|hulk|batman|goku|naruto|luffy|gojo|saitama|pikachu|doraemon|shinchan)\b/i.test(`${story.title} ${story.pitch}`),
     `Exact proper name leaked in ${story.id}: ${story.title}`,
   );
 }
@@ -119,6 +119,7 @@ assert.ok(restoreStudioBackup(JSON.stringify({ version: 1, saved: [], generatedI
 const customEp = buildCustomEpisode('Trump buys a beach shack for ₹200', 'iconic');
 assert.ok(customEp.title.includes('DOLAND TRUMPE'));
 assert.equal(sanitizeCopyrightNames('Elon Musk and Donald Trump meet Spider-Man and Hulk'), 'Elone Maask and Doland Trumpe meet Spooder-Maan and Hulke');
+assert.equal(sanitizeCopyrightNames('Goku, Naruto, Gojo, Saitama and Luffy'), 'Gokoo-Bhai, Narooto-Wa, Goojo-Ji, Saitaama-Seth and Loofy-Babu');
 assert.ok(detectCharacterLock('Spooder-Maan and Hulke').includes('checkered gym shorts') && detectCharacterLock('Hulke').includes('pink flip-flops'));
 assert.equal(desiNameifyWord('cute', 0), 'Cutie');
 assert.equal(desiNameifyWord('Hulk', 3), 'Hulkeshwar');

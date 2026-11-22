@@ -23,6 +23,19 @@ PARODY_NAME_MAP: tuple[tuple[str, str], ...] = (
     (r"\bDolly\s+Chaiwala\b", "Dolli Chai"),
     (r"\bGreat\s+Khali\b", "Khaali"),
     (r"\bGTA\s*6\b", "GTA-Sixe"),
+    (r"\bSon\s+Goku\b", "Gokoo-Bhai"),
+    (r"\bGoku\b", "Gokoo-Bhai"),
+    (r"\bNaruto\s+Uzumaki\b", "Narooto-Wa"),
+    (r"\bNaruto\b", "Narooto-Wa"),
+    (r"\bMonkey\s+D\.?\s+Luffy\b", "Loofy-Babu"),
+    (r"\bLuffy\b", "Loofy-Babu"),
+    (r"\bSatoru\s+Gojo\b", "Goojo-Ji"),
+    (r"\bGojo\s+Satoru\b", "Goojo-Ji"),
+    (r"\bGojo\b", "Goojo-Ji"),
+    (r"\bSaitama\b", "Saitaama-Seth"),
+    (r"\bPikachu\b", "Peekaa-Choo"),
+    (r"\bDoraemon\b", "Doorae-Babu"),
+    (r"\bShin[- ]?chan\b", "Shiin-Chaan"),
     (r"\bElon\b", "Elone"),
     (r"\bTrump\b", "Trumpe"),
     (r"\bModi\b", "Mudi-Ji"),
@@ -38,6 +51,8 @@ EXACT_PROPER_NAME_RE = re.compile(
     r"\b(?:Elon\s+Musk|Donald\s+Trump|Narendra\s+Modi|Mahatma\s+Gandhi|Vladimir\s+Putin|"
     r"Spider[- ]?Man|Iron\s+Man|Superman|Batman|Hulk|Thor|Salman\s+Khan|Virat\s+Kohli|"
     r"Mukesh\s+Ambani|Puneet\s+Superstar|Dolly\s+Chaiwala|Great\s+Khali|GTA\s*6|"
+    r"Son\s+Goku|Goku|Naruto\s+Uzumaki|Naruto|Monkey\s+D\.?\s+Luffy|Luffy|"
+    r"Satoru\s+Gojo|Gojo\s+Satoru|Gojo|Saitama|Pikachu|Doraemon|Shin[- ]?chan|"
     r"Elon|Trump|Modi|Gandhi|Putin)\b",
     re.IGNORECASE,
 )

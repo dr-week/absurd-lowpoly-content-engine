@@ -1,5 +1,6 @@
 import type { TopicOption } from '../types';
 import { sanitizeTopic } from '../engine/alias_sanitizer';
+import { ANIME_PARODY_STORIES } from './stories_anime_parody';
 import { ANTICIPATION_STORIES } from './stories_anticipation';
 import { CRAFT_STORIES_A } from './stories_craft_a';
 import { CRAFT_STORIES_B } from './stories_craft_b';
@@ -29,6 +30,7 @@ import { THEATER_STORIES_B } from './stories_theater_b';
 import { TUTORIAL_STORIES } from './stories_tutorial';
 
 export const ALL_BESPOKE_STORIES: readonly TopicOption[] = [
+  ...ANIME_PARODY_STORIES,
   ...LUGAN_STYLE_STORIES,
   ...LUGAN_STORIES_B,
   ...LUGAN_STORIES_C,

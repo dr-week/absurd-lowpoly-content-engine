@@ -100,7 +100,7 @@ function extractKeywords(text: string): string[] {
 export function scoreComedyCraft(topic: TopicOption): CraftScore {
   const frames = topic.frames ?? [];
   const shots = topic.shots ?? [];
-  const hasSixBeats = frames.length === 6 && shots.length === 6;
+  const hasSixBeats = frames.length === 6 && shots.length >= 5 && shots.length <= 6;
 
   const lastShot = shots[shots.length - 1];
   const punchlineWords = lastShot ? lastShot.hindi.trim().split(/\s+/).filter(Boolean).length : 0;

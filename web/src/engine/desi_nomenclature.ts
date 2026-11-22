@@ -24,6 +24,14 @@ export const DESI_NAME_VARIANTS: Record<string, readonly string[]> = {
   thor: ['Thoorwa', 'Thoresh', 'Thoor-Babu', 'Thorie'],
   ironman: ['Loha-Babu', 'Ironeshwar', 'Lohawa', 'Tin-Babu'],
   gta6: ['GTA-Sixe', 'Vice-Babu', 'GTA-Wa', 'Vice-Seth'],
+  goku: ['Gokoo-Bhai', 'Gokesh', 'Gokuwa', 'Gokoo-Seth'],
+  naruto: ['Narooto-Wa', 'Narootesh', 'Narootu', 'Narooto-Babu'],
+  luffy: ['Loofy-Babu', 'Loofesh', 'Loofwa', 'Loofy-Seth'],
+  gojo: ['Goojo-Ji', 'Goojesh', 'Gooju-Babu', 'Goojwa'],
+  saitama: ['Saitaama-Seth', 'Saitamesh', 'Saitamu', 'Taklu-Babu'],
+  pikachu: ['Peekaa-Choo', 'Peekesh', 'Peeku-Babu', 'Peekwa'],
+  doraemon: ['Doorae-Babu', 'Dooraesh', 'Dooru-Seth', 'Dooraewa'],
+  shinchan: ['Shiin-Chaan', 'Shinchu', 'Shinchwa', 'Shiin-Babu'],
 };
 
 const DESI_SUFFIXES = ['ie', 'u', 'esh', 'eshwar', 'wa', '-Lal', '-Babu', '-Seth'] as const;
