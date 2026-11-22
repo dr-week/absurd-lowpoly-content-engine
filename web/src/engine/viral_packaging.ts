@@ -1,10 +1,12 @@
 import type { GeneratedPrompts, ScoredTopic } from '../types';
 import { getHookLabel, getSituationLabel } from './taxonomy';
+import { detectTwistBlueprint } from './twist_architect';
 
 export interface ViralPackage {
   titles: string[];
   pinnedComment: string;
   loopStatus: string;
+  twistAudit: string;
   hashtags: string[];
   copyText: string;
 }
@@ -16,14 +18,14 @@ function toTag(raw: string): string {
 
 /**
  * Generates high-CTR Reels/Shorts viral packaging:
- * 3 titles, 1 comment-bait pinned comment, loop-rate audit, and 5 precision hashtags.
+ * 3 titles, 1 comment-bait pinned comment, expectation-flip audit, loop audit, and 5 hashtags.
  */
 export function buildViralPackage(topic: ScoredTopic, prompts: GeneratedPrompts): ViralPackage {
   const shortTitle = topic.title.replace(/^PART\s*\d+:\s*/i, '').trim();
   const titles = [
     `Wait till the end: ${shortTitle}`,
     `Nobody expected ${topic.brand} to solve it like this`,
-    `${shortTitle} (1998 PS1 Edition)`,
+    `${shortTitle} (Parallel Dimension Edition)`,
   ];
 
   const commentMap: Record<string, string> = {
@@ -39,11 +41,13 @@ export function buildViralPackage(topic: ScoredTopic, prompts: GeneratedPrompts)
   const shot6Match = prompts.videoPrompt.match(/Shot 6:[\s\S]*?Hindi Dialogue:\s*"([^"]*)"/);
   const words = shot6Match ? shot6Match[1].trim().split(/\s+/).filter(Boolean).length : 0;
   const loopStatus = words > 0 && words <= 7 ? `Tight Loop (${words}w)` : `Crisp Cut (${words}w)`;
+  const bp = detectTwistBlueprint(topic);
+  const twistAudit = `${bp.label}: ${bp.assumedTrack} -> ${bp.subversionSnap}`;
 
   const hashtags = Array.from(
     new Set([
-      '#PS1Aesthetic',
-      '#LowPolyComedy',
+      '#UnexpectedTwist',
+      '#DesiComedy',
       toTag(topic.brand),
       toTag(getHookLabel(topic.hookCategory)),
       toTag(getSituationLabel(topic.situationCategory)),
@@ -54,10 +58,11 @@ export function buildViralPackage(topic: ScoredTopic, prompts: GeneratedPrompts)
     'VIRAL TITLES:',
     ...titles.map((t, i) => `${i + 1}. ${t}`),
     '',
+    `TWIST CHECK: ${twistAudit}`,
     `PINNED COMMENT: ${pinnedComment}`,
     `LOOP AUDIT: ${loopStatus}`,
     `HASHTAGS: ${hashtags.join(' ')}`,
   ].join('\n');
 
-  return { titles, pinnedComment, loopStatus, hashtags, copyText };
+  return { titles, pinnedComment, loopStatus, twistAudit, hashtags, copyText };
 }

@@ -80,7 +80,12 @@ export function assignDiverseVisualStyles<T extends TopicOption>(
   rng: () => number = cryptoRng,
 ): (T & { visualStyle: VisualStyle })[] {
   const allIds = VISUAL_STYLE_OPTIONS.map((s) => s.id);
-  const deck = [...cryptoShuffle(allIds, rng), ...cryptoShuffle(allIds, rng)];
+  const used = new Set<VisualStyle>();
+  for (const t of topics) {
+    if (t.visualStyle) used.add(t.visualStyle);
+  }
+  const unseen = cryptoShuffle(allIds.filter((id) => !used.has(id)), rng);
+  const deck = [...unseen, ...cryptoShuffle(allIds, rng), ...cryptoShuffle(allIds, rng)];
   let cursor = 0;
 
   return topics.map((t) => {

@@ -15,6 +15,8 @@ import { OVERENGINEER_STORIES } from './stories_overengineer';
 import { SCIENCE_STORIES } from './stories_science';
 import { SLICE_OF_LIFE_STORIES } from './stories_slice_of_life';
 import { SPIRAL_STORIES } from './stories_spiral';
+import { SUBVERSION_STORIES_A } from './stories_subversion_a';
+import { SUBVERSION_STORIES_B } from './stories_subversion_b';
 import { SUSPENSE_STORIES } from './stories_suspense';
 import { SWAG_CHALLENGE_STORIES } from './stories_swag_challenge';
 import { TUTORIAL_STORIES } from './stories_tutorial';
@@ -38,4 +40,6 @@ export const ALL_BESPOKE_STORIES: readonly TopicOption[] = [
   ...INDIA_MEME_STORIES,
   ...SLICE_OF_LIFE_STORIES,
   ...SWAG_CHALLENGE_STORIES,
+  ...SUBVERSION_STORIES_A,
+  ...SUBVERSION_STORIES_B,
 ].map(sanitizeTopic);

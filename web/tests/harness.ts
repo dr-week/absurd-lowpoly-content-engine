@@ -14,13 +14,14 @@ import { buildPart2Topic } from '../src/engine/sequel_engine';
 import { computeTasteDna } from '../src/engine/taste_dna';
 import { ALL_BESPOKE_STORIES, generateFreshDiverseBatch, worldFamily } from '../src/engine/topic_generator';
 import { synthesizeTrendCard } from '../src/engine/trend_synthesizer';
+import { cycleTwistBlueprint } from '../src/engine/twist_architect';
 import { buildViralPackage } from '../src/engine/viral_packaging';
 import type { RatingLogEntry } from '../src/types';
 
 const LABEL_PREFIX_RE = /^(?:Fake biopic|Fake childhood origin|Live [A-Za-z ]+(?:news|broadcast)|[A-Za-z ]+documentary|Earnest [a-z-]+ (?:tutorial|hack)|Travel guide tutorial):/i;
 const SLOP_QUOTE_RE = /\b(?:Inspired by|After|Reading|Following|Mid-debate on|Reacting to|Triggered by)\s+"[^"]+"/i;
 
-assert.ok(ALL_BESPOKE_STORIES.length >= 72, `Expected >= 72 bespoke stories, got ${ALL_BESPOKE_STORIES.length}`);
+assert.ok(ALL_BESPOKE_STORIES.length >= 78, `Expected >= 78 bespoke stories, got ${ALL_BESPOKE_STORIES.length}`);
 for (const story of ALL_BESPOKE_STORIES) {
   const craft = scoreComedyCraft(story);
   assert.ok(craft.hasSixBeats, `Story "${story.id}" missing 6 frames/shots`);
@@ -118,6 +119,9 @@ assert.equal(desiNameifyWord('cute', 0), 'Cutie');
 assert.equal(desiNameifyWord('Hulk', 3), 'Hulkeshwar');
 const hulkMock = { ...mockPrompts, topicTitle: 'HULKE FIGHTS AUTO', storyboardPrompt: 'Hulke lifts auto', videoPrompt: 'Hulke walks home' };
 assert.equal(cycleDesiCharacterName(hulkMock, 1).name, 'Hulkeshwar');
+const twistOut = cycleTwistBlueprint(mockPrompts, 0);
+assert.ok(twistOut.label === 'Zoom-Out Context Flip' && twistOut.prompts.storyboardPrompt.includes('Expectation Subversion:'));
+assert.ok(buildViralPackage(sample, mockPrompts).twistAudit.includes('->'));
 assert.ok(buildCrossoverEpisode([sample, customEp])?.title.startsWith('CROSSOVER:'));
 
 console.log(

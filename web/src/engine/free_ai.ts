@@ -7,6 +7,7 @@ import { fetchFreshOnlineNews } from './live_news';
 import { pickCleanLiveNewsStories } from './news_mapper';
 import { cryptoRng, pickCinematographyRig } from './randomizer';
 import { classifyHook, classifySituation, getHookLabel, getSituationLabel } from './taxonomy';
+import { TWIST_ARCHITECT_GUIDE } from './twist_architect';
 import { assignDiverseVisualStyles } from './visual_styles';
 
 const POLLINATIONS_URL = 'https://text.pollinations.ai/openai';
@@ -79,7 +80,7 @@ export async function generateFreshLiveNewsTopics(params: {
     'ALL titles and pitches MUST be in crisp ENGLISH ONLY. ' +
     'Keep every premise DEAD-SIMPLE, SUSPENSEFUL, SURPRISING, and FUNNY—never write robotic tech jargon or copy raw news article titles. Pair a recognizable high-stakes situation (e.g. 5-star GTA chase, bank heist, bomb squad, auto-meter fight) with a simple everyday Indian twist and our phonetic lookalike parody characters (NEVER use real copyrighted names—always use tweaked spellings and absurd desi costume variations): Elone Maask, Doland Trumpe, Gaandhi-G, Putine, Moodi-G, Zuckerburge, Ambaani, Giga-Chaad, Dogee, Spooder-Maan, Hulke, Baatmaan, Sigmaa, Lorde Puneete, Dolli Chai, Khaali, Salmaan Bhoi, Koohli, GTA-Sixe. ' +
     'NEVER mention "low-poly", "PS1", "3D", "meme", or "viral". NEVER use prefixes like "Fake biopic:" or "Inspired by". ' +
-    `${DESI_NOMENCLATURE_GUIDE} ${WRITERS_ROOM_RULES} ` +
+    `${DESI_NOMENCLATURE_GUIDE} ${TWIST_ARCHITECT_GUIDE} ${WRITERS_ROOM_RULES} ` +
     'Return ONLY valid JSON: {"topics":[{"title":"UPPERCASE ENGLISH TITLE","angle":"over-engineer|fake-origin|breaking-news|fake-tutorial|petty-spiral|weird-science","brand":"Parody Character / World","pitch":"Cold-open 1-sentence visual setup + broken-assumption twist + deadpan payoff","viralScore":94}]}';
 
   const newsBlock = headlines.map((h, i) => `${i + 1}. ${h.title}`).join('\n');

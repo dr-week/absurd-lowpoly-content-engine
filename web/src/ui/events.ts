@@ -3,6 +3,7 @@ import { cycleDesiCharacterName } from '../engine/desi_nomenclature';
 import { cycleAlternatePunchline, exportSavedMarkdown, rerollCameraRig, switchPromptVisualStyle } from '../engine/prompt_tools';
 import { removeSavedTopic, saveLikedTopic, setSavedOutcome } from '../engine/saved_store';
 import { exportJson, exportJsonl, saveConfig, saveLogs, upsertVote } from '../engine/telemetry';
+import { cycleTwistBlueprint } from '../engine/twist_architect';
 import { buildViralPackage } from '../engine/viral_packaging';
 import type { ActiveTab, EngineConfig, GeneratedPrompts, HookCategory, OutcomeTag, RatingLogEntry, SavedFilter, SavedItem, ScoredTopic, SituationCategory, VisualStyle, VoteValue } from '../types';
 
@@ -107,6 +108,7 @@ export function bindAppEvents(
         void navigator.clipboard.writeText(`${state.prompts.storyboardPrompt}\n\n---\n\n${state.prompts.videoPrompt}${pack}`).then(() => hooks.toast('Copied Full Bundle'));
         return;
       }
+      if (a === 'reroll-twist' && state.prompts) { const out = cycleTwistBlueprint(state.prompts, (state.rigStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Twist: ${out.label}`); return; }
       if (a === 'reroll-name' && state.prompts) { const out = cycleDesiCharacterName(state.prompts, (state.punchStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Name: ${out.name}`); return; }
       if (a === 'reroll-rig' && state.prompts) { const out = rerollCameraRig(state.prompts, (state.rigStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Camera: ${out.rigLabel}`); return; }
       if (a === 'reroll-punchline' && state.prompts) { const out = cycleAlternatePunchline(state.prompts, (state.punchStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Punchline: ${out.style}`); return; }
