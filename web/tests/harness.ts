@@ -21,7 +21,7 @@ import type { RatingLogEntry } from '../src/types';
 const LABEL_PREFIX_RE = /^(?:Fake biopic|Fake childhood origin|Live [A-Za-z ]+(?:news|broadcast)|[A-Za-z ]+documentary|Earnest [a-z-]+ (?:tutorial|hack)|Travel guide tutorial):/i;
 const SLOP_QUOTE_RE = /\b(?:Inspired by|After|Reading|Following|Mid-debate on|Reacting to|Triggered by)\s+"[^"]+"/i;
 
-assert.ok(ALL_BESPOKE_STORIES.length >= 78, `Expected >= 78 bespoke stories, got ${ALL_BESPOKE_STORIES.length}`);
+assert.ok(ALL_BESPOKE_STORIES.length >= 82, `Expected >= 82 bespoke stories, got ${ALL_BESPOKE_STORIES.length}`);
 for (const story of ALL_BESPOKE_STORIES) {
   const craft = scoreComedyCraft(story);
   assert.ok(craft.hasSixBeats, `Story "${story.id}" missing 6 frames/shots`);

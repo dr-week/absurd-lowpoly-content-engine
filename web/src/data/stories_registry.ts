@@ -1,5 +1,6 @@
 import type { TopicOption } from '../types';
 import { sanitizeTopic } from '../engine/alias_sanitizer';
+import { ANTICIPATION_STORIES } from './stories_anticipation';
 import { CRAFT_STORIES_A } from './stories_craft_a';
 import { CRAFT_STORIES_B } from './stories_craft_b';
 import { CRAFT_STORIES_C } from './stories_craft_c';
@@ -42,4 +43,5 @@ export const ALL_BESPOKE_STORIES: readonly TopicOption[] = [
   ...SWAG_CHALLENGE_STORIES,
   ...SUBVERSION_STORIES_A,
   ...SUBVERSION_STORIES_B,
+  ...ANTICIPATION_STORIES,
 ].map(sanitizeTopic);

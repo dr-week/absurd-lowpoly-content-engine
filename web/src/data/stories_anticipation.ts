@@ -1,0 +1,108 @@
+import type { TopicOption } from '../types';
+
+export const ANTICIPATION_STORIES: readonly TopicOption[] = [
+  {
+    id: 'antic_trojan_scooter_crash_hoodie',
+    title: 'SCOOTER 2 INCHES FROM BRICK WALL CRASH—TURNS INTO A HOODIE FLEX',
+    angle: 'breaking-news',
+    brand: 'Trojan Chaos',
+    trendHook: 'Wants & Needs Trojan-Horse Formula: Imminent Crash -> Unexpected Swag Reveal',
+    visualStyle: 'gta6-vice',
+    pitch:
+      'A speeding scooter loses brakes two inches from slamming into a concrete wall while ten pedestrians cover their eyes—then freeze-frame match-cuts into the rider stepping off dust-free flexing his ₹699 oversized hoodie.',
+    frames: [
+      { frame: 1, position: 'Top Left', framing: 'Action chase wide shot', action: 'A yellow scooter rockets down a narrow market slope straight toward a solid red brick wall with sparks flying from the rear brake.', caption: 'Brakes Failed At 60 km/h!' },
+      { frame: 2, position: 'Top Center', framing: 'Tight reaction shot', action: 'Ten street vendors drop their baskets and cover their eyes screaming as the front tire closes within twelve inches of the bricks.', caption: '12 Inches From Impact!' },
+      { frame: 3, position: 'Top Right', framing: 'Extreme slow-mo close-up', action: 'The front mudguard sits two inches from the wall as time freezes mid-air with dramatic bass silence.', caption: '2 Inches Away!' },
+      { frame: 4, position: 'Bottom Left', framing: 'Whip-pan match-cut', action: 'On the exact beat of impact, the camera whips 180 degrees revealing the rider calmly leaning against the wall with zero scratches.', caption: 'Zero Scratches!' },
+      { frame: 5, position: 'Bottom Center', framing: 'Medium swag shot', action: 'He brushes one tiny speck of dust off his heavy neon-green oversized hoodie while holding up a fresh cup of cutting chai.', caption: 'Hoodie Didn’t Even Wrinkle!' },
+      { frame: 6, position: 'Bottom Right', framing: 'Wide deadpan shot', action: 'Every terrified bystander stops screaming and immediately asks "Bhai, ye hoodie kahan se liya?"', caption: 'Link In Bio Bhai!' },
+    ],
+    shots: [
+      { shot: 1, visual: 'Third-person chase view of a yellow scooter hurtling straight toward a brick wall.', sfx: 'Screaming tires and brake sparks', hindi: 'साठ की स्पीड में स्कूटी दीवार से टकराने वाली थी।' },
+      { shot: 2, visual: 'Ten street vendors cover their eyes bracing for a massive crash.', sfx: 'Gasps and rising tension drone', hindi: 'पूरी सड़क ने डर के मारे आंखें बंद कर लीं।' },
+      { shot: 3, visual: 'Extreme slow-mo close-up two inches from the brick wall as sound cuts dead.', sfx: 'Sharp inhale and dead silence', hindi: 'दीवार से बस दो इंच पहले वक्त थम गया।' },
+      { shot: 4, visual: 'Whip-pan match-cut showing the rider standing coolly against the wall completely unharmed.', sfx: 'Heavy bass drop and vinyl snap', hindi: 'अगले ही सेकंड वह बिना खरोंच दीवार पर टिका था।' },
+      { shot: 5, visual: 'He flicks one speck of dust off his crisp oversized neon-green hoodie.', sfx: 'Crisp fabric snap', hindi: 'अपनी नई हुडी से धूल झाड़कर चाय पीने लगा।' },
+      { shot: 6, visual: 'All ten shocked bystanders crowd around asking where he bought the hoodie.', sfx: 'Curious crowd chatter', hindi: 'सब बोले—भाई, ये हुडी कितने की ली?' },
+    ],
+  },
+  {
+    id: 'antic_40_chai_glasses_tilt',
+    title: '40 CHAI GLASSES TILTING AT 45°—WHOLE STREET HOLDS ITS BREATH',
+    angle: 'over-engineer',
+    brand: 'Anticipation',
+    trendHook: 'PostProtocol Physical Anticipation Hook: Will The 40-Cup Tower Fall?',
+    visualStyle: 'cctv-dashcam',
+    pitch:
+      'Crossing a bumpy speed-breaker carrying a towering pyramid of 40 hot chai glasses on one hand, the top saucer slides millimeter by millimeter while 50 commuters freeze—until a stray cat catches it cleanly on its head.',
+    frames: [
+      { frame: 1, position: 'Top Left', framing: 'Overhead CCTV wide', action: 'A tea-runner steps onto a giant yellow speed-breaker balancing a 4-tier pyramid of 40 steaming glass chai cups on one steel tray.', caption: '40-Cup Tower On 1 Hand!' },
+      { frame: 2, position: 'Top Center', framing: 'Extreme close-up', action: 'The pyramid tilts sharply to 35 degrees; the top glass slides half an inch toward the edge as hot tea ripples.', caption: 'Tilting At 35 Degrees!' },
+      { frame: 3, position: 'Top Right', framing: 'Wide street shot', action: 'Traffic screeches to a halt as fifty commuters, bus drivers, and pedestrians lean forward holding their breath in silence.', caption: '50 People Hold Breath!' },
+      { frame: 4, position: 'Bottom Left', framing: 'Slow-mo close-up', action: 'At 45 degrees, the top glass finally tips off the rim and begins falling straight toward the concrete pavement.', caption: 'It’s Falling!' },
+      { frame: 5, position: 'Bottom Center', framing: 'Low-angle reveal', action: 'A deadpan orange stray cat strolls underneath at the exact millisecond and catches the glass upright flat on its head.', caption: 'Cat Catches It Flat!' },
+      { frame: 6, position: 'Bottom Right', framing: 'Wide deadpan shot', action: 'The whole street erupts in stadium cheers while the cat calmly walks into the tea shop demanding a biscuit.', caption: 'Biscuit Fee Demanded!' },
+    ],
+    shots: [
+      { shot: 1, visual: '240p street CCTV of a tea-runner stepping onto a speed-breaker with a 40-glass pyramid.', sfx: 'Rattling glass clinks', hindi: 'चालीस चाय के गिलास एक हाथ में लेकर वह ब्रेकर पर चढ़ा।' },
+      { shot: 2, visual: 'Tight close-up of the top glass sliding millimeter by millimeter at a 35-degree tilt.', sfx: 'Tense glass slide and heartbeat', hindi: 'ऊपर वाला गिलास तिरछा होकर फिसलने लगा।' },
+      { shot: 3, visual: 'Fifty commuters and auto drivers freeze mid-street holding their breath.', sfx: 'Pin-drop street silence', hindi: 'पूरा ट्रैफिक सांस रोककर गिलास देखने लगा।' },
+      { shot: 4, visual: 'Slow-motion shot as the top glass slips completely off the tray edge.', sfx: 'High-pitched falling whistle', hindi: 'आखिरकार गिलास ट्रे से नीचे छूट गया।' },
+      { shot: 5, visual: 'An orange stray cat walks underneath catching the glass upright on its flat head.', sfx: 'Soft thump and angelic chime', hindi: 'तभी एक बिल्ली ने सिर पर गिलास सीधा पकड़ लिया।' },
+      { shot: 6, visual: 'Crowd erupts cheering as the cat strolls into the shop for a biscuit.', sfx: 'Stadium roar and meow', hindi: 'बिल्ली इनाम में पार्ले-जी लेकर चल दी।' },
+    ],
+  },
+  {
+    id: 'antic_1mm_supercar_reverse_door',
+    title: 'CAR REVERSES 1 MILLIMETER FROM A ₹2 CRORE SUPERCAR—THEN OPENS THE DOOR',
+    angle: 'petty-spiral',
+    brand: 'Anticipation',
+    trendHook: 'Physical Tension + Double-Subversion: "Aane De!" Parking Disaster',
+    visualStyle: 'claymation-stopmo',
+    pitch:
+      'Thirty bystanders shout "Aane de! Aane de!" as an old hatchback reverses inch-by-inch toward a ₹2 crore supercar, miraculously stopping 1 millimeter away—only for the back passenger to swing the door wide open into it.',
+    frames: [
+      { frame: 1, position: 'Top Left', framing: 'Tight bumper shot', action: 'A rusty white hatchback backs slowly toward the gleaming neon bumper of a parked ₹2 crore supercar in a tight lane.', caption: '6 Inches From ₹2 Crore!' },
+      { frame: 2, position: 'Top Center', framing: 'Medium shot', action: 'Three self-appointed parking guides wave frantically yelling "Aane de! Aane de! Bahut jagah hai!" while the gap shrinks to 1 inch.', caption: 'Aane De! Aane De!' },
+      { frame: 3, position: 'Top Right', framing: 'Extreme macro close-up', action: 'Both bumpers sit literally 1 millimeter apart—thin enough that not even a ₹10 note can slide between them.', caption: '1 Millimeter Gap!' },
+      { frame: 4, position: 'Bottom Left', framing: 'Wide celebration shot', action: 'The handbrake clicks; all thirty bystanders clap wildly cheering the greatest reverse-parking miracle in history.', caption: 'Miracle Parking Save!' },
+      { frame: 5, position: 'Bottom Center', framing: 'Medium horror shot', action: 'Before anyone can blink, a sleepy back-seat passenger kicks the rear door wide open straight into the supercar’s side panel.', caption: 'Passenger Kicks Door Open!' },
+      { frame: 6, position: 'Bottom Right', framing: 'Wide deadpan shot', action: 'All three parking guides immediately pretend they never knew the driver and stroll casually into a nearby juice shop.', caption: 'Guides Vanish Instantly!' },
+    ],
+    shots: [
+      { shot: 1, visual: 'Tight shot of an old white hatchback reversing toward a gleaming ₹2 crore supercar.', sfx: 'Reverse beep-beep-beep', hindi: 'पुरानी कार दो करोड़ की सुपरकार के करीब रिवर्स हो रही थी।' },
+      { shot: 2, visual: 'Three street guides wave enthusiastically yelling to keep coming back.', sfx: 'Loud hand claps and engine hum', hindi: 'तीन लोग चिल्ला रहे थे—आने दे, बहुत जगह है!' },
+      { shot: 3, visual: 'Extreme macro showing a razor-thin 1-millimeter gap between both bumpers.', sfx: 'Handbrake click and collective gasp', hindi: 'बंपर बस एक मिलीमीटर पहले चमत्कार से रुक गया।' },
+      { shot: 4, visual: 'Thirty bystanders erupt into proud applause for the miracle save.', sfx: 'Loud cheering and whistles', hindi: 'पूरी गली ने ताली बजाकर जीत का जश्न मनाया।' },
+      { shot: 5, visual: 'Back-seat passenger swings the metal door wide open slamming straight into the supercar.', sfx: 'Horrifying metallic crunch', hindi: 'तभी पीछे वाले ने दरवाज़ा पूरा खोलकर ठोक दिया।' },
+      { shot: 6, visual: 'All three parking guides calmly walk away pretending to be strangers.', sfx: 'Awkward whistling', hindi: 'तीनों गाइड अनजान बनकर जूस पीने खिसक लिए।' },
+    ],
+  },
+  {
+    id: 'antic_trojan_balcony_fall_mattress',
+    title: 'GUY SLIPS OFF 3-STORY BALCONY—LANDS STRAIGHT ON A ₹499 MATTRESS DEMO',
+    angle: 'fake-tutorial',
+    brand: 'Trojan Chaos',
+    trendHook: 'Wants & Needs Trojan-Horse Ad Twist: Terrifying Fall -> Deadpan Mattress Sale',
+    visualStyle: 'hybrid-1998-gta6',
+    pitch:
+      'A guy reaching for a runaway kite slips off a third-floor balcony in heart-stopping slow motion—bouncing cleanly onto a street-side mattress stall while the owner deadpan flips up a "₹499 Spring Mattress" sign.',
+    frames: [
+      { frame: 1, position: 'Top Left', framing: 'High-angle roof shot', action: 'Leaning wildly over a third-floor balcony railing for a neon kite, a guy loses his rubber slipper and tips forward.', caption: 'Slipped Off 3rd Floor!' },
+      { frame: 2, position: 'Top Center', framing: 'Low-angle dramatic shot', action: 'Passersby below point upward in horror as he windmills his arms plummeting past the second-floor laundry lines.', caption: 'Passing 2nd Floor!' },
+      { frame: 3, position: 'Top Right', framing: 'Extreme slow-mo shot', action: 'Three feet above the busy street, he closes his eyes and braces for impact while dramatic orchestral music peaks.', caption: '3 Feet From Street!' },
+      { frame: 4, position: 'Bottom Left', framing: 'Wide bounce shot', action: 'BOING! He lands flat on a stacked tower of cloud-soft white mattresses outside a roadside furniture shop and bounces twice.', caption: 'Soft Double Bounce!' },
+      { frame: 5, position: 'Bottom Center', framing: 'Medium deadpan shot', action: 'Completely unharmed, he sinks comfortably into the foam, pulls a pillow under his head, and gives a thumbs-up.', caption: '10/10 Back Support!' },
+      { frame: 6, position: 'Bottom Right', framing: 'Wide storefront shot', action: 'The deadpan shopkeeper flips a cardboard sign reading "TESTED FROM 3RD FLOOR — ₹499 ONLY" as five customers line up.', caption: '3rd-Floor Tested: ₹499!' },
+    ],
+    shots: [
+      { shot: 1, visual: 'High-angle shot of a guy slipping off a 3rd-floor balcony reaching for a kite.', sfx: 'Slipper squeak and gasp', hindi: 'पतंग पकड़ते वक्त वह तीसरी मंज़िल से फिसल गया।' },
+      { shot: 2, visual: 'Crowd below points up in panic as he tumbles past 2nd-floor balconies.', sfx: 'Dramatic wind rush', hindi: 'नीचे खड़ी भीड़ चीखकर ऊपर देखने लगी।' },
+      { shot: 3, visual: 'Extreme slow-motion three feet above the road as all audio drops silent.', sfx: 'Heartbeat thump and dead silence', hindi: 'सड़क से तीन फुट ऊपर उसने आंखें बंद कर लीं।' },
+      { shot: 4, visual: 'He lands squarely on a roadside stack of white mattresses and bounces softly.', sfx: 'Cartoonish deep spring boing', hindi: 'वह सीधा नीचे लगे गद्दों पर उछलकर गिरा।' },
+      { shot: 5, visual: 'He tucks a pillow under his head giving a satisfied thumbs-up.', sfx: 'Relaxed sigh', hindi: 'कमर सीधी कर बोला—गद्दा तो बड़ा आरामदायक है।' },
+      { shot: 6, visual: 'Deadpan shopkeeper holds up a "3rd-Floor Tested: ₹499" sign to queuing buyers.', sfx: 'Cash register ding', hindi: 'दुकानदार ने चार सौ निन्यानवे का बोर्ड लगा दिया।' },
+    ],
+  },
+];

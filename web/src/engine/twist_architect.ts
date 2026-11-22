@@ -51,20 +51,35 @@ export const TWIST_BLUEPRINTS: readonly TwistBlueprint[] = [
     subversionSnap: 'That exact Shot 1 prop becomes the Shot 6 punchline',
     directive: 'Expectation Subversion: Plant one casual detail in Shot 1 that looks like background clutter and pay it off as the final Shot 6 twist.',
   },
+  {
+    id: 'anticipation-hook',
+    label: '0.5s Physical Anticipation Hook',
+    assumedTrack: 'Object/vehicle is 1 millimeter from disaster or falling',
+    subversionSnap: 'Holds breath for 4 shots then resolves with an impossible deadpan catch',
+    directive: 'Expectation Subversion: Open Frame 1 on an unmistakable physical disaster about to happen (tilting tower, 1mm reverse, falling object) so viewers cannot scroll until resolution.',
+  },
+  {
+    id: 'trojan-chaos-reveal',
+    label: 'Trojan-Horse Chaos Reveal',
+    assumedTrack: 'Pure unscripted crash / prank / stunt with zero ad radar',
+    subversionSnap: 'Impact beat match-cuts straight into an unexpected deadpan swag/product flex',
+    directive: 'Expectation Subversion: Earn 100% attention with raw stunt/crash chaos in Shots 1-3, then match-cut at peak impact into an unexpected deadpan product or swag reveal.',
+  },
 ];
 
 export const TWIST_ARCHITECT_GUIDE =
   'EXPECTATION-SUBVERSION BLUEPRINTS (pick 1 per story): ' +
-  '1) Zoom-Out Context Flip (tight tense close-ups -> wide reveal of tiny mundane task); ' +
-  '2) False-Genre Hijack (serious horror/romance trailer -> deadpan street comedy); ' +
-  '3) Double-Twist False Ending (expected joke in Shot 4 -> second rug-pull in Shot 6); ' +
-  '4) Audio-Visual Contradiction (spy-mission narration over midnight fridge heist); ' +
-  '5) Intimidation Bait-and-Switch (tense standoff -> ultra-polite exchange).';
+  '1) Zoom-Out Context Flip; 2) False-Genre Hijack; 3) Double-Twist False Ending; ' +
+  '4) Audio-Visual Contradiction; 5) Intimidation Bait-and-Switch; ' +
+  '6) 0.5s Physical Anticipation Hook (about-to-crash/drop tension); ' +
+  '7) Trojan-Horse Chaos Reveal (earn attention with stunt/crash -> unexpected deadpan flex at end).';
 
 const TWIST_LINE_RE = /Expectation Subversion:[^.]+\./;
 
 export function detectTwistBlueprint(topic: TopicOption): TwistBlueprint {
   const txt = `${topic.title} ${topic.pitch} ${topic.trendHook}`.toLowerCase();
+  if (/trojan|hoodie|mattress|demo|flex/.test(txt)) return TWIST_BLUEPRINTS[7];
+  if (/tilting|millimeter|1mm|40 chai|falling|anticipation/.test(txt)) return TWIST_BLUEPRINTS[6];
   if (/zoom|close-up|maggi|noodle|tweezer|macro/.test(txt)) return TWIST_BLUEPRINTS[0];
   if (/horror|rain|violin|romantic|ghost|trailer/.test(txt)) return TWIST_BLUEPRINTS[1];
   if (/double|second|bill|robber|biscuit|clove|laung/.test(txt)) return TWIST_BLUEPRINTS[2];
