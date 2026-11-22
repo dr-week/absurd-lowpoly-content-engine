@@ -4,13 +4,15 @@ from __future__ import annotations
 
 import re
 
+from absurd_engine.parody import find_exact_proper_name_leaks, has_emoji
 from absurd_engine.playbook import (
+    BANNED_CLICHE_WORDS,
     CLICHE_WARNING_PHRASES,
     REQUIRED_NEGATIVE_CONSTRAINTS,
-    REQUIRED_PS1_TOKENS,
     STORYBOARD_SLOTS,
     STYLE_SPAM_TOKENS,
     VIDEO_BEATS,
+    VISUAL_STYLE_PROFILES,
 )
 from absurd_engine.schemas import (
     LintIssue,
@@ -22,6 +24,7 @@ from absurd_engine.schemas import (
 
 # Strip ASCII + Devanagari punctuation (e.g. standalone danda "।") before counting words
 _PUNCT_ONLY_RE = re.compile(r"^[\W_।॥]+$")
+_BANNED_CLICHE_RE = re.compile(r"\b(?:" + "|".join(BANNED_CLICHE_WORDS) + r")\b", re.IGNORECASE)
 
 
 def _count_words(text: str) -> int:
@@ -47,7 +50,7 @@ def lint_episode(
     """Validate an episode bundle against all Playbook style, pacing, efficiency, and anti-cliché rules."""
     issues: list[LintIssue] = []
 
-    # 1. Anti-cliché checks on premise
+    # 1. Anti-cliché, zero-emoji, and zero-exact-proper-name checks
     idea_blob = " ".join(
         [idea.title, idea.mundane_anchor, idea.broken_logic_pivot, idea.deadpan_payoff]
     ).lower()
@@ -57,46 +60,65 @@ def lint_episode(
                 LintIssue(
                     severity="warning",
                     code="IDEA_BANNED_TAME_TROPE",
-                    message=f"Premise mentions banned/tame trope '{phrase}' — ideas must match the high-octane Zepto benchmark.",
+                    message=f"Premise mentions banned/tame trope '{phrase}' — keep premises sharp and modern.",
                     location="idea",
                 )
             )
 
-    # Zepto Standard Quality Check: must contain high-energy physical disruption or catastrophic destruction
-    from absurd_engine.playbook import CATASTROPHIC_DESTRUCTION_KEYWORDS
-    all_content = f"{idea_blob} {video.rendered_prompt.lower()}"
-    if not any(kw in all_content for kw in CATASTROPHIC_DESTRUCTION_KEYWORDS):
+    full_text = f"{idea_blob}\n{storyboard.rendered_prompt}\n{video.rendered_prompt}"
+    for leak in find_exact_proper_name_leaks(full_text):
         issues.append(
             LintIssue(
-                severity="warning",
-                code="IDEA_LACKS_CATASTROPHIC_DESTRUCTION",
-                message="Episode lacks catastrophic physical destruction or high-speed disruption (the Zepto Standard).",
-                location="idea",
+                severity="error",
+                code="PROPER_NAME_LEAK",
+                message=f"Exact proper name '{leak}' detected — use phonetic lookalike parody spelling instead.",
+                location="episode",
+            )
+        )
+    if has_emoji(full_text):
+        issues.append(
+            LintIssue(
+                severity="error",
+                code="EMOJI_NOT_ALLOWED",
+                message="Unicode emoji detected — prompts must remain strictly zero-emoji.",
+                location="episode",
+            )
+        )
+    cliche_match = _BANNED_CLICHE_RE.search(full_text)
+    if cliche_match:
+        issues.append(
+            LintIssue(
+                severity="error",
+                code="BANNED_LOCATION_OR_TROPE_CLICHE",
+                message=f"Banned cliché '{cliche_match.group(0)}' detected — avoid Goa/Uncle/Delhi/Mumbai clichés.",
+                location="episode",
             )
         )
 
-    # 2. Storyboard aesthetic, slot alignment, caption length & anti-repetition checks
+    # 2. Storyboard aesthetic (style-aware), slot alignment, caption length & anti-repetition checks
+    sb_profile = VISUAL_STYLE_PROFILES.get(storyboard.spec.visual_style, VISUAL_STYLE_PROFILES["ps1-1998"])
     sb_lower = storyboard.rendered_prompt.lower()
-    for token in REQUIRED_PS1_TOKENS:
+    for token in sb_profile.required_tokens:
         if token not in sb_lower:
             issues.append(
                 LintIssue(
                     severity="error",
-                    code="STORYBOARD_MISSING_PS1_STYLE",
-                    message=f"Storyboard prompt is missing required PS1/N64 style token '{token}'.",
+                    code="STORYBOARD_MISSING_STYLE_TOKEN",
+                    message=f"Storyboard prompt ({sb_profile.key}) is missing required style token '{token}'.",
                     location="storyboard.rendered_prompt",
                 )
             )
-    for neg in REQUIRED_NEGATIVE_CONSTRAINTS:
-        if neg not in sb_lower:
-            issues.append(
-                LintIssue(
-                    severity="error",
-                    code="STORYBOARD_MISSING_NEGATIVE_CONSTRAINT",
-                    message=f"Storyboard prompt is missing required negative constraint '{neg}'.",
-                    location="storyboard.rendered_prompt",
+    if sb_profile.require_ps1_negatives:
+        for neg in REQUIRED_NEGATIVE_CONSTRAINTS:
+            if neg not in sb_lower:
+                issues.append(
+                    LintIssue(
+                        severity="error",
+                        code="STORYBOARD_MISSING_NEGATIVE_CONSTRAINT",
+                        message=f"Storyboard prompt is missing required negative constraint '{neg}'.",
+                        location="storyboard.rendered_prompt",
+                    )
                 )
-            )
 
     for slot, frame in zip(STORYBOARD_SLOTS, storyboard.spec.frames, strict=True):
         if frame.position != slot.position:
@@ -128,35 +150,37 @@ def lint_episode(
                 severity="warning",
                 code="STORYBOARD_STYLE_REPETITION",
                 message=(
-                    f"{sb_spam}/6 storyboard frames repeat global PS1 style terms — "
+                    f"{sb_spam}/6 storyboard frames repeat global style terms — "
                     "keep style in the global header for token efficiency."
                 ),
                 location="storyboard.frames",
             )
         )
 
-    # 3. Video aesthetic, audio, timing, Hindi dialogue pacing & anti-repetition checks
+    # 3. Video aesthetic (style-aware), audio, timing, Hindi dialogue pacing & anti-repetition checks
+    vid_profile = VISUAL_STYLE_PROFILES.get(video.spec.visual_style, VISUAL_STYLE_PROFILES["ps1-1998"])
     vid_lower = video.rendered_prompt.lower()
-    for token in REQUIRED_PS1_TOKENS:
+    for token in vid_profile.required_tokens:
         if token not in vid_lower:
             issues.append(
                 LintIssue(
                     severity="error",
-                    code="VIDEO_MISSING_PS1_STYLE",
-                    message=f"Video prompt is missing required PS1/N64 style token '{token}'.",
+                    code="VIDEO_MISSING_STYLE_TOKEN",
+                    message=f"Video prompt ({vid_profile.key}) is missing required style token '{token}'.",
                     location="video.rendered_prompt",
                 )
             )
-    for neg in REQUIRED_NEGATIVE_CONSTRAINTS:
-        if neg not in vid_lower:
-            issues.append(
-                LintIssue(
-                    severity="error",
-                    code="VIDEO_MISSING_NEGATIVE_CONSTRAINT",
-                    message=f"Video prompt is missing required negative constraint '{neg}'.",
-                    location="video.rendered_prompt",
+    if vid_profile.require_ps1_negatives:
+        for neg in REQUIRED_NEGATIVE_CONSTRAINTS:
+            if neg not in vid_lower:
+                issues.append(
+                    LintIssue(
+                        severity="error",
+                        code="VIDEO_MISSING_NEGATIVE_CONSTRAINT",
+                        message=f"Video prompt is missing required negative constraint '{neg}'.",
+                        location="video.rendered_prompt",
+                    )
                 )
-            )
     if "deadpan" not in vid_lower or "hindi" not in vid_lower:
         issues.append(
             LintIssue(
@@ -218,7 +242,7 @@ def lint_episode(
                 severity="warning",
                 code="VIDEO_STYLE_REPETITION",
                 message=(
-                    f"{vid_spam}/6 video shots repeat global PS1 style terms — "
+                    f"{vid_spam}/6 video shots repeat global style terms — "
                     "keep style in the global header for token efficiency."
                 ),
                 location="video.shots",

@@ -8,6 +8,18 @@ from uuid import uuid4
 
 from pydantic import BaseModel, Field, field_validator
 
+VisualStyle = Literal[
+    "ps1-1998",
+    "gta6-vice",
+    "hybrid-1998-gta6",
+    "cctv-dashcam",
+    "claymation-stopmo",
+    "retro-80s-concept",
+    "isometric-diorama",
+    "vhs-found-footage",
+    "noir-monochrome",
+]
+
 
 class TrendItem(BaseModel):
     """A fresh Indian news or trending hook fetched from RSS."""
@@ -27,7 +39,7 @@ class IdeaRequest(BaseModel):
     )
     setting_hint: str | None = Field(
         default=None,
-        description="Optional location hint (e.g., 'Delhi Metro', 'Chai tapri', 'SBI lunch break').",
+        description="Optional location hint (e.g., 'Metro platform', 'Chai tapri', 'SBI lunch break').",
     )
     news_hook: str | None = Field(
         default=None,
@@ -116,6 +128,7 @@ class StoryboardSpec(BaseModel):
     """Structured 6-frame 3x2 storyboard specification."""
 
     title: str = Field(..., min_length=3, max_length=80)
+    visual_style: VisualStyle = "ps1-1998"
     frames: list[StoryboardFrame] = Field(..., min_length=6, max_length=6)
 
     @field_validator("frames")
@@ -133,7 +146,7 @@ class StoryboardResult(BaseModel):
 
 
 class VideoShot(BaseModel):
-    """Single timed beat inside the 20-second 9:16 vertical video prompt."""
+    """Single timed beat inside the 6-shot vertical video prompt."""
 
     shot_number: int = Field(..., ge=1, le=6)
     time_window: str = Field(..., description="Exact beat window, e.g. '0:00–0:03'.")
@@ -160,9 +173,10 @@ class VideoShot(BaseModel):
 
 
 class VideoScriptSpec(BaseModel):
-    """Structured 20-second 9:16 vertical video specification."""
+    """Structured 6-shot vertical video specification."""
 
     title: str = Field(..., min_length=3, max_length=80)
+    visual_style: VisualStyle = "ps1-1998"
     narrator_voice: str = Field(
         default="Deadpan, serious Indian male narrator speaking ultra-short Hindi lines",
     )
@@ -237,6 +251,7 @@ class EpisodeGenerateRequest(BaseModel):
     setting_hint: str | None = None
     news_hook: str | None = None
     mechanic: str | None = None
+    visual_style: VisualStyle = "ps1-1998"
     mode: Literal["fused", "modular"] = "fused"
     auto_repair: bool = True
     save_to_db: bool = True
@@ -247,6 +262,7 @@ class BatchGenerateRequest(BaseModel):
     count: int = Field(default=3, ge=1, le=10)
     from_trends: bool = True
     seed_topics: list[str] = Field(default_factory=list)
+    visual_style: VisualStyle = "ps1-1998"
     mode: Literal["fused", "modular"] = "fused"
     auto_repair: bool = True
     save_to_db: bool = True

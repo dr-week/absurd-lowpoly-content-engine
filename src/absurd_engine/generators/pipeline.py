@@ -23,6 +23,7 @@ from absurd_engine.schemas import (
     PremiseIdea,
     StoryboardResult,
     VideoResult,
+    VisualStyle,
 )
 from absurd_engine.validator import lint_episode
 
@@ -84,15 +85,18 @@ def _render_bundle(
     provider: BaseLLMProvider,
     draft: FusedEpisodeDraft,
     mode: Literal["fused", "modular"],
+    visual_style: VisualStyle = "ps1-1998",
     repaired: bool = False,
 ) -> EpisodeBundle:
+    sb_spec = draft.storyboard.model_copy(update={"visual_style": visual_style})
+    vid_spec = draft.video.model_copy(update={"visual_style": visual_style})
     sb_res = StoryboardResult(
-        spec=draft.storyboard,
-        rendered_prompt=render_storyboard_prompt(draft.storyboard),
+        spec=sb_spec,
+        rendered_prompt=render_storyboard_prompt(sb_spec),
     )
     vid_res = VideoResult(
-        spec=draft.video,
-        rendered_prompt=render_video_prompt(draft.video),
+        spec=vid_spec,
+        rendered_prompt=render_video_prompt(vid_spec),
     )
     lint = lint_episode(draft.idea, sb_res, vid_res)
     return EpisodeBundle(
@@ -134,6 +138,7 @@ async def generate_episode(
     idea: PremiseIdea | None = None,
     mode: Literal["fused", "modular"] = "fused",
     auto_repair: bool = True,
+    visual_style: VisualStyle = "ps1-1998",
 ) -> EpisodeBundle:
     """Run the full prompt-generation pipeline (1-call fused or 3-call modular) with optional auto-repair."""
     req = idea_request or IdeaRequest(count=1)
@@ -159,11 +164,13 @@ async def generate_episode(
         )
         effective_mode = "modular"
 
-    bundle = _render_bundle(provider, draft, mode=effective_mode, repaired=False)
+    bundle = _render_bundle(provider, draft, mode=effective_mode, visual_style=visual_style, repaired=False)
 
     if auto_repair and (not bundle.lint.passed or bundle.lint.score < 95):
         repaired_draft = await _repair_draft(provider, draft, bundle.lint)
-        repaired_bundle = _render_bundle(provider, repaired_draft, mode=effective_mode, repaired=True)
+        repaired_bundle = _render_bundle(
+            provider, repaired_draft, mode=effective_mode, visual_style=visual_style, repaired=True
+        )
         # Keep the repaired version only if it improved or maintained score
         if repaired_bundle.lint.score >= bundle.lint.score:
             bundle = repaired_bundle

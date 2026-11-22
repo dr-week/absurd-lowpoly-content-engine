@@ -25,7 +25,7 @@ _MOCK_SCENARIOS = [
         "idea": PremiseIdea(
             title="QR CODE NE GRAVITY KAAT DI",
             mechanic="gravity_debit",
-            mundane_anchor="A tired office worker paying ₹12 via UPI at a roadside Delhi chai tapri.",
+            mundane_anchor="A tired office worker paying ₹12 via UPI at a roadside chai tapri.",
             broken_logic_pivot=(
                 "The faded laminated QR sticker fails to scan; when he tilts his phone 15 degrees, "
                 "the payment app deducts 9.8 m/s² of local gravity instead of ₹12."
@@ -348,17 +348,17 @@ _MOCK_SCENARIOS = [
         "idea": PremiseIdea(
             title="FAN MASK NE SKYBOX KHEENCH LIYA",
             mechanic="draw_distance_fog",
-            mundane_anchor="A Delhi commuter testing a fan-powered anti-pollution mask at a foggy traffic signal.",
+            mundane_anchor="A commuter testing a fan-powered anti-pollution mask at a foggy traffic signal.",
             broken_logic_pivot=(
                 "He clicks the mask fan to Speed 3 and accidentally inhales the entire city's "
-                "render distance and skybox, turning Connaught Place into a blank grey void."
+                "render distance and skybox, turning the busy roundabout into a blank grey void."
             ),
             deadpan_payoff=(
                 "Traffic cops calmly hand him a ₹500 challan for removing the city's background "
                 "while cars drive through empty grey nothingness."
             ),
             protagonist=(
-                "Delhi scooter commuter in a brown puffer jacket, helmet, and bulky fan-powered face mask."
+                "Scooter commuter in a brown puffer jacket, helmet, and bulky fan-powered face mask."
             ),
             key_props=[
                 "fan-powered filter mask with dial",
@@ -366,7 +366,7 @@ _MOCK_SCENARIOS = [
                 "traffic police challan pad",
                 "vanishing city skyline",
             ],
-            tone_tags=["deadpan", "surreal", "ps1-1998", "delhi-aqi"],
+            tone_tags=["deadpan", "surreal", "ps1-1998", "city-aqi"],
         ),
         "storyboard": StoryboardSpec(
             title="FAN MASK NE SKYBOX KHEENCH LIYA",
@@ -376,7 +376,7 @@ _MOCK_SCENARIOS = [
                     position="Top Left",
                     camera_framing="Wide static traffic shot",
                     visual_description=(
-                        "Scooter commuter in a brown jacket waits at a foggy Delhi signal wearing "
+                        "Scooter commuter in a brown jacket waits at a foggy traffic signal wearing "
                         "a bulky fan-powered filter mask."
                     ),
                     hinglish_caption="AQI 400 tha, fan mask pehna.",
@@ -408,7 +408,7 @@ _MOCK_SCENARIOS = [
                         "Every building behind the traffic light pops out of existence, leaving "
                         "only flat grey void and floating red signal lights."
                     ),
-                    hinglish_caption="Poora Delhi background delete ho gaya.",
+                    hinglish_caption="Poora city background delete ho gaya.",
                 ),
                 StoryboardFrame(
                     frame_number=5,
@@ -440,11 +440,11 @@ _MOCK_SCENARIOS = [
                     time_window="0:00–0:03",
                     transition="",
                     visual_action=(
-                        "Static shot of commuter Vivek on a scooter at a foggy Delhi intersection, "
+                        "Static shot of commuter Vivek on a scooter at a foggy city intersection, "
                         "wearing a bulky fan-powered pollution mask."
                     ),
                     retro_sfx="Distant traffic horns and tiny fan whirr",
-                    hindi_dialogue="दिल्ली में विवेक ने फैन मास्क पहना।",
+                    hindi_dialogue="सुबह विवेक ने फैन मास्क पहना।",
                 ),
                 VideoShot(
                     shot_number=2,

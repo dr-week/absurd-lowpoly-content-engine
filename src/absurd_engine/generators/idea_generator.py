@@ -15,7 +15,7 @@ THE 7 COMEDY CRAFT LAWS (MANDATORY):
 4. RULE OF THREE: Pattern -> Confirmation -> Broken Prediction.
 5. PUNCH-WORD LAST & ZERO FAT: Put the reveal word at the very end of the punchline (<= 7 Hindi words). Cut all trailing explanation. Use specific numbers/props.
 6. CALLBACK LOOP: Plant one tiny concrete detail in Beat 1 and call it back in Beat 6 for instant rewatch value.
-7. BENIGN VIOLATION + STATUS GAP: High-status deadpan Straight Man (Elon, Trump, Gandhiji, Putin, Modi, Nobel scientist, news anchor) vs microscopic petty detail.
+7. BENIGN VIOLATION + STATUS GAP: High-status deadpan Straight Man (phonetic parody figures like Elone Maask, Doland Trumpe, Bapu-Wa, Puteen-Bhai, Mudi-Ji, Nobel scientist, news anchor) vs microscopic petty detail.
 
 MIX ACROSS 6 DISTINCT FORMATS:
 - over-engineer (Level 1 -> Level 999 build/upgrade)
@@ -26,9 +26,10 @@ MIX ACROSS 6 DISTINCT FORMATS:
 - weird-science (absurd lab study)
 
 STRICT BANLIST (REJECT INSTANTLY):
-- NO Delhi or Mumbai city lock-in. Mix Global/World News, Goa, Science, Iconic Figures, and Universal Modern Life.
+- NO Goa, Uncle, Delhi, or Mumbai clichés. Mix Global/World News, Science, Parody Figures, and Universal Modern Life.
 - NO tame domestic boomer tropes (boiling milk, pressure cookers, terrace clothes, house lizards).
 - NO video game meta logic (no health bars, no respawns, no NPCs).
+- Strictly ZERO emojis and ZERO exact copyrighted/celebrity proper names.
 """
 
 

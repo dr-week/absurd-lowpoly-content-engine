@@ -5,7 +5,8 @@ from __future__ import annotations
 import re
 
 from absurd_engine.llm.base import BaseLLMProvider
-from absurd_engine.playbook import VIDEO_BEATS, VIDEO_GLOBAL_HEADER
+from absurd_engine.parody import sanitize_parody_text, strip_video_forbidden
+from absurd_engine.playbook import VIDEO_BEATS, VISUAL_STYLE_PROFILES
 from absurd_engine.schemas import (
     PremiseIdea,
     StoryboardSpec,
@@ -75,22 +76,23 @@ def _merge_transition_and_action(transition: str, action: str) -> str:
 
 def render_video_prompt(spec: VideoScriptSpec) -> str:
     """Render a VideoScriptSpec into a clean video prompt with NO time, duration, or size mentions."""
-    lines = [VIDEO_GLOBAL_HEADER, ""]
+    profile = VISUAL_STYLE_PROFILES.get(spec.visual_style, VISUAL_STYLE_PROFILES["ps1-1998"])
+    lines = [profile.video_header, ""]
 
     for beat, shot in zip(VIDEO_BEATS, spec.shots, strict=True):
         transition = (shot.transition or beat.default_transition).strip()
-        shot_body = _merge_transition_and_action(transition, shot.visual_action)
+        shot_body = sanitize_parody_text(_merge_transition_and_action(transition, shot.visual_action))
 
-        sfx = shot.retro_sfx.strip().rstrip(".")
+        sfx = sanitize_parody_text(shot.retro_sfx.strip().rstrip("."))
         if beat.shot_number == 6 and "hard cut to black" not in sfx.lower():
             sfx = f"{sfx}, instant hard cut to black"
 
-        dialogue = shot.hindi_dialogue.strip().strip('"')
+        dialogue = sanitize_parody_text(shot.hindi_dialogue.strip().strip('"'))
         lines.append(f"Shot {beat.shot_number}: {shot_body} SFX: {sfx}.")
         lines.append(f'Hindi Dialogue: "{dialogue}"')
         lines.append("")
 
-    return "\n".join(lines).strip()
+    return strip_video_forbidden("\n".join(lines).strip())
 
 
 def build_video_user_prompt(

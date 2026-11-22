@@ -21,6 +21,7 @@ from absurd_engine.generators import (
 )
 from absurd_engine.llm import LLMProviderError, create_provider
 from absurd_engine.mechanics import MECHANICS_CATALOG, pick_mechanic
+from absurd_engine.playbook import BOOK_FRAMEWORKS, DIRECTORS_STACKS, VISUAL_STYLE_PROFILES
 from absurd_engine.schemas import (
     BatchGenerateRequest,
     EpisodeBundle,
@@ -98,6 +99,21 @@ def create_app(settings: EngineSettings | None = None) -> FastAPI:
             for m in MECHANICS_CATALOG
         ]
 
+    @app.get("/styles")
+    async def list_styles() -> list[dict[str, Any]]:
+        return [
+            {"key": p.key, "label": p.label, "required_tokens": list(p.required_tokens)}
+            for p in VISUAL_STYLE_PROFILES.values()
+        ]
+
+    @app.get("/creative-matrix")
+    async def get_creative_matrix() -> dict[str, Any]:
+        return {
+            "books": list(BOOK_FRAMEWORKS),
+            "directors_stacks": list(DIRECTORS_STACKS),
+            "visual_styles_count": len(VISUAL_STYLE_PROFILES),
+        }
+
     @app.get("/trends", response_model=list[TrendItem])
     async def api_trends(limit: int = 8) -> list[TrendItem]:
         return await fetch_india_trends(limit=max(1, min(20, limit)))
@@ -149,6 +165,7 @@ def create_app(settings: EngineSettings | None = None) -> FastAPI:
                 ),
                 mode=req.mode,
                 auto_repair=req.auto_repair,
+                visual_style=req.visual_style,
             )
         except LLMProviderError as exc:
             raise HTTPException(status_code=502, detail=str(exc)) from exc
@@ -186,6 +203,7 @@ def create_app(settings: EngineSettings | None = None) -> FastAPI:
                     ),
                     mode=req.mode,
                     auto_repair=req.auto_repair,
+                    visual_style=req.visual_style,
                 )
             except LLMProviderError as exc:
                 raise HTTPException(status_code=502, detail=str(exc)) from exc

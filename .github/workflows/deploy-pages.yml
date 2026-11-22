@@ -18,6 +18,23 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  test-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Sync Python deps
+        run: uv sync --dev
+
+      - name: Run Python backend test suite
+        run: uv run pytest -v
+
   build:
     runs-on: ubuntu-latest
     steps:
@@ -54,7 +71,7 @@ jobs:
           path: './web/dist'
 
   deploy:
-    needs: build
+    needs: [test-backend, build]
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

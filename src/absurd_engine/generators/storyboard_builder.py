@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 from absurd_engine.llm.base import BaseLLMProvider
-from absurd_engine.playbook import STORYBOARD_GLOBAL_HEADER, STORYBOARD_SLOTS
+from absurd_engine.parody import sanitize_parody_text
+from absurd_engine.playbook import STORYBOARD_SLOTS, VISUAL_STYLE_PROFILES
 from absurd_engine.schemas import PremiseIdea, StoryboardResult, StoryboardSpec
 
 STORYBOARD_SYSTEM_PROMPT = """You are a 1998 PS1/N64 low-poly storyboard director.
@@ -28,12 +29,14 @@ CAPTIONS:
 
 def render_storyboard_prompt(spec: StoryboardSpec) -> str:
     """Render a StoryboardSpec into the concise, token-efficient 3x2 Playbook prompt."""
-    lines = [STORYBOARD_GLOBAL_HEADER.format(title=spec.title), ""]
+    profile = VISUAL_STYLE_PROFILES.get(spec.visual_style, VISUAL_STYLE_PROFILES["ps1-1998"])
+    clean_title = sanitize_parody_text(spec.title)
+    lines = [profile.storyboard_header.format(title=clean_title), ""]
 
     for slot, frame in zip(STORYBOARD_SLOTS, spec.frames, strict=True):
-        framing = frame.camera_framing.strip().rstrip(".")
-        visual = frame.visual_description.strip().rstrip(".")
-        caption = frame.hinglish_caption.strip().strip('"')
+        framing = sanitize_parody_text(frame.camera_framing.strip().rstrip("."))
+        visual = sanitize_parody_text(frame.visual_description.strip().rstrip("."))
+        caption = sanitize_parody_text(frame.hinglish_caption.strip().strip('"'))
         lines.append(f"Frame {slot.index} ({slot.position}): {framing}. {visual}.")
         lines.append(f'Caption: "{caption}"')
         lines.append("")
