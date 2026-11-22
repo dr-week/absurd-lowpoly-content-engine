@@ -16,17 +16,17 @@ const ALIAS_RULES: readonly AliasRule[] = CHARACTER_ROSTER.flatMap((preset) =>
       upper: preset.parodyName.toUpperCase(),
       normal: preset.parodyName,
       preset,
-    })),
+    }))
+    .filter((rule) => !rule.re.test(preset.parodyName)),
 );
 
 /**
- * Replaces raw celebrity / trademarked names with phonetic lookalike spelling tweaks
+ * Replaces ALL raw celebrity / trademarked names with phonetic lookalike spelling tweaks
  * (e.g., "Elon Musk" -> "Elone Maask", "Donald Trump" -> "Doland Trumpe", "Spider-Man" -> "Spooder-Maan").
  */
 export function sanitizeCopyrightNames(text: string): string {
   let out = text;
   for (const rule of ALIAS_RULES) {
-    if (out.toLowerCase().includes(rule.normal.toLowerCase())) continue;
     out = out.replace(rule.re, (match) => (match === match.toUpperCase() && match.length > 2 ? rule.upper : rule.normal));
   }
   return out;
@@ -45,7 +45,9 @@ export function detectCharacterLock(text: string): string {
       locks.push(preset.visualLock);
     }
   }
-  return locks.length ? `Character Silhouette Lock: Render ${locks.slice(0, 2).join('; ')}.` : '';
+  return locks.length
+    ? `Parallel-Dimension Parody Look (shifted colors & absurd alternate-dimension wardrobe, NOT a copyrighted copy): Render ${locks.slice(0, 2).join('; ')}.`
+    : '';
 }
 
 export function sanitizeTopic<T extends TopicOption | ScoredTopic>(topic: T): T {

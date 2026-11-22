@@ -117,9 +117,27 @@ export const CHARACTER_ROSTER: readonly CharacterPreset[] = [
     starter: 'Koohli stares down an umpire for 20 minutes over ',
   },
   {
+    id: 'superman', label: 'Sooper-Babu', parodyName: 'Sooper-Babu',
+    rawAliases: ['superman', 'clark kent'],
+    visualLock: 'Sooper-Babu (parallel-dimension parody hero in purple tracksuit, lime-green bedsheet cape, bright yellow shorts on the outside, and spectacles)',
+    starter: 'Sooper-Babu gets stuck in traffic because ',
+  },
+  {
+    id: 'thor', label: 'Thoorwa', parodyName: 'Thoorwa',
+    rawAliases: ['thor odinson', 'thor'],
+    visualLock: 'Thoorwa (parallel-dimension parody thunder god in pastel-teal tunic, shiny tin helmet, holding a giant wooden roti-belan instead of a hammer)',
+    starter: 'Thoorwa tries to summon lightning just to ',
+  },
+  {
+    id: 'ironman', label: 'Loha-Babu', parodyName: 'Loha-Babu',
+    rawAliases: ['iron man', 'ironman', 'tony stark'],
+    visualLock: 'Loha-Babu (parallel-dimension parody armored inventor in rusty orange-and-teal tin-bucket suit with a glowing LED bicycle headlamp on his chest)',
+    starter: 'Loha-Babu runs out of battery at 1% while ',
+  },
+  {
     id: 'gta6', label: 'GTA-Sixe', parodyName: 'GTA-Sixe',
     rawAliases: ['gta 6', 'gta6', 'gta vi', 'gta-vi bhai', 'vice city'],
-    visualLock: 'GTA-Sixe (flashy parody getaway driver in pineapple-print Hawaiian shirt, khaki cargo shorts, chunky gold chain, and white socks with chappals)',
+    visualLock: 'GTA-Sixe (parallel-dimension getaway driver in pineapple-print Hawaiian shirt, khaki cargo shorts, chunky gold chain, and white socks with chappals)',
     starter: 'During a 5-star GTA-Sixe police chase, everyone stops for ',
   },
 ];

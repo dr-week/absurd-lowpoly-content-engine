@@ -20,6 +20,9 @@ export const DESI_NAME_VARIANTS: Record<string, readonly string[]> = {
   khali: ['Khaali', 'Khaaliprasad', 'Khaalu-Paaji', 'Khaalishwar'],
   salman: ['Salmaan Bhoi', 'Sallu-Bhoi', 'Bhoi-Jaan', 'Salmaanwa'],
   kohli: ['Koohli', 'Chiku-Babu', 'Koohlesh', 'Koohlu'],
+  superman: ['Sooper-Babu', 'Sooperesh', 'Sooperwa', 'Soopie'],
+  thor: ['Thoorwa', 'Thoresh', 'Thoor-Prasad', 'Thorie'],
+  ironman: ['Loha-Babu', 'Ironeshwar', 'Lohawa', 'Tin-Babu'],
   gta6: ['GTA-Sixe', 'Vice-Babu', 'GTA-Wa', 'Vice-Prasad'],
 };
 

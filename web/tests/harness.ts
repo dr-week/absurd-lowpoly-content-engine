@@ -28,7 +28,10 @@ for (const story of ALL_BESPOKE_STORIES) {
   assert.ok(craft.total >= 80, `Story "${story.id}" craft score too low: ${craft.total}`);
   assert.ok(!LABEL_PREFIX_RE.test(story.pitch), `Robotic genre prefix leaked in "${story.id}": ${story.pitch}`);
   assert.ok(!SLOP_QUOTE_RE.test(story.pitch), `Raw headline quote slop leaked in "${story.id}": ${story.pitch}`);
-  assert.ok(!/\b(elon musk|donald trump|vladimir putin|spider-man|mark zuckerberg|incredible hulk|batman)\b/i.test(`${story.title} ${story.pitch}`), `Raw copyright name leaked in ${story.id}`);
+  assert.ok(
+    !/\b(elon|musk|trump|modi|gandhi|gandhiji|putin|zuckerberg|ambani|superman|spider-man|spiderman|thor|iron man|ironman|hulk|batman)\b/i.test(`${story.title} ${story.pitch}`),
+    `Exact proper name leaked in ${story.id}: ${story.title}`,
+  );
 }
 
 const biasedLogs: RatingLogEntry[] = Array.from({ length: 10 }, (_, idx) => ({
