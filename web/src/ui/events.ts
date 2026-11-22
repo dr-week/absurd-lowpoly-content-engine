@@ -1,4 +1,5 @@
 import { cycleDirectorsStack } from '../data/creative_matrix';
+import { cycleAccentProfile } from '../engine/accent_engine';
 import { exportStudioBackup, restoreStudioBackup } from '../engine/backup_sync';
 import { cycleSituationCast } from '../engine/character_variability';
 import { cycleDesiCharacterName } from '../engine/desi_nomenclature';
@@ -16,7 +17,7 @@ export interface AppState {
   hookFilter: HookCategory | 'all'; situationFilter: SituationCategory | 'all'; visualStyle: VisualStyle;
   batchNonce: number; seenPairs: Set<string>; seenTitles: Set<string>; topics: ScoredTopic[]; liveTrends: string[];
   loadingTopics: boolean; selectedId: string | null; activeTopic?: ScoredTopic; prompts: GeneratedPrompts | null;
-  rigStep: number; punchStep: number; twistStep: number; nameStep: number; stackStep: number; voiceStep: number; castStep: number; promoStep: number;
+  rigStep: number; punchStep: number; twistStep: number; nameStep: number; stackStep: number; voiceStep: number; castStep: number; promoStep: number; accentStep: number;
   loading: boolean;
   logs: RatingLogEntry[];
   saved: SavedItem[];
@@ -98,6 +99,7 @@ export function bindAppEvents(
         return;
       }
       if (a === 'reroll-voice' && state.prompts) { const out = cycleVoiceEnsemble(state.prompts, (state.voiceStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Voice: ${out.label}`); return; }
+      if (a === 'reroll-accent' && state.prompts) { const out = cycleAccentProfile(state.prompts, (state.accentStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Accent: ${out.label}`); return; }
       if (a === 'reroll-twist' && state.prompts) { const out = cycleTwistBlueprint(state.prompts, (state.twistStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Twist: ${out.label}`); return; }
       if (a === 'reroll-stack' && state.prompts) { const out = cycleDirectorsStack(state.prompts, (state.stackStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Film: ${out.label}`); return; }
       if (a === 'reroll-cast' && state.prompts) { const out = cycleSituationCast(state.prompts, (state.castStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Cast: ${out.label}`); return; }

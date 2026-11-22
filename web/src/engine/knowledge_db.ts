@@ -1,5 +1,6 @@
 import { DIRECTORS_STACKS } from '../data/creative_matrix';
 import { ALL_BESPOKE_STORIES } from '../data/stories_registry';
+import { ACCENT_PROFILES } from './accent_engine';
 import { VOICE_ENSEMBLES } from './dialogue_theater';
 import { MARKETING_GIMMICKS } from './marketing_gimmicks';
 import { VISUAL_STYLE_OPTIONS } from './visual_styles';
@@ -97,6 +98,7 @@ export function getKnowledgeDB(): StructuredKnowledgeDB {
   for (const s of VISUAL_STYLE_OPTIONS) db.insert({ id: `style_${s.id}`, kind: 'style', title: s.label, domain: 'visual', summary: s.sbDesc, tags: ['style', s.badge, s.id], payload: { ...s } });
   for (const v of VOICE_ENSEMBLES) db.insert({ id: `voice_${v.id}`, kind: 'voice', title: v.label, domain: 'theater', summary: v.audioHeader, tags: ['voice', 'npc', v.id], payload: { ...v } });
   for (const d of DIRECTORS_STACKS) db.insert({ id: `stack_${d.label}`, kind: 'stack', title: d.label, domain: 'film', summary: `${d.book} | ${d.lens} | ${d.editMethod}`, tags: ['film', 'camera', d.book], payload: { ...d } });
+  for (const a of ACCENT_PROFILES) db.insert({ id: `accent_${a.id}`, kind: 'voice', title: a.label, domain: 'accent', summary: `${a.languageFlavor} — ${a.trendingWords.join(', ')}`, tags: ['accent', 'slang', ...a.trendingWords], payload: { ...a } });
   for (const st of ALL_BESPOKE_STORIES) db.insert({ id: `story_${st.id}`, kind: 'story', title: st.title, domain: st.angle, summary: st.pitch, tags: [st.brand, st.angle, st.trendHook], payload: { ...st } });
   cachedDb = db;
   return db;
