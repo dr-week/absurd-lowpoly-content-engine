@@ -129,17 +129,19 @@ export async function generateFreeLiveScriptSpec(topic: TopicOption): Promise<{ 
   const rig = pickCinematographyRig();
   const mech = pickComedyMechanism(cryptoRng());
   const system =
-    'Expand this comedy topic into a 6-frame 3x2 storyboard and a 6-shot video script. ' +
+    'Expand this comedy topic into a 6-frame 3x2 storyboard and a tight 5-shot video script (NEVER 6 shots). ' +
     `PRIMARY MECHANISM (${mech.name}): ${mech.rule} PUNCHLINE RULE: ${mech.punchlineRule} ` +
     `${WRITERS_ROOM_RULES} ${rig.directive} ` +
-    'DO NOT repeat PS1/low-poly style words inside frames/shots. NEVER mention duration, time, timestamps, or 9:16 aspect ratio. Keep Shot 6 Hindi <= 7 words with reveal word LAST. ' +
+    'Keep every spoken line ultra-short (<= 6 words) so the whole 5-shot video plays fast and punchy. NEVER mention duration, time, timestamps, or aspect ratio. ' +
     'Return ONLY JSON: {"frames":[{"frame":1,"position":"Top Left","framing":"...","action":"...","caption":"short Hinglish"}],"shots":[{"shot":1,"visual":"...","sfx":"...","hindi":"short Devanagari Hindi"}]}';
 
-  const user = `Title: ${topic.title}\nWorld: ${topic.brand}\nPremise: ${topic.pitch}\nExact positions: Top Left, Top Center, Top Right, Bottom Left, Bottom Center, Bottom Right.`;
+  const user = `Title: ${topic.title}\nWorld: ${topic.brand}\nPremise: ${topic.pitch}\nExact 6 storyboard positions: Top Left, Top Center, Top Right, Bottom Left, Bottom Center, Bottom Right. Exactly 5 video shots (1 to 5).`;
   try {
     const raw = await callFreeAI(system, user, 18000);
     const parsed = JSON.parse(extractJson(raw)) as { frames?: StoryboardFrameData[]; shots?: VideoShotData[] };
-    if (parsed.frames?.length === 6 && parsed.shots?.length === 6) return { frames: parsed.frames, shots: parsed.shots };
+    if (parsed.frames?.length === 6 && parsed.shots && parsed.shots.length >= 4 && parsed.shots.length <= 5) {
+      return { frames: parsed.frames, shots: parsed.shots };
+    }
   } catch {
     // Fallback cleanly below
   }

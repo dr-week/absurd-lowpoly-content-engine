@@ -38,6 +38,13 @@ export function renderStoryboardText(
 const FORBIDDEN_VID_RE = /\b(9:16|16:9|20-second|20 seconds?)\b|\[\d:\d{2}[^\]]*\]|[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/giu;
 const cleanVideoLine = (s: string): string => sanitizeCopyrightNames(s).replace(FORBIDDEN_VID_RE, '').replace(/\s{2,}/g, ' ').trim();
 
+function condenseToFiveShots(shots: VideoShotData[]): VideoShotData[] {
+  if (shots.length <= 5) return shots.map((s, idx) => ({ ...s, shot: idx + 1 }));
+  // Keep Hook (1), Escalation (2), Shift (3), Build-up (5), and Payoff (6) as Shots 1-5
+  const picked = [shots[0], shots[1], shots[2], shots[shots.length - 2], shots[shots.length - 1]];
+  return picked.map((s, idx) => ({ ...s, shot: idx + 1 }));
+}
+
 export function renderVideoText(
   shots: VideoShotData[],
   rigDirective?: string,
@@ -45,13 +52,27 @@ export function renderVideoText(
   ensembleSeed = 0,
   castDirective?: string,
 ): string {
+  const tightShots = condenseToFiveShots(shots);
   const rig = rigDirective ?? pickCinematographyRig().directive;
-  const lock = detectCharacterLock(shots.map((s) => s.visual).join(' ')) || castDirective || '';
+  const lock = detectCharacterLock(tightShots.map((s) => s.visual).join(' ')) || castDirective || '';
   const lines: string[] = [VIDEO_HEADER(rig, lock, visualStyle, ensembleSeed), ''];
-  for (const shot of shots) {
+  let spokenCount = 0;
+
+  for (let i = 0; i < tightShots.length; i += 1) {
+    const shot = tightShots[i];
+    const isLast = i === tightShots.length - 1;
     lines.push(`Shot ${shot.shot}: ${cleanVideoLine(shot.visual)} SFX: ${cleanVideoLine(shot.sfx)}.`);
-    for (const turnLine of formatShotDialogue(shot, ensembleSeed)) {
-      lines.push(turnLine);
+
+    // Keep total video dialogues strictly to 3-4 lines for crisp <15s pacing:
+    // Shot 3 is a pure visual/SFX action beat; Shot 4 stays silent if budget already hit 3.
+    const shouldSpeak = isLast || (shot.shot !== 3 && (shot.shot !== 4 || spokenCount < 3));
+    if (shouldSpeak) {
+      const budgetLeft = isLast ? 1 : Math.max(1, 3 - spokenCount);
+      const turns = formatShotDialogue(shot, ensembleSeed).slice(0, budgetLeft);
+      for (const turnLine of turns) lines.push(turnLine);
+      spokenCount += turns.length;
+    } else {
+      lines.push('Dialogue: [None — pure visual action & SFX beat]');
     }
     lines.push('');
   }

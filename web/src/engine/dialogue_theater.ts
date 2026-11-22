@@ -109,13 +109,15 @@ const cleanHindi = (s: string): string => s.replace(/[\u{1F300}-\u{1FAFF}\u2600-
 
 export function formatShotDialogue(shot: VideoShotData, ensembleSeed = 0): string[] {
   if (shot.turns && shot.turns.length > 0) {
-    return shot.turns.map((turn: DialogueTurn, idx: number) => {
+    const maxTurns = shot.shot === 2 || shot.shot === 3 ? 2 : 1;
+    return shot.turns.slice(0, maxTurns).map((turn: DialogueTurn, idx: number) => {
       const prefix = idx === 0 ? 'Speaker' : 'Immediately';
       return `${prefix} [${turn.speaker} — ${turn.voice}, ${turn.delivery}]: "${cleanHindi(turn.hindi)}"`;
     });
   }
   const ensemble = pickVoiceEnsemble(ensembleSeed);
-  const slot = ensemble.castByShot[Math.max(0, Math.min(5, shot.shot - 1))];
+  const slotIdx = shot.shot >= 5 ? 5 : Math.max(0, Math.min(4, shot.shot - 1));
+  const slot = ensemble.castByShot[slotIdx];
   return [`Speaker [${slot.speaker} — ${slot.voice}, ${slot.delivery}]: "${cleanHindi(shot.hindi)}"`];
 }
 

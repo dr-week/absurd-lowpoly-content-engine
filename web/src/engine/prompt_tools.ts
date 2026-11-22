@@ -49,7 +49,7 @@ export function cycleAlternatePunchline(
 ): { prompts: GeneratedPrompts; style: string } {
   const pick = ALT_PUNCHLINES[Math.abs(step) % ALT_PUNCHLINES.length];
   const updatedVideo = prompts.videoPrompt.replace(
-    /(Shot 6:[\s\S]*?(?:Hindi Dialogue|Speaker \[[^\]]+\]):\s*")([^"]*)(")/,
+    /(Shot (?:5|6|4):[\s\S]*?(?:Hindi Dialogue|Speaker \[[^\]]+\]):\s*")([^"]*)(")(?![\s\S]*Shot \d+:)/,
     `$1${pick.hindi}$3`,
   );
   return { style: pick.style, prompts: { ...prompts, videoPrompt: updatedVideo } };

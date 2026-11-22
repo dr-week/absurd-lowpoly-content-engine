@@ -40,8 +40,8 @@ export function buildViralPackage(topic: ScoredTopic, prompts: GeneratedPrompts)
   };
   const pinnedComment = commentMap[topic.hookCategory] ?? 'Did you catch the ending twist on the first watch?';
 
-  const shot6Match = prompts.videoPrompt.match(/Shot 6:[\s\S]*?(?:Hindi Dialogue|Speaker \[[^\]]+\]):\s*"([^"]*)"/);
-  const words = shot6Match ? shot6Match[1].trim().split(/\s+/).filter(Boolean).length : 0;
+  const lastShotMatch = prompts.videoPrompt.match(/Shot (?:5|6|4):[\s\S]*?(?:Hindi Dialogue|Speaker \[[^\]]+\]):\s*"([^"]*)"(?![\s\S]*Shot \d+:)/);
+  const words = lastShotMatch ? lastShotMatch[1].trim().split(/\s+/).filter(Boolean).length : 0;
   const loopStatus = words > 0 && words <= 7 ? `Tight Loop (${words}w)` : `Crisp Cut (${words}w)`;
   const bp = detectTwistBlueprint(topic);
   const twistAudit = `${bp.label}: ${bp.assumedTrack} -> ${bp.subversionSnap}`;

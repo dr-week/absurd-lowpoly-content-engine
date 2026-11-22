@@ -113,7 +113,7 @@ export function renderStudioView(params: {
       </div>
       <div class="prompt-stack">
         ${renderCodeRow('storyboard', 'Storyboard (3x2)', prompts.topicTitle, prompts.storyboardPrompt, sbVote, copiedTarget === 'storyboard')}
-        ${renderCodeRow('video', 'Video Prompt', 'No time / No size', prompts.videoPrompt, vidVote, copiedTarget === 'video')}
+        ${renderCodeRow('video', 'Video Prompt', '5 Shots · 3-4 Dialogues', prompts.videoPrompt, vidVote, copiedTarget === 'video')}
         ${renderViralPackagingCard(activeTopic, prompts, copiedTarget === 'packaging')}
       </div>
     `;
