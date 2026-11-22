@@ -62,7 +62,7 @@ export function renderAppShell(params: {
             <label for="cfg-source">AI Engine</label>
             <select id="cfg-source">
               <option value="live-free" ${config.sourceMode === 'live-free' ? 'selected' : ''}>Live News + Free AI (Infinite, no key)</option>
-              <option value="standalone" ${config.sourceMode === 'standalone' ? 'selected' : ''}>Offline Curated Bank (36 stories)</option>
+              <option value="standalone" ${config.sourceMode === 'standalone' ? 'selected' : ''}>Curated Comedy Vault (82 stories, instant)</option>
               <option value="gemini" ${config.sourceMode === 'gemini' ? 'selected' : ''}>Gemini API (Free key, live AI)</option>
               <option value="groq" ${config.sourceMode === 'groq' ? 'selected' : ''}>Groq API (Free key, live AI)</option>
               <option value="openrouter" ${config.sourceMode === 'openrouter' ? 'selected' : ''}>OpenRouter (Any AI, live)</option>

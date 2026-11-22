@@ -98,6 +98,13 @@ export function renderStudioView(params: {
     const sbVote = getVote(logs, 'storyboard', prompts.topicId);
     const vidVote = getVote(logs, 'video', prompts.topicId);
     promptBody = `
+      <div class="remix-bar">
+        <span class="remix-bar__label">Remix Lab</span>
+        <button type="button" class="btn" data-action="reroll-twist" title="Swap Expectation-Subversion Twist Blueprint">${Glyphs.sparkle(14)}<span>Twist</span></button>
+        <button type="button" class="btn" data-action="reroll-name" title="Cycle Funny Desi Character Name">${Glyphs.sparkle(14)}<span>Name</span></button>
+        <button type="button" class="btn" data-action="reroll-rig" title="Swap Camera & Lighting Rig">${Glyphs.refresh(14)}<span>Camera</span></button>
+        <button type="button" class="btn" data-action="reroll-punchline" title="Try Alternate Shot 6 Punchline">${Glyphs.sparkle(14)}<span>Punchline</span></button>
+      </div>
       <div class="prompt-stack">
         ${renderCodeRow('storyboard', 'Storyboard (3x2)', prompts.topicTitle, prompts.storyboardPrompt, sbVote, copiedTarget === 'storyboard')}
         ${renderCodeRow('video', 'Video Prompt', 'No time / No size', prompts.videoPrompt, vidVote, copiedTarget === 'video')}
@@ -116,8 +123,8 @@ export function renderStudioView(params: {
         <div class="section-header__actions">
           <select id="filter-hook" class="compact-select" aria-label="Hook category">${hookOpts}</select>
           <select id="filter-situation" class="compact-select" aria-label="Situation category">${sitOpts}</select>
-          <input type="text" id="seed-input" class="compact-input" placeholder="Brand or topic..." value="${esc(seedQuery)}" />
-          <button type="button" class="btn btn--primary btn--icon" data-action="regenerate-topics" title="8 New Topics">${Glyphs.refresh(15)}</button>
+          <input type="text" id="seed-input" class="compact-input" placeholder="Search topic..." value="${esc(seedQuery)}" />
+          <button type="button" class="btn btn--primary btn--icon" data-action="regenerate-topics" title="8 New Topics (Shortcut: R)">${Glyphs.refresh(15)}</button>
         </div>
       </div>
       ${trendChips}
@@ -133,7 +140,7 @@ export function renderStudioView(params: {
         </div>
         <div class="section-header__actions">
           <select id="visual-style" class="compact-select" aria-label="Visual Engine Style" title="Switch Visual Engine">${styleOpts}</select>
-          ${prompts ? `<button type="button" class="btn" data-action="reroll-twist" title="Swap Expectation-Subversion Twist Blueprint">${Glyphs.sparkle(14)}<span>Twist</span></button><button type="button" class="btn" data-action="reroll-name" title="Cycle Funny Desi Character Name">${Glyphs.sparkle(14)}<span>Name</span></button><button type="button" class="btn" data-action="reroll-rig" title="Swap Camera & Lighting Rig">${Glyphs.refresh(14)}<span>Camera</span></button><button type="button" class="btn" data-action="reroll-punchline" title="Try Alternate Shot 6 Punchline">${Glyphs.sparkle(14)}<span>Punchline</span></button><button type="button" class="btn" data-action="copy-all" title="Copy Storyboard + Video + Viral Pack">${Glyphs.copy(14)}<span>Copy All</span></button><button type="button" class="btn btn--primary" data-action="make-sequel" title="Generate Part 2 Callback Sequel">${Glyphs.arrowRight(14)}<span>Part 2</span></button>` : ''}
+          ${prompts ? `<button type="button" class="btn" data-action="copy-all" title="Copy Storyboard + Video + Viral Pack">${Glyphs.copy(14)}<span>Copy All</span></button><button type="button" class="btn btn--primary" data-action="make-sequel" title="Generate Part 2 Callback Sequel">${Glyphs.arrowRight(14)}<span>Part 2</span></button>` : ''}
         </div>
       </div>
       ${promptBody}
