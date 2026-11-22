@@ -1,5 +1,6 @@
 import type { EngineConfig, GeneratedPrompts, StoryboardFrameData, TopicOption, VideoShotData, VisualStyle } from '../types';
 import { detectCharacterLock, sanitizeCopyrightNames } from './alias_sanitizer';
+import { pickSituationCastDirective } from './character_variability';
 import { formatShotDialogue, pickVoiceEnsemble } from './dialogue_theater';
 import { generateFreeLiveScriptSpec } from './free_ai';
 import { generateLiveScriptSpec } from './live_ai';
@@ -20,10 +21,11 @@ export function renderStoryboardText(
   frames: StoryboardFrameData[],
   rigDirective?: string,
   visualStyle: VisualStyle = 'ps1-1998',
+  castDirective?: string,
 ): string {
   const safeTitle = sanitizeCopyrightNames(title);
   const rig = rigDirective ?? pickCinematographyRig().directive;
-  const lock = detectCharacterLock(`${safeTitle} ${frames.map((f) => f.action).join(' ')}`);
+  const lock = detectCharacterLock(`${safeTitle} ${frames.map((f) => f.action).join(' ')}`) || castDirective || '';
   const lines: string[] = [STORYBOARD_HEADER(safeTitle, rig, lock, visualStyle), ''];
   for (const frame of frames) {
     lines.push(`Frame ${frame.frame} (${frame.position}): ${frame.framing}. ${sanitizeCopyrightNames(frame.action)}`);
@@ -41,9 +43,10 @@ export function renderVideoText(
   rigDirective?: string,
   visualStyle: VisualStyle = 'ps1-1998',
   ensembleSeed = 0,
+  castDirective?: string,
 ): string {
   const rig = rigDirective ?? pickCinematographyRig().directive;
-  const lock = detectCharacterLock(shots.map((s) => s.visual).join(' '));
+  const lock = detectCharacterLock(shots.map((s) => s.visual).join(' ')) || castDirective || '';
   const lines: string[] = [VIDEO_HEADER(rig, lock, visualStyle, ensembleSeed), ''];
   for (const shot of shots) {
     lines.push(`Shot ${shot.shot}: ${cleanVideoLine(shot.visual)} SFX: ${cleanVideoLine(shot.sfx)}.`);
@@ -61,6 +64,7 @@ export async function generatePromptsForTopic(
   visualStyle: VisualStyle = 'ps1-1998',
 ): Promise<GeneratedPrompts> {
   const rig = pickCinematographyRig().directive;
+  const castDir = pickSituationCastDirective(topic, topic.title.length);
 
   if (config.sourceMode === 'gemini' || config.sourceMode === 'groq' || config.sourceMode === 'openrouter') {
     const spec = await generateLiveScriptSpec(config, topic);
@@ -69,8 +73,8 @@ export async function generatePromptsForTopic(
       topicTitle: topic.title,
       angle: topic.angle,
       brand: topic.brand,
-      storyboardPrompt: renderStoryboardText(topic.title, spec.frames, rig, visualStyle),
-      videoPrompt: renderVideoText(spec.shots, rig, visualStyle),
+      storyboardPrompt: renderStoryboardText(topic.title, spec.frames, rig, visualStyle, castDir),
+      videoPrompt: renderVideoText(spec.shots, rig, visualStyle, topic.title.length, castDir),
       generatedAt: new Date().toISOString(),
     };
   }
@@ -106,8 +110,8 @@ export async function generatePromptsForTopic(
     topicTitle: topic.title,
     angle: topic.angle,
     brand: topic.brand,
-    storyboardPrompt: renderStoryboardText(topic.title, spec.frames, rig, visualStyle),
-    videoPrompt: renderVideoText(spec.shots, rig, visualStyle),
+    storyboardPrompt: renderStoryboardText(topic.title, spec.frames, rig, visualStyle, castDir),
+    videoPrompt: renderVideoText(spec.shots, rig, visualStyle, topic.title.length, castDir),
     generatedAt: new Date().toISOString(),
   };
 }

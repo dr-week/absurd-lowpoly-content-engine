@@ -106,7 +106,7 @@ export function renderStudioView(params: {
       <div class="remix-bar">
         <span class="remix-bar__label">Remix Lab</span>
         <button type="button" class="btn" data-action="reroll-voice" title="Swap Multi-Voice Cast & NPC Dialogue Ensemble">${Glyphs.mic(14)}<span>Voice</span></button><button type="button" class="btn" data-action="reroll-twist" title="Swap Expectation-Subversion Twist Blueprint">${Glyphs.shuffle(14)}<span>Twist</span></button>
-        <button type="button" class="btn" data-action="reroll-stack" title="Swap Book + Lens + Film Editing Stack">${Glyphs.film(14)}<span>Film</span></button>
+        <button type="button" class="btn" data-action="reroll-stack" title="Swap Book + Lens + Film Editing Stack">${Glyphs.film(14)}<span>Film</span></button><button type="button" class="btn" data-action="reroll-cast" title="Swap Gender, Profession & Everyday Props">${Glyphs.layers(14)}<span>Cast</span></button>
         <button type="button" class="btn" data-action="reroll-name" title="Cycle Funny Desi Character Name">${Glyphs.user(14)}<span>Name</span></button>
         <button type="button" class="btn" data-action="reroll-rig" title="Swap Camera & Lighting Rig">${Glyphs.camera(14)}<span>Camera</span></button>
         <button type="button" class="btn" data-action="reroll-punchline" title="Try Alternate Shot 6 Punchline">${Glyphs.zap(14)}<span>Punchline</span></button>

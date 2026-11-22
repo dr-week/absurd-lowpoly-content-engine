@@ -1,5 +1,6 @@
 import { cycleDirectorsStack } from '../data/creative_matrix';
 import { exportStudioBackup, restoreStudioBackup } from '../engine/backup_sync';
+import { cycleSituationCast } from '../engine/character_variability';
 import { cycleDesiCharacterName } from '../engine/desi_nomenclature';
 import { cycleVoiceEnsemble } from '../engine/dialogue_theater';
 import { cycleAlternatePunchline, exportSavedMarkdown, rerollCameraRig, switchPromptVisualStyle } from '../engine/prompt_tools';
@@ -10,29 +11,11 @@ import { buildViralPackage } from '../engine/viral_packaging';
 import type { ActiveTab, EngineConfig, GeneratedPrompts, HookCategory, OutcomeTag, RatingLogEntry, SavedFilter, SavedItem, ScoredTopic, SituationCategory, VisualStyle, VoteValue } from '../types';
 
 export interface AppState {
-  config: EngineConfig;
-  activeTab: ActiveTab;
-  drawerOpen: boolean;
-  seedQuery: string;
-  customDraft: string;
-  hookFilter: HookCategory | 'all';
-  situationFilter: SituationCategory | 'all';
-  visualStyle: VisualStyle;
-  batchNonce: number;
-  seenPairs: Set<string>;
-  seenTitles: Set<string>;
-  topics: ScoredTopic[];
-  liveTrends: string[];
-  loadingTopics: boolean;
-  selectedId: string | null;
-  activeTopic?: ScoredTopic;
-  prompts: GeneratedPrompts | null;
-  rigStep: number;
-  punchStep: number;
-  twistStep: number;
-  nameStep: number;
-  stackStep: number;
-  voiceStep: number;
+  config: EngineConfig; activeTab: ActiveTab; drawerOpen: boolean; seedQuery: string; customDraft: string;
+  hookFilter: HookCategory | 'all'; situationFilter: SituationCategory | 'all'; visualStyle: VisualStyle;
+  batchNonce: number; seenPairs: Set<string>; seenTitles: Set<string>; topics: ScoredTopic[]; liveTrends: string[];
+  loadingTopics: boolean; selectedId: string | null; activeTopic?: ScoredTopic; prompts: GeneratedPrompts | null;
+  rigStep: number; punchStep: number; twistStep: number; nameStep: number; stackStep: number; voiceStep: number; castStep: number;
   loading: boolean;
   logs: RatingLogEntry[];
   saved: SavedItem[];
@@ -116,6 +99,7 @@ export function bindAppEvents(
       if (a === 'reroll-voice' && state.prompts) { const out = cycleVoiceEnsemble(state.prompts, (state.voiceStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Voice: ${out.label}`); return; }
       if (a === 'reroll-twist' && state.prompts) { const out = cycleTwistBlueprint(state.prompts, (state.twistStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Twist: ${out.label}`); return; }
       if (a === 'reroll-stack' && state.prompts) { const out = cycleDirectorsStack(state.prompts, (state.stackStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Film: ${out.label}`); return; }
+      if (a === 'reroll-cast' && state.prompts) { const out = cycleSituationCast(state.prompts, (state.castStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Cast: ${out.label}`); return; }
       if (a === 'reroll-name' && state.prompts) { const out = cycleDesiCharacterName(state.prompts, (state.nameStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Name: ${out.name}`); return; }
       if (a === 'reroll-rig' && state.prompts) { const out = rerollCameraRig(state.prompts, (state.rigStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Camera: ${out.rigLabel}`); return; }
       if (a === 'reroll-punchline' && state.prompts) { const out = cycleAlternatePunchline(state.prompts, (state.punchStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Punchline: ${out.style}`); return; }
