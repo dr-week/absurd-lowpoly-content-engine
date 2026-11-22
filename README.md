@@ -1,70 +1,188 @@
+<div align="center">
+
+<img src="assets/content-engine-logo.png" alt="Absurd Low-Poly Content Engine Logo" width="220" />
+
 # Absurd Low-Poly Content Engine
 
-Backend script & prompt generation engine for **1998 PS1 / N64 ultra low-poly 3D** absurdist Indian comedy — built in Python with **FastAPI**, **Pydantic v2**, **Typer**, and a **provider-agnostic LLM layer**.
+**Enterprise-grade, zero-repeat comedy ideation, storyboard, and short-form video prompt studio for 1998 PS1 / N64 ultra low-poly 3D content.**
 
-See [PLAYBOOK.md](PLAYBOOK.md) for the canonical visual style, idea formula, 6-frame 3x2 storyboard structure, and 20-second 9:16 vertical video prompt rules.
+[![Live Studio](https://img.shields.io/badge/Live%20Studio-Launch%20App-0066FF?style=for-the-badge&logo=githubpages&logoColor=white)](https://dr-week.github.io/absurd-lowpoly-content-engine/)
+[![Deploy Status](https://img.shields.io/github/actions/workflow/status/dr-week/absurd-lowpoly-content-engine/deploy-pages.yml?style=for-the-badge&label=Pages%20Deploy)](https://github.com/dr-week/absurd-lowpoly-content-engine/actions/workflows/deploy-pages.yml)
+[![Trend Sync](https://img.shields.io/github/actions/workflow/status/dr-week/absurd-lowpoly-content-engine/sync-trends.yml?style=for-the-badge&label=6h%20News%20Sync)](https://github.com/dr-week/absurd-lowpoly-content-engine/actions/workflows/sync-trends.yml)
 
-## What's Included (v1 — Prompt Text Generation)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript&logoColor=white)](web/)
+[![Vite](https://img.shields.io/badge/Vite-6.x-646CFF?style=flat-square&logo=vite&logoColor=white)](web/)
+[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=flat-square&logo=python&logoColor=white)](src/absurd_engine/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-REST%20API-009688?style=flat-square&logo=fastapi&logoColor=white)](src/absurd_engine/api.py)
 
-1. **Absurd Idea / Premise Generator** (`absurd_engine.generators.idea_generator`)
-   - Anchors in a mundane Indian setting, everyday moment, or recent news/trending hook.
-   - Pivots into broken logic / disorienting physical absurdity and a deadpan visual payoff.
-   - Explicitly rejects predictable "jugaad/hack" and talking-object clichés.
-2. **6-Frame 3x2 Storyboard Prompt Builder** (`absurd_engine.generators.storyboard_builder`)
-   - Generates structured 6-frame specs + renders the exact Playbook copy-paste prompt with strict 1998 PS1/N64 aesthetic tokens, negative constraints, title, and short Hinglish pixel-font captions.
-3. **20s 9:16 Video Prompt Builder** (`absurd_engine.generators.video_builder`)
-   - Generates structured 6-beat timed video scripts (`[0:00–0:03]` through `[0:17–0:20]`) with jerky low-FPS animation, retro PS1 SFX, sharp hard cuts, and ultra-short deadpan Hindi narrator dialogue.
-4. **Playbook Linter** (`absurd_engine.validator`)
-   - Scores every episode (0–100), enforcing PS1/N64 aesthetic tokens, negative constraints, beat timing, Hindi line word-count pacing per 3–4s window, and cliché warnings.
-5. **Any-AI Provider Layer** (`absurd_engine.llm`)
-   - Works out-of-the-box with `mock` (offline deterministic PS1 scenarios), plus `gemini`, `openai`, `openrouter`, `ollama` (or any OpenAI-compatible endpoint), and `anthropic`.
+[**Launch Live Web Studio**](https://dr-week.github.io/absurd-lowpoly-content-engine/) · [**Comedy Playbook**](PLAYBOOK.md) · [**Quick Start**](#-quick-start) · [**API Reference**](#-rest-api-reference)
+
+</div>
+
+---
+
+## Live Studio
+
+> **Production Web App (Zero Install, Zero API Key Required):**
+> **https://dr-week.github.io/absurd-lowpoly-content-engine/**
+
+---
+
+## Executive Overview
+
+**Absurd Low-Poly Content Engine** is a dual-stack creative production platform (TypeScript + SCSS Web Studio & Python FastAPI/CLI Backend) engineered to automate high-retention short-form absurdist comedy scripts in authentic **1998 PlayStation 1 / Nintendo 64** visual grammar.
+
+Unlike static prompt templates or repetitive Mad-Libs combinators, the engine pairs **real-time global news ingestion**, **stand-up & sketch-room comedy mechanics**, **persistent anti-repetition memory**, and a **real-world viral feedback loop** to generate fresh, structurally varied, production-ready prompts on every refresh.
+
+### Core Platform Capabilities
+
+| Capability | Description |
+| :--- | :--- |
+| **Zero-Repeat Live News Engine** | Harvests fresh headlines across **10,000+ live items** (Hacker News, Spaceflight News, Wikipedia, BBC World, ScienceDaily Strange & Offbeat, Atlas Obscura, Ars Technica, Goa News) with a **1,000-headline** and **500-title** permanent never-repeat memory. |
+| **Smart Comedy Headline Filter** | Automatically scores incoming news for comedic irony and rejects dry kernel/CVE patches, tragedies, and obscure encyclopedia stubs before generation. |
+| **7 Laws of Comedy Craft** | Enforces **0.8s Frame-0 Pattern Interrupt**, **South Park "But / Therefore" causality**, **Setup → Assumption → Shatter**, **UCB Game of the Scene**, **Rule of Three**, **Punch-Word-Last Hindi economy (`≤ 7 words`)**, and **Shot 1 → Shot 6 Callback Loops**. |
+| **Hook × Situation Taxonomy** | Categorizes and stratifies every 8-card batch across **6 Hook Categories** (`Iconic Figures`, `Over-Engineer`, `Fake Origins`, `Weird Science`, `Fake Hacks`, `Breaking Chaos`) and **6 Situation Categories** (`World & Politics`, `Goa & Travel`, `AI & Gadgets`, `Petty Ego`, `Lab & Space`, `School & Origin`) with **8/8 unique worlds** and **0 adjacent same-format cards**. |
+| **Custom Idea Studio & Cast Roster** | Write any 1-line premise or click a 7-character quick-pick preset (**Elon**, **Trump**, **Gandhiji**, **Putin**, **Modi**, **Goa Uncle**, **MIT Lab**) to generate a full Storyboard, Video Prompt, and Viral Pack instantly. |
+| **Viral Packaging & Series Tools** | Auto-generates **3 High-CTR Titles**, **Pinned Comment Bait**, **Loop Audit**, and **5 Precision Hashtags** alongside **1-Click Camera Rig Re-Roll**, **Punchline Lab**, **Part 2 Callback Sequels**, **Crossover Mashups**, and **Copy All**. |
+| **Saved Workflow & 5× Viral Taste DNA** | Thumbs Up stores topics in **Saved** (`Pending` → `Done` when generated via `→`). Tagging posted videos as `Flop` / `Good` / `Viral` weights real viral winners **5× higher** in your live **Taste DNA** to steer future AI batches. |
+| **6-Hour Automated Factory & Sync** | GitHub Actions syncs fresh oddities/world trends every 6 hours (and optionally pre-generates daily AI episodes into `daily_episodes.json`). Cross-device **Backup / Restore JSON** transfers your Saved list, outcomes, and history across devices. |
+
+---
+
+## System Architecture
+
+```mermaid
+flowchart LR
+  subgraph Sources["Live Online Sources (Zero-Key)"]
+    RSS["6h GitHub Actions RSS\n(ScienceDaily Oddities, Atlas Obscura,\nArs Technica, BBC, Goa, HN)"]
+    LIVE["Browser Live APIs\n(Hacker News, Spaceflight v4,\nWikipedia Random)"]
+  end
+
+  subgraph Engine["Comedy Craft & Anti-Repeat Engine"]
+    FLT["Comedy-Potential Filter\n+ 1,000-Headline Memory"]
+    TAX["Hook × Situation Stratifier\n(Crypto PRNG + 8/8 Unique Worlds)"]
+    AI["Tiered AI Cascade\n(BYOK -> Daily Pool -> Free AI -> 32 Archetypes)"]
+    DNA["5× Viral Taste DNA\n(Saved + Outcomes + Logs)"]
+  end
+
+  subgraph Studio["Zuari Liquid Glass Web Studio"]
+    TOP["01 Topics & Custom Idea Bar"]
+    PRM["02 Storyboard + Video + Viral Pack"]
+    SAV["Saved (Pending / Done / Outcomes)"]
+  end
+
+  RSS --> FLT
+  LIVE --> FLT
+  FLT --> AI
+  DNA --> AI
+  AI --> TAX --> TOP --> PRM
+  TOP --> SAV --> DNA
+```
+
+---
+
+## Prompt & Aesthetic Standards
+
+All outputs strictly adhere to [PLAYBOOK.md](PLAYBOOK.md):
+
+- **Strict Text-Only Output:** Produces copy-ready **6-Frame 3×2 Storyboard Prompts** and **6-Shot Video Prompts** only.
+- **Single Global Style Header:** Declares the raw 1998 PS1/N64 low-poly geometry, blurry bitmap textures, crude Gouraud shading, randomized 1998 camera/lighting rig, and negative constraints (`NO 2D cartoon art, NO comic ink outlines, NO cel-shading, NO smooth modern CGI`) **once** in the header—eliminating token bloat across individual shots.
+- **Zero Time or Aspect-Ratio Leaks:** Video prompts never mention duration (`20-second`), aspect ratio (`9:16`), or timestamps (`[0:00–0:03]`).
+- **Lo-Fi 1998 Audio Grammar:** Specifies slightly compressed lo-fi 1998 PS1-era deadpan Indian male narrator fidelity paired with retro SFX and sharp hard cuts.
+
+---
 
 ## Quick Start
 
+### 1. Zero-Install Web Studio (Recommended)
+Open **[https://dr-week.github.io/absurd-lowpoly-content-engine/](https://dr-week.github.io/absurd-lowpoly-content-engine/)**:
+- Press **`R`** (or click Refresh) for 8 brand-new live-news topics.
+- Press **`1`–`8`** (or click **`→`**) to generate the Storyboard, Video Prompt, and Viral Pack.
+- Optional: Open **Settings** to paste a free **Gemini**, **Groq**, or **OpenRouter** API key for unlimited zero-cooldown LLM generation, or export/restore a cross-device **Backup JSON**.
+
+### 2. Local Web Studio Development
 ```bash
-# Install dependencies into a local venv with uv
+cd web
+npm install
+npm run test:harness   # 120-card F5 reload, 0/32 rapid live repeat, Comedy Craft & Saved tests
+npm run build          # TypeScript type-check + Vite production bundle
+npm run dev            # Local Vite dev server
+```
+
+### 3. Python CLI, FastAPI Backend & Log Optimizer
+```bash
+# Install Python dependencies
 uv sync --extra dev
 
-# Run tests
-uv run pytest
+# Run backend test suite
+uv run pytest -v
 
-# Generate a full episode (idea -> 6-frame storyboard prompt -> 20s video prompt -> lint + export)
-uv run absurd generate --topic "chai tapri QR code"
+# Generate a full episode via CLI
+uv run absurd generate --topic "Goa beach sunset server update"
 
-# Generate just premises
-uv run absurd idea --setting "Delhi Metro" --count 2
-
-# Start the FastAPI backend (Swagger UI at /docs)
+# Start FastAPI server (OpenAPI docs at /docs)
 uv run absurd serve --port 8000
+
+# Tune the 6-hour AI Episode Factory from exported Studio logs or Backup JSON
+uv run python scripts/optimize_from_logs.py absurd-studio-backup.json
 ```
 
-## Switching AI Providers
+### 4. Optional — Activate 6-Hour Automated AI Episode Drops
+Add a free `GEMINI_API_KEY` or `GROQ_API_KEY` under your repository's **Settings → Secrets and variables → Actions**. The scheduled [sync-trends.yml](.github/workflows/sync-trends.yml) workflow will automatically pre-generate fresh AI episodes into `web/public/daily_episodes.json` every 6 hours for 0ms, zero-cooldown delivery.
 
-Copy `.env.example` to `.env` and configure any provider:
+---
 
-```env
-# Google Gemini
-LLM_PROVIDER=gemini
-LLM_MODEL=gemini-2.5-flash
-LLM_API_KEY=your-key
+## REST API Reference
 
-# OpenAI / OpenRouter / Groq / Ollama
-LLM_PROVIDER=openrouter
-LLM_MODEL=google/gemini-2.5-flash
-LLM_API_KEY=your-key
+When running `uv run absurd serve --port 8000`:
 
-# Local Ollama (no API key needed)
-LLM_PROVIDER=ollama
-LLM_MODEL=llama3.1
+| Endpoint | Method | Description |
+| :--- | :---: | :--- |
+| `/health` | `GET` | Engine status, active LLM provider, and model configuration |
+| `/ideas/generate` | `POST` | Generate 1–5 comedy-crafted premises with anti-cliché rules |
+| `/storyboards/generate` | `POST` | Expand a premise into a 6-frame 3×2 storyboard spec and prompt |
+| `/videos/generate` | `POST` | Expand a premise into a 6-shot video script and rendered prompt |
+| `/episodes/generate` | `POST` | Full fused pipeline (`idea → storyboard → video → lint`) with optional SQLite & disk export |
+| `/lint` | `POST` | Validate any episode bundle against Playbook quality rules |
+
+Configure any provider via `.env` (see [.env.example](.env.example)): `gemini`, `groq`, `openrouter`, `openai`, `anthropic`, `ollama`, or `mock`.
+
+---
+
+## Modular Repository Structure
+
+Every frontend module is strictly maintained under **150 lines** for clarity, testability, and rapid iteration.
+
+```text
+absurd-lowpoly-content-engine/
+├── assets/                     # Brand assets (Content Engine emblem)
+├── scripts/
+│   ├── sync_trends.py          # 6-hour global/oddities/Goa RSS aggregator
+│   ├── generate_daily_pool.py  # Optional 6-hour AI episode pre-generator
+│   └── optimize_from_logs.py   # Taste DNA optimizer from exported logs/backups
+├── src/absurd_engine/          # Python FastAPI backend, Typer CLI, LLM providers & linter
+├── tests/                      # Python pytest verification suite (12 tests)
+└── web/                        # TypeScript + SCSS Zuari Liquid Glass Web Studio
+    ├── public/                 # Live synced trends & daily episode feeds
+    ├── src/
+    │   ├── data/               # 36 bespoke stories, 32 live archetypes, character roster
+    │   ├── engine/             # Live news, comedy craft, taxonomy, Taste DNA, sequels, mashups
+    │   ├── styles/             # Zuari OKLCH tokens, Liquid Glass surfaces, 5-plane layout
+    │   └── ui/                 # Studio, Saved, Viral Analytics, Logs, Custom Bar & Shell views
+    └── tests/harness.ts        # Automated 120-card F5 reload & anti-pattern verification harness
 ```
 
-## REST API Endpoints (UI-Ready)
+---
 
-- `GET /health` — Engine status and active LLM provider/model.
-- `POST /ideas/generate` — Generate 1–5 surreal anti-cliché Indian premises.
-- `POST /storyboards/generate` — Expand a `PremiseIdea` into a 6-frame 3x2 storyboard spec + rendered prompt.
-- `POST /storyboards/render` — Re-render an edited `StoryboardSpec` into the canonical prompt text.
-- `POST /videos/generate` — Expand a `PremiseIdea` (+ optional `StoryboardSpec`) into a 20s 9:16 video script + rendered prompt.
-- `POST /videos/render` — Re-render an edited `VideoScriptSpec` into the canonical prompt text.
-- `POST /episodes/generate` — Full pipeline (`idea -> storyboard -> video -> lint`) with optional disk export.
-- `POST /lint` — Run the Playbook Linter on any episode bundle.
+## Quality & Verification Guarantees
+
+- **Automated Web Harness (`npm run test:harness`):** Verifies 15 simulated F5 reloads × 8 cards (`6/6` formats, `8/8` unique worlds, `0` adjacent same-format cards, `0/8` consecutive repeats), `0/32` repeats across 4 rapid live refreshes, Headline Filter, Taste DNA 5× Viral weighting, Part 2 Sequels, Crossover Mashups, Custom Ideas, Viral Pack, Camera/Punchline tools, Saved lifecycle, and Backup/Restore.
+- **Automated Python Suite (`uv run pytest -v`):** Verifies fused pipeline, linter scoring, RSS parsing, mechanic rotation, SQLite history, token savings benchmarks, and FastAPI endpoints.
+
+---
+
+<div align="center">
+
+Built with precision by **DCODE / Content Engine** · [Open Live Studio](https://dr-week.github.io/absurd-lowpoly-content-engine/)
+
+</div>
