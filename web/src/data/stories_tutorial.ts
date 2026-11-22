@@ -77,9 +77,9 @@ export const TUTORIAL_STORIES: TopicOption[] = [
     id: 'tut-wifi-booster',
     title: 'FREE 10-GBPS BEACH WI-FI TRICK',
     angle: 'fake-tutorial',
-    brand: 'Goa Shack',
+    brand: 'Beach Shack',
     trendHook: 'Tech Hack Bait-and-Switch',
-    pitch: 'Guy wraps a coconut in foil on a Goan beach to boost Wi-Fi; accidentally hijacks a passing satellite and downloads the entire ocean.',
+    pitch: 'Guy wraps a coconut in foil on a coastal beach to boost Wi-Fi; accidentally hijacks a passing satellite and downloads the entire ocean.',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'Beach table shot', action: 'Digital nomad stares at one flickering Wi-Fi bar on his laptop under a palm tree.', caption: 'Beach pe Wi-Fi slow chal raha.' },
       { frame: 2, position: 'Top Center', framing: 'DIY close-up', action: 'He wraps a green coconut in silver foil and balances a steel spoon on top.', caption: 'Step 1: nariyal ko foil mein lapeto.' },

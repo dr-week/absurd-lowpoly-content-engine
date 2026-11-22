@@ -107,7 +107,7 @@ assert.ok(retroPrompts.storyboardPrompt.includes('1980s vintage hand-painted'));
 assert.ok(buildPart2Topic(sample).title.startsWith('PART 2:'));
 assert.equal(buildViralPackage(sample, mockPrompts).titles.length, 3);
 assert.ok(restoreStudioBackup(JSON.stringify({ version: 1, saved: [], generatedIds: ['x1'], logs: [], seenTitles: ['t1'], seenPairs: [] })).generatedIds.has('x1'));
-const customEp = buildCustomEpisode('Trump buys a Goa beach shack for ₹200', 'iconic');
+const customEp = buildCustomEpisode('Trump buys a beach shack for ₹200', 'iconic');
 assert.ok(customEp.title.includes('DOLAND TRUMPE'));
 assert.equal(sanitizeCopyrightNames('Elon Musk and Donald Trump meet Spider-Man and Hulk'), 'Elone Maask and Doland Trumpe meet Spooder-Maan and Hulke');
 assert.ok(detectCharacterLock('Spooder-Maan and Hulke').includes('checkered gym shorts') && detectCharacterLock('Hulke').includes('pink flip-flops'));

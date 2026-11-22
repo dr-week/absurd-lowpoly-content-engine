@@ -12,7 +12,7 @@ function inferThemeFromHeadlines(headlines: LiveHeadline[]): string[] {
   if (/mars|moon|nasa|space|rocket|orbit|satellite/.test(joined)) themes.push('space', 'elon', 'motabhai');
   if (/ai|model|robot|chip|nvidia|google|apple|code/.test(joined)) themes.push('ai-tech', 'zuck', 'elon');
   if (/study|scientist|brain|sleep|physics|cern|mit|lab/.test(joined)) themes.push('science', 'gigachad');
-  if (/goa|beach|ferry|tourist|flight|airport/.test(joined)) themes.push('goa');
+  if (/beach|ferry|tourist|flight|airport/.test(joined)) themes.push('coastal');
   if (/trump|putin|un |summit|tariff|bank|election/.test(joined)) themes.push('trump', 'putin', 'modi', 'gandhi');
   if (/game|gta|police|traffic|chase|bank|heist/.test(joined)) themes.push('gta');
   return themes;

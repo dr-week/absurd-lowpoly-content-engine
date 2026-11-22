@@ -7,7 +7,7 @@ export const NEWS_STORIES: TopicOption[] = [
     angle: 'breaking-news',
     brand: 'UN Summit',
     trendHook: 'Breaking News Broadcast',
-    pitch: '14 nations call an emergency UN Security Council session because one rented scooter is parked diagonally across two lines in Goa.',
+    pitch: '14 nations call an emergency UN Security Council session because one rented scooter is parked diagonally across two lines at a beach resort.',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'Broadcast studio shot', action: 'Serious news anchor sits behind a red ticker reading "BREAKING: GLOBAL PARKING CRISIS".', caption: 'Breaking: global parking crisis.' },
       { frame: 2, position: 'Top Center', framing: 'Field reporter shot', action: 'Live correspondent points gravely at a single yellow scooter parked 15 degrees crooked.', caption: 'Scooter 15 degree tedhi khadi.' },

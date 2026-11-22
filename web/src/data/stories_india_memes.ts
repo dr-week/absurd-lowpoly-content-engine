@@ -89,18 +89,18 @@ export const INDIA_MEME_STORIES: readonly TopicOption[] = [
     pitch:
       'During a sleepy apartment committee meeting about parking stickers, Lorde Puneete dumps two buckets of white talcum powder over his head screaming about potholes—winning a unanimous 400-0 vote.',
     frames: [
-      { frame: 1, position: 'Top Left', framing: 'Wide room shot', action: 'Forty bored apartment uncles nap in plastic chairs as the RWA secretary drones on about ₹50 parking stickers.', caption: 'Boring RWA Meeting!' },
+      { frame: 1, position: 'Top Left', framing: 'Wide room shot', action: 'Forty bored apartment residents nap in plastic chairs as the RWA secretary drones on about ₹50 parking stickers.', caption: 'Boring RWA Meeting!' },
       { frame: 2, position: 'Top Center', framing: 'Medium shot', action: 'Lorde Puneete in a torn yellow shirt and plastic toy crown kicks open the clubhouse door carrying two blue paint buckets.', caption: 'Lorde Enters With Buckets!' },
       { frame: 3, position: 'Top Right', framing: 'Dramatic close-up', action: 'He dumps an entire mountain of white talcum powder onto his own head and screams "KYA HAAL HAI BEROZGAARO!" into the mic.', caption: 'Talcum Powder Storm!' },
-      { frame: 4, position: 'Bottom Left', framing: 'Wide shot', action: 'Every sleeping uncle jolts awake in a cloud of rose-scented powder and gives a thunderous standing ovation.', caption: '400 Uncles Awake!' },
+      { frame: 4, position: 'Bottom Left', framing: 'Wide shot', action: 'Every sleeping resident jolts awake in a cloud of rose-scented powder and gives a thunderous standing ovation.', caption: '400 Residents Awake!' },
       { frame: 5, position: 'Bottom Center', framing: 'Medium shot', action: 'Within three minutes, the committee crowns him Society President for life and hands him the master water-tank keys.', caption: 'Unanimous 400-0 Vote!' },
       { frame: 6, position: 'Bottom Right', framing: 'Wide deadpan shot', action: 'The next morning all potholes are fixed—because Lorde Puneete filled them with 600 bottles of rose talcum powder.', caption: 'Rose-Scented Roads!' },
     ],
     shots: [
-      { shot: 1, visual: 'Forty bored apartment uncles snoring in plastic chairs during a society meeting.', sfx: 'Loud snoring and fan creak', hindi: 'सोसाइटी की मीटिंग में सब अंकल खर्राटे ले रहे थे।' },
+      { shot: 1, visual: 'Forty bored apartment residents snoring in plastic chairs during a society meeting.', sfx: 'Loud snoring and fan creak', hindi: 'सोसाइटी की मीटिंग में सब पड़ोसी खर्राटे ले रहे थे।' },
       { shot: 2, visual: 'Lorde Puneete in a plastic toy crown kicks the door open with two blue buckets.', sfx: 'Door slam and dramatic boom', hindi: 'तभी प्लास्टिक मुकुट पहनकर लॉर्ड पुनीते अंदर आया।' },
       { shot: 3, visual: 'He pours two buckets of white talcum powder over his head screaming into the mic.', sfx: 'Mic feedback screech and powder poof', hindi: 'सिर पर पाउडर डालकर माइक में ज़ोर से चीखा।' },
-      { shot: 4, visual: 'All forty uncles jump up cheering through a giant cloud of white powder.', sfx: 'Thunderous applause and whistles', hindi: 'गुलाब की खुशबू में सब अंकल जागकर तालियां बजाने लगे।' },
+      { shot: 4, visual: 'All forty residents jump up cheering through a giant cloud of white powder.', sfx: 'Thunderous applause and whistles', hindi: 'गुलाब की खुशबू में सब पड़ोसी जागकर तालियां बजाने लगे।' },
       { shot: 5, visual: 'They hand Lorde Puneete the Society President sash and water-tank keys.', sfx: 'Victory trumpet fanfare', hindi: 'चार सौ वोट से वह सोसाइटी प्रेसिडेंट बन गया।' },
       { shot: 6, visual: 'Next morning every road pothole is filled neatly with white rose talcum powder.', sfx: 'Gentle breeze and chime', hindi: 'अगले दिन सारे गड्ढे पाउडर से भर गए।' },
     ],

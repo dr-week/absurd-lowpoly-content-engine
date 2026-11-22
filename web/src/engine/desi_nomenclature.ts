@@ -28,7 +28,7 @@ const DESI_SUFFIXES = ['ie', 'u', 'esh', 'eshwar', 'wa', '-Lal', '-Babu', '-Pras
 export const DESI_NOMENCLATURE_GUIDE =
   'DESI PARODY NAMING RULE: Use funny Indian-style phonetic & suffix variations instead of exact real names: ' +
   '1) Cute-ify (-ie/-u: Hulkie, Trumpu, Elonu, Spoodie, Doggu); ' +
-  '2) Uncle-ify (-esh/-eshwar/-Lal/-Prasad: Dogesh, Hulkeshwar, Batmahesh, Elone Prasad, Doland-Lal); ' +
+  '2) Sanskrit-ify (-esh/-eshwar/-Lal/-Prasad: Dogesh, Hulkeshwar, Batmahesh, Elone Prasad, Doland-Lal); ' +
   '3) Village-ify (-wa: Elonwa, Trumpwa, Hulkwa, Zuckwa); ' +
   '4) Honorifics (-Babu/-Paaji/-Kaka/-Seth: Makad-Babu, Putu Paaji, Ambu-Seth).';
 

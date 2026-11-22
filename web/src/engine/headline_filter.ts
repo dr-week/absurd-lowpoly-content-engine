@@ -4,7 +4,7 @@ const DRY_OR_BLEAK_RE =
 const OBSCURE_BIO_RE = /\(\d{4}[-–]\d{4}\)|—\s*(american|british|french|german|hungarian|polish|italian|russian)\s+(actor|actress|politician|footballer|player|painter|poet|bishop|soldier)/i;
 
 const COMEDY_BOOST_RE =
-  /\b(elon|musk|trump|putin|modi|gandhi|nasa|cern|mit|mars|moon|rocket|satellite|robot|ai|openai|anthropic|google|apple|billion|million|goa|beach|scooter|airport|sleep|coffee|tea|cat|dog|fish|whale|dolphin|octopus|pizza|toast|fridge|toaster|wifi|wi-fi|summit|treaty|bank|rent|broker|study|scientist|physicist|accidentally|bizarre|weird|record|world's)\b/gi;
+  /\b(elon|musk|trump|putin|modi|gandhi|nasa|cern|mit|mars|moon|rocket|satellite|robot|ai|openai|anthropic|google|apple|billion|million|beach|scooter|airport|sleep|coffee|tea|cat|dog|fish|whale|dolphin|octopus|pizza|toast|fridge|toaster|wifi|wi-fi|summit|treaty|bank|rent|broker|study|scientist|physicist|accidentally|bizarre|weird|record|world's)\b/gi;
 
 /**
  * Scores a raw online headline for comedic/viral potential.

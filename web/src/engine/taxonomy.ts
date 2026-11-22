@@ -16,7 +16,7 @@ export const HOOK_CATEGORIES: readonly CategoryMeta<HookCategory>[] = [
 
 export const SITUATION_CATEGORIES: readonly CategoryMeta<SituationCategory>[] = [
   { id: 'global', label: 'World & Politics' },
-  { id: 'coastal', label: 'Goa & Travel' },
+  { id: 'coastal', label: 'Travel & Street' },
   { id: 'tech', label: 'AI & Gadgets' },
   { id: 'ego', label: 'Petty Ego' },
   { id: 'lab', label: 'Lab & Space' },
@@ -45,7 +45,7 @@ export function classifyHook(topic: TopicOption): HookCategory {
 
 export function classifySituation(topic: TopicOption): SituationCategory {
   const text = `${topic.brand} ${topic.title} ${topic.pitch}`.toLowerCase();
-  if (/goa|beach|anjuna|scooter|airport|travel|ferry/.test(text)) return 'coastal';
+  if (/beach|resort|scooter|airport|travel|ferry|dhaba|highway/.test(text)) return 'coastal';
   if (/school|kindergarten|1st grade|bully|paratha|childhood|8-year|9-year|charkha|dj/.test(text)) return 'childhood';
   if (/mars|nasa|cern|mit|lab|orbit|sleep|whey|protein|fish|cat|physicist|scientist/.test(text)) return 'lab';
   if (/un |summit|g20|bank|silo|submarine|tariff|treaty|global|bridge/.test(text)) return 'global';

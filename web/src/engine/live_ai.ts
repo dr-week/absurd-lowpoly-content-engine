@@ -71,7 +71,7 @@ export async function generateLiveTopics(
   const system =
     'You are a top stand-up & sketch comedy head writer inventing 8 structurally DIFFERENT absurdist comedy premises for 1998 PS1/N64 low-poly 3D videos with a deadpan Hindi narrator. ' +
     'Cover ALL 6 distinct story formats: over-engineer (Level 1 -> Level 999 build), fake-origin (fake celebrity childhood story), breaking-news (serious TV broadcast), fake-tutorial (3-step Rule-of-Three guide), petty-spiral (UCB heightening escalation), weird-science (absurd lab study). ' +
-    'Use copyright-safe parody meme names (Elon Bhai, Doland Bhau, Bapu-G, Putinder, Modi-G, Zucku Bhai, Giga-Chaddha, Doge-esh, Spooder-Bhai, Sigma Tauji), Goa, World News, and Science. NEVER lock topics to Delhi or Mumbai. ' +
+    'Use phonetic parody meme names (Elone Maask, Doland Trumpe, Gaandhi-G, Putine, Moodi-G, Zuckerburge, Giga-Chaad, Dogee, Spooder-Maan, Hulke, Baatmaan, GTA-Sixe), World News, and Science. NEVER lock topics to Delhi, Mumbai, Goa, or generic uncles. ' +
     `${WRITERS_ROOM_RULES} ` +
     'Return ONLY JSON: {"topics":[{"title":"UPPERCASE PUNCHY TITLE","angle":"over-engineer|fake-origin|breaking-news|fake-tutorial|petty-spiral|weird-science","brand":"Figure/World Tag","pitch":"Cold-open 1-sentence Setup -> False Assumption -> Shatter payoff (NO genre-label prefix)","viralScore":92}]}';
 

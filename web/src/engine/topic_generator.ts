@@ -21,7 +21,7 @@ export const STORY_FORMAT_PACKS: readonly (readonly TopicOption[])[] = FORMAT_KE
 export function worldFamily(brand: string): string {
   const b = brand.toLowerCase();
   for (const [rx, fam] of [
-    [/goa/, 'goa'], [/elon|maask/, 'elon'], [/gandhi|gaandhi|bapu/, 'gandhi'], [/trump|doland/, 'trump'],
+    [/beach|ferry|resort/, 'coastal'], [/elon|maask/, 'elon'], [/gandhi|gaandhi|bapu/, 'gandhi'], [/trump|doland/, 'trump'],
     [/putin/, 'putin'], [/modi|moodi/, 'modi'], [/zuck/, 'zuck'], [/giga/, 'gigachad'], [/doge/, 'doge'],
     [/spooder/, 'spooder'], [/hulk/, 'hulk'], [/baat/, 'batman'], [/gta/, 'gta'], [/sigma/, 'sigma'],
     [/puneet/, 'puneet'], [/dolli/, 'dolli'], [/khaali/, 'khaali'], [/salmaan/, 'salmaan'], [/koohli/, 'koohli'],

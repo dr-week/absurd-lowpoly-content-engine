@@ -9,22 +9,22 @@ export const DEBATE_STORIES: readonly TopicOption[] = [
     trendHook: 'Reddit Petty Argument: 14-Year Grudge Over Pushing a Chair',
     visualStyle: 'cctv-dashcam',
     pitch:
-      'At a wedding buffet, Sigma Tauji pulls a plastic chair out two inches to rest his elbow; the uncle next to him shoves it back—sparking a 14-year silent feud where they bring laser levels to every family function.',
+      'At a wedding buffet, Sigma Tauji pulls a plastic chair out two inches to rest his elbow; the neighbor next to him shoves it back—sparking a 14-year silent feud where they bring laser levels to every family function.',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'Overhead CCTV wide shot', action: 'On a wedding lawn, Sigma Tauji pulls an empty white plastic chair out by two inches to rest his left elbow.', caption: '2-Inch Elbow Rest!' },
-      { frame: 2, position: 'Top Center', framing: 'Medium CCTV shot', action: 'Goa Uncle-G sitting adjacent wordlessly shoves the plastic chair two inches back flush against the table.', caption: 'Shoved Back Flush!' },
+      { frame: 2, position: 'Top Center', framing: 'Medium CCTV shot', action: 'the rental owner sitting adjacent wordlessly shoves the plastic chair two inches back flush against the table.', caption: 'Shoved Back Flush!' },
       { frame: 3, position: 'Top Right', framing: 'Close-up', action: 'Both men lock eyes in dead silence while pulling and pushing the same plastic chair back and forth seventeen times.', caption: '17 Silent Shoves!' },
       { frame: 4, position: 'Bottom Left', framing: 'Wide shot', action: 'Fourteen years later at another wedding, both men arrive carrying yellow steel measuring tapes and laser spirit levels.', caption: '14 Years Later!' },
       { frame: 5, position: 'Bottom Center', framing: 'Close-up', action: 'Sigma Tauji bolts the plastic chair legs to the floor tiles with iron brackets so it stays permanently two inches out.', caption: 'Bolted To The Floor!' },
-      { frame: 6, position: 'Bottom Right', framing: 'Wide deadpan shot', action: 'Goa Uncle-G saws two inches off the dining table edge instead so the chair is flush again.', caption: 'Table Sawed Flush!' },
+      { frame: 6, position: 'Bottom Right', framing: 'Wide deadpan shot', action: 'the rental owner saws two inches off the dining table edge instead so the chair is flush again.', caption: 'Table Sawed Flush!' },
     ],
     shots: [
       { shot: 1, visual: 'Overhead 240p CCTV view of Sigma Tauji pulling a plastic chair out two inches for his elbow.', sfx: 'Plastic chair scrape on floor', hindi: 'शादी में ताऊजी ने कोहनी रखने को कुर्सी दो इंच खींची।' },
-      { shot: 2, visual: 'Goa Uncle-G sitting next to him wordlessly pushes the chair two inches back in.', sfx: 'Sharp plastic thud', hindi: 'बगल वाले अंकल ने बिना बोले कुर्सी वापस अंदर ठेल दी।' },
-      { shot: 3, visual: 'Both uncles stare deadpan while sliding the chair out and in seventeen times.', sfx: 'Rhythmic squeak-squeak-squeak', hindi: 'दोनों ने सत्रह बार चुपचाप कुर्सी आगे-पीछे खिसकाई।' },
+      { shot: 2, visual: 'the rental owner sitting next to him wordlessly pushes the chair two inches back in.', sfx: 'Sharp plastic thud', hindi: 'बगल वाले पड़ोसी ने बिना बोले कुर्सी वापस अंदर ठेल दी।' },
+      { shot: 3, visual: 'Both residents stare deadpan while sliding the chair out and in seventeen times.', sfx: 'Rhythmic squeak-squeak-squeak', hindi: 'दोनों ने सत्रह बार चुपचाप कुर्सी आगे-पीछे खिसकाई।' },
       { shot: 4, visual: 'Fourteen years later both men enter a wedding hall carrying measuring tapes.', sfx: 'Dramatic metallic tape snap', hindi: 'चौदह साल बाद दोनों हर शादी में इंची-टेप लेकर आते हैं।' },
       { shot: 5, visual: 'Sigma Tauji bolts the plastic chair legs to the floor two inches out.', sfx: 'Power drill buzz', hindi: 'ताऊजी ने कुर्सी फर्श में बोल्ट कर दी।' },
-      { shot: 6, visual: 'Goa Uncle-G saws two inches off the table so it lines up flush again.', sfx: 'Hand saw zip and dead silence', hindi: 'अंकल ने आरी से टेबल काट दी।' },
+      { shot: 6, visual: 'the rental owner saws two inches off the table so it lines up flush again.', sfx: 'Hand saw zip and dead silence', hindi: 'पड़ोसी ने आरी से टेबल काट दी।' },
     ],
   },
   {

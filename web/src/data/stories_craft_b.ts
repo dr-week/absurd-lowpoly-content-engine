@@ -2,14 +2,14 @@ import type { TopicOption } from '../types';
 
 export const CRAFT_STORIES_B: TopicOption[] = [
   {
-    id: 'bn-goa-sunset-delay',
-    title: 'BREAKING: GOA SUNSET DELAYED FOR SERVER UPDATE',
+    id: 'bn-sunset-delay',
+    title: 'BREAKING: BEACH SUNSET DELAYED FOR SERVER UPDATE',
     angle: 'breaking-news',
-    brand: 'Goa',
+    brand: 'Beach Shack',
     trendHook: 'Deadpan Straight Man + Misdirection',
-    pitch: 'At 6 PM on Anjuna beach, the sunset freezes mid-sky showing a loading spinner. A municipal lineman climbs a bamboo ladder with a ₹20 screwdriver to reboot the sun.',
+    pitch: 'At 6 PM on the coastal beach, the sunset freezes mid-sky showing a loading spinner. A municipal lineman climbs a bamboo ladder with a ₹20 screwdriver to reboot the sun.',
     frames: [
-      { frame: 1, position: 'Top Left', framing: 'TV broadcast beach shot', action: 'News anchor stands on Goa sand as 50 tourists point cameras at a frozen orange sun.', caption: 'Goa mein sunset 6 baje atak gaya.' },
+      { frame: 1, position: 'Top Left', framing: 'TV broadcast beach shot', action: 'News anchor stands on coastal sand as 50 tourists point cameras at a frozen orange sun.', caption: 'Beach pe sunset 6 baje atak gaya.' },
       { frame: 2, position: 'Top Center', framing: 'Sky zoom-in shot', action: 'A crisp pixel loading bar floats across the sun reading "UPDATING HORIZON 12%".', caption: 'Suraj pe server update chal raha.' },
       { frame: 3, position: 'Top Right', framing: 'Beach wide shot', action: 'A calm municipal lineman sets up a wobbling 40-foot bamboo ladder leaning into the clouds.', caption: 'Lineman baans ki seedhi le aaya.' },
       { frame: 4, position: 'Bottom Left', framing: 'High-angle sky shot', action: 'The technician taps the side of the sun twice with a ₹20 yellow screwdriver.', caption: '20 rupaye ke pechkas se thoka.' },
@@ -17,7 +17,7 @@ export const CRAFT_STORIES_B: TopicOption[] = [
       { frame: 6, position: 'Bottom Right', framing: 'Anchor close-up', action: 'Standing in pitch darkness with a flashlight under his chin, the anchor nods solemnly.', caption: 'Kal ka sunset time pe aayega.' },
     ],
     shots: [
-      { shot: 1, visual: 'Live TV beach shot of fifty tourists staring at a frozen sun above Goa waves.', sfx: 'Urgent 1998 news sting and surf', hindi: 'गोवा में शाम का सनसेट अटक गया।' },
+      { shot: 1, visual: 'Live TV beach shot of fifty tourists staring at a frozen sun above ocean waves.', sfx: 'Urgent 1998 news sting and surf', hindi: 'बीच पर शाम का सनसेट अटक गया।' },
       { shot: 2, visual: 'Hard cut zooming into the sun displaying a blocky pixel "UPDATING 12%" bar.', sfx: 'Dial-up modem screech', hindi: 'सूरज पर सर्वर अपडेट चल रहा था।' },
       { shot: 3, visual: 'Wide cut to a municipal lineman climbing an impossibly tall bamboo ladder into the sky.', sfx: 'Creaking bamboo rungs', hindi: 'लाइनमैन बाँस की सीढ़ी लगा चढ़ा।' },
       { shot: 4, visual: 'Close-up of the lineman whacking the glowing sun twice with a tiny yellow screwdriver.', sfx: 'Two hollow metallic clanks', hindi: 'बीस के पेचकस से दो बार ठोका।' },
@@ -74,10 +74,10 @@ export const CRAFT_STORIES_B: TopicOption[] = [
     ],
   },
   {
-    id: 'ft-goa-scooter-rent',
-    title: 'HOW TO RENT A ₹200 SCOOTER IN GOA',
+    id: 'ft-scooter-rent',
+    title: 'HOW TO RENT A ₹200 SCOOTER ON VACATION',
     angle: 'fake-tutorial',
-    brand: 'Goa',
+    brand: 'Beach Shack',
     trendHook: 'Rule of Three + Broken Assumption',
     pitch: 'Step 1 inspect the brakes, Step 2 check the petrol needle, Step 3 discover the ₹200 scooter has no engine and the rental guy pushes you downhill for ₹50 extra.',
     frames: [
@@ -89,7 +89,7 @@ export const CRAFT_STORIES_B: TopicOption[] = [
       { frame: 6, position: 'Bottom Right', framing: 'Side tracking close-up', action: 'Panting beside the rolling scooter, the owner holds out a QR code mid-sprint.', caption: 'Dhakke ka 50 rupaye extra boss.' },
     ],
     shots: [
-      { shot: 1, visual: 'Sunny Goa roadside shot of a tourist celebrating a ₹200 red scooter rental.', sfx: 'Cheerful beach breeze and coin clink', hindi: 'गोवा में दो सौ की स्कूटी मिली।' },
+      { shot: 1, visual: 'Sunny coastal roadside shot of a tourist celebrating a ₹200 red scooter rental.', sfx: 'Cheerful beach breeze and coin clink', hindi: 'बीच पर दो सौ की स्कूटी मिली।' },
       { shot: 2, visual: 'Close-up of the tourist testing the horn and brakes with a confident thumbs-up.', sfx: 'Sharp retro scooter beep-beep', hindi: 'ब्रेक और हॉर्न एकदम बढ़िया थे।' },
       { shot: 3, visual: 'Hard cut to his hand twisting the key repeatedly in awkward dead silence.', sfx: 'Tiny hollow key click', hindi: 'चाबी घुमाई, पर आवाज़ नहीं आई।' },
       { shot: 4, visual: 'Smash-cut lifting the seat to reveal an empty hollow shell holding one coconut.', sfx: 'Hollow plastic thud', hindi: 'इंजन की जगह एक नारियल रखा था।' },

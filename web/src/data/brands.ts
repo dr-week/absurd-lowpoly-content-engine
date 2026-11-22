@@ -1,9 +1,9 @@
 import type { BrandSignal } from '../types';
 
-// Global + Goa + Science + Politics + Modern Culture Viral Heat Signals
+// Global + Street + Science + Politics + Modern Culture Viral Heat Signals
 export const BRAND_SIGNALS: Record<string, BrandSignal> = {
-  'Goa Shack': { brand: 'Goa Shack', spendHeat: 93, hook: 'Goa tourist & coastal lifestyle viral reels', agencyStyle: 'Relatable travel satire' },
-  'Goa Ferry': { brand: 'Goa Ferry', spendHeat: 89, hook: 'Goan scooter & river ferry culture', agencyStyle: 'Deadpan regional comedy' },
+  'Beach Shack': { brand: 'Beach Shack', spendHeat: 93, hook: 'Tourist & coastal lifestyle viral reels', agencyStyle: 'Relatable travel satire' },
+  'Island Ferry': { brand: 'Island Ferry', spendHeat: 89, hook: 'Rental scooter & river ferry culture', agencyStyle: 'Deadpan regional comedy' },
   'NASA Study': { brand: 'NASA Study', spendHeat: 94, hook: 'Space & zero-gravity research headlines', agencyStyle: 'Absurd science explainer' },
   'Sleep Study': { brand: 'Sleep Study', spendHeat: 91, hook: 'Viral university psychology/sleep studies', agencyStyle: 'Deadpan weird science' },
   'Quantum Lab': { brand: 'Quantum Lab', spendHeat: 90, hook: 'Particle physics & weird lab breakthroughs', agencyStyle: 'Sci-fi deadpan twist' },

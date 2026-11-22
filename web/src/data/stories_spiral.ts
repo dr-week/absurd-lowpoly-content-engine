@@ -50,12 +50,12 @@ export const SPIRAL_STORIES: TopicOption[] = [
     ],
   },
   {
-    id: 'spi-goa-scooter-deposit',
-    title: 'GOA SCOOTER RENT: THE ₹50 SCRATCH TRIAL',
+    id: 'spi-scooter-deposit',
+    title: 'RENTAL SCOOTER RENT: THE ₹50 SCRATCH TRIAL',
     angle: 'petty-spiral',
-    brand: 'Goa Ferry',
+    brand: 'Island Ferry',
     trendHook: 'Travel Dispute Spiral',
-    pitch: 'Tourist returns a rented Goan scooter; owner spots a microscopic scratch and summons a forensic microscope team, drone radar, and a maritime tribunal.',
+    pitch: 'Tourist returns a rented rental scooter; owner spots a microscopic scratch and summons a forensic microscope team, drone radar, and a maritime tribunal.',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'Sunny roadside shot', action: 'Tourist hands back scooter keys smiling; rental owner crouches beside the front fender.', caption: 'Scooter wapas karne aaya.' },
       { frame: 2, position: 'Top Center', framing: 'Macro fender shot', action: 'Owner pulls out a glowing forensic UV magnifying glass pointing at a 1-millimeter speck.', caption: '1 mm ka scratch mil gaya.' },
@@ -65,7 +65,7 @@ export const SPIRAL_STORIES: TopicOption[] = [
       { frame: 6, position: 'Bottom Right', framing: 'Deadpan owner shot', action: 'Owner nods calmly, folds his hands, and still holds onto the ₹1000 deposit note.', caption: 'Forensic team ka 500 alag.' },
     ],
     shots: [
-      { shot: 1, visual: 'Sunny Goan roadside shot of a tourist handing back rented scooter keys.', sfx: 'Key jingle and coastal breeze', hindi: 'टूरिस्ट स्कूटर वापस करने आया।' },
+      { shot: 1, visual: 'Sunny coastal roadside shot of a tourist handing back rented scooter keys.', sfx: 'Key jingle and coastal breeze', hindi: 'टूरिस्ट स्कूटर वापस करने आया।' },
       { shot: 2, visual: 'Hard cut to rental owner inspecting a microscopic dot with a glowing magnifier.', sfx: 'Dramatic retro zoom beep', hindi: 'मालिक को एक मिलीमीटर निशान दिखा।' },
       { shot: 3, visual: 'Wide shot of white forensic vans taping off the entire beach road.', sfx: 'Van brakes and caution tape snap', hindi: 'सीधा फ़ोरेंसिक टीम बुला ली।' },
       { shot: 4, visual: 'Hard cut to a judge slamming a gavel beside a holographic scooter fender on the sand.', sfx: 'Loud wooden gavel bang', hindi: 'बीच पर पूरी अदालत लग गई।' },
