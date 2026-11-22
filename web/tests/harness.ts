@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { cycleDirectorsStack } from '../src/data/creative_matrix';
 import { cycleSituationCast } from '../src/engine/character_variability';
 import { cycleMarketingGimmick } from '../src/engine/marketing_gimmicks';
+import { getKnowledgeDB } from '../src/engine/knowledge_db';
 import { detectCharacterLock, sanitizeCopyrightNames } from '../src/engine/alias_sanitizer';
 import { restoreStudioBackup } from '../src/engine/backup_sync';
 import { scoreComedyCraft } from '../src/engine/comedy_craft';
@@ -139,7 +140,7 @@ for (const p of [mockPrompts, gtaPrompts, switchPromptVisualStyle(mockPrompts, '
 assert.ok(mockPrompts.videoPrompt.includes('Speaker [') && ALL_BESPOKE_STORIES[0].shots?.[0].turns?.length === 2, 'Expected multi-voice speaker tags & NPC ping-pong');
 assert.ok(renderVideoText(ALL_BESPOKE_STORIES[0].shots ?? []).includes('Immediately ['), 'Expected NPC-to-NPC ping-pong reply');
 assert.ok(cycleSituationCast(mockPrompts, 0).prompts.storyboardPrompt.includes('Character & Prop Design:'));
-assert.ok(cycleMarketingGimmick(mockPrompts, 0).prompts.videoPrompt.includes('Marketing Gimmick') && buildViralPackage(sample, mockPrompts).copyText.includes('MARKETING GIMMICK:'));
+assert.ok(cycleMarketingGimmick(mockPrompts, 0).prompts.videoPrompt.includes('Marketing Gimmick') && buildViralPackage(sample, mockPrompts).copyText.includes('MARKETING GIMMICK:') && getKnowledgeDB().size >= 130 && getKnowledgeDB().search('hook point', 'book')[0]?.id === 'book_hook_point');
 assert.ok(buildCrossoverEpisode([sample, customEp])?.title.startsWith('CROSSOVER:'));
 
 console.log(

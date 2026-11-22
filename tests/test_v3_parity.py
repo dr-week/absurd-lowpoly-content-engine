@@ -154,3 +154,17 @@ def test_validator_flags_proper_names_emojis_and_cliches() -> None:
     assert "PROPER_NAME_LEAK" in codes
     assert "EMOJI_NOT_ALLOWED" in codes
     assert "BANNED_LOCATION_OR_TROPE_CLICHE" in codes
+
+
+def test_knowledge_db_fts5_search_and_books_endpoint(tmp_path: Path) -> None:
+    client = _make_client(tmp_path)
+    books_res = client.get("/knowledge/books")
+    assert books_res.status_code == 200
+    assert len(books_res.json()) >= 18
+
+    search_res = client.get("/knowledge/search", params={"q": "Hook Point", "kind": "book"})
+    assert search_res.status_code == 200
+    hits = search_res.json()
+    assert len(hits) >= 1
+    assert any("Hook Point" in h["title"] for h in hits)
+

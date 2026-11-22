@@ -19,6 +19,7 @@ from absurd_engine.generators import (
     render_storyboard_prompt,
     render_video_prompt,
 )
+from absurd_engine.knowledge_db import KnowledgeBaseDB, MARKETING_AND_STORY_BOOKS
 from absurd_engine.llm import LLMProviderError, create_provider
 from absurd_engine.mechanics import MECHANICS_CATALOG, pick_mechanic
 from absurd_engine.playbook import BOOK_FRAMEWORKS, DIRECTORS_STACKS, VISUAL_STYLE_PROFILES
@@ -66,6 +67,7 @@ def create_app(settings: EngineSettings | None = None) -> FastAPI:
     cfg = settings or EngineSettings()
     provider = create_provider(cfg)
     store = EpisodeStore(cfg.db_path)
+    kb = KnowledgeBaseDB()
 
     app = FastAPI(
         title="Absurd Low-Poly Content Engine API",
@@ -113,6 +115,14 @@ def create_app(settings: EngineSettings | None = None) -> FastAPI:
             "directors_stacks": list(DIRECTORS_STACKS),
             "visual_styles_count": len(VISUAL_STYLE_PROFILES),
         }
+
+    @app.get("/knowledge/books")
+    async def list_knowledge_books() -> list[dict[str, str]]:
+        return list(MARKETING_AND_STORY_BOOKS)
+
+    @app.get("/knowledge/search")
+    async def search_knowledge(q: str = "", kind: str | None = None, limit: int = 12) -> list[dict[str, Any]]:
+        return kb.search(q, kind=kind, limit=max(1, min(50, limit)))
 
     @app.get("/trends", response_model=list[TrendItem])
     async def api_trends(limit: int = 8) -> list[TrendItem]:
