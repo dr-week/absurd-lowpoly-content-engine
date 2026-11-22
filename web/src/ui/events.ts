@@ -3,6 +3,7 @@ import { exportStudioBackup, restoreStudioBackup } from '../engine/backup_sync';
 import { cycleSituationCast } from '../engine/character_variability';
 import { cycleDesiCharacterName } from '../engine/desi_nomenclature';
 import { cycleVoiceEnsemble } from '../engine/dialogue_theater';
+import { cycleMarketingGimmick } from '../engine/marketing_gimmicks';
 import { cycleAlternatePunchline, exportSavedMarkdown, rerollCameraRig, switchPromptVisualStyle } from '../engine/prompt_tools';
 import { removeSavedTopic, saveLikedTopic, setSavedOutcome } from '../engine/saved_store';
 import { exportJson, exportJsonl, saveConfig, saveLogs, upsertVote } from '../engine/telemetry';
@@ -15,7 +16,7 @@ export interface AppState {
   hookFilter: HookCategory | 'all'; situationFilter: SituationCategory | 'all'; visualStyle: VisualStyle;
   batchNonce: number; seenPairs: Set<string>; seenTitles: Set<string>; topics: ScoredTopic[]; liveTrends: string[];
   loadingTopics: boolean; selectedId: string | null; activeTopic?: ScoredTopic; prompts: GeneratedPrompts | null;
-  rigStep: number; punchStep: number; twistStep: number; nameStep: number; stackStep: number; voiceStep: number; castStep: number;
+  rigStep: number; punchStep: number; twistStep: number; nameStep: number; stackStep: number; voiceStep: number; castStep: number; promoStep: number;
   loading: boolean;
   logs: RatingLogEntry[];
   saved: SavedItem[];
@@ -103,6 +104,7 @@ export function bindAppEvents(
       if (a === 'reroll-name' && state.prompts) { const out = cycleDesiCharacterName(state.prompts, (state.nameStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Name: ${out.name}`); return; }
       if (a === 'reroll-rig' && state.prompts) { const out = rerollCameraRig(state.prompts, (state.rigStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Camera: ${out.rigLabel}`); return; }
       if (a === 'reroll-punchline' && state.prompts) { const out = cycleAlternatePunchline(state.prompts, (state.punchStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Punchline: ${out.style}`); return; }
+      if (a === 'reroll-promo' && state.prompts) { const out = cycleMarketingGimmick(state.prompts, (state.promoStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Promo: ${out.label}`); return; }
       if (a === 'export-saved-md') { exportSavedMarkdown(state.saved); hooks.toast('Exported Saved .md'); return; }
       if (a === 'export-backup') { exportStudioBackup(state); hooks.toast('Backup downloaded'); return; }
       if (a === 'export-jsonl') { exportJsonl(state.logs); hooks.toast('Exported JSONL'); return; }

@@ -1,5 +1,6 @@
 import { detectActiveDirectorsStack } from '../data/creative_matrix';
 import type { GeneratedPrompts, ScoredTopic } from '../types';
+import { detectActiveGimmick } from './marketing_gimmicks';
 import { getHookLabel, getSituationLabel } from './taxonomy';
 import { detectTwistBlueprint } from './twist_architect';
 
@@ -19,7 +20,7 @@ function toTag(raw: string): string {
 
 /**
  * Generates high-CTR Reels/Shorts viral packaging:
- * 3 titles, 1 comment-bait pinned comment, expectation-flip audit, loop audit, and 5 hashtags.
+ * 3 titles, 1 comment-bait pinned comment, expectation-flip audit, loop audit, marketing gimmick, and 5 hashtags.
  */
 export function buildViralPackage(topic: ScoredTopic, prompts: GeneratedPrompts): ViralPackage {
   const shortTitle = topic.title.replace(/^PART\s*\d+:\s*/i, '').trim();
@@ -45,6 +46,7 @@ export function buildViralPackage(topic: ScoredTopic, prompts: GeneratedPrompts)
   const bp = detectTwistBlueprint(topic);
   const twistAudit = `${bp.label}: ${bp.assumedTrack} -> ${bp.subversionSnap}`;
   const stack = detectActiveDirectorsStack(prompts.storyboardPrompt, topic.title.length);
+  const gimmick = detectActiveGimmick(prompts.storyboardPrompt, topic.title.length);
 
   const hashtags = Array.from(
     new Set([
@@ -62,6 +64,7 @@ export function buildViralPackage(topic: ScoredTopic, prompts: GeneratedPrompts)
     '',
     `TWIST CHECK: ${twistAudit}`,
     `BOOK & EDIT: ${stack.book} | ${stack.lens} | ${stack.editMethod}`,
+    `MARKETING GIMMICK: ${gimmick.label} — ${gimmick.ctaBait}`,
     `PINNED COMMENT: ${pinnedComment}`,
     `LOOP AUDIT: ${loopStatus}`,
     `HASHTAGS: ${hashtags.join(' ')}`,
