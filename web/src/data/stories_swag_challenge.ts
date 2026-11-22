@@ -1,0 +1,108 @@
+import type { TopicOption } from '../types';
+
+export const SWAG_CHALLENGE_STORIES: readonly TopicOption[] = [
+  {
+    id: 'swag_torn_chappal_showroom_buyout',
+    title: 'TORN-CHAPPAL GUY KICKED OUT OF SUPERCAR SHOWROOM—BUYS THE BUILDING',
+    angle: 'petty-spiral',
+    brand: 'Ambaani',
+    trendHook: 'Undercover Rich Swag Reversal: Torn Chappals vs ₹4 Crore Supercar',
+    visualStyle: 'gta6-vice',
+    pitch:
+      'A showroom manager laughs and kicks a guy in torn rubber chappals out for touching a ₹4 crore supercar—until he walks back in five minutes later with a steel tiffin full of property deeds and buys the whole showroom.',
+    frames: [
+      { frame: 1, position: 'Top Left', framing: 'Showroom wide shot', action: 'Wearing torn rubber chappals and a faded cotton shirt, Ambaani gently taps the hood of a neon-red ₹4 crore supercar.', caption: 'Torn Chappals In Showroom!' },
+      { frame: 2, position: 'Top Center', framing: 'Medium shot', action: 'A smug showroom manager in a tight suit grabs his shoulder laughing: "Brother, even the key-chain costs more than your house!"', caption: 'Manager Laughs Him Out!' },
+      { frame: 3, position: 'Top Right', framing: 'Close-up', action: 'Ambaani says nothing, adjusts his ₹80 plastic watch, makes one 3-second phone call outside, and walks calmly back inside.', caption: 'One 3-Second Call!' },
+      { frame: 4, position: 'Bottom Left', framing: 'Wide dramatic shot', action: 'Six black armored SUVs screech up outside as the dealership owner sprints in bowing nervously with a velvet deed folder.', caption: '6 Armored SUVs Arrive!' },
+      { frame: 5, position: 'Bottom Center', framing: 'Close-up', action: 'Ambaani signs the building buyout paper using a ₹5 ballpen while the smug manager’s jaw drops to the marble floor.', caption: 'Buys Whole Showroom!' },
+      { frame: 6, position: 'Bottom Right', framing: 'Wide swag shot', action: 'Leaving the ₹4 crore supercar untouched, Ambaani rides out on his squeaky old bicycle after ordering the manager to polish its bell.', caption: 'Polish My Cycle Bell!' },
+    ],
+    shots: [
+      { shot: 1, visual: 'Glossy luxury showroom as Ambaani in torn rubber chappals inspects a neon-red supercar.', sfx: 'Squeaky rubber chappal step', hindi: 'फटी चप्पल में वह चार करोड़ की कार देखने शोरूम गया।' },
+      { shot: 2, visual: 'Smug showroom manager points to the exit laughing in his face.', sfx: 'Mocking laugh and door push', hindi: 'मैनेजर हंसकर बोला—चाबी भी तेरी औकात से बाहर है।' },
+      { shot: 3, visual: 'Outside, Ambaani makes one calm three-second phone call.', sfx: 'Single phone beep', hindi: 'बाहर जाकर उसने बस तीन सेकंड का एक फोन किया।' },
+      { shot: 4, visual: 'Six black SUVs pull up as the dealership boss runs out bowing deeply.', sfx: 'Screeching tires and dramatic bass drop', hindi: 'पांच मिनट में छह काली गाड़ियां शोरूम के बाहर रुक गईं।' },
+      { shot: 5, visual: 'Ambaani signs the building purchase deed with a ₹5 plastic pen.', sfx: 'Crisp pen scribble and stamp slam', hindi: 'पांच के पेन से उसने पूरा शोरूम ही खरीद लिया।' },
+      { shot: 6, visual: 'Ambaani rides away on an old bicycle while the manager polishes its bell.', sfx: 'Bicycle tring-tring and swag beat', hindi: 'मैनेजर को अपनी साइकिल की घंटी चमकाने रख लिया।' },
+    ],
+  },
+  {
+    id: 'swag_snobby_date_secret_hotel_owner',
+    title: 'SNOBBY DATE MOCKS HIS SIMPLE KURTA—HE OWNS THE 5-STAR HOTEL',
+    angle: 'breaking-news',
+    brand: 'Salmaan Bhoi',
+    trendHook: 'Undercover Rich Karma Twist: Insulted Date Turns Out To Be Boss',
+    visualStyle: 'claymation-stopmo',
+    pitch:
+      'At a 5-star rooftop restaurant, a snobby date loudly mocks Salmaan Bhoi’s simple kurta and tells the waiter to throw him out—until the head chef and 12 staff sprint out saluting him as the secret owner.',
+    frames: [
+      { frame: 1, position: 'Top Left', framing: 'Rooftop table shot', action: 'Salmaan Bhoi sits calmly in a plain cotton kurta ordering ₹40 masala soda while his date glares at him in disgust.', caption: 'Plain Kurta On 5-Star Date!' },
+      { frame: 2, position: 'Top Center', framing: 'Medium shot', action: 'She stands up loud enough for every table to hear: "Waiter! Remove this broke guy, he can’t even afford the menu!"', caption: 'Throw This Broke Guy Out!' },
+      { frame: 3, position: 'Top Right', framing: 'Close-up', action: 'Salmaan Bhoi slowly puts on his crooked mirrored aviators and lightly taps his turquoise bracelet once against the glass.', caption: 'One Bracelet Tap!' },
+      { frame: 4, position: 'Bottom Left', framing: 'Wide dining shot', action: 'Kitchen doors swing open as the head chef, hotel GM, and twelve waiters rush out lining up in a red-carpet salute.', caption: '12 Staff Salute Him!' },
+      { frame: 5, position: 'Bottom Center', framing: 'Medium reaction shot', action: 'The hotel GM bows saying "Good evening, Chairman Sir!" while the snobby date freezes mid-sip and drops her fork.', caption: 'Good Evening Chairman Sir!' },
+      { frame: 6, position: 'Bottom Right', framing: 'Deadpan wide shot', action: 'Salmaan Bhoi switches tables to eat dal-chawal with the kitchen staff while handing his date the ₹48,000 VIP table bill.', caption: '₹48,000 Bill For Madam!' },
+    ],
+    shots: [
+      { shot: 1, visual: '5-star rooftop table where Salmaan Bhoi in a simple kurta orders lime soda.', sfx: 'Soft jazz and ice clink', hindi: 'फाइव-स्टार डेट पर वह सादे कुर्ते में बैठकर सोडा मंगाया।' },
+      { shot: 2, visual: 'Snobby date yells at the waiter to kick the "broke guy" out of the hotel.', sfx: 'Loud chair scrape and gasps', hindi: 'लड़की चिल्लाई—वेटर, इस गरीब को होटल से बाहर निकालो।' },
+      { shot: 3, visual: 'Salmaan Bhoi slides on aviators and taps his bracelet once on the glass.', sfx: 'Sharp glass ting', hindi: 'उसने चश्मा लगाया और ग्लास पर बस एक बार ब्रेसलेट बजाया।' },
+      { shot: 4, visual: 'Twelve waiters and the head chef sprint out forming a red-carpet salute.', sfx: 'Dramatic orchestral swell', hindi: 'बारह वेटर और हेड शेफ दौड़कर सलाम ठोकने आ गए।' },
+      { shot: 5, visual: 'The GM bows calling him Chairman Sir as the date drops her fork in shock.', sfx: 'Metallic fork clatter', hindi: 'मैनेजर झुककर बोला—गुड इवनिंग चेयरमैन सर!' },
+      { shot: 6, visual: 'Salmaan Bhoi eats dal-chawal with staff while the waiter hands her a ₹48,000 bill.', sfx: 'Receipt slam and bass drop', hindi: 'मैडम को अड़तालीस हज़ार का बिल थमा दिया।' },
+    ],
+  },
+  {
+    id: 'challenge_3_friends_hide_mega_mall',
+    title: '3 FRIENDS HIDE OVERNIGHT IN A MEGA-MALL USING ABSURD DISGUISES',
+    angle: 'fake-tutorial',
+    brand: '24-Hr Challenge',
+    trendHook: 'MrBeast-Style Overnight Survival Challenge: 3 Disguises vs Mall Security',
+    visualStyle: 'cctv-dashcam',
+    pitch:
+      'Three friends bet ₹50,000 on who can hide overnight inside the city’s biggest mall: Friend 1 hides inside a fake dustbin, Friend 2 wears a burger apron and gets forced to mop floors, and Friend 3 carries a ladder so guards salute him.',
+    frames: [
+      { frame: 1, position: 'Top Left', framing: 'Mall CCTV wide shot', action: 'At 10:55 PM as mall shutters roll down, three friends fist-bump over a ₹50,000 overnight hide-and-seek bet.', caption: '10:55 PM Mall Bet!' },
+      { frame: 2, position: 'Top Center', framing: 'Medium shot', action: 'Friend 1 climbs inside a hollow plastic dustbin with two eye-holes—instantly getting tossed full of half-eaten ice cream cones.', caption: 'Disguise #1: Dustbin!' },
+      { frame: 3, position: 'Top Right', framing: 'Wide food-court shot', action: 'Friend 2 puts on a red fast-food apron to blend in, but the night manager catches him and forces him to scrub 40 trays till 3 AM.', caption: 'Disguise #2: Forced Shift!' },
+      { frame: 4, position: 'Bottom Left', framing: 'Corridor CCTV shot', action: 'Friend 3 simply wears a neon vest, carries an aluminum ladder and clipboard, and nods sternly at two patrolling security guards.', caption: 'Disguise #3: Ladder Trick!' },
+      { frame: 5, position: 'Bottom Center', framing: 'Medium shot', action: 'The guards immediately salute Friend 3, unlock the VIP luxury furniture showroom, and bring him free hot tea.', caption: 'Guards Unlock VIP Bed!' },
+      { frame: 6, position: 'Bottom Right', framing: 'Morning wide shot', action: 'At 8 AM Friend 3 wakes up refreshed on a ₹2 lakh massage bed winning the ₹50,000 while Friend 2 is still mopping the food court.', caption: 'Ladder Always Wins!' },
+    ],
+    shots: [
+      { shot: 1, visual: '240p mall CCTV at 10:55 PM as three friends lock in an overnight ₹50,000 hiding challenge.', sfx: 'Heavy shutter clang', hindi: 'मॉल बंद होते ही तीन दोस्तों ने रात भर छुपने की शर्त लगाई।' },
+      { shot: 2, visual: 'Friend 1 hides inside a hollow dustbin and gets hit by an ice-cream cone.', sfx: 'Wet splat and muffled groan', hindi: 'पहला डस्टबिन बना तो लोग उसमें आइसक्रीम फेंक गए।' },
+      { shot: 3, visual: 'Friend 2 in a burger apron is handed a mop by an angry night shift manager.', sfx: 'Squeaky mop and whistle', hindi: 'दूसरा वेटर बना तो मैनेजर ने रात भर पोंछा लगवाया।' },
+      { shot: 4, visual: 'Friend 3 walks past security carrying an aluminum ladder and serious clipboard.', sfx: 'Confident boots and walkie click', hindi: 'तीसरे ने बस सीढ़ी उठाई और गार्ड को सलाम मारा।' },
+      { shot: 5, visual: 'Guards respectfully unlock the luxury mattress showroom and bring him chai.', sfx: 'Key unlock and polite salute', hindi: 'गार्ड ने खुद वीआईपी गद्दे वाला कमरा खोल दिया।' },
+      { shot: 6, visual: 'At 8 AM Friend 3 stretches on a ₹2 lakh bed holding ₹50,000 cash.', sfx: 'Cash register chime', hindi: 'सीढ़ी वाला सुबह पचास हज़ार जीत गया।' },
+    ],
+  },
+  {
+    id: 'challenge_last_to_leave_chalk_circle',
+    title: 'LAST TO LEAVE A ₹10 CHALK CIRCLE WINS A SUPERCAR—DOGEE ENTERS',
+    angle: 'over-engineer',
+    brand: 'Elone Maask',
+    trendHook: 'MrBeast-Style Last-To-Leave Circle Challenge vs Sleepy Dogee',
+    visualStyle: 'ps1-1998',
+    pitch:
+      'Elone Maask offers a ₹5 crore supercar to whoever stays longest inside a tiny chalk circle—tempting four hyper-competitive contestants with cash bribes until Dogee wanders in for a nap and beats everyone.',
+    frames: [
+      { frame: 1, position: 'Top Left', framing: 'High-angle wide shot', action: 'In a giant stadium, four intense contestants stand inside a tight white chalk circle staring at a shiny supercar parked ten feet away.', caption: 'Last To Leave Wins!' },
+      { frame: 2, position: 'Top Center', framing: 'Medium shot', action: 'At Hour 6, Elone Maask waves a hot pizza box outside the line; Contestant 1 lunges out immediately and gets eliminated.', caption: 'Hour 6: Pizza Trap!' },
+      { frame: 3, position: 'Top Right', framing: 'Wide shot', action: 'At Hour 18, Elone Maask drops ₹5 lakh cash just two inches outside the circle; two more contestants dive for the notes.', caption: 'Hour 18: ₹5 Lakh Bribe!' },
+      { frame: 4, position: 'Bottom Left', framing: 'Medium shot', action: 'Just as the final contestant celebrates, Dogee wearing tiny black sunglasses casually strolls into the chalk circle and curls up to sleep.', caption: 'Dogee Enters Circle!' },
+      { frame: 5, position: 'Bottom Center', framing: 'Close-up', action: 'Elone Maask blasts airhorns and waves bacon strips outside—Dogee doesn’t even open one eye for 48 straight hours.', caption: '48-Hour Power Nap!' },
+      { frame: 6, position: 'Bottom Right', framing: 'Wide deadpan shot', action: 'Exhausted, the human finalist collapses over the chalk line while Dogee sits in the supercar driver seat wearing the winner crown.', caption: 'Dogee Wins Supercar!' },
+    ],
+    shots: [
+      { shot: 1, visual: 'Stadium wide shot of four contestants trapped inside a white chalk circle facing a supercar.', sfx: 'Dramatic game-show horn', hindi: 'गोले में आखिर तक टिकने वाले को पांच करोड़ की कार थी।' },
+      { shot: 2, visual: 'Elone Maask waves a steaming pizza outside and Contestant 1 steps out instantly.', sfx: 'Buzzer sound', hindi: 'छठे घंटे में पहला बंदा पिज़्ज़ा देखकर बाहर भागा।' },
+      { shot: 3, visual: 'Elone Maask drops cash bundles outside the line; two contestants dive out.', sfx: 'Double elimination buzzer', hindi: 'दो लोग पांच लाख कैश के लालच में आउट हो गए।' },
+      { shot: 4, visual: 'Dogee in tiny sunglasses casually walks inside the chalk circle and naps.', sfx: 'Gentle yawn', hindi: 'तभी चश्मा लगाकर डोगी गोले में सोने आ गया।' },
+      { shot: 5, visual: 'Elone Maask blasts airhorns while Dogee sleeps peacefully unbothered.', sfx: 'Loud airhorn and soft snore', hindi: 'अड़तालीस घंटे भोंपू बजा पर डोगी की आंख न खुली।' },
+      { shot: 6, visual: 'Dogee sits upright in the supercar driver seat wearing a golden crown.', sfx: 'Engine rev and victory chime', hindi: 'आखिर में डोगी पांच करोड़ की कार जीत गया।' },
+    ],
+  },
+];

@@ -50,6 +50,18 @@ export const COMEDY_MECHANISMS: readonly ComedyMechanism[] = [
     rule: 'Shot 1-2 grounded relatable annoyance (boss lecture, smug critic, strict rule) -> Shot 3-4 peak arrogance -> Shot 5-6 deadpan literal compliance or savage 1-line comeback that flips the power dynamic.',
     punchlineRule: 'Zero lecturing; deliver the savage comeback in <= 7 Hindi words and cut immediately.',
   },
+  {
+    id: 'undercover-swag-karma',
+    name: 'Undercover Rich Swag Reversal',
+    rule: 'Shot 1-2 humble disguise (torn chappals, plain kurta) gets publicly insulted by snobby guard/date -> Shot 3-4 sudden billionaire/owner reveal -> Shot 5-6 deadpan swag karma twist.',
+    punchlineRule: 'Deliver the satisfying status flip + absurd humble flex in <= 7 Hindi words.',
+  },
+  {
+    id: 'challenge-survival',
+    name: 'MrBeast-Style 24-Hr Disguise Challenge',
+    rule: 'Shot 1 high-stakes bet/rule -> Shots 2-4 three distinct disguises or escalating temptations ("what happens next?") -> Shots 5-6 absurdly simple winner outsmarts everyone.',
+    punchlineRule: 'Reveal the unexpected winner in <= 7 Hindi words with a sharp payoff.',
+  },
 ];
 
 export function pickComedyMechanism(seed = Math.random()): ComedyMechanism {

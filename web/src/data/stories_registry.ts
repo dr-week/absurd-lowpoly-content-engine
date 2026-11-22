@@ -16,6 +16,7 @@ import { SCIENCE_STORIES } from './stories_science';
 import { SLICE_OF_LIFE_STORIES } from './stories_slice_of_life';
 import { SPIRAL_STORIES } from './stories_spiral';
 import { SUSPENSE_STORIES } from './stories_suspense';
+import { SWAG_CHALLENGE_STORIES } from './stories_swag_challenge';
 import { TUTORIAL_STORIES } from './stories_tutorial';
 
 export const ALL_BESPOKE_STORIES: readonly TopicOption[] = [
@@ -36,4 +37,5 @@ export const ALL_BESPOKE_STORIES: readonly TopicOption[] = [
   ...DEBATE_STORIES,
   ...INDIA_MEME_STORIES,
   ...SLICE_OF_LIFE_STORIES,
+  ...SWAG_CHALLENGE_STORIES,
 ].map(sanitizeTopic);
