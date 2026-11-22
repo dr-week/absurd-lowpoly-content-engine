@@ -105,7 +105,7 @@ export function renderStudioView(params: {
     promptBody = `
       <div class="remix-bar">
         <span class="remix-bar__label">Remix Lab</span>
-        <button type="button" class="btn" data-action="reroll-twist" title="Swap Expectation-Subversion Twist Blueprint">${Glyphs.shuffle(14)}<span>Twist</span></button>
+        <button type="button" class="btn" data-action="reroll-voice" title="Swap Multi-Voice Cast & NPC Dialogue Ensemble">${Glyphs.mic(14)}<span>Voice</span></button><button type="button" class="btn" data-action="reroll-twist" title="Swap Expectation-Subversion Twist Blueprint">${Glyphs.shuffle(14)}<span>Twist</span></button>
         <button type="button" class="btn" data-action="reroll-stack" title="Swap Book + Lens + Film Editing Stack">${Glyphs.film(14)}<span>Film</span></button>
         <button type="button" class="btn" data-action="reroll-name" title="Cycle Funny Desi Character Name">${Glyphs.user(14)}<span>Name</span></button>
         <button type="button" class="btn" data-action="reroll-rig" title="Swap Camera & Lighting Rig">${Glyphs.camera(14)}<span>Camera</span></button>

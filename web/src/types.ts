@@ -41,11 +41,22 @@ export interface StoryboardFrameData {
   caption: string;
 }
 
+export type SpeakerRole = 'protagonist' | 'npc1' | 'npc2' | 'entity' | 'narrator';
+
+export interface DialogueTurn {
+  speaker: string;
+  role: SpeakerRole;
+  voice: string;
+  delivery: string;
+  hindi: string;
+}
+
 export interface VideoShotData {
   shot: number;
   visual: string;
   sfx: string;
   hindi: string;
+  turns?: DialogueTurn[];
 }
 
 export interface TopicOption {

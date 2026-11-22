@@ -20,9 +20,13 @@ import { SUBVERSION_STORIES_A } from './stories_subversion_a';
 import { SUBVERSION_STORIES_B } from './stories_subversion_b';
 import { SUSPENSE_STORIES } from './stories_suspense';
 import { SWAG_CHALLENGE_STORIES } from './stories_swag_challenge';
+import { THEATER_STORIES_A } from './stories_theater_a';
+import { THEATER_STORIES_B } from './stories_theater_b';
 import { TUTORIAL_STORIES } from './stories_tutorial';
 
 export const ALL_BESPOKE_STORIES: readonly TopicOption[] = [
+  ...THEATER_STORIES_A,
+  ...THEATER_STORIES_B,
   ...OVERENGINEER_STORIES,
   ...ORIGIN_STORIES,
   ...NEWS_STORIES,

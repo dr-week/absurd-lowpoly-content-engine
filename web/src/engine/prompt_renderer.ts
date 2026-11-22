@@ -1,5 +1,6 @@
 import type { EngineConfig, GeneratedPrompts, StoryboardFrameData, TopicOption, VideoShotData, VisualStyle } from '../types';
 import { detectCharacterLock, sanitizeCopyrightNames } from './alias_sanitizer';
+import { formatShotDialogue, pickVoiceEnsemble } from './dialogue_theater';
 import { generateFreeLiveScriptSpec } from './free_ai';
 import { generateLiveScriptSpec } from './live_ai';
 import { pickCinematographyRig } from './randomizer';
@@ -11,8 +12,8 @@ const STORYBOARD_HEADER = (title: string, rigDirective: string, charLock: string
   `6-frame storyboard in a 3x2 grid on a plain dark background. Apply one unified style to ALL panels: ${getVisualStyleMeta(style).sbDesc} ${rigDirective}${charLock ? ` ${charLock}` : ''} Strictly NO 2D cartoon art, NO comic ink outlines, NO cel-shading. Place a short bold retro pixel-font Hinglish caption under each panel. Title at top: "${title}".`;
 
 // Strictly NO time, NO duration, NO video size / aspect ratio mentions!
-const VIDEO_HEADER = (rigDirective: string, charLock: string, style: VisualStyle): string =>
-  `Absurdist comedy video. Apply one unified style throughout: ${getVisualStyleMeta(style).vidDesc} ${rigDirective}${charLock ? ` ${charLock}` : ''} Strictly NO 2D cartoon art, NO comic ink outlines, NO cel-shading. Audio: deadpan, serious Indian male narrator speaking ultra-short Hindi lines matched tightly to each shot, paired with punchy game SFX and sharp hard cuts.`;
+const VIDEO_HEADER = (rigDirective: string, charLock: string, style: VisualStyle, ensembleSeed = 0): string =>
+  `Absurdist comedy video. Apply one unified style throughout: ${getVisualStyleMeta(style).vidDesc} ${rigDirective}${charLock ? ` ${charLock}` : ''} Strictly NO 2D cartoon art, NO comic ink outlines, NO cel-shading. ${pickVoiceEnsemble(ensembleSeed).audioHeader}`;
 
 export function renderStoryboardText(
   title: string,
@@ -39,13 +40,16 @@ export function renderVideoText(
   shots: VideoShotData[],
   rigDirective?: string,
   visualStyle: VisualStyle = 'ps1-1998',
+  ensembleSeed = 0,
 ): string {
   const rig = rigDirective ?? pickCinematographyRig().directive;
   const lock = detectCharacterLock(shots.map((s) => s.visual).join(' '));
-  const lines: string[] = [VIDEO_HEADER(rig, lock, visualStyle), ''];
+  const lines: string[] = [VIDEO_HEADER(rig, lock, visualStyle, ensembleSeed), ''];
   for (const shot of shots) {
     lines.push(`Shot ${shot.shot}: ${cleanVideoLine(shot.visual)} SFX: ${cleanVideoLine(shot.sfx)}.`);
-    lines.push(`Hindi Dialogue: "${shot.hindi.replace(/[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/gu, '').trim()}"`);
+    for (const turnLine of formatShotDialogue(shot, ensembleSeed)) {
+      lines.push(turnLine);
+    }
     lines.push('');
   }
   return lines.join('\n').trim();

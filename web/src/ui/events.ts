@@ -1,6 +1,7 @@
 import { cycleDirectorsStack } from '../data/creative_matrix';
 import { exportStudioBackup, restoreStudioBackup } from '../engine/backup_sync';
 import { cycleDesiCharacterName } from '../engine/desi_nomenclature';
+import { cycleVoiceEnsemble } from '../engine/dialogue_theater';
 import { cycleAlternatePunchline, exportSavedMarkdown, rerollCameraRig, switchPromptVisualStyle } from '../engine/prompt_tools';
 import { removeSavedTopic, saveLikedTopic, setSavedOutcome } from '../engine/saved_store';
 import { exportJson, exportJsonl, saveConfig, saveLogs, upsertVote } from '../engine/telemetry';
@@ -31,6 +32,7 @@ export interface AppState {
   twistStep: number;
   nameStep: number;
   stackStep: number;
+  voiceStep: number;
   loading: boolean;
   logs: RatingLogEntry[];
   saved: SavedItem[];
@@ -111,6 +113,7 @@ export function bindAppEvents(
         void navigator.clipboard.writeText(`${state.prompts.storyboardPrompt}\n\n---\n\n${state.prompts.videoPrompt}${pack}`).then(() => hooks.toast('Copied Full Bundle'));
         return;
       }
+      if (a === 'reroll-voice' && state.prompts) { const out = cycleVoiceEnsemble(state.prompts, (state.voiceStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Voice: ${out.label}`); return; }
       if (a === 'reroll-twist' && state.prompts) { const out = cycleTwistBlueprint(state.prompts, (state.twistStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Twist: ${out.label}`); return; }
       if (a === 'reroll-stack' && state.prompts) { const out = cycleDirectorsStack(state.prompts, (state.stackStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Film: ${out.label}`); return; }
       if (a === 'reroll-name' && state.prompts) { const out = cycleDesiCharacterName(state.prompts, (state.nameStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Name: ${out.name}`); return; }

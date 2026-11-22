@@ -134,9 +134,11 @@ for (const p of [mockPrompts, gtaPrompts, switchPromptVisualStyle(mockPrompts, '
   assert.ok(!THIRD_PARTY_RE.test(p.storyboardPrompt), `Third-party trademark in storyboard: ${p.storyboardPrompt.match(THIRD_PARTY_RE)?.[0]}`);
   assert.ok(!THIRD_PARTY_RE.test(p.videoPrompt), `Third-party trademark in video: ${p.videoPrompt.match(THIRD_PARTY_RE)?.[0]}`);
 }
+assert.ok(mockPrompts.videoPrompt.includes('Speaker [') && ALL_BESPOKE_STORIES[0].shots?.[0].turns?.length === 2, 'Expected multi-voice speaker tags & NPC ping-pong');
+assert.ok(renderVideoText(ALL_BESPOKE_STORIES[0].shots ?? []).includes('Immediately ['), 'Expected NPC-to-NPC ping-pong reply');
 assert.ok(buildCrossoverEpisode([sample, customEp])?.title.startsWith('CROSSOVER:'));
 
 console.log(
   `HARNESS PASS: ${ALL_BESPOKE_STORIES.length} human-crafted stories × ${RELOADS} F5 reloads = ${RELOADS * 8} cards ` +
-    `(19 Phonetic Lookalike Parody Characters with Desi Shitpost Costume Locks verified).`,
+    `(19 Phonetic Lookalike Parody Characters + Multi-Voice Theater Cast verified).`,
 );

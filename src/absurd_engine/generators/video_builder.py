@@ -88,8 +88,10 @@ def render_video_prompt(spec: VideoScriptSpec) -> str:
             sfx = f"{sfx}, instant hard cut to black"
 
         dialogue = sanitize_parody_text(shot.hindi_dialogue.strip().strip('"'))
+        speaker = sanitize_parody_text(shot.speaker.strip() or "PROTAGONIST")
+        voice_dir = sanitize_parody_text(shot.voice_direction.strip() or "on-screen lip-sync")
         lines.append(f"Shot {beat.shot_number}: {shot_body} SFX: {sfx}.")
-        lines.append(f'Hindi Dialogue: "{dialogue}"')
+        lines.append(f'Speaker [{speaker} — {voice_dir}]: "{dialogue}"')
         lines.append("")
 
     return strip_video_forbidden("\n".join(lines).strip())

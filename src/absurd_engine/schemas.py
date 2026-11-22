@@ -168,7 +168,15 @@ class VideoShot(BaseModel):
         ...,
         min_length=2,
         max_length=80,
-        description="Ultra-short deadpan Hindi narrator line fitting 3–4s.",
+        description="Ultra-short spoken Hindi line fitting 3–4s.",
+    )
+    speaker: str = Field(
+        default="PROTAGONIST",
+        description="Explicit speaker label (e.g. PROTAGONIST, NPC-1: CHAIWALA, NPC-2: BYSTANDER, ENTITY: PA SPEAKER, NARRATOR (V.O.)).",
+    )
+    voice_direction: str = Field(
+        default="natural conversational tone, on-screen lip-sync",
+        description="Voice texture, delivery, and eyeline/lip-sync direction.",
     )
 
 
