@@ -30,7 +30,7 @@ jobs:
         uses: astral-sh/setup-uv@v4
 
       - name: Sync Python deps
-        run: uv sync --dev
+        run: uv sync --extra dev
 
       - name: Run Python backend test suite
         run: uv run pytest -v
