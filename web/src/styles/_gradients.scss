@@ -1,0 +1,115 @@
+// Multi-Section OKLCH Gradient Theme System (studio light & noir dark)
+// Every major Studio section gets a distinct, harmonious atmospheric gradient while keeping WCAG contrast crisp.
+
+:root,
+[data-theme='studio'] {
+  --grad-canvas: radial-gradient(900px 520px at 8% -10%, oklch(93% 0.04 55 / 0.65), transparent 62%),
+    radial-gradient(840px 500px at 92% 4%, oklch(92% 0.04 235 / 0.6), transparent 60%),
+    radial-gradient(760px 480px at 50% 100%, oklch(93% 0.035 162 / 0.5), transparent 65%),
+    var(--nova-color-background);
+  --grad-header: linear-gradient(120deg, oklch(98% 0.015 240 / 0.86), oklch(99% 0.01 80 / 0.84), oklch(97.5% 0.018 195 / 0.86));
+  --grad-topics: linear-gradient(148deg, oklch(99.2% 0.014 68), oklch(97.8% 0.022 48) 54%, oklch(98.8% 0.014 95));
+  --grad-composer: linear-gradient(125deg, oklch(98.5% 0.02 32 / 0.92), oklch(97% 0.024 62 / 0.88));
+  --grad-prompts: linear-gradient(152deg, oklch(99% 0.012 242), oklch(97.2% 0.022 222) 55%, oklch(98.4% 0.016 268));
+  --grad-remix: linear-gradient(115deg, oklch(96.5% 0.03 168 / 0.92), oklch(97% 0.026 205 / 0.9), oklch(97.5% 0.022 145 / 0.92));
+  --grad-section-odd: linear-gradient(148deg, oklch(98.8% 0.016 158), oklch(97.2% 0.024 182));
+  --grad-section-even: linear-gradient(148deg, oklch(98.8% 0.016 278), oklch(97.4% 0.022 245));
+  --grad-drawer: linear-gradient(165deg, oklch(99% 0.012 215), oklch(96.8% 0.02 245));
+  --grad-dock: linear-gradient(115deg, oklch(100% 0.012 240 / 0.82), oklch(99% 0.016 55 / 0.8), oklch(99% 0.016 175 / 0.82));
+  --grad-accent: linear-gradient(135deg, oklch(48% 0.16 250), oklch(44% 0.15 212));
+  --grad-card-active: linear-gradient(145deg, oklch(98.5% 0.024 235), oklch(97% 0.028 200));
+  --grad-sb-head: linear-gradient(90deg, oklch(24% 0.055 268), oklch(20% 0.035 250));
+  --grad-vid-head: linear-gradient(90deg, oklch(24% 0.055 205), oklch(20% 0.032 232));
+  --grad-pack-head: linear-gradient(90deg, oklch(26% 0.065 24), oklch(21% 0.045 348));
+  --grad-topic-rim: oklch(72% 0.12 58 / 0.45);
+  --grad-prompt-rim: oklch(64% 0.13 232 / 0.45);
+}
+
+[data-theme='noir'] {
+  --grad-canvas: radial-gradient(900px 520px at 10% -8%, oklch(23% 0.055 42 / 0.55), transparent 60%),
+    radial-gradient(860px 520px at 92% 4%, oklch(23% 0.06 238 / 0.55), transparent 62%),
+    radial-gradient(760px 460px at 50% 100%, oklch(22% 0.055 168 / 0.45), transparent 65%),
+    var(--nova-color-background);
+  --grad-header: linear-gradient(120deg, oklch(20% 0.03 252 / 0.84), oklch(18% 0.022 225 / 0.84), oklch(20% 0.028 195 / 0.84));
+  --grad-topics: linear-gradient(148deg, oklch(20.5% 0.026 52), oklch(18% 0.022 36) 54%, oklch(19.5% 0.018 260));
+  --grad-composer: linear-gradient(125deg, oklch(23% 0.038 30 / 0.85), oklch(19.5% 0.026 58 / 0.85));
+  --grad-prompts: linear-gradient(152deg, oklch(20% 0.028 248), oklch(17.5% 0.03 224) 55%, oklch(19.5% 0.024 275));
+  --grad-remix: linear-gradient(115deg, oklch(22% 0.048 168 / 0.88), oklch(20.5% 0.042 208 / 0.88), oklch(21.5% 0.036 145 / 0.88));
+  --grad-section-odd: linear-gradient(148deg, oklch(20% 0.032 162), oklch(17.5% 0.026 196));
+  --grad-section-even: linear-gradient(148deg, oklch(20.5% 0.032 282), oklch(18% 0.028 244));
+  --grad-drawer: linear-gradient(165deg, oklch(21% 0.03 225), oklch(16.5% 0.022 258));
+  --grad-dock: linear-gradient(115deg, oklch(23% 0.032 245 / 0.84), oklch(22% 0.03 45 / 0.8), oklch(22% 0.034 175 / 0.84));
+  --grad-accent: linear-gradient(135deg, oklch(72% 0.14 222), oklch(66% 0.14 195));
+  --grad-card-active: linear-gradient(145deg, oklch(25% 0.045 232), oklch(22% 0.042 198));
+  --grad-sb-head: linear-gradient(90deg, oklch(22% 0.055 270), oklch(16% 0.03 255));
+  --grad-vid-head: linear-gradient(90deg, oklch(22% 0.055 202), oklch(16% 0.03 230));
+  --grad-pack-head: linear-gradient(90deg, oklch(24% 0.065 22), oklch(17% 0.042 350));
+  --grad-topic-rim: oklch(68% 0.13 55 / 0.45);
+  --grad-prompt-rim: oklch(70% 0.14 222 / 0.45);
+}
+
+html,
+body {
+  background: var(--grad-canvas);
+  background-attachment: fixed;
+}
+
+.ambient-header {
+  background: var(--grad-header);
+}
+
+.brand-mark,
+.btn--primary {
+  background: var(--grad-accent);
+  border-color: transparent;
+}
+
+#section-topics {
+  background: var(--grad-topics);
+  border-top: 2px solid var(--grad-topic-rim);
+}
+
+.composer-bar {
+  background: var(--grad-composer);
+}
+
+#section-prompts {
+  background: var(--grad-prompts);
+  border-top: 2px solid var(--grad-prompt-rim);
+}
+
+.remix-bar {
+  background: var(--grad-remix);
+}
+
+.topic-card.is-selected {
+  background: var(--grad-card-active);
+}
+
+.code-block-card:has(#code-storyboard) .code-block-card__header {
+  background: var(--grad-sb-head);
+}
+
+.code-block-card:has(#code-video) .code-block-card__header {
+  background: var(--grad-vid-head);
+}
+
+.code-block-card:has(#code-packaging) .code-block-card__header {
+  background: var(--grad-pack-head);
+}
+
+.surface-main > .section-card:not(#section-topics):not(#section-prompts):nth-of-type(odd) {
+  background: var(--grad-section-odd);
+}
+
+.surface-main > .section-card:not(#section-topics):not(#section-prompts):nth-of-type(even) {
+  background: var(--grad-section-even);
+}
+
+.dock-plane {
+  background: var(--grad-dock);
+}
+
+.drawer-panel {
+  background: var(--grad-drawer);
+}
