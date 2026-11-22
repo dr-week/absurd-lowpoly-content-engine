@@ -1,7 +1,7 @@
 import type { EngineConfig, GeneratedPrompts, StoryboardFrameData, TopicOption, VideoShotData, VisualStyle } from '../types';
 import { detectCharacterLock, sanitizeCopyrightNames } from './alias_sanitizer';
 import { pickSituationCastDirective } from './character_variability';
-import { formatShotDialogue, pickVoiceEnsemble } from './dialogue_theater';
+import { buildVoiceCastBible, formatShotDialogue, pickVoiceEnsemble } from './dialogue_theater';
 import { generateFreeLiveScriptSpec } from './free_ai';
 import { generateLiveScriptSpec } from './live_ai';
 import { pickCinematographyRig } from './randomizer';
@@ -59,22 +59,25 @@ export function renderVideoText(
   const tightShots = condenseToFiveShots(shots);
   const rig = rigDirective ?? pickCinematographyRig().directive;
   const lock = detectCharacterLock(tightShots.map((s) => s.visual).join(' ')) || castDirective || '';
-  const lines: string[] = [VIDEO_HEADER(rig, lock, visualStyle, ensembleSeed), ''];
+  const lines: string[] = [
+    VIDEO_HEADER(rig, lock, visualStyle, ensembleSeed),
+    '',
+    buildVoiceCastBible(tightShots, ensembleSeed),
+    '',
+  ];
 
   for (let i = 0; i < tightShots.length; i += 1) {
     const shot = tightShots[i];
     const isLast = i === tightShots.length - 1;
     lines.push(`Shot ${shot.shot}: ${cleanVideoLine(shot.visual)} SFX: ${cleanVideoLine(shot.sfx)}.`);
 
-    // Ultra-crisp ~10s pacing: 5 shots, exactly 3 spoken dialogues (Shot 1, Shot 2, Shot 5).
-    // Shots 3 & 4 are pure visual action + SFX breathing beats so speech never feels rushed.
+    // Ultra-crisp <10s pacing: 5 shots, exactly 3 spoken dialogues (Shot 1, Shot 2, Shot 5).
+    // Shots 3 & 4 are strictly silent visual + SFX beats so speech never feels rushed or leaks stage directions.
     if (isLast || shot.shot === 1 || shot.shot === 2) {
       const turn = formatShotDialogue(shot, ensembleSeed)[0];
       if (turn) lines.push(turn);
-    } else if (shot.shot === 3) {
-      lines.push('Dialogue: [None — fast visual action & SFX beat]');
     } else {
-      lines.push('Dialogue: [None — deadpan silent hold & SFX before payoff]');
+      lines.push('Spoken Audio: NONE (strictly silent—visual action & SFX only, zero speech).');
     }
     lines.push('');
   }
