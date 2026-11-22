@@ -23,7 +23,7 @@ export interface AppState {
   saved: SavedItem[];
   generatedIds: Set<string>;
   savedFilter: SavedFilter;
-  copiedTarget: 'storyboard' | 'video' | 'packaging' | null;
+  copiedTarget: string | null;
 }
 
 export function bindAppEvents(
@@ -96,6 +96,11 @@ export function bindAppEvents(
       if (a === 'copy-all' && state.prompts) {
         const pack = state.activeTopic ? `\n\n---\n\n${buildViralPackage(state.activeTopic, state.prompts).copyText}` : '';
         void navigator.clipboard.writeText(`${state.prompts.storyboardPrompt}\n\n---\n\n${state.prompts.videoPrompt}${pack}`).then(() => hooks.toast('Copied Full Bundle'));
+        return;
+      }
+      if (a === 'copy-text' && el.dataset.text) {
+        const cid = el.dataset.copyId ?? 'text';
+        void navigator.clipboard.writeText(el.dataset.text).then(() => { state.copiedTarget = cid; hooks.render(); hooks.toast('Copied'); window.setTimeout(() => { state.copiedTarget = null; hooks.render(); }, 1200); });
         return;
       }
       if (a === 'reroll-voice' && state.prompts) { const out = cycleVoiceEnsemble(state.prompts, (state.voiceStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Voice: ${out.label}`); return; }

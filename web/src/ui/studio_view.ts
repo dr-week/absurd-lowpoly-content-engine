@@ -4,8 +4,9 @@ import { getVote } from '../engine/telemetry';
 import { getVisualStyleMeta } from '../engine/visual_styles';
 import { Glyphs } from '../glyphs';
 import type { GeneratedPrompts, HookCategory, RatingLogEntry, ScoredTopic, SituationCategory, VisualStyle } from '../types';
-import { esc } from './escape';
+import { renderCaptionsSection } from './captions_section';
 import { renderCustomIdeaBar } from './custom_bar';
+import { esc } from './escape';
 import { renderViralPackagingCard } from './packaging_card';
 
 function renderCodeRow(kind: 'storyboard' | 'video', label: string, meta: string, content: string, vote: 'up' | 'down' | null, copied: boolean): string {
@@ -28,21 +29,11 @@ function renderCodeRow(kind: 'storyboard' | 'video', label: string, meta: string
 }
 
 export function renderStudioView(params: {
-  topics: ScoredTopic[];
-  logs: RatingLogEntry[];
-  generatedIds: Set<string>;
-  selectedId: string | null;
-  activeTopic?: ScoredTopic;
-  prompts: GeneratedPrompts | null;
-  visualStyle: VisualStyle;
-  loadingTopics: boolean;
-  loading: boolean;
-  seedQuery: string;
-  customDraft: string;
-  hookFilter: HookCategory | 'all';
-  situationFilter: SituationCategory | 'all';
-  liveTrends: string[];
-  copiedTarget: 'storyboard' | 'video' | 'packaging' | null;
+  topics: ScoredTopic[]; logs: RatingLogEntry[]; generatedIds: Set<string>;
+  selectedId: string | null; activeTopic?: ScoredTopic; prompts: GeneratedPrompts | null;
+  visualStyle: VisualStyle; loadingTopics: boolean; loading: boolean;
+  seedQuery: string; customDraft: string; hookFilter: HookCategory | 'all';
+  situationFilter: SituationCategory | 'all'; liveTrends: string[]; copiedTarget: string | null;
 }): string {
   const { topics, logs, generatedIds, selectedId, activeTopic, prompts, visualStyle, loadingTopics, loading, seedQuery, customDraft, hookFilter, situationFilter, liveTrends, copiedTarget } = params;
 
@@ -143,6 +134,6 @@ export function renderStudioView(params: {
         </div>
       </div>
       ${promptBody}
-    </section>
+    </section>${renderCaptionsSection(activeTopic, prompts, copiedTarget)}
   `;
 }

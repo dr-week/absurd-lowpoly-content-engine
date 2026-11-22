@@ -99,13 +99,27 @@ body {
   &:has(#code-packaging) .code-block-card__header { background: var(--grad-pack-head); }
 }
 
-.surface-main > .section-card:not(#section-topics):not(#section-prompts):nth-of-type(odd) {
+.surface-main > .section-card:not(#section-topics):not(#section-prompts):not(#section-captions):nth-of-type(odd) {
   background: var(--grad-section-odd);
 }
 
-.surface-main > .section-card:not(#section-topics):not(#section-prompts):nth-of-type(even) {
+.surface-main > .section-card:not(#section-topics):not(#section-prompts):not(#section-captions):nth-of-type(even) {
   background: var(--grad-section-even);
 }
+
+#section-captions {
+  background: var(--grad-remix);
+  border-top: 2px solid oklch(64% 0.16 165 / 0.55);
+  .section-header__step { background: linear-gradient(135deg, oklch(56% 0.16 162), oklch(52% 0.15 198)); }
+}
+
+.caption-list { display: flex; flex-direction: column; gap: 8px; }
+.caption-row {
+  display: flex; align-items: center; gap: 10px; padding: 9px 12px;
+  border-radius: var(--nova-radius-md); background: var(--grad-card-glass); border: 1px solid var(--nova-color-border);
+  &__text { flex: 1; font-size: 13px; font-weight: 500; }
+}
+.hashtag-strip { display: flex; flex-wrap: wrap; gap: 7px; padding-top: 4px; }
 
 .dock-plane { background: var(--grad-dock); }
 .drawer-panel { background: var(--grad-drawer); }
