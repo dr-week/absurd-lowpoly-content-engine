@@ -115,8 +115,8 @@ def test_parody_sanitizer_and_video_forbidden_stripper() -> None:
 
 def test_validator_flags_proper_names_emojis_and_cliches() -> None:
     idea = PremiseIdea(
-        title="Elon Musk visits Goa with Uncle",
-        mundane_anchor="A wild Goa beach argument with an Uncle",
+        title="Elon Musk visits Goa temple with Uncle",
+        mundane_anchor="A wild Goa beach argument with an Uncle over prasad",
         broken_logic_pivot="Hulk flips a plastic chair into orbit",
         deadpan_payoff="He still asks for two rupees change",
         protagonist="Man in neon slippers",
@@ -161,6 +161,7 @@ def test_validator_flags_proper_names_emojis_and_cliches() -> None:
     assert "PROPER_NAME_LEAK" in codes
     assert "EMOJI_NOT_ALLOWED" in codes
     assert "BANNED_LOCATION_OR_TROPE_CLICHE" in codes
+    assert "RELIGIOUS_CONTENT_NOT_ALLOWED" in codes
 
 
 def test_knowledge_db_fts5_search_and_books_endpoint(tmp_path: Path) -> None:

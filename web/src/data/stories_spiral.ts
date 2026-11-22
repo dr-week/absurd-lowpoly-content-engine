@@ -81,7 +81,7 @@ export const SPIRAL_STORIES: TopicOption[] = [
     trendHook: 'Deadpan Betrayal Escalation',
     pitch: 'Customer says "barely trim the sides." Barber removes hair, eyebrows, and ears in one clean block, then calmly argues it matches the poster on the wall.',
     frames: [
-      { frame: 1, position: 'Top Left', framing: 'Salon chair shot', action: 'Man in bright cape points carefully at his temples asking for a tiny millimeter trim.', caption: 'Bas side se halka trim bola.' },
+      { frame: 1, position: 'Top Left', framing: 'Salon chair shot', action: 'Man in bright cape points carefully at his sideburns asking for a tiny millimeter trim.', caption: 'Bas side se halka trim bola.' },
       { frame: 2, position: 'Top Center', framing: 'Trimmer close-up', action: 'Barber nods solemnly once and fires up a humming 1998 steel clipper.', caption: 'Barber ne bola, samajh gaya.' },
       { frame: 3, position: 'Top Right', framing: 'Side action shot', action: 'One single sweep slides hair, eyebrows, and both ears cleanly onto the tiled floor.', caption: 'Ek swipe mein sab neeche gira.' },
       { frame: 4, position: 'Bottom Left', framing: 'Mirror two-shot', action: 'Customer stares at his perfectly smooth egg-shaped head in the dusty salon mirror.', caption: 'Sheeshe mein sirf anda dikha.' },

@@ -34,24 +34,22 @@ export function renderStudioView(params: {
   visualStyle: VisualStyle; loadingTopics: boolean; loading: boolean;
   seedQuery: string; customDraft: string; hookFilter: HookCategory | 'all';
   situationFilter: SituationCategory | 'all'; liveTrends: string[]; copiedTarget: string | null;
+  openPanel: 'none' | 'filters' | 'custom';
 }): string {
-  const { topics, logs, generatedIds, selectedId, activeTopic, prompts, visualStyle, loadingTopics, loading, seedQuery, customDraft, hookFilter, situationFilter, liveTrends, copiedTarget } = params;
+  const { topics, logs, generatedIds, selectedId, activeTopic, prompts, visualStyle, loadingTopics, loading, seedQuery, customDraft, hookFilter, situationFilter, liveTrends, copiedTarget, openPanel } = params;
 
   const hookOpts = ['<option value="all">All Hooks</option>', ...HOOK_CATEGORIES.map((h) => `<option value="${h.id}" ${hookFilter === h.id ? 'selected' : ''}>${esc(h.label)}</option>`)].join('');
   const sitOpts = ['<option value="all">All Situations</option>', ...SITUATION_CATEGORIES.map((s) => `<option value="${s.id}" ${situationFilter === s.id ? 'selected' : ''}>${esc(s.label)}</option>`)].join('');
   const styleOpts = VISUAL_STYLE_OPTIONS.map((v) => `<option value="${v.id}" ${visualStyle === v.id ? 'selected' : ''}>${esc(v.label)}</option>`).join('');
+  const activeFilters = (hookFilter !== 'all' ? 1 : 0) + (situationFilter !== 'all' ? 1 : 0) + (seedQuery.trim() ? 1 : 0);
 
-  const trendChips = liveTrends.length
-    ? `<div class="trend-strip">${liveTrends
-        .slice(0, 6)
-        .map((kw) => `<button type="button" class="pill ${seedQuery === kw ? 'pill--accent' : ''}" data-action="pick-trend" data-trend="${esc(kw)}" title="Toggle live trend">${esc(kw)}</button>`)
-        .join('')}</div>`
-    : '';
-
-  const catRail = `<div class="cat-rail" role="tablist" aria-label="Content Type Gradients">
-    <button type="button" class="cat-pill ${hookFilter === 'all' ? 'is-active' : ''}" data-action="pick-hook" data-hook="all"><span class="cat-pill__dot"></span>All Types</button>
-    ${HOOK_CATEGORIES.map((c) => `<button type="button" class="cat-pill ${hookFilter === c.id ? 'is-active' : ''}" data-action="pick-hook" data-hook="${c.id}"><span class="cat-pill__dot"></span>${esc(c.label)}</button>`).join('')}
-  </div>`;
+  const filterTray = openPanel === 'filters'
+    ? `<div class="control-tray">
+        <div class="control-tray__row"><span class="control-tray__label">Filter</span><select id="filter-hook" class="compact-select" aria-label="Hook category">${hookOpts}</select><select id="filter-situation" class="compact-select" aria-label="Situation category">${sitOpts}</select>${activeFilters ? `<button type="button" class="btn" data-action="clear-filters">${Glyphs.close(13)}<span>Reset</span></button>` : ''}</div>
+        <div class="control-tray__row"><span class="control-tray__label">Types</span><div class="cat-rail" role="tablist" aria-label="Content Type Gradients"><button type="button" class="cat-pill ${hookFilter === 'all' ? 'is-active' : ''}" data-action="pick-hook" data-hook="all"><span class="cat-pill__dot"></span>All</button>${HOOK_CATEGORIES.map((c) => `<button type="button" class="cat-pill ${hookFilter === c.id ? 'is-active' : ''}" data-action="pick-hook" data-hook="${c.id}"><span class="cat-pill__dot"></span>${esc(c.label)}</button>`).join('')}</div></div>
+        ${liveTrends.length ? `<div class="control-tray__row"><span class="control-tray__label">Trends</span><div class="trend-strip">${liveTrends.slice(0, 6).map((kw) => `<button type="button" class="pill ${seedQuery === kw ? 'pill--accent' : ''}" data-action="pick-trend" data-trend="${esc(kw)}">${esc(kw)}</button>`).join('')}</div></div>` : ''}
+      </div>`
+    : openPanel === 'custom' ? renderCustomIdeaBar(customDraft) : '';
 
   const cards = loadingTopics
     ? '<div class="empty-state" style="grid-column:1/-1;">Generating 8 fresh AI topics...</div>'
@@ -100,7 +98,7 @@ export function renderStudioView(params: {
         <button type="button" class="btn" data-action="reroll-stack" title="Swap Book + Lens + Film Editing Stack">${Glyphs.film(14)}<span>Film</span></button><button type="button" class="btn" data-action="reroll-cast" title="Swap Gender, Profession & Everyday Props">${Glyphs.layers(14)}<span>Cast</span></button>
         <button type="button" class="btn" data-action="reroll-name" title="Cycle Funny Desi Character Name">${Glyphs.user(14)}<span>Name</span></button>
         <button type="button" class="btn" data-action="reroll-rig" title="Swap Camera & Lighting Rig">${Glyphs.camera(14)}<span>Camera</span></button>
-        <button type="button" class="btn" data-action="reroll-punchline" title="Try Alternate Shot 6 Punchline">${Glyphs.zap(14)}<span>Punchline</span></button><button type="button" class="btn" data-action="reroll-promo" title="Inject Viral Product Marketing Gimmick">${Glyphs.sparkle(14)}<span>Promo</span></button>
+        <button type="button" class="btn" data-action="reroll-punchline" title="Try Alternate Shot 5 Punchline">${Glyphs.zap(14)}<span>Punchline</span></button><button type="button" class="btn" data-action="reroll-promo" title="Inject Viral Product Marketing Gimmick">${Glyphs.sparkle(14)}<span>Promo</span></button>
       </div>
       <div class="prompt-stack">
         ${renderCodeRow('storyboard', 'Storyboard (3x2)', prompts.topicTitle, prompts.storyboardPrompt, sbVote, copiedTarget === 'storyboard')}
@@ -115,13 +113,14 @@ export function renderStudioView(params: {
       <div class="section-header">
         <div class="section-header__title-group"><span class="section-header__step">01</span><h2>Topics</h2></div>
         <div class="section-header__actions">
-          <select id="filter-hook" class="compact-select" aria-label="Hook category">${hookOpts}</select>
-          <select id="filter-situation" class="compact-select" aria-label="Situation category">${sitOpts}</select>
           <input type="text" id="seed-input" class="compact-input" placeholder="Search topic..." value="${esc(seedQuery)}" />
+          <button type="button" class="btn ${openPanel === 'filters' || activeFilters ? 'btn--active' : ''}" data-action="toggle-panel" data-panel="filters" title="Filter by type, situation & live trends">${Glyphs.sliders(14)}<span>Filters${activeFilters ? ` · ${activeFilters}` : ''}</span></button>
+          <button type="button" class="btn ${openPanel === 'custom' ? 'btn--active' : ''}" data-action="toggle-panel" data-panel="custom" title="Write your own 1-line idea">${Glyphs.sparkle(14)}<span>Custom</span></button>
+          ${activeFilters ? `<button type="button" class="btn btn--icon" data-action="clear-filters" title="Clear all filters">${Glyphs.close(14)}</button>` : ''}
           <button type="button" class="btn btn--primary btn--icon" data-action="regenerate-topics" title="8 New Topics (Shortcut: R)">${Glyphs.refresh(15)}</button>
         </div>
       </div>
-      ${trendChips}${catRail}${renderCustomIdeaBar(customDraft)}
+      ${filterTray}
       <div class="topics-grid">${cards}</div>
     </section>
 

@@ -2,7 +2,7 @@ import { CHARACTER_ROSTER } from '../data/characters';
 import type { GeneratedPrompts } from '../types';
 
 export const DESI_NAME_VARIANTS: Record<string, readonly string[]> = {
-  elon: ['Elone Maask', 'Elonesh', 'Elonu', 'Elonwa', 'Elone Prasad'],
+  elon: ['Elone Maask', 'Elonesh', 'Elonu', 'Elonwa', 'Elone-Seth'],
   trump: ['Doland Trumpe', 'Trumpu', 'Trumpesh', 'Doland-Lal', 'Trumpwa'],
   spooder: ['Spooder-Maan', 'Spoodie', 'Spooder-Lal', 'Makad-Babu', 'Spooderwa'],
   hulk: ['Hulke', 'Hulkeshwar', 'Hulku', 'Hulkie', 'Hulkwa'],
@@ -12,26 +12,26 @@ export const DESI_NAME_VARIANTS: Record<string, readonly string[]> = {
   modi: ['Moodi-G', 'Moodi-Kaka', 'Moodesh', 'Moodi-Babu'],
   zuck: ['Zuckerburge', 'Zucku-Babu', 'Zuckesh', 'Zuckwa', 'Zuckie'],
   ambani: ['Ambaani', 'Motabhai', 'Ambaanesh', 'Ambu-Seth'],
-  gigachad: ['Giga-Chaad', 'Giga-Chaddha', 'Gigesh', 'Gigu-Paaji', 'Chaad-Prasad'],
+  gigachad: ['Giga-Chaad', 'Giga-Chaddha', 'Gigesh', 'Gigu-Paaji', 'Chaad-Seth'],
   doge: ['Dogee', 'Dogesh', 'Dogeshwar', 'Doggu', 'Dogwa'],
-  sigma: ['Sigmaa', 'Sigmesh', 'Sigmu-Tau', 'Sigma-Prasad', 'Sigwa'],
+  sigma: ['Sigmaa', 'Sigmesh', 'Sigmu-Tau', 'Sigma-Seth', 'Sigwa'],
   puneet: ['Lorde Puneete', 'Puneetu', 'Puneetesh', 'Puneetwa'],
   dolly: ['Dolli Chai', 'Dollu-Chai', 'Chai-Raja', 'Dolli-Babu'],
-  khali: ['Khaali', 'Khaaliprasad', 'Khaalu-Paaji', 'Khaalishwar'],
+  khali: ['Khaali', 'Khaali-Seth', 'Khaalu-Paaji', 'Khaalishwar'],
   salman: ['Salmaan Bhoi', 'Sallu-Bhoi', 'Bhoi-Jaan', 'Salmaanwa'],
   kohli: ['Koohli', 'Chiku-Babu', 'Koohlesh', 'Koohlu'],
   superman: ['Sooper-Babu', 'Sooperesh', 'Sooperwa', 'Soopie'],
-  thor: ['Thoorwa', 'Thoresh', 'Thoor-Prasad', 'Thorie'],
+  thor: ['Thoorwa', 'Thoresh', 'Thoor-Babu', 'Thorie'],
   ironman: ['Loha-Babu', 'Ironeshwar', 'Lohawa', 'Tin-Babu'],
-  gta6: ['GTA-Sixe', 'Vice-Babu', 'GTA-Wa', 'Vice-Prasad'],
+  gta6: ['GTA-Sixe', 'Vice-Babu', 'GTA-Wa', 'Vice-Seth'],
 };
 
-const DESI_SUFFIXES = ['ie', 'u', 'esh', 'eshwar', 'wa', '-Lal', '-Babu', '-Prasad'] as const;
+const DESI_SUFFIXES = ['ie', 'u', 'esh', 'eshwar', 'wa', '-Lal', '-Babu', '-Seth'] as const;
 
 export const DESI_NOMENCLATURE_GUIDE =
   'DESI PARODY NAMING RULE: Use funny Indian-style phonetic & suffix variations instead of exact real names: ' +
   '1) Cute-ify (-ie/-u: Hulkie, Trumpu, Elonu, Spoodie, Doggu); ' +
-  '2) Sanskrit-ify (-esh/-eshwar/-Lal/-Prasad: Dogesh, Hulkeshwar, Batmahesh, Elone Prasad, Doland-Lal); ' +
+  '2) Classic-ify (-esh/-eshwar/-Lal/-Seth: Dogesh, Hulkeshwar, Batmahesh, Elone-Seth, Doland-Lal); ' +
   '3) Village-ify (-wa: Elonwa, Trumpwa, Hulkwa, Zuckwa); ' +
   '4) Honorifics (-Babu/-Paaji/-Kaka/-Seth: Makad-Babu, Putu Paaji, Ambu-Seth).';
 

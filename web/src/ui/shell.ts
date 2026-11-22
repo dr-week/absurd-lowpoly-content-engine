@@ -24,9 +24,7 @@ export function renderAppShell(params: {
             <h1>Absurd Studio</h1>
           </div>
           <div class="ambient-header__metrics">
-            <span class="pill">${esc(config.sourceMode)}</span>
-            <span class="pill"><strong>${stats.totalVotes}</strong></span>
-            <span class="pill pill--positive"><strong>${stats.approvalRate}%</strong></span>
+            <span class="pill" title="${stats.totalVotes} votes logged">${esc(config.sourceMode)} · <strong>${stats.approvalRate}%</strong></span>
             <button type="button" class="btn btn--icon" data-action="export-jsonl" title="Download JSONL Logs">${Glyphs.download(15)}</button>
             <button type="button" class="btn btn--icon" data-action="toggle-theme" title="Theme">${config.theme === 'studio' ? Glyphs.moon(15) : Glyphs.sun(15)}</button>
             <button type="button" class="btn btn--icon" data-action="open-drawer" title="Settings">${Glyphs.sliders(15)}</button>

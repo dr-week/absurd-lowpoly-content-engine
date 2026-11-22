@@ -68,7 +68,7 @@ for (let r = 1; r <= RELOADS; r += 1) {
     const sb = renderStoryboardText(topic.title, topic.frames ?? [], undefined, topic.visualStyle);
     const vid = renderVideoText(topic.shots ?? [], undefined, topic.visualStyle);
     assert.ok(!SLOP_QUOTE_RE.test(topic.pitch), `Headline quote slop detected: ${topic.pitch}`);
-    assert.ok(!/delhi|mumbai|bombay/i.test(`${topic.title} ${topic.pitch}`));
+    assert.ok(!/delhi|mumbai|bombay|temple|mandir|church|mosque|masjid|gurudwara|prasad|pandit|priest/i.test(`${topic.title} ${topic.pitch} ${sb} ${vid}`), `Banned location or religious term in ${topic.id}`);
     assert.ok(sb.includes('3x2 grid') && (sb.includes('NO cel-shading') || sb.includes('mixed-media textures')));
     assert.ok(!vid.includes('9:16') && !vid.includes('20-second') && !vid.includes('[0:00'));
   }

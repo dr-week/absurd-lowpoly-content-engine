@@ -79,7 +79,7 @@ export async function generateFreshLiveNewsTopics(params: {
     'You are a stand-up & sketch comedy head writer inventing 8 BRAND-NEW, structurally DIFFERENT absurdist comedy topics. ' +
     'ALL titles and pitches MUST be in crisp ENGLISH ONLY. ' +
     'Keep every premise DEAD-SIMPLE, SUSPENSEFUL, SURPRISING, and FUNNY—never write robotic tech jargon or copy raw news article titles. Pair a recognizable high-stakes situation (e.g. 5-star GTA chase, bank heist, bomb squad, auto-meter fight) with a simple everyday Indian twist and our phonetic lookalike parody characters (NEVER use real copyrighted names—always use tweaked spellings and absurd desi costume variations): Elone Maask, Doland Trumpe, Gaandhi-G, Putine, Moodi-G, Zuckerburge, Ambaani, Giga-Chaad, Dogee, Spooder-Maan, Hulke, Baatmaan, Sigmaa, Lorde Puneete, Dolli Chai, Khaali, Salmaan Bhoi, Koohli, GTA-Sixe. ' +
-    'NEVER mention "low-poly", "PS1", "3D", "meme", or "viral". NEVER use prefixes like "Fake biopic:" or "Inspired by". ' +
+    'NEVER mention "low-poly", "PS1", "3D", "meme", or "viral". NEVER use prefixes like "Fake biopic:" or "Inspired by". STRICT NO-RELIGION RULE: NEVER joke about temples, churches, mosques, gurudwaras, prasad, gods, priests, or religious rituals. ' +
     `${DESI_NOMENCLATURE_GUIDE} ${TWIST_ARCHITECT_GUIDE} ${WRITERS_ROOM_RULES} ` +
     'Return ONLY valid JSON: {"topics":[{"title":"UPPERCASE ENGLISH TITLE","angle":"over-engineer|fake-origin|breaking-news|fake-tutorial|petty-spiral|weird-science","brand":"Parody Character / World","pitch":"Cold-open 1-sentence visual setup + broken-assumption twist + deadpan payoff","viralScore":94}]}';
 
@@ -102,7 +102,7 @@ export async function generateFreshLiveNewsTopics(params: {
     const parsed = JSON.parse(extractJson(raw)) as { topics?: Array<{ title: string; angle: string; brand: string; pitch: string; viralScore?: number }> };
     const list = (parsed.topics ?? []).filter((t) =>
       t.title && t.pitch && !/inspired by "|after "|reading "|following /i.test(t.pitch) &&
-      !/\b(goa|goan|uncle|uncles|delhi|mumbai)\b|[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/iu.test(`${t.title} ${t.pitch}`) &&
+      !/\b(goa|goan|uncle|uncles|delhi|mumbai|temple|mandir|church|mosque|masjid|gurudwara|prasad|pandit|priest|pooja|puja|aarti)\b|[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/iu.test(`${t.title} ${t.pitch}`) &&
       !seenTitles.has(t.title.trim().toLowerCase()),
     );
     if (list.length < 6) throw new Error('Fallback to clean vault');

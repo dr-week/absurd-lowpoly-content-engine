@@ -79,7 +79,7 @@ export const CRAFT_STORIES_A: TopicOption[] = [
     angle: 'fake-origin',
     brand: 'Elon Musk',
     trendHook: 'Fake Childhood Origin + Broken Assumption',
-    pitch: '9-year-old Elon’s bicycle chain slips on the way to school. Instead of fixing the chain, he tapes two Diwali rockets to the seat and lands vertically on the principal’s roof.',
+    pitch: '9-year-old Elon’s bicycle chain slips on the way to school. Instead of fixing the chain, he tapes two bottle rockets to the seat and lands vertically on the principal’s roof.',
     frames: [
       { frame: 1, position: 'Top Left', framing: 'Suburban street shot', action: '9-year-old Elon stands beside a small blue bicycle whose rusty chain lies on the road.', caption: 'School jaate waqt chain utar gayi.' },
       { frame: 2, position: 'Top Center', framing: 'Garage close-up', action: 'Instead of touching the chain, he duct-tapes two giant red bottle rockets under the seat.', caption: 'Chain chhodi, do rocket baandhe.' },

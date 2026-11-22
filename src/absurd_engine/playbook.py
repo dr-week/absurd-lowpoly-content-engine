@@ -143,6 +143,11 @@ VIDEO_BEATS: tuple[BeatWindow, ...] = (
 )
 
 BANNED_CLICHE_WORDS: tuple[str, ...] = ("goa", "goan", "uncle", "uncles", "delhi", "mumbai")
+BANNED_RELIGIOUS_WORDS: tuple[str, ...] = (
+    "temple", "temples", "mandir", "church", "churches", "mosque", "masjid",
+    "gurudwara", "gurdwara", "prasad", "prashad", "pandit", "pujari", "priest",
+    "imam", "pooja", "puja", "aarti", "bhagwan", "ashram", "bhajan", "kirtan", "havan", "langar",
+)
 
 
 @dataclass(frozen=True)

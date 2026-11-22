@@ -13,7 +13,7 @@ import { buildViralPackage } from '../engine/viral_packaging';
 import type { ActiveTab, EngineConfig, GeneratedPrompts, HookCategory, OutcomeTag, RatingLogEntry, SavedFilter, SavedItem, ScoredTopic, SituationCategory, VisualStyle, VoteValue } from '../types';
 
 export interface AppState {
-  config: EngineConfig; activeTab: ActiveTab; drawerOpen: boolean; seedQuery: string; customDraft: string;
+  config: EngineConfig; activeTab: ActiveTab; drawerOpen: boolean; openPanel: 'none' | 'filters' | 'custom'; seedQuery: string; customDraft: string;
   hookFilter: HookCategory | 'all'; situationFilter: SituationCategory | 'all'; visualStyle: VisualStyle;
   batchNonce: number; seenPairs: Set<string>; seenTitles: Set<string>; topics: ScoredTopic[]; liveTrends: string[];
   loadingTopics: boolean; selectedId: string | null; activeTopic?: ScoredTopic; prompts: GeneratedPrompts | null;
@@ -48,6 +48,8 @@ export function bindAppEvents(
       if (a === 'toggle-theme') { state.config.theme = state.config.theme === 'studio' ? 'noir' : 'studio'; saveConfig(state.config); hooks.render(); return; }
       if (a === 'open-drawer') { state.drawerOpen = true; hooks.render(); return; }
       if (a === 'close-drawer') { state.drawerOpen = false; hooks.render(); return; }
+      if (a === 'toggle-panel' && el.dataset.panel) { const p = el.dataset.panel as 'filters' | 'custom'; state.openPanel = state.openPanel === p ? 'none' : p; hooks.render(); return; }
+      if (a === 'clear-filters') { state.hookFilter = 'all'; state.situationFilter = 'all'; state.seedQuery = ''; state.batchNonce += 1; void hooks.refreshTopics(); return; }
       if (a === 'regenerate-topics') { state.batchNonce += 1; void hooks.refreshTopics(); return; }
       if (a === 'pick-hook' && el.dataset.hook) { const next = el.dataset.hook as HookCategory | 'all'; state.hookFilter = state.hookFilter === next ? 'all' : next; state.batchNonce += 1; void hooks.refreshTopics(); return; }
       if (a === 'pick-trend' && el.dataset.trend) { state.seedQuery = state.seedQuery === el.dataset.trend ? '' : el.dataset.trend; state.batchNonce += 1; void hooks.refreshTopics(); return; }

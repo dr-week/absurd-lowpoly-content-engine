@@ -7,6 +7,7 @@ import re
 from absurd_engine.parody import find_exact_proper_name_leaks, has_emoji
 from absurd_engine.playbook import (
     BANNED_CLICHE_WORDS,
+    BANNED_RELIGIOUS_WORDS,
     CLICHE_WARNING_PHRASES,
     REQUIRED_NEGATIVE_CONSTRAINTS,
     STORYBOARD_SLOTS,
@@ -25,6 +26,7 @@ from absurd_engine.schemas import (
 # Strip ASCII + Devanagari punctuation (e.g. standalone danda "।") before counting words
 _PUNCT_ONLY_RE = re.compile(r"^[\W_।॥]+$")
 _BANNED_CLICHE_RE = re.compile(r"\b(?:" + "|".join(BANNED_CLICHE_WORDS) + r")\b", re.IGNORECASE)
+_BANNED_RELIGIOUS_RE = re.compile(r"\b(?:" + "|".join(BANNED_RELIGIOUS_WORDS) + r")\b", re.IGNORECASE)
 
 
 def _count_words(text: str) -> int:
@@ -91,6 +93,16 @@ def lint_episode(
                 severity="error",
                 code="BANNED_LOCATION_OR_TROPE_CLICHE",
                 message=f"Banned cliché '{cliche_match.group(0)}' detected — avoid Goa/Uncle/Delhi/Mumbai clichés.",
+                location="episode",
+            )
+        )
+    religious_match = _BANNED_RELIGIOUS_RE.search(full_text)
+    if religious_match:
+        issues.append(
+            LintIssue(
+                severity="error",
+                code="RELIGIOUS_CONTENT_NOT_ALLOWED",
+                message=f"Religious reference '{religious_match.group(0)}' detected — no jokes on temples, churches, mosques, or prasad.",
                 location="episode",
             )
         )

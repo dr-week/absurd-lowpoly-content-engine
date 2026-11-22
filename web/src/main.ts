@@ -27,7 +27,7 @@ const initialTopics = evaluateTopics({ count: 8, query: '', logs: logs0, seenPai
 saveSeenPairs(seen0);
 
 const state: AppState = {
-  config: cfg0, activeTab: 'studio', drawerOpen: false, seedQuery: '', customDraft: '', hookFilter: 'all', situationFilter: 'all',
+  config: cfg0, activeTab: 'studio', drawerOpen: false, openPanel: 'none', seedQuery: '', customDraft: '', hookFilter: 'all', situationFilter: 'all',
   visualStyle: 'ps1-1998', batchNonce: Date.now(), seenPairs: seen0, seenTitles: loadSeenTitles(), topics: initialTopics, liveTrends: [],
   loadingTopics: cfg0.sourceMode === 'live-free', selectedId: null, activeTopic: undefined, prompts: null,
   rigStep: 0, punchStep: 0, twistStep: 0, nameStep: 0, stackStep: 0, voiceStep: 0, castStep: 0, promoStep: 0, accentStep: 0, loading: false, logs: logs0, saved: loadSaved(), generatedIds: loadGeneratedIds(),
@@ -119,7 +119,7 @@ function render(): void {
   document.documentElement.setAttribute('data-theme', state.config.theme);
   const surfaceHtml =
     state.activeTab === 'studio'
-      ? renderStudioView({ topics: state.topics, logs: state.logs, generatedIds: state.generatedIds, selectedId: state.selectedId, activeTopic: state.activeTopic, prompts: state.prompts, visualStyle: state.visualStyle, loadingTopics: state.loadingTopics, loading: state.loading, seedQuery: state.seedQuery, customDraft: state.customDraft, hookFilter: state.hookFilter, situationFilter: state.situationFilter, liveTrends: state.liveTrends, copiedTarget: state.copiedTarget })
+      ? renderStudioView({ topics: state.topics, logs: state.logs, generatedIds: state.generatedIds, selectedId: state.selectedId, activeTopic: state.activeTopic, prompts: state.prompts, visualStyle: state.visualStyle, loadingTopics: state.loadingTopics, loading: state.loading, seedQuery: state.seedQuery, customDraft: state.customDraft, hookFilter: state.hookFilter, situationFilter: state.situationFilter, liveTrends: state.liveTrends, copiedTarget: state.copiedTarget, openPanel: state.openPanel })
       : state.activeTab === 'saved'
         ? renderSavedView({ saved: state.saved, filter: state.savedFilter, selectedId: state.selectedId })
         : state.activeTab === 'analytics'
