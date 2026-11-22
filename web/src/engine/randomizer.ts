@@ -7,18 +7,18 @@ export interface CinematographyRig {
 export const CINEMATOGRAPHY_RIGS: readonly CinematographyRig[] = [
   {
     id: 'cctv',
-    label: '1998 CCTV',
-    directive: 'Camera & Lighting: high-corner 1998 security CCTV lens with flat fluorescent green-grey tint.',
+    label: 'Overhead Security',
+    directive: 'Camera & Lighting: high-corner wide security angle with flat fluorescent green-grey tint.',
   },
   {
     id: 'camcorder',
-    label: 'VHS Camcorder',
-    directive: 'Camera & Lighting: stiff 1998 handheld camcorder angles with washed-out daylight exposure.',
+    label: 'Handheld Action',
+    directive: 'Camera & Lighting: raw handheld follow-cam angles with harsh daylight exposure.',
   },
   {
     id: 'broadcast',
     label: 'TV Broadcast',
-    directive: 'Camera & Lighting: rigid late-90s live TV broadcast framing with sterile overhead halogen glare.',
+    directive: 'Camera & Lighting: rigid live TV broadcast framing with sterile overhead halogen glare.',
   },
   {
     id: 'overcast',
@@ -32,8 +32,8 @@ export const CINEMATOGRAPHY_RIGS: readonly CinematographyRig[] = [
   },
   {
     id: 'doc',
-    label: 'Retro Doc',
-    directive: 'Camera & Lighting: earnest 1998 science documentary zoom-ins with muted tungsten indoor tones.',
+    label: 'Zoom-In Doc',
+    directive: 'Camera & Lighting: earnest documentary zoom-ins with muted tungsten indoor tones.',
   },
 ];
 

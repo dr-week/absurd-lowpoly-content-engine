@@ -29,7 +29,7 @@ export function synthesizeTrendCard(query: string, batchNonce: number): TopicOpt
         { frame: 6, position: 'Bottom Right', framing: 'Studio close-up', action: 'Elon Bhai folds the paper neatly and nods with complete engineering pride.', caption: 'Next version Mars pe test hoga.' },
       ],
       shots: [
-        { shot: 1, visual: `Wide lab shot of Elon Bhai pointing seriously at "${label.toUpperCase()}" on a CRT monitor.`, sfx: 'Sci-fi alert chime', hindi: `एलन भाई ने ${label} पर रिसर्च शुरू की।` },
+        { shot: 1, visual: `Wide lab shot of Elone Maask pointing seriously at "${label.toUpperCase()}" on a CRT monitor.`, sfx: 'Sci-fi alert chime', hindi: `एलोनेश ने ${label} पर रिसर्च शुरू की।` },
         { shot: 2, visual: 'Hard cut to engineers welding giant radar dishes around one tiny wooden desk.', sfx: 'Wrench ratchets and hydraulic hiss', hindi: 'चालीस फुट का एनालाइज़र बना दिया।' },
         { shot: 3, visual: 'Close-up of gauges spinning into red as overhead lamps flicker.', sfx: 'Rising turbine hum', hindi: 'पूरा सिस्टम ओवरलोड हो गया।' },
         { shot: 4, visual: 'Wide control-room cut as an old printer spits out one single sheet.', sfx: 'Noisy dot-matrix printer buzz', hindi: 'तीन घंटे बाद एक पन्ना निकला।' },
