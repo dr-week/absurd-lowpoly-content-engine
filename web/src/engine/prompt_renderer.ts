@@ -5,6 +5,7 @@ import { buildVoiceCastBible, formatShotDialogue, pickVoiceEnsemble } from './di
 import { generateFreeLiveScriptSpec } from './free_ai';
 import { generateLiveScriptSpec } from './live_ai';
 import { pickCinematographyRig } from './randomizer';
+import { formatStorySpineHeader, pickStoryArc } from './story_craft_engine';
 import { getVisualStyleMeta, VISUAL_STYLE_OPTIONS } from './visual_styles';
 
 export { VISUAL_STYLE_OPTIONS };
@@ -58,9 +59,11 @@ export function renderVideoText(
 ): string {
   const tightShots = condenseToFiveShots(shots);
   const rig = rigDirective ?? pickCinematographyRig().directive;
+  const arc = pickStoryArc(ensembleSeed);
   const lock = detectCharacterLock(tightShots.map((s) => s.visual).join(' ')) || castDirective || '';
   const lines: string[] = [
     VIDEO_HEADER(rig, lock, visualStyle, ensembleSeed),
+    formatStorySpineHeader(arc),
     '',
     buildVoiceCastBible(tightShots, ensembleSeed),
     '',
@@ -69,7 +72,9 @@ export function renderVideoText(
   for (let i = 0; i < tightShots.length; i += 1) {
     const shot = tightShots[i];
     const isLast = i === tightShots.length - 1;
-    lines.push(`Shot ${shot.shot}: ${cleanVideoLine(shot.visual)} SFX: ${cleanVideoLine(shot.sfx)}.`);
+    const beat = arc.beats[Math.min(4, i)];
+    const act = arc.actingCues[Math.min(4, i)];
+    lines.push(`Shot ${shot.shot}: [${beat}] ${cleanVideoLine(shot.visual)} Acting: ${act}. SFX: ${cleanVideoLine(shot.sfx)}.`);
 
     // Ultra-crisp <10s pacing: 5 shots, exactly 3 spoken dialogues (Shot 1, Shot 2, Shot 5).
     // Shots 3 & 4 are strictly silent visual + SFX beats so speech never feels rushed or leaks stage directions.

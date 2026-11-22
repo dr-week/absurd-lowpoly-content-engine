@@ -15,22 +15,43 @@ const HOOK_TO_ANGLE: Record<HookCategory, string> = {
 export function expandCustomIdeaLocally(topic: TopicOption): { frames: StoryboardFrameData[]; shots: VideoShotData[] } {
   const lead = topic.brand || 'Protagonist';
   const idea = topic.pitch.replace(/\.$/, '');
+  const mode = topic.title.length % 3;
+
+  if (mode === 1) {
+    return {
+      frames: [
+        { frame: 1, position: 'Top Left', framing: 'Wide cold-open shot', action: `${lead} walks in with full high-status swagger: ${idea}.`, caption: 'Full attitude mein entry!' },
+        { frame: 2, position: 'Top Center', framing: 'Counter two-shot', action: `A completely unbothered counterpart barely glances up while ${lead} demands VIP treatment.`, caption: 'Saamne wala bilkul chill tha.' },
+        { frame: 3, position: 'Top Right', framing: 'Action escalation shot', action: `${lead} dramatically doubles down, pulling out a shiny badge and pointing at the clock.`, caption: 'VIP card nikaal diya!' },
+        { frame: 4, position: 'Bottom Left', framing: 'Silent reveal shot', action: `The counterpart calmly points to a tiny handwritten rule taped right beside ${lead}’s nose.`, caption: 'Chhota board dikhaya.' },
+        { frame: 5, position: 'Bottom Center', framing: 'Tight reaction close-up', action: `${lead}’s confident smile freezes mid-frame as everyone behind them stares silently.`, caption: 'Hawa nikal gayi.' },
+        { frame: 6, position: 'Bottom Right', framing: 'Deadpan final shot', action: `${lead} quietly pays double and backs out with zero eye contact.`, caption: 'Chupchaap double de diya.' },
+      ],
+      shots: [
+        { shot: 1, visual: `Cold-open wide shot of ${lead} strutting in: ${idea}.`, sfx: 'Confident shoe stomp', hindi: 'आज काम तुरंत होना चाहिए!' },
+        { shot: 2, visual: `Deadpan counterpart barely looks up as ${lead} waves a shiny VIP pass.`, sfx: 'Flat counter tap', hindi: 'नियम सबके लिए बराबर है।' },
+        { shot: 3, visual: `Counterpart silently points to a tiny taped sign reading "DOUBLE CHARGE FOR ATTITUDE".`, sfx: 'Crisp paper tap', hindi: 'बोर्ड देखो।' },
+        { shot: 4, visual: `Tight close-up of ${lead} blinking slowly in stunned silence as the queue watches.`, sfx: 'Awkward dry room hum', hindi: 'सन्नाटा।' },
+        { shot: 5, visual: `${lead} quietly slides double cash across the counter and walks backward out the door.`, sfx: 'Cash slap, instant hard cut to black', hindi: 'माफ़ करना भाई, खुला रखो।' },
+      ],
+    };
+  }
+
   return {
     frames: [
-      { frame: 1, position: 'Top Left', framing: 'Flat wide establishing shot', action: `${lead} stands stiffly as the premise begins: ${idea}.`, caption: `${lead} ne naya plan shuru kiya.` },
-      { frame: 2, position: 'Top Center', framing: 'Desk close-up', action: `Instead of the simple ₹10 fix, ${lead} unrolls a 40-foot blueprint covered in red arrows.`, caption: 'Simple rasta chhoda, mega plan banaya.' },
-      { frame: 3, position: 'Top Right', framing: 'Assembly wide shot', action: `Ten boxy assistants bolt glowing gauges, cables, and steel struts around the scene.`, caption: 'Level 999 upgrade lag gaya.' },
-      { frame: 4, position: 'Bottom Left', framing: 'Low-angle chaos shot', action: `The moment it powers on, overhead lights flicker and every chair slides sideways calmly.`, caption: 'Switch dabate hi pura room hila.' },
-      { frame: 5, position: 'Bottom Center', framing: 'Extreme close-up', action: `Smoke clears; the original tiny problem sits completely untouched in the center.`, caption: 'Asli dikkat abhi bhi wahin thi.' },
-      { frame: 6, position: 'Bottom Right', framing: 'Deadpan direct lens shot', action: `${lead} nods with complete pride and hands over a ₹500 invoice anyway.`, caption: 'Agle update mein fix hoga.' },
+      { frame: 1, position: 'Top Left', framing: 'Flat wide establishing shot', action: `${lead} faces an absurd moment mid-action: ${idea}.`, caption: `${lead} ne naya plan shuru kiya.` },
+      { frame: 2, position: 'Top Center', framing: 'Close-up escalation', action: `Instead of the ₹10 obvious fix, ${lead} deploys an absurdly over-engineered contraption.`, caption: 'Simple chhoda, mega plan banaya.' },
+      { frame: 3, position: 'Top Right', framing: 'Peak chaos shot', action: `Sparks fly and nearby objects float sideways the instant ${lead} flips the switch.`, caption: 'Switch dabate hi chaos!' },
+      { frame: 4, position: 'Bottom Left', framing: 'Silent reveal shot', action: `Smoke clears—the original tiny problem sits completely untouched in the center.`, caption: 'Asli dikkat wahin thi.' },
+      { frame: 5, position: 'Bottom Center', framing: 'Bystander beat', action: `A sleepy bystander solves the whole thing in one effortless casual tap.`, caption: 'Ek tap mein solve hua.' },
+      { frame: 6, position: 'Bottom Right', framing: 'Deadpan lens close-up', action: `${lead} nods proudly anyway and hands over a ₹500 bill.`, caption: 'Maine pehle dheela kiya tha.' },
     ],
     shots: [
-      { shot: 1, visual: `Static wide shot introducing ${lead}: ${idea}.`, sfx: 'Quiet ambient room hum', hindi: `${lead} ने नया प्लान शुरू किया।` },
-      { shot: 2, visual: `Hard cut to ${lead} snapping open a giant glowing schematic on a steel table.`, sfx: 'Crisp paper snap and retro chime', hindi: 'सीधा चालीस फुट का प्लान खोला।' },
-      { shot: 3, visual: 'Fast cut to workers bolting blinking radars and steel pipes at full speed.', sfx: 'Rapid wrench clicks and sparks', hindi: 'लेवल नौ सौ निन्यानवे अपग्रेड हुआ।' },
-      { shot: 4, visual: 'Low worm-eye shot as lights dim and the floor tilts sharply sideways.', sfx: 'Deep turbine roar and siren', hindi: 'स्विच दबाते ही पूरा कमरा हिला।' },
-      { shot: 5, visual: 'Smash-cut through pixelated smoke showing the original tiny issue untouched.', sfx: 'Awkward dry cricket chirp', hindi: 'असली दिक्कत वहीं की वहीं थी।' },
-      { shot: 6, visual: `Deadpan lens close-up of ${lead} nodding proudly with a tiny invoice.`, sfx: 'Bass drop, instant hard cut to black', hindi: 'बोले, अगले अपडेट में फिक्स होगा।' },
+      { shot: 1, visual: `Static cold-open shot introducing ${lead}: ${idea}.`, sfx: 'Quiet ambient room hum', hindi: 'आज यह मामला खत्म होगा!' },
+      { shot: 2, visual: `Hard cut to ${lead} flipping a glowing switch on an absurdly huge contraption.`, sfx: 'Turbine hum and retro chime', hindi: 'सीधा मेगा प्लान चालू किया।' },
+      { shot: 3, visual: 'Smoke blasts across the room while the original tiny problem stays completely untouched.', sfx: 'Poof and dry squeak', hindi: 'कुछ नहीं बदला।' },
+      { shot: 4, visual: 'A sleepy bystander walks past and fixes it effortlessly with one casual finger tap.', sfx: 'Single crisp click', hindi: 'हो गया।' },
+      { shot: 5, visual: `Deadpan close-up of ${lead} nodding proudly with zero shame.`, sfx: 'Cricket chirp, instant hard cut to black', hindi: 'मैंने पहले ढीला किया था।' },
     ],
   };
 }

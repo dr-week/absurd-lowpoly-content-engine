@@ -129,10 +129,10 @@ export async function generateFreeLiveScriptSpec(topic: TopicOption): Promise<{ 
   const rig = pickCinematographyRig();
   const mech = pickComedyMechanism(cryptoRng());
   const system =
-    'Expand this comedy topic into a 6-frame 3x2 storyboard and a tight 5-shot video script (NEVER 6 shots). ' +
+    'Expand this comedy topic into a 6-frame 3x2 storyboard and a tight 5-shot <10s video script (NEVER 6 shots). ' +
     `PRIMARY MECHANISM (${mech.name}): ${mech.rule} PUNCHLINE RULE: ${mech.punchlineRule} ` +
     `${WRITERS_ROOM_RULES} ${rig.directive} ` +
-    'Keep every spoken line ultra-short (<= 6 words) so the whole 5-shot video plays fast and punchy. NEVER mention duration, time, timestamps, or aspect ratio. ' +
+    'Use THEREFORE/BUT causality (NEVER "and then"), put the comic reveal word LAST in Shot 5, and keep every spoken line <= 5 complete Hindi words. NEVER mention duration, time, timestamps, or aspect ratio. ' +
     'Return ONLY JSON: {"frames":[{"frame":1,"position":"Top Left","framing":"...","action":"...","caption":"short Hinglish"}],"shots":[{"shot":1,"visual":"...","sfx":"...","hindi":"short Devanagari Hindi"}]}';
 
   const user = `Title: ${topic.title}\nWorld: ${topic.brand}\nPremise: ${topic.pitch}\nExact 6 storyboard positions: Top Left, Top Center, Top Right, Bottom Left, Bottom Center, Bottom Right. Exactly 5 video shots (1 to 5).`;
