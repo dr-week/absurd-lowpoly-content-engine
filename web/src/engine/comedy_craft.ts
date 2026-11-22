@@ -44,6 +44,12 @@ export const COMEDY_MECHANISMS: readonly ComedyMechanism[] = [
     rule: 'Connect every shot with BUT (obstacle/reversal) or THEREFORE (consequence) — never "and then".',
     punchlineRule: 'Reveal the hidden true motive only on the last two words of Shot 6.',
   },
+  {
+    id: 'savage-reversal',
+    name: 'Slice-of-Life Savage Comeback',
+    rule: 'Shot 1-2 grounded relatable annoyance (boss lecture, smug critic, strict rule) -> Shot 3-4 peak arrogance -> Shot 5-6 deadpan literal compliance or savage 1-line comeback that flips the power dynamic.',
+    punchlineRule: 'Zero lecturing; deliver the savage comeback in <= 7 Hindi words and cut immediately.',
+  },
 ];
 
 export function pickComedyMechanism(seed = Math.random()): ComedyMechanism {
@@ -52,13 +58,11 @@ export function pickComedyMechanism(seed = Math.random()): ComedyMechanism {
 }
 
 export const WRITERS_ROOM_RULES =
-  'COMEDY WRITER RULES (MANDATORY): ' +
-  '1) SIMPLE SUSPENSEFUL PREMISE (ZERO GIBBERISH): Start with a high-stakes, instantly recognizable situation anyone understands in 2 seconds (e.g. a 5-star GTA police chase, a ticking steel box, a bank heist, a billionaire summit) and collide it with a tiny relatable Indian everyday twist (₹40 FASTag barrier, Mummy’s phone call, Token #89 queue). ' +
-  '2) 0.8s PATTERN INTERRUPT: Open Shot 1 mid-action on an unusual visual detail (never a slow static intro). ' +
+  'RETENTION & COMEDY WRITER RULES (MANDATORY): ' +
+  '1) ZERO AI GIBBERISH (HUMAN SLICE-OF-LIFE): Every premise must be instantly relatable in 2 seconds (office boss, cafe critic, surprise exam, traffic, midnight walk, heist). Surreal twists are great, robotic nonsense is banned. ' +
+  '2) EVERY-BEAT RETENTION PACING: Shot 1 = instant hook mid-action; Shot 2 = familiar expectation; Shot 3 = first micro-twist; Shot 4 = peak tension or smug flex; Shot 5 = grounded expectation shatter / savage comeback; Shot 6 = <= 7-word Hindi punchline (reveal word LAST) + hard cut for >100% rewatch loop. ' +
   '3) BUT/THEREFORE CAUSALITY: Every shot transition must be "BUT" (reversal) or "THEREFORE" (escalation), NEVER "and then". ' +
-  '4) BROKEN ASSUMPTION & RULE OF THREE: Shots 1-3 build one obvious high-stakes expectation; Shots 4-5 shatter it with deadpan internal logic. ' +
-  '5) PUNCH-WORD LAST & ZERO FAT: Put the reveal word at the VERY END of Shot 6 Hindi dialogue (<= 7 words). ' +
-  '6) SPECIFICITY & CALLBACK LOOP: Use concrete numbers/props ("₹10 coin", "Token #89", "5-star") and call back Shot 1 in Shot 6.';
+  '4) SPECIFICITY & CALLBACK: Use concrete numbers/props ("9:03 AM", "₹10", "Question 1", "back cover") and call back Shot 1 in Shot 6.';
 
 export interface CraftScore {
   total: number;

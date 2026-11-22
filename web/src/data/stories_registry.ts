@@ -13,6 +13,7 @@ import { NEWS_STORIES } from './stories_news';
 import { ORIGIN_STORIES } from './stories_origin';
 import { OVERENGINEER_STORIES } from './stories_overengineer';
 import { SCIENCE_STORIES } from './stories_science';
+import { SLICE_OF_LIFE_STORIES } from './stories_slice_of_life';
 import { SPIRAL_STORIES } from './stories_spiral';
 import { SUSPENSE_STORIES } from './stories_suspense';
 import { TUTORIAL_STORIES } from './stories_tutorial';
@@ -34,4 +35,5 @@ export const ALL_BESPOKE_STORIES: readonly TopicOption[] = [
   ...SUSPENSE_STORIES,
   ...DEBATE_STORIES,
   ...INDIA_MEME_STORIES,
+  ...SLICE_OF_LIFE_STORIES,
 ].map(sanitizeTopic);

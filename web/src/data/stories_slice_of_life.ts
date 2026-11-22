@@ -1,0 +1,108 @@
+import type { TopicOption } from '../types';
+
+export const SLICE_OF_LIFE_STORIES: readonly TopicOption[] = [
+  {
+    id: 'sol_roasts_book_author_next_to_him',
+    title: 'ROASTS A BOOK FOR 10 MINUTES—THE AUTHOR WAS SITTING NEXT TO HIM',
+    angle: 'petty-spiral',
+    brand: 'Cafe Critic',
+    trendHook: 'Reddit Real-Life Plot Twist: Roasting a Book to Its Own Author',
+    visualStyle: 'claymation-stopmo',
+    pitch:
+      'At a quiet café, a guy spends ten minutes brutally roasting a novel as "boring filler" to the polite stranger beside him—until the stranger leaves and he flips the book over to see the stranger’s giant photo on the back cover.',
+    frames: [
+      { frame: 1, position: 'Top Left', framing: 'Cafe two-shot', action: 'At a cozy café table, a loud guy waves a paperback novel while a quiet bespectacled stranger sips coffee right next to him.', caption: 'Cafe Book Review!' },
+      { frame: 2, position: 'Top Center', framing: 'Medium shot', action: 'The stranger politely asks "How is the book?" and the loud guy smirks, cracking his knuckles to launch a lecture.', caption: 'How Is The Book?' },
+      { frame: 3, position: 'Top Right', framing: 'Close-up', action: 'The loud guy points dramatically at the pages saying "Pure filler! The author clearly wrote this in one sleepy afternoon for ₹50."', caption: 'Pure Filler Trash!' },
+      { frame: 4, position: 'Bottom Left', framing: 'Medium reaction shot', action: 'The quiet stranger nods calmly, writes a tiny note on a napkin, says "Fair feedback, thanks," and walks out the door.', caption: 'Thanks For Feedback!' },
+      { frame: 5, position: 'Bottom Center', framing: 'Extreme close-up', action: 'Feeling proud, the loud guy closes the book—freezing in horror as the back cover shows the stranger’s exact smiling portrait.', caption: 'Author Photo On Back!' },
+      { frame: 6, position: 'Bottom Right', framing: 'Wide deadpan shot', action: 'He slowly slides underneath the café table clutching his coffee cup while the waiter quietly hands him the bill.', caption: 'Soul Left The Body!' },
+    ],
+    shots: [
+      { shot: 1, visual: 'Cozy café two-shot of a guy reading a novel next to a polite stranger.', sfx: 'Soft coffee cup clink', hindi: 'कैफे में बगल वाले ने पूछा—किताब कैसी है?' },
+      { shot: 2, visual: 'The guy smirks and waves the book dismissively in front of the stranger.', sfx: 'Smug chuckle and page flip', hindi: 'वह पूरे दस मिनट किताब की बुराई करता रहा।' },
+      { shot: 3, visual: 'Close-up of the guy mocking the writing with exaggerated hand gestures.', sfx: 'Dramatic scoff', hindi: 'बोला—लेखक ने पक्का नींद में कचरा लिखा है।' },
+      { shot: 4, visual: 'The stranger nods politely, smiles faintly, and walks calmly out the café.', sfx: 'Door chime and calm footsteps', hindi: 'बगल वाला मुस्कुराकर थैंक्स बोला और चला गया।' },
+      { shot: 5, visual: 'Extreme close-up as the guy flips the book over revealing the stranger’s author portrait.', sfx: 'Sharp violin screech and record scratch', hindi: 'किताब पलटी तो पीछे उसी लेखक की फोटो थी।' },
+      { shot: 6, visual: 'Wide deadpan shot of the guy slowly hiding under the table.', sfx: 'Chair scrape and dead silence', hindi: 'वह चुपचाप टेबल के नीचे छुप गया।' },
+    ],
+  },
+  {
+    id: 'sol_boss_3_minutes_late_savage_reply',
+    title: 'BOSS LECTURES ON 3 MINUTES LATE—EMPLOYEE WALKS OUT AT 6:00:00 SHARP',
+    angle: 'breaking-news',
+    brand: 'Sigmaa',
+    trendHook: 'Viral Savage Office Comeback: 9:03 AM vs 6:00:00 PM Sharp',
+    visualStyle: 'cctv-dashcam',
+    pitch:
+      'After his manager gives a 15-minute whiteboard lecture about arriving at 9:03 AM hurting "company culture", Sigmaa stands up mid-sentence at 6:00:00 PM sharp, unplugs the projector, and drops one deadpan line.',
+    frames: [
+      { frame: 1, position: 'Top Left', framing: 'Office CCTV wide shot', action: 'A digital wall clock reads 9:03 AM as Sigmaa walks to his desk holding a steel tiffin while his boss taps a wristwatch furiously.', caption: '9:03 AM Crime Scene!' },
+      { frame: 2, position: 'Top Center', framing: 'Medium shot', action: 'The boss draws a giant red pie chart on a whiteboard lecturing the whole floor: "Three minutes late destroys company culture!"', caption: '15-Min Culture Lecture!' },
+      { frame: 3, position: 'Top Right', framing: 'Close-up', action: 'Sigmaa nods silently with zero expression and sets a loud digital stopwatch right next to his keyboard.', caption: 'Stopwatch Activated!' },
+      { frame: 4, position: 'Bottom Left', framing: 'Wide meeting shot', action: 'At 5:59:58 PM the boss starts an urgent slide presentation yelling "Just twenty more minutes guys, we are family!"', caption: '5:59 PM Urgent Slides!' },
+      { frame: 5, position: 'Bottom Center', framing: 'Extreme close-up', action: 'The stopwatch hits 6:00:00 PM with a crisp beep; Sigmaa calmly packs his laptop and pulls the projector plug from the wall.', caption: '6:00:00 PM Unplugged!' },
+      { frame: 6, position: 'Bottom Right', framing: 'Wide deadpan hallway shot', action: 'Walking out past the frozen boss, Sigmaa deadpans: "Staying three minutes late hurts my home culture."', caption: 'Home Culture First!' },
+    ],
+    shots: [
+      { shot: 1, visual: '240p office CCTV showing Sigmaa arriving at 9:03 AM as his boss glares at his watch.', sfx: 'Loud wristwatch tap', hindi: 'नौ बजकर तीन मिनट पर ऑफिस पहुंचने पर बॉस भड़क गया।' },
+      { shot: 2, visual: 'Boss draws frantic red circles on a whiteboard lecturing about company culture.', sfx: 'Squeaky marker and angry finger snap', hindi: 'पंद्रह मिनट भाषण दिया—तीन मिनट लेट से कल्चर बिगड़ता है।' },
+      { shot: 3, visual: 'Close-up of Sigmaa deadpan setting a digital timer on his desk.', sfx: 'Crisp digital beep', hindi: 'सिग्मा ने चुपचाप डेस्क पर अलार्म सेट कर दिया।' },
+      { shot: 4, visual: 'At 5:59 PM the boss opens a 40-slide deck saying they need twenty extra minutes.', sfx: 'Projector hum', hindi: 'पांच उनसठ पर बॉस ने अर्जेंट मीटिंग शुरू कर दी।' },
+      { shot: 5, visual: 'Clock hits 6:00:00 PM sharp; Sigmaa calmly unplugs the projector and zips his bag.', sfx: 'Sharp beep and power-down whine', hindi: 'ठीक छह बजे उसने प्रोजेक्टर का प्लग निकाल दिया।' },
+      { shot: 6, visual: 'Sigmaa walks out past the stunned boss without looking back.', sfx: 'Mic drop thump and door click', hindi: 'बोला—छह तीन पर मेरा घर का कल्चर बिगड़ता है।' },
+    ],
+  },
+  {
+    id: 'sol_eats_surprise_exam_paper',
+    title: 'TEACHER SAYS "DON’T LEAVE UNTIL THE PAPER IS GONE"—STUDENT EATS IT',
+    angle: 'fake-origin',
+    brand: 'School Origin',
+    trendHook: 'Reddit Viral Classroom Twist: Literal Malicious Compliance',
+    visualStyle: 'ps1-1998',
+    pitch:
+      'When a strict math teacher announces a surprise test and declares nobody leaves until the question paper is completely gone, a deadpan backbencher calmly folds the booklet, dips it in water, and eats every page.',
+    frames: [
+      { frame: 1, position: 'Top Left', framing: 'Classroom wide shot', action: 'A strict math teacher slams a stack of surprise calculus tests onto desks while thirty students groan in panic.', caption: 'Surprise Math Test!' },
+      { frame: 2, position: 'Top Center', framing: 'Medium shot', action: 'The teacher points at a sleepy backbencher and declares: "Nobody leaves this chair until your test paper is completely gone!"', caption: 'Paper Must Be Gone!' },
+      { frame: 3, position: 'Top Right', framing: 'Close-up', action: 'The backbencher stares blankly at Question 1, nods respectfully, and neatly folds the exam sheet into a triangle.', caption: 'Neatly Folded Paper!' },
+      { frame: 4, position: 'Bottom Left', framing: 'Medium shot', action: 'In dead silence, he dips the corner into his steel water bottle and takes a crisp, polite bite out of Calculus Page 1.', caption: 'First Crisp Bite!' },
+      { frame: 5, position: 'Bottom Center', framing: 'Wide reaction shot', action: 'The teacher and twenty-nine students freeze with dropped jaws as he chews through Question 10 and wipes his mouth.', caption: 'All 10 Questions Eaten!' },
+      { frame: 6, position: 'Bottom Right', framing: 'Deadpan doorway shot', action: 'He holds up two empty hands, says "Paper is gone, sir," and strolls out of the classroom as the bell rings.', caption: 'Technically Compliant!' },
+    ],
+    shots: [
+      { shot: 1, visual: 'Classroom wide shot as teacher slaps surprise math test papers on every desk.', sfx: 'Heavy paper slap and collective groan', hindi: 'टीचर ने अचानक सरप्राइज़ मैथ टेस्ट बांट दिया।' },
+      { shot: 2, visual: 'Teacher points sternly at a backbencher warning nobody leaves until the paper is gone.', sfx: 'Chalk snap', hindi: 'बोले—जब तक पेपर खत्म न हो, सीट से मत उठना।' },
+      { shot: 3, visual: 'Backbencher stares at Question 1 and neatly folds the sheet like a samosa.', sfx: 'Crisp paper fold', hindi: 'बैकबेंचर ने शांति से पेपर को समोसे जैसा मोड़ा।' },
+      { shot: 4, visual: 'He dips the paper into his water bottle and takes a calm, loud bite.', sfx: 'Crunchy chew and pin-drop silence', hindi: 'पानी में डुबोकर पहला सवाल आराम से खा गया।' },
+      { shot: 5, visual: 'Entire class and teacher stare frozen as he finishes the last corner.', sfx: 'Gulp and awkward cricket chirp', hindi: 'पूरी क्लास के सामने पूरा पेपर चबाकर निगल गया।' },
+      { shot: 6, visual: 'He shows two empty hands and calmly walks out the classroom door.', sfx: 'School bell ring', hindi: 'खाली हाथ दिखाकर बोला—सर, पेपर खत्म हो गया।' },
+    ],
+  },
+  {
+    id: 'sol_midnight_ghost_mutual_scream',
+    title: '2 NEIGHBORS SCREAM AT MIDNIGHT THINKING THE OTHER IS A GHOST',
+    angle: 'weird-science',
+    brand: 'Night Walk',
+    trendHook: 'Reddit Slice-of-Life Twist: Mutual Midnight Panic',
+    visualStyle: 'gta6-vice',
+    pitch:
+      'Walking home at midnight after a horror movie, a guy mistakes a silhouette in the dark lane for a ghost and lets out a terror scream—the silhouette screams even louder, both sprint away, and meet at the lift next morning.',
+    frames: [
+      { frame: 1, position: 'Top Left', framing: 'Dark street third-person shot', action: 'At 12:15 AM under one flickering streetlight, a nervous guy walks home holding a milk packet after watching a horror film.', caption: '12:15 AM Horror Walk!' },
+      { frame: 2, position: 'Top Center', framing: 'Medium shadow shot', action: 'A tall silhouette carrying a white umbrella steps slowly out from behind a parked scooter ten feet ahead.', caption: 'Dark Silhouette Appears!' },
+      { frame: 3, position: 'Top Right', framing: 'Close-up', action: 'Convinced it is a ghost, the guy drops his milk packet and unleashes an ear-splitting high-pitched scream.', caption: 'Terror Scream #1!' },
+      { frame: 4, position: 'Bottom Left', framing: 'Wide chaos shot', action: 'Startled by the scream, the silhouette screams twice as loud, flings the umbrella in the air, and sprints backward.', caption: 'Ghost Screams Back!' },
+      { frame: 5, position: 'Bottom Center', framing: 'Split-lane wide shot', action: 'Both grown men sprint at 35 km/h in opposite directions while two stray dogs watch them in total confusion.', caption: 'Both Sprint Opposite!' },
+      { frame: 6, position: 'Bottom Right', framing: 'Morning elevator two-shot', action: 'At 8 AM both men step into the same apartment elevator, lock eyes in awkward silence, and stare intensely at the floor numbers.', caption: 'Floor 4 Awkward Silence!' },
+    ],
+    shots: [
+      { shot: 1, visual: 'Dark flickering street at midnight as a nervous guy walks home with a milk packet.', sfx: 'Eerie night wind and flickering bulb', hindi: 'हॉरर फिल्म देखकर वह रात बारह बजे गली से लौट रहा था।' },
+      { shot: 2, visual: 'A tall dark figure with a white umbrella steps out from behind a scooter.', sfx: 'Creaking metal gate', hindi: 'अंधेरे में स्कूटर के पीछे से एक परछाई निकली।' },
+      { shot: 3, visual: 'The guy drops his milk and lets out a bloodcurdling horror scream.', sfx: 'High-pitched terror scream', hindi: 'भूत समझकर उसने पूरी ताकत से चीख मार दी।' },
+      { shot: 4, visual: 'The dark figure screams even louder and throws the umbrella into the sky.', sfx: 'Even louder scream and umbrella clatter', hindi: 'डर के मारे सामने वाला भूत उससे तेज़ चीख पड़ा।' },
+      { shot: 5, visual: 'Both men sprint full speed in opposite directions as street dogs watch.', sfx: 'Frantic running footsteps', hindi: 'दोनों उल्टी दिशा में जान बचाकर भाग निकले।' },
+      { shot: 6, visual: 'Next morning both stand side-by-side in the apartment lift avoiding eye contact.', sfx: 'Awkward elevator ding', hindi: 'सुबह दोनों पड़ोसी लिफ्ट में चुपचाप खड़े थे।' },
+    ],
+  },
+];
