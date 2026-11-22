@@ -1,0 +1,108 @@
+import type { TopicOption } from '../types';
+
+export const INDIA_MEME_STORIES: readonly TopicOption[] = [
+  {
+    id: 'india_meme_hulke_auto_meter',
+    title: 'HULKE IN FLORAL SHIRT & FLIP-FLOPS ARGUES OVER ₹10 AUTO METER',
+    angle: 'petty-spiral',
+    brand: 'Hulke',
+    trendHook: 'Desi Parody Superhero vs Stubborn Auto-Rickshaw Driver',
+    visualStyle: 'cctv-dashcam',
+    pitch:
+      'A pastel-mint-green Hulke wearing an unbuttoned floral Hawaiian shirt and pink flip-flops lifts an auto-rickshaw three feet off the ground—only to put it down politely because the driver still refuses to turn on the meter.',
+    frames: [
+      { frame: 1, position: 'Top Left', framing: 'Wide street CCTV shot', action: 'Pastel-mint-green Hulke in a floral shirt and pink flip-flops squeezes sideways into the back seat of a tiny yellow-green auto.', caption: 'Hulke Takes An Auto!' },
+      { frame: 2, position: 'Top Center', framing: 'Medium shot', action: 'The skinny auto driver glances back deadpan and demands ₹150 flat for a 500-meter ride without turning on the meter.', caption: 'Meter Nahi Chalega!' },
+      { frame: 3, position: 'Top Right', framing: 'Dramatic low angle', action: 'Hulke steps out, roars at 110 decibels, and lifts the entire auto-rickshaw with the driver still inside three feet above the road.', caption: 'Auto Lifted 3 Feet!' },
+      { frame: 4, position: 'Bottom Left', framing: 'Close-up', action: 'Suspended in mid-air, the auto driver calmly chews pan masala and says "Ab ₹200 lagega, extra lifting charge."', caption: 'Now ₹200 Flat!' },
+      { frame: 5, position: 'Bottom Center', framing: 'Medium shot', action: 'Hulke freezes in disbelief, gently lowers the auto onto the asphalt without a scratch, and checks his pockets for coins.', caption: 'Hulke Checks Coins!' },
+      { frame: 6, position: 'Bottom Right', framing: 'Wide deadpan shot', action: 'Hulke walks home sweating in his tiny pink flip-flops while the auto driver zooms past honking triumphantly.', caption: 'Driver Wins Again!' },
+    ],
+    shots: [
+      { shot: 1, visual: '240p street CCTV of pastel-mint Hulke in a floral shirt squeezing into a tiny auto-rickshaw.', sfx: 'Loud metal suspension groan', hindi: 'हल्के ने पांच सौ मीटर के लिए ऑटो पकड़ा।' },
+      { shot: 2, visual: 'Auto driver looks back deadpan and points away from the meter.', sfx: 'Dry cough and engine idle', hindi: 'ड्राइवर बोला—मीटर खराब है, डेढ़ सौ लगेगा।' },
+      { shot: 3, visual: 'Hulke steps out and lifts the entire auto with the driver inside three feet high.', sfx: 'Monster roar and creaking frame', hindi: 'गुस्से में हल्के ने पूरा ऑटो हवा में उठा लिया।' },
+      { shot: 4, visual: 'Floating driver calmly holds up two fingers from the cab.', sfx: 'Calm horn toot', hindi: 'हवा में बैठकर ड्राइवर बोला—अब दो सौ लगेगा।' },
+      { shot: 5, visual: 'Hulke slowly sets the auto back down on the road in stunned silence.', sfx: 'Gentle tire thump', hindi: 'हल्के ने चुपचाप ऑटो नीचे रख दिया।' },
+      { shot: 6, visual: 'Hulke walks home in pink flip-flops as the auto speeds past.', sfx: 'Flip-flop slap and distant horn', hindi: 'हल्के पैदल ही घर निकल पड़ा।' },
+    ],
+  },
+  {
+    id: 'india_meme_dolli_chai_g20_summit',
+    title: 'DOLLI CHAI HIJACKS WORLD SUMMIT WITH 360° FLYING CUTTING CHAI',
+    angle: 'breaking-news',
+    brand: 'Dolli Chai',
+    trendHook: 'Viral Indian Tapri Swagger vs World Leaders',
+    visualStyle: 'gta6-vice',
+    pitch:
+      'World leaders pause an emergency summit when Dolli Chai enters in neon-pink star sunglasses, flips a brass kettle 360 degrees in slow motion, and bills Elone Maask ₹20,000 for one ₹10 cutting chai.',
+    frames: [
+      { frame: 1, position: 'Top Left', framing: 'Wide press shot', action: 'Inside a tense marble summit hall, Elone Maask and Doland Trumpe argue over a glowing globe while everyone looks exhausted.', caption: 'Tense World Summit!' },
+      { frame: 2, position: 'Top Center', framing: 'Dramatic entrance shot', action: 'Double doors burst open as Dolli Chai moonwalks in wearing neon-pink star sunglasses, LED sneakers, and carrying a steel kettle.', caption: 'Dolli Chai Enters!' },
+      { frame: 3, position: 'Top Right', framing: 'Low-angle slow-mo shot', action: 'Dolli Chai spins the brass kettle 360 degrees mid-air and pours a glowing arc of ginger chai from six feet away without spilling one drop.', caption: '6-Foot Flying Pour!' },
+      { frame: 4, position: 'Bottom Left', framing: 'Close-up', action: 'Elone Maask takes one sip from the tiny glass and immediately cancels his Mars rocket speech to ask for a franchise.', caption: 'Mars Cancelled For Chai!' },
+      { frame: 5, position: 'Bottom Center', framing: 'Medium shot', action: 'Dolli Chai flips his sunglasses down and slides a crumpled paper receipt reading "VIP Swagger Tax: ₹20,000".', caption: '₹20,000 Swagger Tax!' },
+      { frame: 6, position: 'Bottom Right', framing: 'Wide deadpan shot', action: 'Both billionaires quietly ask if they can split one ₹10 cutting chai into two half-cups instead.', caption: 'Half-Half Cutting Please!' },
+    ],
+    shots: [
+      { shot: 1, visual: 'Tense world summit hall as Elone Maask and Doland Trumpe argue over a globe.', sfx: 'Serious summit murmur', hindi: 'वर्ल्ड समिट में बड़ी मीटिंग के बीच सब थक गए थे।' },
+      { shot: 2, visual: 'Dolli Chai moonwalks in wearing neon-pink star sunglasses holding a brass kettle.', sfx: 'Dramatic synth drop and whistle', hindi: 'तभी स्टार चश्मा पहनकर डॉली चाय अंदर आ गया।' },
+      { shot: 3, visual: 'Dolli Chai flips the kettle 360 degrees pouring chai from six feet away.', sfx: 'Whoosh and crisp liquid pour', hindi: 'छह फुट ऊपर से बिना गिराए कटिंग चाय डाली।' },
+      { shot: 4, visual: 'Elone Maask takes one sip and stares at the glass in awe.', sfx: 'Satisfied slurp and angelic chord', hindi: 'एक घूंट पीते ही एलॉन ने मार्स प्लान रोक दिया।' },
+      { shot: 5, visual: 'Dolli Chai slides over a handwritten bill for ₹20,000 VIP Swagger Tax.', sfx: 'Paper slide and cash chime', hindi: 'डॉली ने बीस हज़ार का स्वैग बिल थमा दिया।' },
+      { shot: 6, visual: 'Both billionaires awkwardly ask to share one ₹10 cutting chai in two cups.', sfx: 'Awkward coin clink', hindi: 'दोनों बोले—दस रुपये वाली हाफ-हाफ कर दो।' },
+    ],
+  },
+  {
+    id: 'india_meme_khaali_phone_screen',
+    title: 'KHAALI TRIES TO TAP "SKIP AD"—ACCIDENTALLY BENDS THE BUILDING WI-FI',
+    angle: 'over-engineer',
+    brand: 'Khaali',
+    trendHook: 'Gentle Giant Slapstick vs Tiny Mobile Skip-Ad Button',
+    visualStyle: 'claymation-stopmo',
+    pitch:
+      'Wearing a tiny polka-dot apron, 7-foot-3 Khaali tries to tap a microscopic 2-millimeter "Skip Ad" cross on his phone—cracking three smartphones, a marble table, and the neighborhood fiber cable.',
+    frames: [
+      { frame: 1, position: 'Top Left', framing: 'Extreme close-up', action: 'A tiny 2-millimeter "X" Skip Ad button blinks on a smartphone screen while Khaali’s massive tree-trunk thumb hovers over it.', caption: '2mm Skip-Ad Button!' },
+      { frame: 2, position: 'Top Center', framing: 'Medium shot', action: 'Wearing a tiny polka-dot apron, Khaali sweats nervously and gently lowers his thumb—instantly snapping the phone in half.', caption: 'Phone #1 Snapped!' },
+      { frame: 3, position: 'Top Right', framing: 'Wide shot', action: 'He buys a reinforced tablet and tries using a wooden toothpick—which launches through the marble dining table like a nail.', caption: 'Table Split In Half!' },
+      { frame: 4, position: 'Bottom Left', framing: 'Medium shot', action: 'A surgical team brings a robotic laser pointer stylus so Khaali can press the button remotely from ten feet away.', caption: 'Laser Stylus Deployed!' },
+      { frame: 5, position: 'Bottom Center', framing: 'Close-up', action: 'Khaali sneezes once while aiming, bumping the wall and bending the entire street’s metal Wi-Fi pole into a U-shape.', caption: 'Street Wi-Fi Bent!' },
+      { frame: 6, position: 'Bottom Right', framing: 'Wide deadpan shot', action: 'With the internet dead, Khaali smiles peacefully and watches the 30-second ad finish on its own.', caption: 'Ad Finished Anyway!' },
+    ],
+    shots: [
+      { shot: 1, visual: 'Macro shot of a tiny 2mm Skip Ad button under Khaali’s giant hovering thumb.', sfx: 'Tense clock tick', hindi: 'खाली के फोन पर दो मिलीमीटर का स्किप बटन आया।' },
+      { shot: 2, visual: 'Khaali in a polka-dot apron gently taps the screen and snaps the phone in two.', sfx: 'Loud glass crack', hindi: 'हल्के से छूते ही पहला फोन दो टुकड़े हो गया।' },
+      { shot: 3, visual: 'He tries tapping a tablet with a toothpick and splits the marble table.', sfx: 'Heavy stone crack', hindi: 'टूथपिक से दबाया तो संगमरमर की टेबल फट गई।' },
+      { shot: 4, visual: 'Engineers hand him a ten-foot robotic stylus arm to aim at the button.', sfx: 'Servo whine and laser beep', hindi: 'दस फुट दूर से रोबोटिक पेन मंगवाया गया।' },
+      { shot: 5, visual: 'Khaali sneezes, nudging the wall and bending the street Wi-Fi pole outside.', sfx: 'Giant sneeze and metal bend', hindi: 'छींक आते ही मोहल्ले का वाई-फाई खंभा मुड़ गया।' },
+      { shot: 6, visual: 'Khaali shrugs happily as the ad timer finally hits zero on its own.', sfx: 'Cheerful ding', hindi: 'खाली ने आराम से पूरा ऐड देख लिया।' },
+    ],
+  },
+  {
+    id: 'india_meme_lorde_puneete_society_meeting',
+    title: 'LORDE PUNEETE ELECTED SOCIETY PRESIDENT AFTER 1 TALCUM POWDER SPEECH',
+    angle: 'fake-origin',
+    brand: 'Lorde Puneete',
+    trendHook: 'Indian Meme Royalty vs Boring Apartment RWA Meeting',
+    visualStyle: 'ps1-1998',
+    pitch:
+      'During a sleepy apartment committee meeting about parking stickers, Lorde Puneete dumps two buckets of white talcum powder over his head screaming about potholes—winning a unanimous 400-0 vote.',
+    frames: [
+      { frame: 1, position: 'Top Left', framing: 'Wide room shot', action: 'Forty bored apartment uncles nap in plastic chairs as the RWA secretary drones on about ₹50 parking stickers.', caption: 'Boring RWA Meeting!' },
+      { frame: 2, position: 'Top Center', framing: 'Medium shot', action: 'Lorde Puneete in a torn yellow shirt and plastic toy crown kicks open the clubhouse door carrying two blue paint buckets.', caption: 'Lorde Enters With Buckets!' },
+      { frame: 3, position: 'Top Right', framing: 'Dramatic close-up', action: 'He dumps an entire mountain of white talcum powder onto his own head and screams "KYA HAAL HAI BEROZGAARO!" into the mic.', caption: 'Talcum Powder Storm!' },
+      { frame: 4, position: 'Bottom Left', framing: 'Wide shot', action: 'Every sleeping uncle jolts awake in a cloud of rose-scented powder and gives a thunderous standing ovation.', caption: '400 Uncles Awake!' },
+      { frame: 5, position: 'Bottom Center', framing: 'Medium shot', action: 'Within three minutes, the committee crowns him Society President for life and hands him the master water-tank keys.', caption: 'Unanimous 400-0 Vote!' },
+      { frame: 6, position: 'Bottom Right', framing: 'Wide deadpan shot', action: 'The next morning all potholes are fixed—because Lorde Puneete filled them with 600 bottles of rose talcum powder.', caption: 'Rose-Scented Roads!' },
+    ],
+    shots: [
+      { shot: 1, visual: 'Forty bored apartment uncles snoring in plastic chairs during a society meeting.', sfx: 'Loud snoring and fan creak', hindi: 'सोसाइटी की मीटिंग में सब अंकल खर्राटे ले रहे थे।' },
+      { shot: 2, visual: 'Lorde Puneete in a plastic toy crown kicks the door open with two blue buckets.', sfx: 'Door slam and dramatic boom', hindi: 'तभी प्लास्टिक मुकुट पहनकर लॉर्ड पुनीते अंदर आया।' },
+      { shot: 3, visual: 'He pours two buckets of white talcum powder over his head screaming into the mic.', sfx: 'Mic feedback screech and powder poof', hindi: 'सिर पर पाउडर डालकर माइक में ज़ोर से चीखा।' },
+      { shot: 4, visual: 'All forty uncles jump up cheering through a giant cloud of white powder.', sfx: 'Thunderous applause and whistles', hindi: 'गुलाब की खुशबू में सब अंकल जागकर तालियां बजाने लगे।' },
+      { shot: 5, visual: 'They hand Lorde Puneete the Society President sash and water-tank keys.', sfx: 'Victory trumpet fanfare', hindi: 'चार सौ वोट से वह सोसाइटी प्रेसिडेंट बन गया।' },
+      { shot: 6, visual: 'Next morning every road pothole is filled neatly with white rose talcum powder.', sfx: 'Gentle breeze and chime', hindi: 'अगले दिन सारे गड्ढे पाउडर से भर गए।' },
+    ],
+  },
+];

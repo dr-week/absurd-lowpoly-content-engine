@@ -12,7 +12,7 @@ const ALIAS_RULES: readonly AliasRule[] = CHARACTER_ROSTER.flatMap((preset) =>
   [...preset.rawAliases]
     .sort((a, b) => b.length - a.length)
     .map((alias) => ({
-      re: new RegExp(`\\b${alias.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')}(?!\\s*(?:bhai|bhau|-g|nder|-esh|-chaddha))\\b`, 'gi'),
+      re: new RegExp(`\\b${alias.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')}\\b`, 'gi'),
       upper: preset.parodyName.toUpperCase(),
       normal: preset.parodyName,
       preset,
@@ -20,12 +20,13 @@ const ALIAS_RULES: readonly AliasRule[] = CHARACTER_ROSTER.flatMap((preset) =>
 );
 
 /**
- * Replaces raw celebrity / trademarked names with copyright-safe parody names
- * (e.g., "Elon Musk" -> "Elon Bhai", "Donald Trump" -> "Doland Bhau", "Spider-Man" -> "Spooder-Bhai").
+ * Replaces raw celebrity / trademarked names with phonetic lookalike spelling tweaks
+ * (e.g., "Elon Musk" -> "Elone Maask", "Donald Trump" -> "Doland Trumpe", "Spider-Man" -> "Spooder-Maan").
  */
 export function sanitizeCopyrightNames(text: string): string {
   let out = text;
   for (const rule of ALIAS_RULES) {
+    if (out.toLowerCase().includes(rule.normal.toLowerCase())) continue;
     out = out.replace(rule.re, (match) => (match === match.toUpperCase() && match.length > 2 ? rule.upper : rule.normal));
   }
   return out;
