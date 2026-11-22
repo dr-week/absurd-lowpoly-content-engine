@@ -100,10 +100,10 @@ export function renderStudioView(params: {
     promptBody = `
       <div class="remix-bar">
         <span class="remix-bar__label">Remix Lab</span>
-        <button type="button" class="btn" data-action="reroll-twist" title="Swap Expectation-Subversion Twist Blueprint">${Glyphs.sparkle(14)}<span>Twist</span></button>
-        <button type="button" class="btn" data-action="reroll-name" title="Cycle Funny Desi Character Name">${Glyphs.sparkle(14)}<span>Name</span></button>
-        <button type="button" class="btn" data-action="reroll-rig" title="Swap Camera & Lighting Rig">${Glyphs.refresh(14)}<span>Camera</span></button>
-        <button type="button" class="btn" data-action="reroll-punchline" title="Try Alternate Shot 6 Punchline">${Glyphs.sparkle(14)}<span>Punchline</span></button>
+        <button type="button" class="btn" data-action="reroll-twist" title="Swap Expectation-Subversion Twist Blueprint">${Glyphs.shuffle(14)}<span>Twist</span></button>
+        <button type="button" class="btn" data-action="reroll-name" title="Cycle Funny Desi Character Name">${Glyphs.user(14)}<span>Name</span></button>
+        <button type="button" class="btn" data-action="reroll-rig" title="Swap Camera & Lighting Rig">${Glyphs.camera(14)}<span>Camera</span></button>
+        <button type="button" class="btn" data-action="reroll-punchline" title="Try Alternate Shot 6 Punchline">${Glyphs.zap(14)}<span>Punchline</span></button>
       </div>
       <div class="prompt-stack">
         ${renderCodeRow('storyboard', 'Storyboard (3x2)', prompts.topicTitle, prompts.storyboardPrompt, sbVote, copiedTarget === 'storyboard')}

@@ -14,7 +14,7 @@ export function renderCustomIdeaBar(draft: string): string {
         <button type="button" class="btn btn--primary" data-action="run-custom-idea" title="Generate Prompts from Your Idea">${Glyphs.arrowRight(14)}<span>Create</span></button>
       </div>
       <div class="composer-bar__row">
-        <span class="composer-bar__label">Cast</span>
+        <span class="composer-bar__label" style="display:inline-flex; align-items:center; gap:4px;">${Glyphs.user(12)}<span>Cast</span></span>
         <div class="chip-rail">${chips}</div>
       </div>
     </div>

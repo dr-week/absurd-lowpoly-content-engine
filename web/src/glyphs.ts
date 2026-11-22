@@ -69,4 +69,10 @@ export const Glyphs = {
     ),
   arrowRight: (size = 16) => svg('<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>', size),
   bookmark: (size = 16) => svg('<path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>', size),
+  shuffle: (size = 16) =>
+    svg('<polyline points="16 3 21 3 21 8"/><line x1="4" x2="21" y1="20" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" x2="21" y1="15" y2="21"/><line x1="4" x2="9" y1="4" y2="9"/>', size),
+  user: (size = 16) => svg('<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>', size),
+  camera: (size = 16) =>
+    svg('<path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/>', size),
+  zap: (size = 16) => svg('<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>', size),
 };
