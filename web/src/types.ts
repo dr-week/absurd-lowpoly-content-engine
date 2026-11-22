@@ -15,7 +15,8 @@ export type VisualStyle =
   | 'retro-80s-concept'
   | 'isometric-diorama'
   | 'vhs-found-footage'
-  | 'noir-monochrome';
+  | 'noir-monochrome'
+  | 'lugan-3d-skit';
 export type SourceMode = 'live-free' | 'standalone' | 'gemini' | 'groq' | 'openrouter' | 'backend';
 
 export interface SavedItem {

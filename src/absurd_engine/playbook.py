@@ -303,6 +303,24 @@ VISUAL_STYLE_PROFILES: dict[str, VisualStyleProfile] = {
         ),
         required_tokens=("noir", "monochrome", "neon"),
     ),
+    "lugan-3d-skit": VisualStyleProfile(
+        key="lugan-3d-skit",
+        label="Stylized 3D Viral Skit",
+        storyboard_header=(
+            "6-frame storyboard in a 3x2 grid on a plain dark background. Apply one unified style to ALL "
+            "panels: clean stylized indie 3D character animation—smooth simplified matte-shaded 3D figures "
+            "with big expressive reaction faces, glossy stylized cars and garage props, crisp bright daylight "
+            'lighting, and slapstick vehicle physics. Place a short bold caption under each panel. Title at top: "{title}".'
+        ),
+        video_header=(
+            "Absurdist comedy video. Apply one unified style throughout: clean stylized indie 3D character "
+            "animation—expressive simplified 3D comedy rigs with snappy squash-and-stretch timing, glossy "
+            "stylized vehicles and street props, crisp daylight lighting, whip-pan reaction cuts, and slapstick "
+            "physics. Audio: deadpan, serious Indian male narrator and expressive multi-character Hindi dialogue, "
+            "punchy foley SFX, and sharp hard cuts."
+        ),
+        required_tokens=("stylized", "3d", "slapstick"),
+    ),
 }
 
 BOOK_FRAMEWORKS: tuple[dict[str, str], ...] = (

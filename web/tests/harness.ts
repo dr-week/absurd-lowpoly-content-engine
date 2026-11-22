@@ -137,8 +137,8 @@ for (const p of [mockPrompts, gtaPrompts, switchPromptVisualStyle(mockPrompts, '
   assert.ok(!THIRD_PARTY_RE.test(p.storyboardPrompt), `Third-party trademark in storyboard: ${p.storyboardPrompt.match(THIRD_PARTY_RE)?.[0]}`);
   assert.ok(!THIRD_PARTY_RE.test(p.videoPrompt), `Third-party trademark in video: ${p.videoPrompt.match(THIRD_PARTY_RE)?.[0]}`);
 }
-assert.ok(mockPrompts.videoPrompt.includes('Speaker [') && ALL_BESPOKE_STORIES[0].shots?.[0].turns?.length === 2, 'Expected multi-voice speaker tags & NPC ping-pong');
-assert.ok(renderVideoText(ALL_BESPOKE_STORIES[0].shots ?? []).includes('Immediately ['), 'Expected NPC-to-NPC ping-pong reply');
+const multiVoiceStory = ALL_BESPOKE_STORIES.find((s) => s.shots?.some((sh) => (sh.turns?.length ?? 0) >= 2));
+assert.ok(mockPrompts.videoPrompt.includes('Speaker [') && multiVoiceStory && renderVideoText(multiVoiceStory.shots ?? []).includes('Immediately ['), 'Expected multi-voice speaker tags & NPC ping-pong');
 assert.ok(cycleSituationCast(mockPrompts, 0).prompts.storyboardPrompt.includes('Character & Prop Design:'));
 assert.ok(cycleMarketingGimmick(mockPrompts, 0).prompts.videoPrompt.includes('Marketing Gimmick') && buildViralPackage(sample, mockPrompts).copyText.includes('MARKETING GIMMICK:') && getKnowledgeDB().size >= 130 && getKnowledgeDB().search('hook point', 'book')[0]?.id === 'book_hook_point');
 assert.ok(buildCrossoverEpisode([sample, customEp])?.title.startsWith('CROSSOVER:'));

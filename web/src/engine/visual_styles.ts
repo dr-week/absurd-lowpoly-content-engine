@@ -89,7 +89,16 @@ export const VISUAL_STYLE_OPTIONS: readonly VisualStyleMeta[] = [
     sbDesc:
       'high-contrast neo-noir monochrome cinema screenshots—deep Venetian-blind black shadows, wet rain-slicked street reflections, sharp chiaroscuro rim lighting, and one single vivid neon-amber accent color popping against stark black-and-white.',
     vidDesc:
-      'high-contrast neo-noir monochrome cinema capture—dramatic chiaroscuro shadows, pouring rain on wet asphalt, slow moody tracking shots, and one vivid neon-amber accent color contrasting deadpan Indian street comedy.',
+      'high-contrast neo-noir monochrome cinema capture—dramatic chiaroscuro shadows, pouring rain on wet asphalt, slow moody tracking shots, and one vivid neon-amber accent color contrasting deadpan street comedy.',
+  },
+  {
+    id: 'lugan-3d-skit',
+    label: 'Stylized 3D Viral Skit',
+    badge: '3D Viral Skit',
+    sbDesc:
+      'clean stylized indie 3D character animation screenshots—smooth simplified matte-shaded 3D figures with big expressive reaction faces, glossy stylized cars and garage props, crisp bright daylight lighting, and exaggerated slapstick vehicle physics.',
+    vidDesc:
+      'clean stylized indie 3D character animation capture—expressive simplified 3D comedy rigs with snappy squash-and-stretch timing, glossy stylized vehicles and street props, crisp daylight lighting, whip-pan reaction cuts, and chaotic slapstick physics.',
   },
 ];
 

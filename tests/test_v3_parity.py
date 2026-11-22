@@ -52,11 +52,11 @@ def test_cors_and_metadata_endpoints(tmp_path: Path) -> None:
     assert preflight.status_code == 200
     assert preflight.headers.get("access-control-allow-origin") == "https://dr-week.github.io"
 
-    # GET /styles returns all 9 visual engines
+    # GET /styles returns all 10 visual engines
     styles_res = client.get("/styles")
     assert styles_res.status_code == 200
     styles = styles_res.json()
-    assert len(styles) == 9
+    assert len(styles) == 10
     assert {s["key"] for s in styles} == set(VISUAL_STYLE_PROFILES.keys())
 
     # GET /creative-matrix returns 10 books + 6 director's stacks
@@ -65,7 +65,7 @@ def test_cors_and_metadata_endpoints(tmp_path: Path) -> None:
     matrix = matrix_res.json()
     assert len(matrix["books"]) == len(BOOK_FRAMEWORKS) == 10
     assert len(matrix["directors_stacks"]) == len(DIRECTORS_STACKS) == 6
-    assert matrix["visual_styles_count"] == 9
+    assert matrix["visual_styles_count"] == 10
 
 
 def test_multi_style_episode_generation_passes_style_aware_lint(tmp_path: Path) -> None:

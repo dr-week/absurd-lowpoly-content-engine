@@ -8,6 +8,7 @@ import { DEBATE_STORIES } from './stories_debates';
 import { GTA_STORIES } from './stories_gta';
 import { ICONIC_STORIES_B } from './stories_iconic_b';
 import { INDIA_MEME_STORIES } from './stories_india_memes';
+import { LUGAN_STYLE_STORIES } from './stories_lugan_style';
 import { MEME_STORIES } from './stories_meme';
 import { MEME_STORIES_B } from './stories_meme_b';
 import { NEWS_STORIES } from './stories_news';
@@ -25,6 +26,7 @@ import { THEATER_STORIES_B } from './stories_theater_b';
 import { TUTORIAL_STORIES } from './stories_tutorial';
 
 export const ALL_BESPOKE_STORIES: readonly TopicOption[] = [
+  ...LUGAN_STYLE_STORIES,
   ...THEATER_STORIES_A,
   ...THEATER_STORIES_B,
   ...OVERENGINEER_STORIES,

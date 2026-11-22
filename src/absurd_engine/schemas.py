@@ -18,6 +18,7 @@ VisualStyle = Literal[
     "isometric-diorama",
     "vhs-found-footage",
     "noir-monochrome",
+    "lugan-3d-skit",
 ]
 
 
