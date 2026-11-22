@@ -132,15 +132,8 @@ export function renderStudioView(params: {
           <h2>Prompts</h2>
         </div>
         <div class="section-header__actions">
-          <select id="visual-style" class="compact-select" aria-label="Visual Engine Style" title="Switch Visual Engine (1998 PS1 vs GTA 6 Gameplay)">${styleOpts}</select>
-          ${
-            prompts
-              ? `<button type="button" class="btn" data-action="reroll-rig" title="Swap Camera & Lighting Rig">${Glyphs.refresh(14)}<span>Camera</span></button>
-                 <button type="button" class="btn" data-action="reroll-punchline" title="Try Alternate Shot 6 Punchline">${Glyphs.sparkle(14)}<span>Punchline</span></button>
-                 <button type="button" class="btn" data-action="copy-all" title="Copy Storyboard + Video + Viral Pack">${Glyphs.copy(14)}<span>Copy All</span></button>
-                 <button type="button" class="btn btn--primary" data-action="make-sequel" title="Generate Part 2 Callback Sequel">${Glyphs.arrowRight(14)}<span>Part 2</span></button>`
-              : ''
-          }
+          <select id="visual-style" class="compact-select" aria-label="Visual Engine Style" title="Switch Visual Engine">${styleOpts}</select>
+          ${prompts ? `<button type="button" class="btn" data-action="reroll-name" title="Cycle Funny Desi Character Name">${Glyphs.sparkle(14)}<span>Name</span></button><button type="button" class="btn" data-action="reroll-rig" title="Swap Camera & Lighting Rig">${Glyphs.refresh(14)}<span>Camera</span></button><button type="button" class="btn" data-action="reroll-punchline" title="Try Alternate Shot 6 Punchline">${Glyphs.sparkle(14)}<span>Punchline</span></button><button type="button" class="btn" data-action="copy-all" title="Copy Storyboard + Video + Viral Pack">${Glyphs.copy(14)}<span>Copy All</span></button><button type="button" class="btn btn--primary" data-action="make-sequel" title="Generate Part 2 Callback Sequel">${Glyphs.arrowRight(14)}<span>Part 2</span></button>` : ''}
         </div>
       </div>
       ${promptBody}

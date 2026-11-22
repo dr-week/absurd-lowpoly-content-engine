@@ -3,6 +3,7 @@ import { detectCharacterLock, sanitizeCopyrightNames } from '../src/engine/alias
 import { restoreStudioBackup } from '../src/engine/backup_sync';
 import { scoreComedyCraft } from '../src/engine/comedy_craft';
 import { buildCustomEpisode } from '../src/engine/custom_builder';
+import { cycleDesiCharacterName, desiNameifyWord } from '../src/engine/desi_nomenclature';
 import { scoreHeadlineComedyPotential } from '../src/engine/headline_filter';
 import { buildCrossoverEpisode } from '../src/engine/mashup_engine';
 import { pickCleanLiveNewsStories } from '../src/engine/news_mapper';
@@ -110,6 +111,10 @@ const customEp = buildCustomEpisode('Trump buys a Goa beach shack for ₹200', '
 assert.ok(customEp.title.includes('DOLAND TRUMPE'));
 assert.equal(sanitizeCopyrightNames('Elon Musk and Donald Trump meet Spider-Man and Hulk'), 'Elone Maask and Doland Trumpe meet Spooder-Maan and Hulke');
 assert.ok(detectCharacterLock('Spooder-Maan and Hulke').includes('checkered gym shorts') && detectCharacterLock('Hulke').includes('pink flip-flops'));
+assert.equal(desiNameifyWord('cute', 0), 'Cutie');
+assert.equal(desiNameifyWord('Hulk', 3), 'Hulkeshwar');
+const hulkMock = { ...mockPrompts, topicTitle: 'HULKE FIGHTS AUTO', storyboardPrompt: 'Hulke lifts auto', videoPrompt: 'Hulke walks home' };
+assert.equal(cycleDesiCharacterName(hulkMock, 1).name, 'Hulkeshwar');
 assert.ok(buildCrossoverEpisode([sample, customEp])?.title.startsWith('CROSSOVER:'));
 
 console.log(
