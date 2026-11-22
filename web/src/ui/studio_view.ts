@@ -1,7 +1,8 @@
+import { VISUAL_STYLE_OPTIONS } from '../engine/prompt_renderer';
 import { getHookLabel, getSituationLabel, HOOK_CATEGORIES, SITUATION_CATEGORIES } from '../engine/taxonomy';
 import { getVote } from '../engine/telemetry';
 import { Glyphs } from '../glyphs';
-import type { GeneratedPrompts, HookCategory, RatingLogEntry, ScoredTopic, SituationCategory } from '../types';
+import type { GeneratedPrompts, HookCategory, RatingLogEntry, ScoredTopic, SituationCategory, VisualStyle } from '../types';
 import { esc } from './escape';
 import { renderCustomIdeaBar } from './custom_bar';
 import { renderViralPackagingCard } from './packaging_card';
@@ -32,6 +33,7 @@ export function renderStudioView(params: {
   selectedId: string | null;
   activeTopic?: ScoredTopic;
   prompts: GeneratedPrompts | null;
+  visualStyle: VisualStyle;
   loadingTopics: boolean;
   loading: boolean;
   seedQuery: string;
@@ -41,10 +43,11 @@ export function renderStudioView(params: {
   liveTrends: string[];
   copiedTarget: 'storyboard' | 'video' | 'packaging' | null;
 }): string {
-  const { topics, logs, generatedIds, selectedId, activeTopic, prompts, loadingTopics, loading, seedQuery, customDraft, hookFilter, situationFilter, liveTrends, copiedTarget } = params;
+  const { topics, logs, generatedIds, selectedId, activeTopic, prompts, visualStyle, loadingTopics, loading, seedQuery, customDraft, hookFilter, situationFilter, liveTrends, copiedTarget } = params;
 
   const hookOpts = ['<option value="all">All Hooks</option>', ...HOOK_CATEGORIES.map((h) => `<option value="${h.id}" ${hookFilter === h.id ? 'selected' : ''}>${esc(h.label)}</option>`)].join('');
   const sitOpts = ['<option value="all">All Situations</option>', ...SITUATION_CATEGORIES.map((s) => `<option value="${s.id}" ${situationFilter === s.id ? 'selected' : ''}>${esc(s.label)}</option>`)].join('');
+  const styleOpts = VISUAL_STYLE_OPTIONS.map((v) => `<option value="${v.id}" ${visualStyle === v.id ? 'selected' : ''}>${esc(v.label)}</option>`).join('');
 
   const trendChips = liveTrends.length
     ? `<div class="trend-strip">${liveTrends
@@ -126,16 +129,17 @@ export function renderStudioView(params: {
           <span class="section-header__step">02</span>
           <h2>Prompts</h2>
         </div>
-        ${
-          prompts
-            ? `<div class="section-header__actions">
-                <button type="button" class="btn" data-action="reroll-rig" title="Swap 1998 Camera & Lighting Rig">${Glyphs.refresh(14)}<span>Camera</span></button>
-                <button type="button" class="btn" data-action="reroll-punchline" title="Try Alternate Shot 6 Punchline">${Glyphs.sparkle(14)}<span>Punchline</span></button>
-                <button type="button" class="btn" data-action="copy-all" title="Copy Storyboard + Video + Viral Pack">${Glyphs.copy(14)}<span>Copy All</span></button>
-                <button type="button" class="btn btn--primary" data-action="make-sequel" title="Generate Part 2 Callback Sequel">${Glyphs.arrowRight(14)}<span>Part 2</span></button>
-              </div>`
-            : ''
-        }
+        <div class="section-header__actions">
+          <select id="visual-style" class="compact-select" aria-label="Visual Engine Style" title="Switch Visual Engine (1998 PS1 vs GTA 6 Gameplay)">${styleOpts}</select>
+          ${
+            prompts
+              ? `<button type="button" class="btn" data-action="reroll-rig" title="Swap Camera & Lighting Rig">${Glyphs.refresh(14)}<span>Camera</span></button>
+                 <button type="button" class="btn" data-action="reroll-punchline" title="Try Alternate Shot 6 Punchline">${Glyphs.sparkle(14)}<span>Punchline</span></button>
+                 <button type="button" class="btn" data-action="copy-all" title="Copy Storyboard + Video + Viral Pack">${Glyphs.copy(14)}<span>Copy All</span></button>
+                 <button type="button" class="btn btn--primary" data-action="make-sequel" title="Generate Part 2 Callback Sequel">${Glyphs.arrowRight(14)}<span>Part 2</span></button>`
+              : ''
+          }
+        </div>
       </div>
       ${promptBody}
     </section>

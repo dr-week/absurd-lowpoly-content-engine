@@ -6,6 +6,7 @@ export type OutcomeTag = 'flop' | 'good' | 'viral';
 export type HookCategory = 'iconic' | 'build' | 'origin' | 'science' | 'tutorial' | 'news';
 export type SituationCategory = 'global' | 'coastal' | 'tech' | 'ego' | 'lab' | 'childhood';
 export type ThemeName = 'studio' | 'noir';
+export type VisualStyle = 'ps1-1998' | 'gta6-vice' | 'hybrid-1998-gta6';
 export type SourceMode = 'live-free' | 'standalone' | 'gemini' | 'groq' | 'openrouter' | 'backend';
 
 export interface SavedItem {

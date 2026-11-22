@@ -7,7 +7,7 @@ import { scoreHeadlineComedyPotential } from '../src/engine/headline_filter';
 import { buildCrossoverEpisode } from '../src/engine/mashup_engine';
 import { pickCleanLiveNewsStories } from '../src/engine/news_mapper';
 import { renderStoryboardText, renderVideoText } from '../src/engine/prompt_renderer';
-import { cycleAlternatePunchline, rerollCameraRig } from '../src/engine/prompt_tools';
+import { cycleAlternatePunchline, rerollCameraRig, switchPromptVisualStyle } from '../src/engine/prompt_tools';
 import { markTopicGenerated, removeSavedTopic, saveLikedTopic, setSavedOutcome } from '../src/engine/saved_store';
 import { buildPart2Topic } from '../src/engine/sequel_engine';
 import { computeTasteDna } from '../src/engine/taste_dna';
@@ -19,7 +19,7 @@ import type { RatingLogEntry } from '../src/types';
 const LABEL_PREFIX_RE = /^(?:Fake biopic|Fake childhood origin|Live [A-Za-z ]+(?:news|broadcast)|[A-Za-z ]+documentary|Earnest [a-z-]+ (?:tutorial|hack)|Travel guide tutorial):/i;
 const SLOP_QUOTE_RE = /\b(?:Inspired by|After|Reading|Following|Mid-debate on|Reacting to|Triggered by)\s+"[^"]+"/i;
 
-assert.ok(ALL_BESPOKE_STORIES.length >= 48, `Expected >= 48 bespoke stories, got ${ALL_BESPOKE_STORIES.length}`);
+assert.ok(ALL_BESPOKE_STORIES.length >= 56, `Expected >= 56 bespoke stories, got ${ALL_BESPOKE_STORIES.length}`);
 for (const story of ALL_BESPOKE_STORIES) {
   const craft = scoreComedyCraft(story);
   assert.ok(craft.hasSixBeats, `Story "${story.id}" missing 6 frames/shots`);
@@ -71,9 +71,9 @@ assert.equal(afterGen.saved[0].generated, true);
 savedList = removeSavedTopic(afterGen.saved, sample.id);
 assert.equal(savedList.length, 0);
 
-// Verify 6 consecutive live-news-mapped refreshes (48 cards) return 48/48 unique human-crafted stories with ZERO headline-slicing slop
+// Verify 7 consecutive live-news-mapped refreshes (56 cards) return 56/56 unique human-crafted stories with ZERO headline-slicing slop
 const seenLive = new Set<string>();
-for (let b = 1; b <= 5; b += 1) {
+for (let b = 1; b <= 6; b += 1) {
   const cards = await pickCleanLiveNewsStories({ seenTitles: seenLive, hookFilter: 'all', situationFilter: 'all', count: 8 });
   assert.equal(cards.length, 8);
   for (const c of cards) {
@@ -82,7 +82,7 @@ for (let b = 1; b <= 5; b += 1) {
     seenLive.add(c.title.toLowerCase());
   }
 }
-assert.equal(seenLive.size, 40, 'Expected 40/40 unique human-crafted stories across 5 rapid live refreshes');
+assert.equal(seenLive.size, 48, 'Expected 48/48 unique human-crafted stories across 6 rapid live refreshes');
 
 assert.ok(scoreHeadlineComedyPotential('KVM x86 kernel patch CVE-2026-1234') < 0);
 const dna = computeTasteDna(biasedLogs, setSavedOutcome([{ topic: sample, savedAt: new Date().toISOString(), generated: true }], sample.id, 'viral'));
@@ -94,6 +94,9 @@ const mockPrompts = {
 };
 assert.ok(rerollCameraRig(mockPrompts, 2).prompts.videoPrompt.includes('broadcast'));
 assert.ok(cycleAlternatePunchline(mockPrompts, 1).prompts.videoPrompt.includes('कमेटी अगली मीटिंग अगले साल रखेगी।'));
+const gtaPrompts = switchPromptVisualStyle(mockPrompts, 'gta6-vice');
+assert.ok(gtaPrompts.storyboardPrompt.includes('circular GPS radar minimap') && gtaPrompts.videoPrompt.includes('flashing wanted-level stars'));
+assert.ok(!gtaPrompts.videoPrompt.includes('9:16') && !gtaPrompts.videoPrompt.includes('20-second'));
 assert.ok(buildPart2Topic(sample).title.startsWith('PART 2:'));
 assert.equal(buildViralPackage(sample, mockPrompts).titles.length, 3);
 assert.ok(restoreStudioBackup(JSON.stringify({ version: 1, saved: [], generatedIds: ['x1'], logs: [], seenTitles: ['t1'], seenPairs: [] })).generatedIds.has('x1'));
@@ -105,5 +108,5 @@ assert.ok(buildCrossoverEpisode([sample, customEp])?.title.startsWith('CROSSOVER
 
 console.log(
   `HARNESS PASS: ${ALL_BESPOKE_STORIES.length} human-crafted stories × ${RELOADS} F5 reloads = ${RELOADS * 8} cards ` +
-    `(0/40 rapid live repeats, ZERO raw-headline string-slicing slop, 12 Parody Meme Characters verified).`,
+    `(0/48 rapid live repeats, GTA 6 / GTA 5 Gameplay HUD + 1998 PS1 Hybrid verified).`,
 );

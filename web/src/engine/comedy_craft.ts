@@ -53,12 +53,12 @@ export function pickComedyMechanism(seed = Math.random()): ComedyMechanism {
 
 export const WRITERS_ROOM_RULES =
   'COMEDY WRITER RULES (MANDATORY): ' +
-  '1) 0.8s PATTERN INTERRUPT: Open Shot 1 mid-action on an unusual visual detail (never a slow static intro). ' +
-  '2) BUT/THEREFORE CAUSALITY: Every shot transition must be "BUT" (reversal) or "THEREFORE" (escalation), NEVER "and then". ' +
-  '3) BROKEN ASSUMPTION: Setup creates one clear expectation; payoff shatters it while still making sense in hindsight (surprising, not random). ' +
-  '4) RULE OF THREE: Establish pattern (Shot 2), confirm bigger (Shot 3), shatter prediction (Shots 4-5). ' +
-  '5) PUNCH-WORD LAST & ZERO FAT: Put the reveal word at the VERY END of Shot 6 Hindi dialogue (<= 7 words). Cut everything after the reveal. ' +
-  '6) SPECIFICITY & CALLBACK LOOP: Use concrete numbers/props ("₹10 coin", "40-foot crane", "3°C") and call back Shot 1 in Shot 6 for >100% rewatch loop.';
+  '1) SIMPLE SUSPENSEFUL PREMISE (ZERO GIBBERISH): Start with a high-stakes, instantly recognizable situation anyone understands in 2 seconds (e.g. a 5-star GTA police chase, a ticking steel box, a bank heist, a billionaire summit) and collide it with a tiny relatable Indian everyday twist (₹40 FASTag barrier, Mummy’s phone call, Token #89 queue). ' +
+  '2) 0.8s PATTERN INTERRUPT: Open Shot 1 mid-action on an unusual visual detail (never a slow static intro). ' +
+  '3) BUT/THEREFORE CAUSALITY: Every shot transition must be "BUT" (reversal) or "THEREFORE" (escalation), NEVER "and then". ' +
+  '4) BROKEN ASSUMPTION & RULE OF THREE: Shots 1-3 build one obvious high-stakes expectation; Shots 4-5 shatter it with deadpan internal logic. ' +
+  '5) PUNCH-WORD LAST & ZERO FAT: Put the reveal word at the VERY END of Shot 6 Hindi dialogue (<= 7 words). ' +
+  '6) SPECIFICITY & CALLBACK LOOP: Use concrete numbers/props ("₹10 coin", "Token #89", "5-star") and call back Shot 1 in Shot 6.';
 
 export interface CraftScore {
   total: number;

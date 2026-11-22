@@ -75,7 +75,7 @@ export async function generateFreshLiveNewsTopics(params: {
   const system =
     'You are a stand-up & sketch comedy head writer inventing 8 BRAND-NEW, structurally DIFFERENT absurdist comedy topics. ' +
     'ALL titles and pitches MUST be in crisp ENGLISH ONLY. ' +
-    'NEVER copy raw news article titles or obscure jargon into the title or pitch. Extract ONLY the relatable human theme and pair a concrete physical object (e.g. 1 mosquito, ₹10 coin, jammed toaster, ceiling fan, dumbbell) with one of our parody meme characters: Elon Bhai, Doland Bhau, Bapu-G, Putinder, Modi-G, Zucku Bhai, Motabhai, Giga-Chaddha, Doge-esh, Spooder-Bhai, Sigma Tauji, Goa Uncle-G. ' +
+    'Keep every premise DEAD-SIMPLE, SUSPENSEFUL, SURPRISING, and FUNNY—never write robotic tech jargon or copy raw news article titles. Pair a recognizable high-stakes situation (e.g. 5-star GTA police chase, bank heist, bomb squad, billionaire ego) with a simple everyday Indian twist (e.g. ₹40 FASTag barrier, Mummy phone call, Token #89, plastic chair) and one of our parody meme characters: Elon Bhai, Doland Bhau, Bapu-G, Putinder, Modi-G, Zucku Bhai, Motabhai, Giga-Chaddha, Doge-esh, Spooder-Bhai, Sigma Tauji, Goa Uncle-G, GTA-VI Bhai. ' +
     'NEVER mention "low-poly", "PS1", "3D", "meme", or "viral". NEVER use prefixes like "Fake biopic:" or "Inspired by". ' +
     `${WRITERS_ROOM_RULES} ` +
     'Return ONLY valid JSON: {"topics":[{"title":"UPPERCASE ENGLISH TITLE","angle":"over-engineer|fake-origin|breaking-news|fake-tutorial|petty-spiral|weird-science","brand":"Parody Character / World","pitch":"Cold-open 1-sentence visual setup + broken-assumption twist + deadpan payoff","viralScore":94}]}';

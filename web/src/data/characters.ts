@@ -104,4 +104,12 @@ export const CHARACTER_ROSTER: readonly CharacterPreset[] = [
     visualLock: 'Goa Uncle-G (sunburned retired uncle in floral shirt, oversized dark sunglasses, and flip-flops)',
     starter: 'Goa Uncle-G invents a 10-Gbps beach hack for ',
   },
+  {
+    id: 'gta6',
+    label: 'GTA-VI Bhai',
+    parodyName: 'GTA-VI Bhai',
+    rawAliases: ['gta 6', 'gta6', 'gta vi', 'vice city'],
+    visualLock: 'GTA-VI Bhai (flashy getaway driver in tropical Vice-style Hawaiian shirt, gold chain, aviator sunglasses, and 5-star wanted HUD energy)',
+    starter: 'During a 5-star GTA-VI Bhai police chase, everyone stops for ',
+  },
 ];

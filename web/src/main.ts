@@ -28,7 +28,7 @@ saveSeenPairs(seen0);
 
 const state: AppState = {
   config: cfg0, activeTab: 'studio', drawerOpen: false, seedQuery: '', customDraft: '', hookFilter: 'all', situationFilter: 'all',
-  batchNonce: Date.now(), seenPairs: seen0, seenTitles: loadSeenTitles(), topics: initialTopics, liveTrends: [],
+  visualStyle: 'ps1-1998', batchNonce: Date.now(), seenPairs: seen0, seenTitles: loadSeenTitles(), topics: initialTopics, liveTrends: [],
   loadingTopics: cfg0.sourceMode === 'live-free', selectedId: null, activeTopic: undefined, prompts: null,
   rigStep: 0, punchStep: 0, loading: false, logs: logs0, saved: loadSaved(), generatedIds: loadGeneratedIds(),
   savedFilter: 'all', copiedTarget: null,
@@ -79,10 +79,11 @@ async function refreshTopics(): Promise<void> {
 
 async function generateFor(topic: ScoredTopic, switchStudio: boolean): Promise<void> {
   if (switchStudio) state.activeTab = 'studio';
+  if (/gta/i.test(`${topic.brand} ${topic.title}`) && state.visualStyle === 'ps1-1998') state.visualStyle = 'gta6-vice';
   state.selectedId = topic.id; state.activeTopic = topic; state.loading = true;
   Object.assign(state, markTopicGenerated(state.saved, state.generatedIds, topic.id));
   render();
-  try { state.prompts = await generatePromptsForTopic(topic, state.config); }
+  try { state.prompts = await generatePromptsForTopic(topic, state.config, state.visualStyle); }
   catch (err) { toast(`Prompt error: ${err instanceof Error ? err.message : 'failed'}`); }
   state.loading = false; render();
   document.getElementById('section-prompts')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -118,7 +119,7 @@ function render(): void {
   document.documentElement.setAttribute('data-theme', state.config.theme);
   const surfaceHtml =
     state.activeTab === 'studio'
-      ? renderStudioView({ topics: state.topics, logs: state.logs, generatedIds: state.generatedIds, selectedId: state.selectedId, activeTopic: state.activeTopic, prompts: state.prompts, loadingTopics: state.loadingTopics, loading: state.loading, seedQuery: state.seedQuery, customDraft: state.customDraft, hookFilter: state.hookFilter, situationFilter: state.situationFilter, liveTrends: state.liveTrends, copiedTarget: state.copiedTarget })
+      ? renderStudioView({ topics: state.topics, logs: state.logs, generatedIds: state.generatedIds, selectedId: state.selectedId, activeTopic: state.activeTopic, prompts: state.prompts, visualStyle: state.visualStyle, loadingTopics: state.loadingTopics, loading: state.loading, seedQuery: state.seedQuery, customDraft: state.customDraft, hookFilter: state.hookFilter, situationFilter: state.situationFilter, liveTrends: state.liveTrends, copiedTarget: state.copiedTarget })
       : state.activeTab === 'saved'
         ? renderSavedView({ saved: state.saved, filter: state.savedFilter, selectedId: state.selectedId })
         : state.activeTab === 'analytics'

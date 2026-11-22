@@ -13,6 +13,7 @@ function inferThemeFromHeadlines(headlines: LiveHeadline[]): string[] {
   if (/study|scientist|brain|sleep|physics|cern|mit|lab/.test(joined)) themes.push('science', 'gigachad');
   if (/goa|beach|ferry|tourist|flight|airport/.test(joined)) themes.push('goa');
   if (/trump|putin|un |summit|tariff|bank|election/.test(joined)) themes.push('trump', 'putin', 'modi', 'gandhi');
+  if (/game|gta|police|traffic|chase|bank|heist/.test(joined)) themes.push('gta');
   return themes;
 }
 

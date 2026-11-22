@@ -30,6 +30,7 @@ export const BRAND_SIGNALS: Record<string, BrandSignal> = {
   'Doge-esh': { brand: 'Doge-esh', spendHeat: 96, hook: 'Deadpan Shiba dog outsmarting executives', agencyStyle: 'Internet meme comedy' },
   'Spooder-Bhai': { brand: 'Spooder-Bhai', spendHeat: 95, hook: 'Desi knockoff superhero in rubber chappals', agencyStyle: 'Superhero parody' },
   'Sigma Tauji': { brand: 'Sigma Tauji', spendHeat: 93, hook: '3:45 AM hustle routine taken to absurd extremes', agencyStyle: 'Sigma grindset parody' },
+  'GTA-VI Bhai': { brand: 'GTA-VI Bhai', spendHeat: 99, hook: '5-star Vice heist suspense stopped by petty ₹20 reality', agencyStyle: 'Blockbuster open-world parody' },
   'Fake Origin': { brand: 'Fake Origin', spendHeat: 93, hook: 'Fake celebrity childhood & 100x growth story', agencyStyle: 'Progression montage comedy' },
   'Luxury Villa': { brand: 'Luxury Villa', spendHeat: 90, hook: 'Discount coupon vs luxury Airbnb', agencyStyle: 'Lifestyle contrast' },
 };

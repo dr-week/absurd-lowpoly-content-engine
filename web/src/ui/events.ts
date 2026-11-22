@@ -1,9 +1,9 @@
 import { exportStudioBackup, restoreStudioBackup } from '../engine/backup_sync';
-import { cycleAlternatePunchline, exportSavedMarkdown, rerollCameraRig } from '../engine/prompt_tools';
+import { cycleAlternatePunchline, exportSavedMarkdown, rerollCameraRig, switchPromptVisualStyle } from '../engine/prompt_tools';
 import { removeSavedTopic, saveLikedTopic, setSavedOutcome } from '../engine/saved_store';
 import { exportJson, exportJsonl, saveConfig, saveLogs, upsertVote } from '../engine/telemetry';
 import { buildViralPackage } from '../engine/viral_packaging';
-import type { ActiveTab, EngineConfig, GeneratedPrompts, HookCategory, OutcomeTag, RatingLogEntry, SavedFilter, SavedItem, ScoredTopic, SituationCategory, VoteValue } from '../types';
+import type { ActiveTab, EngineConfig, GeneratedPrompts, HookCategory, OutcomeTag, RatingLogEntry, SavedFilter, SavedItem, ScoredTopic, SituationCategory, VisualStyle, VoteValue } from '../types';
 
 export interface AppState {
   config: EngineConfig;
@@ -13,6 +13,7 @@ export interface AppState {
   customDraft: string;
   hookFilter: HookCategory | 'all';
   situationFilter: SituationCategory | 'all';
+  visualStyle: VisualStyle;
   batchNonce: number;
   seenPairs: Set<string>;
   seenTitles: Set<string>;
@@ -126,6 +127,11 @@ export function bindAppEvents(
   document.getElementById('seed-input')?.addEventListener('change', (ev) => { state.seedQuery = (ev.target as HTMLInputElement).value; state.batchNonce += 1; void hooks.refreshTopics(); });
   document.getElementById('filter-hook')?.addEventListener('change', (ev) => { state.hookFilter = (ev.target as HTMLSelectElement).value as HookCategory | 'all'; state.batchNonce += 1; void hooks.refreshTopics(); });
   document.getElementById('filter-situation')?.addEventListener('change', (ev) => { state.situationFilter = (ev.target as HTMLSelectElement).value as SituationCategory | 'all'; state.batchNonce += 1; void hooks.refreshTopics(); });
+  document.getElementById('visual-style')?.addEventListener('change', (ev) => {
+    state.visualStyle = (ev.target as HTMLSelectElement).value as VisualStyle;
+    if (state.prompts) state.prompts = switchPromptVisualStyle(state.prompts, state.visualStyle);
+    hooks.render(); hooks.toast(`Style: ${state.visualStyle}`);
+  });
   document.getElementById('drawer-backdrop')?.addEventListener('click', (ev) => { if ((ev.target as HTMLElement).id === 'drawer-backdrop') { state.drawerOpen = false; hooks.render(); } });
   document.getElementById('cfg-theme')?.addEventListener('change', (ev) => { state.config.theme = (ev.target as HTMLSelectElement).value as EngineConfig['theme']; saveConfig(state.config); hooks.render(); });
   document.getElementById('cfg-source')?.addEventListener('change', (ev) => { state.config.sourceMode = (ev.target as HTMLSelectElement).value as EngineConfig['sourceMode']; saveConfig(state.config); hooks.render(); });
