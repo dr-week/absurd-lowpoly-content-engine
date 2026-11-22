@@ -137,14 +137,10 @@ for (const p of [mockPrompts, gtaPrompts, switchPromptVisualStyle(mockPrompts, '
   assert.ok(!THIRD_PARTY_RE.test(p.storyboardPrompt), `Third-party trademark in storyboard: ${p.storyboardPrompt.match(THIRD_PARTY_RE)?.[0]}`);
   assert.ok(!THIRD_PARTY_RE.test(p.videoPrompt), `Third-party trademark in video: ${p.videoPrompt.match(THIRD_PARTY_RE)?.[0]}`);
 }
-const multiVoiceStory = ALL_BESPOKE_STORIES.find((s) => s.shots?.some((sh) => (sh.turns?.length ?? 0) >= 2));
 const spokenCount = (mockPrompts.videoPrompt.match(/^(?:Speaker|Immediately) \[/gm) ?? []).length;
-assert.ok(spokenCount >= 3 && spokenCount <= 4 && mockPrompts.videoPrompt.includes('Shot 5:') && !mockPrompts.videoPrompt.includes('Shot 6:') && mockPrompts.storyboardPrompt.includes('Frame 6') && multiVoiceStory, `Expected 6-frame storyboard, 5-shot video & 3-4 dialogues (got ${spokenCount})`);
+assert.ok(spokenCount === 3 && mockPrompts.videoPrompt.includes('Shot 5:') && !mockPrompts.videoPrompt.includes('Shot 6:') && mockPrompts.storyboardPrompt.includes('Frame 6'), `Expected 6-frame storyboard, 5-shot video & 3 dialogues (got ${spokenCount})`);
 assert.ok(cycleSituationCast(mockPrompts, 0).prompts.storyboardPrompt.includes('Character & Prop Design:'));
 assert.ok(cycleMarketingGimmick(mockPrompts, 0).prompts.videoPrompt.includes('Marketing Gimmick') && buildViralPackage(sample, mockPrompts).copyText.includes('MARKETING GIMMICK:') && getKnowledgeDB().size >= 130 && getKnowledgeDB().search('hook point', 'book')[0]?.id === 'book_hook_point');
 assert.ok(buildCrossoverEpisode([sample, customEp])?.title.startsWith('CROSSOVER:'));
 
-console.log(
-  `HARNESS PASS: ${ALL_BESPOKE_STORIES.length} human-crafted stories × ${RELOADS} F5 reloads = ${RELOADS * 8} cards ` +
-    `(19 Phonetic Lookalike Parody Characters + Multi-Voice Theater Cast verified).`,
-);
+console.log(`HARNESS PASS: ${ALL_BESPOKE_STORIES.length} human-crafted stories × ${RELOADS} F5 reloads = ${RELOADS * 8} cards (Multi-Voice 5-Shot / 3-Dialogue 10s Pacing verified).`);

@@ -56,23 +56,21 @@ export function renderVideoText(
   const rig = rigDirective ?? pickCinematographyRig().directive;
   const lock = detectCharacterLock(tightShots.map((s) => s.visual).join(' ')) || castDirective || '';
   const lines: string[] = [VIDEO_HEADER(rig, lock, visualStyle, ensembleSeed), ''];
-  let spokenCount = 0;
 
   for (let i = 0; i < tightShots.length; i += 1) {
     const shot = tightShots[i];
     const isLast = i === tightShots.length - 1;
     lines.push(`Shot ${shot.shot}: ${cleanVideoLine(shot.visual)} SFX: ${cleanVideoLine(shot.sfx)}.`);
 
-    // Keep total video dialogues strictly to 3-4 lines for crisp <15s pacing:
-    // Shot 3 is a pure visual/SFX action beat; Shot 4 stays silent if budget already hit 3.
-    const shouldSpeak = isLast || (shot.shot !== 3 && (shot.shot !== 4 || spokenCount < 3));
-    if (shouldSpeak) {
-      const budgetLeft = isLast ? 1 : Math.max(1, 3 - spokenCount);
-      const turns = formatShotDialogue(shot, ensembleSeed).slice(0, budgetLeft);
-      for (const turnLine of turns) lines.push(turnLine);
-      spokenCount += turns.length;
+    // Ultra-crisp ~10s pacing: 5 shots, exactly 3 spoken dialogues (Shot 1, Shot 2, Shot 5).
+    // Shots 3 & 4 are pure visual action + SFX breathing beats so speech never feels rushed.
+    if (isLast || shot.shot === 1 || shot.shot === 2) {
+      const turn = formatShotDialogue(shot, ensembleSeed)[0];
+      if (turn) lines.push(turn);
+    } else if (shot.shot === 3) {
+      lines.push('Dialogue: [None — fast visual action & SFX beat]');
     } else {
-      lines.push('Dialogue: [None — pure visual action & SFX beat]');
+      lines.push('Dialogue: [None — deadpan silent hold & SFX before payoff]');
     }
     lines.push('');
   }
