@@ -8,6 +8,9 @@ import { DEBATE_STORIES } from './stories_debates';
 import { GTA_STORIES } from './stories_gta';
 import { ICONIC_STORIES_B } from './stories_iconic_b';
 import { INDIA_MEME_STORIES } from './stories_india_memes';
+import { LUGAN_STORIES_B } from './stories_lugan_b';
+import { LUGAN_STORIES_C } from './stories_lugan_c';
+import { LUGAN_STORIES_D } from './stories_lugan_d';
 import { LUGAN_STYLE_STORIES } from './stories_lugan_style';
 import { MEME_STORIES } from './stories_meme';
 import { MEME_STORIES_B } from './stories_meme_b';
@@ -27,6 +30,9 @@ import { TUTORIAL_STORIES } from './stories_tutorial';
 
 export const ALL_BESPOKE_STORIES: readonly TopicOption[] = [
   ...LUGAN_STYLE_STORIES,
+  ...LUGAN_STORIES_B,
+  ...LUGAN_STORIES_C,
+  ...LUGAN_STORIES_D,
   ...THEATER_STORIES_A,
   ...THEATER_STORIES_B,
   ...OVERENGINEER_STORIES,
