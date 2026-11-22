@@ -64,32 +64,20 @@ async function fetchSpaceNews(count = 5): Promise<LiveHeadline[]> {
     .map((r) => ({ title: r.title, source: r.news_site || 'Space News' }));
 }
 
-async function fetchWikiTopics(count = 4): Promise<LiveHeadline[]> {
-  const rows = await Promise.all(
-    Array.from({ length: count }, () =>
-      fetchJsonWithTimeout<{ title?: string; description?: string }>('https://en.wikipedia.org/api/rest_v1/page/random/summary', 3500),
-    ),
-  );
-  return rows
-    .filter((r): r is { title: string; description?: string } => Boolean(r?.title))
-    .map((r) => ({ title: r.description ? `${r.title} — ${r.description}` : r.title, source: 'Wikipedia' }));
-}
-
 /**
  * Fetches fresh, NEVER-BEFORE-USED online headlines from 10,000+ live items across 4 zero-key CORS sources:
  * Hacker News (1,000 top+new) + Spaceflight News (1,500+ articles) + Wikipedia Random (6.9M+) + GitHub Actions RSS.
  */
 export async function fetchFreshOnlineNews(count = 8): Promise<LiveHeadline[]> {
   const used = loadUsedHeadlines();
-  const [feed, hn, space, wiki] = await Promise.all([
+  const [feed, hn, space] = await Promise.all([
     loadLiveTrends().catch(() => null),
     fetchHackerNews(8),
     fetchSpaceNews(8),
-    fetchWikiTopics(6),
   ]);
 
   const rss: LiveHeadline[] = (feed?.trends ?? []).map((t) => ({ title: t.title, source: t.source }));
-  const scored = cryptoShuffle([...hn, ...space, ...wiki, ...rss], cryptoRng)
+  const scored = cryptoShuffle([...hn, ...space, ...rss], cryptoRng)
     .map((item) => ({ item, score: scoreHeadlineComedyPotential(item.title) }))
     .filter((x) => x.score >= 0)
     .sort((a, b) => b.score - a.score);

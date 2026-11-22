@@ -2,7 +2,9 @@ import { getBrandHeat } from '../data/brands';
 import { CRAFT_STORIES_A } from '../data/stories_craft_a';
 import { CRAFT_STORIES_B } from '../data/stories_craft_b';
 import { CRAFT_STORIES_C } from '../data/stories_craft_c';
+import { ICONIC_STORIES_B } from '../data/stories_iconic_b';
 import { MEME_STORIES } from '../data/stories_meme';
+import { MEME_STORIES_B } from '../data/stories_meme_b';
 import { NEWS_STORIES } from '../data/stories_news';
 import { ORIGIN_STORIES } from '../data/stories_origin';
 import { OVERENGINEER_STORIES } from '../data/stories_overengineer';
@@ -22,6 +24,7 @@ const COOL_ID_PREFIX = '__coolid__';
 export const ALL_BESPOKE_STORIES: readonly TopicOption[] = [
   ...OVERENGINEER_STORIES, ...ORIGIN_STORIES, ...NEWS_STORIES, ...TUTORIAL_STORIES, ...SPIRAL_STORIES,
   ...SCIENCE_STORIES, ...CRAFT_STORIES_A, ...CRAFT_STORIES_B, ...CRAFT_STORIES_C, ...MEME_STORIES,
+  ...MEME_STORIES_B, ...ICONIC_STORIES_B,
 ].map(sanitizeTopic);
 
 const FORMAT_KEYS = ['over-engineer', 'fake-origin', 'breaking-news', 'fake-tutorial', 'petty-spiral', 'weird-science'] as const;

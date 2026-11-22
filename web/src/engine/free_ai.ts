@@ -1,11 +1,11 @@
 import type { HookCategory, RatingLogEntry, ScoredTopic, SituationCategory, StoryboardFrameData, TopicOption, VideoShotData } from '../types';
 import { sanitizeTopic } from './alias_sanitizer';
-import { pickComedyMechanism, scoreComedyCraft, WRITERS_ROOM_RULES } from './comedy_craft';
+import { pickComedyMechanism, WRITERS_ROOM_RULES } from './comedy_craft';
 import { expandCustomIdeaLocally } from './custom_builder';
 import { fetchFreshOnlineNews } from './live_news';
+import { pickCleanLiveNewsStories } from './news_mapper';
 import { cryptoRng, pickCinematographyRig } from './randomizer';
 import { classifyHook, classifySituation, getHookLabel, getSituationLabel } from './taxonomy';
-import { synthesizeTopicsFromHeadlines } from './trend_synthesizer';
 
 const POLLINATIONS_URL = 'https://text.pollinations.ai/openai';
 const PLLNS_TS_KEY = 'absurd_studio_pllns_ts';
@@ -29,7 +29,7 @@ function extractJson(raw: string): string {
   return end > start ? s.slice(start, end + 1) : s;
 }
 
-async function callFreeAI(system: string, user: string, timeoutMs = 22000): Promise<string> {
+async function callFreeAI(system: string, user: string, timeoutMs = 18000): Promise<string> {
   if (!canCallPollinations()) throw new Error('Cooldown active');
   recordPollinationsCall();
   const ctrl = new AbortController();
@@ -58,13 +58,6 @@ async function callFreeAI(system: string, user: string, timeoutMs = 22000): Prom
   }
 }
 
-function fallbackFromHeadlines(headlines: Array<{ title: string; source: string }>, batchNonce: number): ScoredTopic[] {
-  return synthesizeTopicsFromHeadlines(headlines, batchNonce).map((topic) => ({
-    ...topic, brandHeat: 88, viralScore: Math.min(98, Math.round(scoreComedyCraft(topic).total * 0.96)),
-    hookCategory: classifyHook(topic), situationCategory: classifySituation(topic),
-  }));
-}
-
 export async function generateFreshLiveNewsTopics(params: {
   query: string;
   logs: RatingLogEntry[];
@@ -74,30 +67,29 @@ export async function generateFreshLiveNewsTopics(params: {
   situationFilter: SituationCategory | 'all';
   tasteSummary?: string;
 }): Promise<ScoredTopic[]> {
-  const { query, logs, seenTitles, batchNonce, hookFilter, situationFilter, tasteSummary = '' } = params;
-  const headlines = await fetchFreshOnlineNews(8);
+  const { query, logs, seenTitles, hookFilter, situationFilter, tasteSummary = '' } = params;
+  const headlines = await fetchFreshOnlineNews(8).catch(() => []);
   const liked = logs.filter((l) => l.vote === 'up').slice(0, 5).map((l) => l.title);
   const avoid = Array.from(seenTitles).slice(-40);
 
   const system =
     'You are a stand-up & sketch comedy head writer inventing 8 BRAND-NEW, structurally DIFFERENT absurdist comedy topics. ' +
-    'ALL titles and pitches MUST be in crisp ENGLISH ONLY (zero Hindi/Devanagari in titles or pitches). ' +
-    'NEVER mention "low-poly", "PS1", "3D", "meme", or "viral". NEVER use prefixes like "Fake biopic:" or "Breaking:". ' +
-    'Cover ALL 6 formats: over-engineer, fake-origin, breaking-news, fake-tutorial, petty-spiral, weird-science. ' +
-    'Use copyright-safe parody meme names (Elon Bhai, Doland Bhau, Bapu-G, Putinder, Modi-G, Zucku Bhai, Giga-Chaddha, Doge-esh, Spooder-Bhai, Sigma Tauji), Goa, Science, and World News. NEVER lock to Delhi or Mumbai. ' +
+    'ALL titles and pitches MUST be in crisp ENGLISH ONLY. ' +
+    'NEVER copy raw news article titles or obscure jargon into the title or pitch. Extract ONLY the relatable human theme and pair a concrete physical object (e.g. 1 mosquito, ₹10 coin, jammed toaster, ceiling fan, dumbbell) with one of our parody meme characters: Elon Bhai, Doland Bhau, Bapu-G, Putinder, Modi-G, Zucku Bhai, Motabhai, Giga-Chaddha, Doge-esh, Spooder-Bhai, Sigma Tauji, Goa Uncle-G. ' +
+    'NEVER mention "low-poly", "PS1", "3D", "meme", or "viral". NEVER use prefixes like "Fake biopic:" or "Inspired by". ' +
     `${WRITERS_ROOM_RULES} ` +
-    'Return ONLY valid JSON: {"topics":[{"title":"UPPERCASE ENGLISH TITLE","angle":"over-engineer|fake-origin|breaking-news|fake-tutorial|petty-spiral|weird-science","brand":"Short World Tag","pitch":"Cold-open 1-sentence English setup + broken-assumption twist + deadpan payoff","viralScore":92}]}';
+    'Return ONLY valid JSON: {"topics":[{"title":"UPPERCASE ENGLISH TITLE","angle":"over-engineer|fake-origin|breaking-news|fake-tutorial|petty-spiral|weird-science","brand":"Parody Character / World","pitch":"Cold-open 1-sentence visual setup + broken-assumption twist + deadpan payoff","viralScore":94}]}';
 
-  const newsBlock = headlines.map((h, i) => `${i + 1}. [${h.source}] ${h.title}`).join('\n');
+  const newsBlock = headlines.map((h, i) => `${i + 1}. ${h.title}`).join('\n');
   const user = [
-    `FRESH LIVE ONLINE NEWS RIGHT NOW (twist at least 5 of these into brand-new absurd comedy stories):\n${newsBlock || 'Invent 8 totally fresh world/science/Goa/iconic-figure stories.'}`,
+    `Today's trending themes (extract ONLY broad relatable themes, NEVER quote raw headlines):\n${newsBlock}`,
     hookFilter !== 'all' ? `Focus HOOK CATEGORY on: ${getHookLabel(hookFilter)}.` : '',
     situationFilter !== 'all' ? `Focus SITUATION CATEGORY on: ${getSituationLabel(situationFilter)}.` : '',
     tasteSummary ? `USER TASTE DNA: ${tasteSummary}` : '',
-    query.trim() ? `At least 2 topics MUST riff on: ${query.trim()}.` : '',
+    query.trim() ? `At least 2 topics MUST feature: ${query.trim()}.` : '',
     liked.length ? `User liked: ${liked.join('; ')}` : '',
-    avoid.length ? `NEVER repeat or closely resemble ANY of these past titles:\n${avoid.join(' | ')}` : '',
-    `Unique entropy nonce: ${Date.now()}-${Math.floor(cryptoRng() * 999999)}. Return ONLY JSON.`,
+    avoid.length ? `NEVER repeat these past titles:\n${avoid.join(' | ')}` : '',
+    `Nonce: ${Date.now()}-${Math.floor(cryptoRng() * 999999)}. Return ONLY JSON.`,
   ]
     .filter(Boolean)
     .join('\n');
@@ -105,23 +97,21 @@ export async function generateFreshLiveNewsTopics(params: {
   try {
     const raw = await callFreeAI(system, user);
     const parsed = JSON.parse(extractJson(raw)) as { topics?: Array<{ title: string; angle: string; brand: string; pitch: string; viralScore?: number }> };
-    const list = (parsed.topics ?? []).filter((t) => t.title && t.pitch && !seenTitles.has(t.title.trim().toLowerCase()));
-    if (list.length < 4) throw new Error('Too few fresh AI topics');
+    const list = (parsed.topics ?? []).filter(
+      (t) => t.title && t.pitch && !/inspired by "|after "|reading "|following "/i.test(t.pitch) && !seenTitles.has(t.title.trim().toLowerCase()),
+    );
+    if (list.length < 6) throw new Error('Fallback to clean vault');
 
     const stamp = Date.now().toString(36);
     return list.slice(0, 8).map((t, idx) => {
-      const base = sanitizeTopic({ id: `live_${stamp}_${idx}`, title: t.title.trim().toUpperCase(), angle: t.angle || 'breaking-news', brand: t.brand || 'World', trendHook: 'Live Online News', pitch: t.pitch.trim() });
+      const base = sanitizeTopic({ id: `live_${stamp}_${idx}`, title: t.title.trim().toUpperCase(), angle: t.angle || 'over-engineer', brand: t.brand || 'Elon Bhai', trendHook: 'Live AI Comedy', pitch: t.pitch.trim() });
       return {
-        ...base,
-        brandHeat: t.viralScore ?? 90,
-        viralScore: Math.max(70, Math.min(99, Math.round(t.viralScore ?? 90))),
-        hookCategory: classifyHook(base),
-        situationCategory: classifySituation(base),
+        ...base, brandHeat: t.viralScore ?? 92, viralScore: Math.max(78, Math.min(99, Math.round(t.viralScore ?? 92))),
+        hookCategory: classifyHook(base), situationCategory: classifySituation(base),
       };
     });
   } catch {
-    if (headlines.length >= 4) return fallbackFromHeadlines(headlines, batchNonce);
-    throw new Error('Live news generation unavailable');
+    return pickCleanLiveNewsStories({ seenTitles, hookFilter, situationFilter, count: 8 });
   }
 }
 
