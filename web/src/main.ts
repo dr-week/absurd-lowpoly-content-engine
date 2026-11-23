@@ -30,7 +30,7 @@ const state: AppState = {
   config: cfg0, activeTab: 'studio', drawerOpen: false, openPanel: 'none', seedQuery: '', customDraft: '', hookFilter: 'all', situationFilter: 'all',
   visualStyle: 'ps1-1998', targetModel: 'veo-3-flow', marketingPlatform: 'reels', brandProduct: '', batchNonce: Date.now(), seenPairs: seen0, seenTitles: loadSeenTitles(), topics: initialTopics, liveTrends: [],
   loadingTopics: cfg0.sourceMode === 'live-free', selectedId: null, activeTopic: undefined, prompts: null,
-  rigStep: 0, punchStep: 0, twistStep: 0, nameStep: 0, stackStep: 0, voiceStep: 0, castStep: 0, promoStep: 0, accentStep: 0, loading: false, logs: logs0, saved: loadSaved(), generatedIds: loadGeneratedIds(),
+  rigStep: 0, punchStep: 0, twistStep: 0, nameStep: 0, stackStep: 0, voiceStep: 0, castStep: 0, promoStep: 0, accentStep: 0, overlayStep: 0, loading: false, logs: logs0, saved: loadSaved(), generatedIds: loadGeneratedIds(),
   savedFilter: 'all', copiedTarget: null,
 };
 

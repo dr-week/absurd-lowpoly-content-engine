@@ -101,7 +101,7 @@ export function renderStudioView(params: {
         <button type="button" class="btn" data-action="reroll-stack" title="Swap Film Stack">${Glyphs.film(14)}<span>Film</span></button><button type="button" class="btn" data-action="reroll-cast" title="Swap Cast">${Glyphs.layers(14)}<span>Cast</span></button>
         <button type="button" class="btn" data-action="reroll-name" title="Cycle Parody Name">${Glyphs.user(14)}<span>Name</span></button>
         <button type="button" class="btn" data-action="reroll-rig" title="Swap Camera Rig">${Glyphs.camera(14)}<span>Camera</span></button>
-        <button type="button" class="btn" data-action="reroll-punchline" title="Swap Punchline">${Glyphs.zap(14)}<span>Punchline</span></button><button type="button" class="btn" data-action="reroll-promo" title="Inject Product Gimmick">${Glyphs.sparkle(14)}<span>Promo</span></button>
+        <button type="button" class="btn" data-action="reroll-punchline" title="Swap Punchline">${Glyphs.zap(14)}<span>Punchline</span></button><button type="button" class="btn" data-action="reroll-promo" title="Inject Product Gimmick">${Glyphs.sparkle(14)}<span>Promo</span></button><button type="button" class="btn" data-action="reroll-overlay" title="Cycle Native IG Reels / Story Overlay Sticker">${Glyphs.bookmark(14)}<span>Overlay</span></button>
       </div>
       <div class="prompt-stack">
         ${renderCodeRow('storyboard', 'Storyboard (3x2)', prompts.topicTitle, prompts.storyboardPrompt, sbVote, copiedTarget === 'storyboard')}

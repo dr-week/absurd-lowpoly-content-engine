@@ -6,6 +6,7 @@ import { cycleDesiCharacterName } from '../engine/desi_nomenclature';
 import { cycleVoiceEnsemble } from '../engine/dialogue_theater';
 import { cycleMarketingGimmick } from '../engine/marketing_gimmicks';
 import { cycleAlternatePunchline, exportSavedMarkdown, rerollCameraRig, switchPromptVisualStyle } from '../engine/prompt_tools';
+import { cycleReelOverlay } from '../engine/reel_overlays';
 import { removeSavedTopic, saveLikedTopic, setSavedOutcome } from '../engine/saved_store';
 import { exportJson, exportJsonl, saveConfig, saveLogs, upsertVote } from '../engine/telemetry';
 import { cycleTwistBlueprint } from '../engine/twist_architect';
@@ -17,7 +18,7 @@ export interface AppState {
   hookFilter: HookCategory | 'all'; situationFilter: SituationCategory | 'all'; visualStyle: VisualStyle; targetModel: TargetVideoModel; marketingPlatform: MarketingPlatform; brandProduct: string;
   batchNonce: number; seenPairs: Set<string>; seenTitles: Set<string>; topics: ScoredTopic[]; liveTrends: string[];
   loadingTopics: boolean; selectedId: string | null; activeTopic?: ScoredTopic; prompts: GeneratedPrompts | null;
-  rigStep: number; punchStep: number; twistStep: number; nameStep: number; stackStep: number; voiceStep: number; castStep: number; promoStep: number; accentStep: number;
+  rigStep: number; punchStep: number; twistStep: number; nameStep: number; stackStep: number; voiceStep: number; castStep: number; promoStep: number; accentStep: number; overlayStep: number;
   loading: boolean; logs: RatingLogEntry[]; saved: SavedItem[]; generatedIds: Set<string>; savedFilter: SavedFilter; copiedTarget: string | null;
 }
 
@@ -109,6 +110,7 @@ export function bindAppEvents(
       if (a === 'reroll-rig' && state.prompts) { const out = rerollCameraRig(state.prompts, (state.rigStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Camera: ${out.rigLabel}`); return; }
       if (a === 'reroll-punchline' && state.prompts) { const out = cycleAlternatePunchline(state.prompts, (state.punchStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Punchline: ${out.style}`); return; }
       if (a === 'reroll-promo' && state.prompts) { const out = cycleMarketingGimmick(state.prompts, (state.promoStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Promo: ${out.label}`); return; }
+      if (a === 'reroll-overlay' && state.prompts) { const out = cycleReelOverlay(state.prompts, state.activeTopic, (state.overlayStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Overlay: ${out.label}`); return; }
       if (a === 'pick-platform' && el.dataset.platform) { state.marketingPlatform = el.dataset.platform as MarketingPlatform; hooks.render(); return; }
       if (a === 'export-saved-md') { exportSavedMarkdown(state.saved); hooks.toast('Exported Saved .md'); return; }
       if (a === 'export-backup') { exportStudioBackup(state); hooks.toast('Backup downloaded'); return; }
