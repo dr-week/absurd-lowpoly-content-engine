@@ -10,20 +10,15 @@ import { removeSavedTopic, saveLikedTopic, setSavedOutcome } from '../engine/sav
 import { exportJson, exportJsonl, saveConfig, saveLogs, upsertVote } from '../engine/telemetry';
 import { cycleTwistBlueprint } from '../engine/twist_architect';
 import { buildViralPackage } from '../engine/viral_packaging';
-import type { ActiveTab, EngineConfig, GeneratedPrompts, HookCategory, OutcomeTag, RatingLogEntry, SavedFilter, SavedItem, ScoredTopic, SituationCategory, VisualStyle, VoteValue } from '../types';
+import type { ActiveTab, EngineConfig, GeneratedPrompts, HookCategory, MarketingPlatform, OutcomeTag, RatingLogEntry, SavedFilter, SavedItem, ScoredTopic, SituationCategory, TargetVideoModel, VisualStyle, VoteValue } from '../types';
 
 export interface AppState {
   config: EngineConfig; activeTab: ActiveTab; drawerOpen: boolean; openPanel: 'none' | 'filters' | 'custom'; seedQuery: string; customDraft: string;
-  hookFilter: HookCategory | 'all'; situationFilter: SituationCategory | 'all'; visualStyle: VisualStyle;
+  hookFilter: HookCategory | 'all'; situationFilter: SituationCategory | 'all'; visualStyle: VisualStyle; targetModel: TargetVideoModel; marketingPlatform: MarketingPlatform; brandProduct: string;
   batchNonce: number; seenPairs: Set<string>; seenTitles: Set<string>; topics: ScoredTopic[]; liveTrends: string[];
   loadingTopics: boolean; selectedId: string | null; activeTopic?: ScoredTopic; prompts: GeneratedPrompts | null;
   rigStep: number; punchStep: number; twistStep: number; nameStep: number; stackStep: number; voiceStep: number; castStep: number; promoStep: number; accentStep: number;
-  loading: boolean;
-  logs: RatingLogEntry[];
-  saved: SavedItem[];
-  generatedIds: Set<string>;
-  savedFilter: SavedFilter;
-  copiedTarget: string | null;
+  loading: boolean; logs: RatingLogEntry[]; saved: SavedItem[]; generatedIds: Set<string>; savedFilter: SavedFilter; copiedTarget: string | null;
 }
 
 export function bindAppEvents(
@@ -114,6 +109,7 @@ export function bindAppEvents(
       if (a === 'reroll-rig' && state.prompts) { const out = rerollCameraRig(state.prompts, (state.rigStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Camera: ${out.rigLabel}`); return; }
       if (a === 'reroll-punchline' && state.prompts) { const out = cycleAlternatePunchline(state.prompts, (state.punchStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Punchline: ${out.style}`); return; }
       if (a === 'reroll-promo' && state.prompts) { const out = cycleMarketingGimmick(state.prompts, (state.promoStep += 1)); state.prompts = out.prompts; hooks.render(); hooks.toast(`Promo: ${out.label}`); return; }
+      if (a === 'pick-platform' && el.dataset.platform) { state.marketingPlatform = el.dataset.platform as MarketingPlatform; hooks.render(); return; }
       if (a === 'export-saved-md') { exportSavedMarkdown(state.saved); hooks.toast('Exported Saved .md'); return; }
       if (a === 'export-backup') { exportStudioBackup(state); hooks.toast('Backup downloaded'); return; }
       if (a === 'export-jsonl') { exportJsonl(state.logs); hooks.toast('Exported JSONL'); return; }
@@ -130,9 +126,11 @@ export function bindAppEvents(
   const customInput = document.getElementById('custom-idea-input') as HTMLInputElement | null;
   customInput?.addEventListener('input', () => { state.customDraft = customInput.value; });
   customInput?.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') void hooks.runCustomIdea(); });
+  document.getElementById('brand-product-input')?.addEventListener('change', (ev) => { state.brandProduct = (ev.target as HTMLInputElement).value; hooks.render(); });
   document.getElementById('seed-input')?.addEventListener('change', (ev) => { state.seedQuery = (ev.target as HTMLInputElement).value; state.batchNonce += 1; void hooks.refreshTopics(); });
   document.getElementById('filter-hook')?.addEventListener('change', (ev) => { state.hookFilter = (ev.target as HTMLSelectElement).value as HookCategory | 'all'; state.batchNonce += 1; void hooks.refreshTopics(); });
   document.getElementById('filter-situation')?.addEventListener('change', (ev) => { state.situationFilter = (ev.target as HTMLSelectElement).value as SituationCategory | 'all'; state.batchNonce += 1; void hooks.refreshTopics(); });
+  document.getElementById('target-model')?.addEventListener('change', (ev) => { state.targetModel = (ev.target as HTMLSelectElement).value as TargetVideoModel; hooks.render(); hooks.toast(`Model: ${state.targetModel}`); });
   document.getElementById('visual-style')?.addEventListener('change', (ev) => { state.visualStyle = (ev.target as HTMLSelectElement).value as VisualStyle; if (state.prompts) state.prompts = switchPromptVisualStyle(state.prompts, state.visualStyle); hooks.render(); hooks.toast(`Style: ${state.visualStyle}`); });
   document.getElementById('drawer-backdrop')?.addEventListener('click', (ev) => { if ((ev.target as HTMLElement).id === 'drawer-backdrop') { state.drawerOpen = false; hooks.render(); } });
   document.getElementById('cfg-theme')?.addEventListener('change', (ev) => { state.config.theme = (ev.target as HTMLSelectElement).value as EngineConfig['theme']; saveConfig(state.config); hooks.render(); });

@@ -1,85 +1,78 @@
+import { buildGrowthMarketingPack, PLATFORM_OPTIONS } from '../engine/marketing_growth';
 import { Glyphs } from '../glyphs';
-import type { GeneratedPrompts, ScoredTopic } from '../types';
-import { getHookLabel } from '../engine/taxonomy';
+import type { GeneratedPrompts, MarketingPlatform, ScoredTopic } from '../types';
 import { esc } from './escape';
-
-export interface ShortCaptionPack {
-  captions: readonly { label: string; text: string }[];
-  hashtags: readonly string[];
-  allText: string;
-}
-
-function cleanTag(raw: string): string {
-  const s = raw.replace(/[^a-zA-Z0-9]+/g, '');
-  return s ? `#${s.toLowerCase()}` : '#comedy';
-}
-
-export function buildShortCaptionPack(topic: ScoredTopic): ShortCaptionPack {
-  const shortTitle = topic.title.replace(/^(?:PART\s*\d+|CROSSOVER):\s*/i, '').trim();
-  const concise = shortTitle.length > 52 ? `${shortTitle.slice(0, 49).trim()}...` : shortTitle;
-  const captions = [
-    { label: 'Short Hook', text: `Wait for the ending: ${concise.toLowerCase()}.` },
-    { label: 'Deadpan', text: `Nobody expected this to escalate so fast.` },
-    { label: 'Question', text: `Would you stay calm or walk away? Comment below.` },
-  ] as const;
-
-  const hashtags = Array.from(
-    new Set([
-      '#shorts',
-      '#reels',
-      '#comedy',
-      '#animation',
-      '#plottwist',
-      cleanTag(getHookLabel(topic.hookCategory)),
-    ]),
-  ).slice(0, 6);
-
-  const allText = `${captions[0].text}\n\n${hashtags.join(' ')}`;
-  return { captions, hashtags, allText };
-}
 
 export function renderCaptionsSection(
   topic: ScoredTopic | undefined,
   prompts: GeneratedPrompts | null,
   copiedTarget: string | null,
+  platform: MarketingPlatform = 'reels',
+  brandProduct = '',
 ): string {
   if (!topic || !prompts) {
     return `
       <section class="section-card zuari-surface-elevated" id="section-captions">
         <div class="section-header">
-          <div class="section-header__title-group"><span class="section-header__step">03</span><h2>Captions &amp; Hashtags</h2></div>
+          <div class="section-header__title-group"><span class="section-header__step">03</span><h2>Growth, Hooks &amp; Captions</h2></div>
         </div>
-        <div class="empty-state">Select a topic above to generate short captions &amp; simple hashtags</div>
+        <div class="empty-state">Select a topic above to unlock A/B hooks, DM-share triggers, platform posts &amp; stealth brand cameos</div>
       </section>
     `;
   }
 
-  const pack = buildShortCaptionPack(topic);
-  const rows = pack.captions
+  const pack = buildGrowthMarketingPack(topic, platform, brandProduct);
+  const platTabs = PLATFORM_OPTIONS.map(
+    (p) => `<button type="button" class="pill ${platform === p.id ? 'pill--accent' : ''}" data-action="pick-platform" data-platform="${p.id}" style="cursor:pointer;">${esc(p.label)}</button>`,
+  ).join('');
+
+  const hookRows = pack.hooks
     .map(
-      (c, i) => `
+      (h) => `
         <div class="caption-row">
-          <span class="pill">${esc(c.label)}</span>
-          <span class="caption-row__text">${esc(c.text)}</span>
-          <button type="button" class="btn btn--icon" data-action="copy-text" data-copy-id="cap-${i}" data-text="${esc(c.text)}" title="Copy caption">${copiedTarget === `cap-${i}` ? Glyphs.check(14) : Glyphs.copy(14)}</button>
+          <span class="pill">Hook ${h.variant} · ${esc(h.angle)}</span>
+          <span class="caption-row__text">${esc(h.text)}</span>
+          <button type="button" class="btn btn--icon" data-action="copy-text" data-copy-id="hook-${h.variant}" data-text="${esc(h.text)}" title="Copy Hook ${h.variant}">${copiedTarget === `hook-${h.variant}` ? Glyphs.check(14) : Glyphs.copy(14)}</button>
         </div>
       `,
     )
     .join('');
 
-  const tagsStr = pack.hashtags.join(' ');
-  const tagPills = pack.hashtags.map((t) => `<span class="pill pill--accent">${esc(t)}</span>`).join('');
+  const growthRows = `
+    <div class="caption-row">
+      <span class="pill pill--positive">DM Share</span>
+      <span class="caption-row__text">${esc(pack.dmShareTrigger)}</span>
+      <button type="button" class="btn btn--icon" data-action="copy-text" data-copy-id="dm-share" data-text="${esc(pack.dmShareTrigger)}" title="Copy DM Share Trigger">${copiedTarget === 'dm-share' ? Glyphs.check(14) : Glyphs.copy(14)}</button>
+    </div>
+    <div class="caption-row">
+      <span class="pill pill--accent">Comment Trap</span>
+      <span class="caption-row__text">${esc(pack.pinnedCommentTrap)}</span>
+      <button type="button" class="btn btn--icon" data-action="copy-text" data-copy-id="pin-trap" data-text="${esc(pack.pinnedCommentTrap)}" title="Copy Pinned Comment">${copiedTarget === 'pin-trap' ? Glyphs.check(14) : Glyphs.copy(14)}</button>
+    </div>
+  `;
+
+  const brandBlock = pack.brandPlacement
+    ? `<div class="caption-row"><span class="pill pill--positive">Stealth Cameo</span><span class="caption-row__text">${esc(pack.brandPlacement.propLine)}</span><button type="button" class="btn btn--icon" data-action="copy-text" data-copy-id="brand-prop" data-text="${esc(pack.brandPlacement.propLine)}" title="Copy Prop Direction">${copiedTarget === 'brand-prop' ? Glyphs.check(14) : Glyphs.copy(14)}</button></div>`
+    : '';
+
+  const tagsStr = pack.platformPost.hashtags.join(' ');
+  const tagPills = pack.platformPost.hashtags.map((t) => `<span class="pill pill--accent">${esc(t)}</span>`).join('');
 
   return `
     <section class="section-card zuari-surface-elevated" id="section-captions">
       <div class="section-header">
-        <div class="section-header__title-group"><span class="section-header__step">03</span><h2>Captions &amp; Hashtags</h2></div>
+        <div class="section-header__title-group"><span class="section-header__step">03</span><h2>Growth, Hooks &amp; Captions</h2></div>
         <div class="section-header__actions">
-          <button type="button" class="btn" data-action="copy-text" data-copy-id="tags" data-text="${esc(tagsStr)}" title="Copy Hashtags">${copiedTarget === 'tags' ? Glyphs.check(14) : Glyphs.copy(14)}<span>Copy Tags</span></button>
-          <button type="button" class="btn btn--primary" data-action="copy-text" data-copy-id="cap-all" data-text="${esc(pack.allText)}" title="Copy Caption + Hashtags">${copiedTarget === 'cap-all' ? Glyphs.check(14) : Glyphs.copy(14)}<span>Copy Ready Post</span></button>
+          <div class="vote-group">${platTabs}</div>
+          <button type="button" class="btn" data-action="copy-text" data-copy-id="tags" data-text="${esc(tagsStr)}" title="Copy Hashtags">${copiedTarget === 'tags' ? Glyphs.check(14) : Glyphs.copy(14)}<span>Tags</span></button>
+          <button type="button" class="btn btn--primary" data-action="copy-text" data-copy-id="cap-all" data-text="${esc(pack.platformPost.fullCopy)}" title="Copy Ready ${esc(pack.platformPost.label)} Post">${copiedTarget === 'cap-all' ? Glyphs.check(14) : Glyphs.copy(14)}<span>Copy ${esc(pack.platformPost.label)}</span></button>
         </div>
       </div>
-      <div class="caption-list">${rows}</div>
+      <div class="control-tray__row">
+        <span class="control-tray__label">Sponsor</span>
+        <input type="text" id="brand-product-input" class="compact-input" style="flex:1; min-width:180px; width:auto;" placeholder="Optional: type your product/app for stealth comedy placement..." value="${esc(brandProduct)}" />
+      </div>
+      <div class="caption-list">${hookRows}${growthRows}${brandBlock}</div>
       <div class="hashtag-strip">${tagPills}</div>
     </section>
   `;

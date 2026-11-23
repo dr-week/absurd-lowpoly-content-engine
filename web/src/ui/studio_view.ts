@@ -1,9 +1,10 @@
+import { compileForTargetModel, TARGET_MODEL_OPTIONS } from '../engine/model_compiler';
 import { VISUAL_STYLE_OPTIONS } from '../engine/prompt_renderer';
 import { getHookLabel, HOOK_CATEGORIES, SITUATION_CATEGORIES } from '../engine/taxonomy';
 import { getVote } from '../engine/telemetry';
 import { getVisualStyleMeta } from '../engine/visual_styles';
 import { Glyphs } from '../glyphs';
-import type { GeneratedPrompts, HookCategory, RatingLogEntry, ScoredTopic, SituationCategory, VisualStyle } from '../types';
+import type { GeneratedPrompts, HookCategory, MarketingPlatform, RatingLogEntry, ScoredTopic, SituationCategory, TargetVideoModel, VisualStyle } from '../types';
 import { renderCaptionsSection } from './captions_section';
 import { renderCustomIdeaBar } from './custom_bar';
 import { esc } from './escape';
@@ -31,16 +32,17 @@ function renderCodeRow(kind: 'storyboard' | 'video', label: string, meta: string
 export function renderStudioView(params: {
   topics: ScoredTopic[]; logs: RatingLogEntry[]; generatedIds: Set<string>;
   selectedId: string | null; activeTopic?: ScoredTopic; prompts: GeneratedPrompts | null;
-  visualStyle: VisualStyle; loadingTopics: boolean; loading: boolean;
-  seedQuery: string; customDraft: string; hookFilter: HookCategory | 'all';
-  situationFilter: SituationCategory | 'all'; liveTrends: string[]; copiedTarget: string | null;
-  openPanel: 'none' | 'filters' | 'custom';
+  visualStyle: VisualStyle; targetModel: TargetVideoModel; marketingPlatform: MarketingPlatform; brandProduct: string;
+  loadingTopics: boolean; loading: boolean; seedQuery: string; customDraft: string;
+  hookFilter: HookCategory | 'all'; situationFilter: SituationCategory | 'all'; liveTrends: string[];
+  copiedTarget: string | null; openPanel: 'none' | 'filters' | 'custom';
 }): string {
-  const { topics, logs, generatedIds, selectedId, activeTopic, prompts, visualStyle, loadingTopics, loading, seedQuery, customDraft, hookFilter, situationFilter, liveTrends, copiedTarget, openPanel } = params;
+  const { topics, logs, generatedIds, selectedId, activeTopic, prompts, visualStyle, targetModel, marketingPlatform, brandProduct, loadingTopics, loading, seedQuery, customDraft, hookFilter, situationFilter, liveTrends, copiedTarget, openPanel } = params;
 
   const hookOpts = ['<option value="all">All Hooks</option>', ...HOOK_CATEGORIES.map((h) => `<option value="${h.id}" ${hookFilter === h.id ? 'selected' : ''}>${esc(h.label)}</option>`)].join('');
   const sitOpts = ['<option value="all">All Situations</option>', ...SITUATION_CATEGORIES.map((s) => `<option value="${s.id}" ${situationFilter === s.id ? 'selected' : ''}>${esc(s.label)}</option>`)].join('');
   const styleOpts = VISUAL_STYLE_OPTIONS.map((v) => `<option value="${v.id}" ${visualStyle === v.id ? 'selected' : ''}>${esc(v.label)}</option>`).join('');
+  const modelOpts = TARGET_MODEL_OPTIONS.map((m) => `<option value="${m.id}" ${targetModel === m.id ? 'selected' : ''}>${esc(m.label)}</option>`).join('');
   const activeFilters = (hookFilter !== 'all' ? 1 : 0) + (situationFilter !== 'all' ? 1 : 0) + (seedQuery.trim() ? 1 : 0);
 
   const filterTray = openPanel === 'filters'
@@ -91,18 +93,19 @@ export function renderStudioView(params: {
   } else if (prompts) {
     const sbVote = getVote(logs, 'storyboard', prompts.topicId);
     const vidVote = getVote(logs, 'video', prompts.topicId);
+    const compiled = compileForTargetModel(prompts, targetModel, activeTopic);
     promptBody = `
       <div class="remix-bar">
         <span class="remix-bar__label">Remix Lab</span>
-        <button type="button" class="btn" data-action="reroll-voice" title="Swap Multi-Voice Cast & NPC Dialogue Ensemble">${Glyphs.mic(14)}<span>Voice</span></button><button type="button" class="btn" data-action="reroll-accent" title="Swap Regional Accent & Trending Slang">${Glyphs.fileText(14)}<span>Accent</span></button><button type="button" class="btn" data-action="reroll-twist" title="Swap Expectation-Subversion Twist Blueprint">${Glyphs.shuffle(14)}<span>Twist</span></button>
-        <button type="button" class="btn" data-action="reroll-stack" title="Swap Book + Lens + Film Editing Stack">${Glyphs.film(14)}<span>Film</span></button><button type="button" class="btn" data-action="reroll-cast" title="Swap Gender, Profession & Everyday Props">${Glyphs.layers(14)}<span>Cast</span></button>
-        <button type="button" class="btn" data-action="reroll-name" title="Cycle Funny Desi Character Name">${Glyphs.user(14)}<span>Name</span></button>
-        <button type="button" class="btn" data-action="reroll-rig" title="Swap Camera & Lighting Rig">${Glyphs.camera(14)}<span>Camera</span></button>
-        <button type="button" class="btn" data-action="reroll-punchline" title="Try Alternate Shot 5 Punchline">${Glyphs.zap(14)}<span>Punchline</span></button><button type="button" class="btn" data-action="reroll-promo" title="Inject Viral Product Marketing Gimmick">${Glyphs.sparkle(14)}<span>Promo</span></button>
+        <button type="button" class="btn" data-action="reroll-voice" title="Swap Voice Cast">${Glyphs.mic(14)}<span>Voice</span></button><button type="button" class="btn" data-action="reroll-accent" title="Swap Accent">${Glyphs.fileText(14)}<span>Accent</span></button><button type="button" class="btn" data-action="reroll-twist" title="Swap Twist">${Glyphs.shuffle(14)}<span>Twist</span></button>
+        <button type="button" class="btn" data-action="reroll-stack" title="Swap Film Stack">${Glyphs.film(14)}<span>Film</span></button><button type="button" class="btn" data-action="reroll-cast" title="Swap Cast">${Glyphs.layers(14)}<span>Cast</span></button>
+        <button type="button" class="btn" data-action="reroll-name" title="Cycle Parody Name">${Glyphs.user(14)}<span>Name</span></button>
+        <button type="button" class="btn" data-action="reroll-rig" title="Swap Camera Rig">${Glyphs.camera(14)}<span>Camera</span></button>
+        <button type="button" class="btn" data-action="reroll-punchline" title="Swap Punchline">${Glyphs.zap(14)}<span>Punchline</span></button><button type="button" class="btn" data-action="reroll-promo" title="Inject Product Gimmick">${Glyphs.sparkle(14)}<span>Promo</span></button>
       </div>
       <div class="prompt-stack">
         ${renderCodeRow('storyboard', 'Storyboard (3x2)', prompts.topicTitle, prompts.storyboardPrompt, sbVote, copiedTarget === 'storyboard')}
-        ${renderCodeRow('video', 'Video Prompt', '5 Shots · 3 Dialogues', prompts.videoPrompt, vidVote, copiedTarget === 'video')}
+        ${renderCodeRow('video', compiled.label, compiled.meta, compiled.videoOutput, vidVote, copiedTarget === 'video')}
         ${renderViralPackagingCard(activeTopic, prompts, copiedTarget === 'packaging')}
       </div>
     `;
@@ -128,11 +131,12 @@ export function renderStudioView(params: {
       <div class="section-header">
         <div class="section-header__title-group"><span class="section-header__step">02</span><h2>Prompts</h2></div>
         <div class="section-header__actions">
+          <select id="target-model" class="compact-select" aria-label="Target Video Model" title="Compile Prompt for Target AI Model">${modelOpts}</select>
           <select id="visual-style" class="compact-select" aria-label="Visual Engine Style" title="Switch Visual Engine">${styleOpts}</select>
           ${prompts ? `<button type="button" class="btn" data-action="copy-all" title="Copy Storyboard + Video + Viral Pack">${Glyphs.copy(14)}<span>Copy All</span></button><button type="button" class="btn btn--primary" data-action="make-sequel" title="Generate Part 2 Callback Sequel">${Glyphs.arrowRight(14)}<span>Part 2</span></button>` : ''}
         </div>
       </div>
       ${promptBody}
-    </section>${renderCaptionsSection(activeTopic, prompts, copiedTarget)}
+    </section>${renderCaptionsSection(activeTopic, prompts, copiedTarget, marketingPlatform, brandProduct)}
   `;
 }

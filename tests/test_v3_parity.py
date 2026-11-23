@@ -182,3 +182,25 @@ def test_knowledge_db_fts5_search_and_books_endpoint(tmp_path: Path) -> None:
     assert len(hits) >= 1
     assert any("Hook Point" in h["title"] for h in hits)
 
+
+def test_mcp_jsonrpc_server_endpoint(tmp_path: Path) -> None:
+    client = _make_client(tmp_path)
+
+    init_res = client.post("/mcp", json={"jsonrpc": "2.0", "id": 1, "method": "initialize"})
+    assert init_res.status_code == 200
+    assert init_res.json()["result"]["serverInfo"]["name"] == "absurd-studio-mcp"
+
+    list_res = client.post("/mcp", json={"jsonrpc": "2.0", "id": 2, "method": "tools/list"})
+    assert list_res.status_code == 200
+    tool_names = {t["name"] for t in list_res.json()["result"]["tools"]}
+    assert {"list_visual_engines", "search_comedy_knowledge", "generate_viral_episode"} <= tool_names
+
+    call_res = client.post(
+        "/mcp",
+        json={"jsonrpc": "2.0", "id": 3, "method": "tools/call", "params": {"name": "list_visual_engines"}},
+    )
+    assert call_res.status_code == 200
+    engines = call_res.json()["result"]["content"][0]["json"]
+    assert len(engines) == 16
+
+

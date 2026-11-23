@@ -23,7 +23,9 @@ export type VisualStyle =
   | 'paper-cutout-stopmo'
   | 'concept-art-gouache'
   | 'ink-wash-blueprint';
-export type SourceMode = 'live-free' | 'standalone' | 'gemini' | 'groq' | 'openrouter' | 'backend';
+export type SourceMode = 'live-free' | 'chrome-nano' | 'standalone' | 'gemini' | 'groq' | 'openrouter' | 'backend';
+export type TargetVideoModel = 'veo-3-flow' | 'nano-banana' | 'sora-2' | 'kling-2';
+export type MarketingPlatform = 'reels' | 'shorts' | 'tiktok' | 'x';
 
 export interface SavedItem {
   topic: ScoredTopic;

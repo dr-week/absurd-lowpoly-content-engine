@@ -241,6 +241,12 @@ def create_app(settings: EngineSettings | None = None) -> FastAPI:
     async def api_lint_episode(req: LintEpisodeRequest) -> LintReport:
         return lint_episode(req.idea, req.storyboard, req.video)
 
+    @app.post("/mcp")
+    async def api_mcp(payload: dict[str, Any]) -> dict[str, Any]:
+        from absurd_engine.mcp_server import handle_mcp_request
+
+        return await handle_mcp_request(payload, cfg)
+
     return app
 
 
