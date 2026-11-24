@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-24T03:40:49.865500+00:00",
+  "updated_at": "2026-11-24T16:48:36.506381+00:00",
   "count": 30,
   "keywords": [
     "scientists",
@@ -23,20 +23,20 @@
     "hiding",
     "history",
     "holes",
-    "link",
+    "living",
     "mysterious",
     "remarkable",
     "secret",
     "secrets",
     "solved",
-    "surprising",
+    "strange",
     "time",
     "abbey's",
-    "acorns",
     "alzheimer",
     "amphibian",
     "anti-aging",
-    "armored"
+    "armored",
+    "battery"
   ],
   "trends": [
     {
@@ -56,6 +56,12 @@
       "source": "ScienceDaily Strange & Offbeat",
       "published": "Mon, 23 Nov 2026 05:45:53 EST",
       "url": "https://www.sciencedaily.com/releases/2026/11/261122060334.htm"
+    },
+    {
+      "title": "Strange new materials can crawl, walk, and dig like living creatures",
+      "source": "ScienceDaily Strange & Offbeat",
+      "published": "Mon, 23 Nov 2026 19:05:29 EST",
+      "url": "https://www.sciencedaily.com/releases/2026/11/261121221137.htm"
     },
     {
       "title": "A 194-year-old tortoise has a remarkable anti-aging secret hidden in its DNA",
@@ -212,12 +218,6 @@
       "source": "ScienceDaily Strange & Offbeat",
       "published": "Sun, 08 Nov 2026 03:14:23 EST",
       "url": "https://www.sciencedaily.com/releases/2026/11/261106174528.htm"
-    },
-    {
-      "title": "Scientists discover a surprising link between acorns and lyme disease",
-      "source": "ScienceDaily Strange & Offbeat",
-      "published": "Mon, 09 Nov 2026 05:59:35 EST",
-      "url": "https://www.sciencedaily.com/releases/2026/11/261106174518.htm"
     }
   ]
 }
