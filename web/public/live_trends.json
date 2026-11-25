@@ -1,19 +1,18 @@
 {
-  "updated_at": "2026-11-24T16:48:36.506381+00:00",
+  "updated_at": "2026-11-25T01:48:25.366624+00:00",
   "count": 30,
   "keywords": [
     "scientists",
     "discover",
-    "ancient",
+    "black",
     "brain",
     "finally",
     "human",
     "million-year-old",
     "mystery",
     "reveal",
-    "reveals",
+    "ancient",
     "bizarre",
-    "black",
     "deep-sea",
     "earth's",
     "evolution",
@@ -26,8 +25,8 @@
     "living",
     "mysterious",
     "remarkable",
+    "reveals",
     "secret",
-    "secrets",
     "solved",
     "strange",
     "time",
@@ -36,6 +35,7 @@
     "amphibian",
     "anti-aging",
     "armored",
+    "atom",
     "battery"
   ],
   "trends": [
@@ -56,6 +56,12 @@
       "source": "ScienceDaily Strange & Offbeat",
       "published": "Mon, 23 Nov 2026 05:45:53 EST",
       "url": "https://www.sciencedaily.com/releases/2026/11/261122060334.htm"
+    },
+    {
+      "title": "A black hole the size of an atom could destroy an entire star",
+      "source": "ScienceDaily Strange & Offbeat",
+      "published": "Tue, 24 Nov 2026 15:58:15 EST",
+      "url": "https://www.sciencedaily.com/releases/2026/11/261122060332.htm"
     },
     {
       "title": "Strange new materials can crawl, walk, and dig like living creatures",
@@ -212,12 +218,6 @@
       "source": "ScienceDaily Strange & Offbeat",
       "published": "Sun, 08 Nov 2026 21:48:24 EST",
       "url": "https://www.sciencedaily.com/releases/2026/11/261108202703.htm"
-    },
-    {
-      "title": "Ancient Siberian tomb reveals surprising secrets of cannabis use 2,800 years ago",
-      "source": "ScienceDaily Strange & Offbeat",
-      "published": "Sun, 08 Nov 2026 03:14:23 EST",
-      "url": "https://www.sciencedaily.com/releases/2026/11/261106174528.htm"
     }
   ]
 }
