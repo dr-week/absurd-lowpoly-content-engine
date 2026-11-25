@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-25T01:48:25.366624+00:00",
+  "updated_at": "2026-11-25T16:35:57.604515+00:00",
   "count": 30,
   "keywords": [
     "scientists",
@@ -18,27 +18,33 @@
     "evolution",
     "fossils",
     "giant",
-    "hidden",
     "hiding",
     "history",
     "holes",
     "living",
     "mysterious",
     "remarkable",
-    "reveals",
     "secret",
     "solved",
     "strange",
     "time",
+    "using",
     "abbey's",
     "alzheimer",
     "amphibian",
     "anti-aging",
     "armored",
     "atom",
-    "battery"
+    "battery",
+    "beneath"
   ],
   "trends": [
+    {
+      "title": "Physicists just sent an unblockable message through a brick wall using gravity",
+      "source": "ScienceDaily Strange & Offbeat",
+      "published": "Tue, 24 Nov 2026 21:29:38 EST",
+      "url": "https://www.sciencedaily.com/releases/2026/11/261123005343.htm"
+    },
     {
       "title": "Two monster black holes from the dawn of time defy explanation",
       "source": "ScienceDaily Strange & Offbeat",
@@ -212,12 +218,6 @@
       "source": "ScienceDaily Strange & Offbeat",
       "published": "Tue, 10 Nov 2026 23:27:12 EST",
       "url": "https://www.sciencedaily.com/releases/2026/11/261108203832.htm"
-    },
-    {
-      "title": "DNA on the Shroud of Turin reveals centuries of hidden secrets",
-      "source": "ScienceDaily Strange & Offbeat",
-      "published": "Sun, 08 Nov 2026 21:48:24 EST",
-      "url": "https://www.sciencedaily.com/releases/2026/11/261108202703.htm"
     }
   ]
 }
