@@ -1,51 +1,39 @@
-const SESSION_KEY_STORAGE = 'absurd_vault_session_key';
+const SESSION_KEY = 'absurd_vault_session_key';
 
-function toBase64(bytes: Uint8Array): string {
-  let binary = '';
-  for (let i = 0; i < bytes.length; i++) {
-    binary += String.fromCharCode(bytes[i]);
-  }
-  return btoa(binary);
-}
+const toB64 = (b: Uint8Array): string => btoa(String.fromCharCode(...b));
 
-function fromBase64(b64: string): Uint8Array<ArrayBuffer> {
-  const binary = atob(b64);
-  const bytes = new Uint8Array(new ArrayBuffer(binary.length));
-  for (let i = 0; i < binary.length; i++) {
-    bytes[i] = binary.charCodeAt(i);
-  }
-  return bytes;
+function fromB64(s: string): Uint8Array<ArrayBuffer> {
+  const bin = atob(s);
+  const out = new Uint8Array(new ArrayBuffer(bin.length));
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
 }
 
 export function getOrCreateSessionSecret(): string {
   if (typeof sessionStorage === 'undefined') return 'ephemeral-fallback';
-  let secret = sessionStorage.getItem(SESSION_KEY_STORAGE);
-  if (!secret) {
-    const raw = crypto.getRandomValues(new Uint8Array(32));
-    secret = toBase64(raw);
-    sessionStorage.setItem(SESSION_KEY_STORAGE, secret);
+  let key = sessionStorage.getItem(SESSION_KEY);
+  if (!key) {
+    key = toB64(crypto.getRandomValues(new Uint8Array(32)));
+    sessionStorage.setItem(SESSION_KEY, key);
   }
-  return secret;
+  return key;
 }
 
 export function clearSessionSecret(): void {
-  if (typeof sessionStorage !== 'undefined') {
-    sessionStorage.removeItem(SESSION_KEY_STORAGE);
-  }
+  if (typeof sessionStorage !== 'undefined') sessionStorage.removeItem(SESSION_KEY);
 }
 
-async function deriveAesKey(passphrase: string, salt: Uint8Array<ArrayBuffer>): Promise<CryptoKey> {
-  const enc = new TextEncoder();
-  const baseKey = await crypto.subtle.importKey(
+async function deriveKey(pin: string, salt: Uint8Array<ArrayBuffer>): Promise<CryptoKey> {
+  const base = await crypto.subtle.importKey(
     'raw',
-    enc.encode(passphrase),
+    new TextEncoder().encode(pin),
     'PBKDF2',
     false,
     ['deriveKey']
   );
   return crypto.subtle.deriveKey(
     { name: 'PBKDF2', salt, iterations: 100_000, hash: 'SHA-256' },
-    baseKey,
+    base,
     { name: 'AES-GCM', length: 256 },
     false,
     ['encrypt', 'decrypt']
@@ -54,30 +42,28 @@ async function deriveAesKey(passphrase: string, salt: Uint8Array<ArrayBuffer>): 
 
 export async function encryptSecret(
   plaintext: string,
-  passphrase: string = getOrCreateSessionSecret()
+  pin: string = getOrCreateSessionSecret()
 ): Promise<{ iv: string; ciphertext: string; salt: string }> {
-  const salt = new Uint8Array(new ArrayBuffer(16));
-  crypto.getRandomValues(salt);
-  const iv = new Uint8Array(new ArrayBuffer(12));
-  crypto.getRandomValues(iv);
-  const key = await deriveAesKey(passphrase, salt);
-  const encoded = new TextEncoder().encode(plaintext);
-  const buf = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, encoded);
-  return {
-    iv: toBase64(iv),
-    ciphertext: toBase64(new Uint8Array(buf)),
-    salt: toBase64(salt),
-  };
+  const salt = crypto.getRandomValues(new Uint8Array(new ArrayBuffer(16)));
+  const iv = crypto.getRandomValues(new Uint8Array(new ArrayBuffer(12)));
+  const key = await deriveKey(pin, salt);
+  const buf = await crypto.subtle.encrypt(
+    { name: 'AES-GCM', iv },
+    key,
+    new TextEncoder().encode(plaintext)
+  );
+  return { iv: toB64(iv), ciphertext: toB64(new Uint8Array(buf)), salt: toB64(salt) };
 }
 
 export async function decryptSecret(
   payload: { iv: string; ciphertext: string; salt: string },
-  passphrase: string = getOrCreateSessionSecret()
+  pin: string = getOrCreateSessionSecret()
 ): Promise<string> {
-  const salt = fromBase64(payload.salt);
-  const iv = fromBase64(payload.iv);
-  const ciphertext = fromBase64(payload.ciphertext);
-  const key = await deriveAesKey(passphrase, salt);
-  const buf = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ciphertext);
+  const key = await deriveKey(pin, fromB64(payload.salt));
+  const buf = await crypto.subtle.decrypt(
+    { name: 'AES-GCM', iv: fromB64(payload.iv) },
+    key,
+    fromB64(payload.ciphertext)
+  );
   return new TextDecoder().decode(buf);
 }
