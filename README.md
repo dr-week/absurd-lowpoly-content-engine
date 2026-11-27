@@ -186,3 +186,9 @@ absurd-lowpoly-content-engine/
 Built with precision by **DCODE / Content Engine** · [Open Live Studio](https://dr-week.github.io/absurd-lowpoly-content-engine/)
 
 </div>
+
+## Hybrid Local-First Script Studio (Section 02)
+
+- **Local-First Storage (`web/src/engine/storage/`)**: IndexedDB (`absurd_script_studio_v1`), AES-256-GCM encrypted vault (`crypto_vault.ts` + `sessionStorage`), multi-tab `BroadcastChannel` (`absurd_script_studio_bus`), and `navigator.storage.persist()` profile management.
+- **5-Beat Retention Script Engine (`web/src/engine/script/`)**: ~2.3 words/sec pacing calculator with `[PAUSE]` deductions, delivery cue parser, audio-first visual gate sanitizer, and 5-beat comedy blueprints (`Hook`, `Setup`, `Escalation`, `Twist`, `Payoff`).
+- **Studio UI (`web/src/ui/`)**: 60/40 split pane with 24x24 SVG glyphs, 5-beat pacing timeline, Clean/Rehearsal/JSON copy modes, WPM teleprompter with mirror mode, and 9:16 safe-zone overlays (IG Reels, TikTok, Shorts).

@@ -137,6 +137,8 @@ export function renderStudioView(params: {
         </div>
       </div>
       ${promptBody}
-    </section>${renderCaptionsSection(activeTopic, prompts, copiedTarget, marketingPlatform, brandProduct)}
+    </section>
+    <div id="script-studio-mount"></div>
+    ${renderCaptionsSection(activeTopic, prompts, copiedTarget, marketingPlatform, brandProduct)}
   `;
 }

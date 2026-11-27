@@ -18,6 +18,7 @@ import { esc } from './ui/escape';
 import { bindAppEvents, type AppState } from './ui/events';
 import { renderSavedView } from './ui/saved_view';
 import { renderAppShell } from './ui/shell';
+import { renderScriptChatSection } from './ui/script_chat_section';
 import { renderStudioView } from './ui/studio_view';
 
 const cfg0 = loadConfig();
@@ -127,6 +128,8 @@ function render(): void {
           : renderLogsView(state.logs);
   root.innerHTML = renderAppShell({ config: state.config, activeTab: state.activeTab, drawerOpen: state.drawerOpen, logs: state.logs, savedCount: state.saved.length, surfaceHtml });
   bindAppEvents(state, { render, refreshTopics, selectTopic, createSequel, createMashup, runCustomIdea, toast });
+  const scriptMount = document.getElementById('script-studio-mount');
+  if (scriptMount) scriptMount.replaceChildren(renderScriptChatSection());
 }
 
 window.addEventListener('keydown', (ev) => {
