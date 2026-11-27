@@ -5,7 +5,9 @@
 @use 'controls';
 @use 'cards';
 @use 'studio';
-@use 'script_studio';
-@use 'chat';
+@use 'stage_script';
+@use 'stage_monitors';
+@use 'chat_layout';
+@use 'chat_stream';
 @use 'gradients';
 @use 'flashcards';

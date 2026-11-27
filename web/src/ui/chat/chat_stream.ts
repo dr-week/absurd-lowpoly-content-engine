@@ -1,17 +1,7 @@
-import type { ChatMessage } from '../engine/storage/storage_types.ts';
-import { uiGlyphs } from './glyphs.ts';
-
-const STARTERS = [
-  { title: '5-Beat Hinglish Reel', sub: 'Deadpan society lift audit script', prompt: 'Write a 5-beat Hinglish comedy script about a mandatory Aadhaar scan inside the society lift.' },
-  { title: 'Parody World News', sub: 'Elone Maask vs Bengaluru traffic', prompt: 'Pitch 3 absurd breaking-news premises where Elone Maask tries solving Bengaluru traffic.' },
-  { title: 'Punch Up My Premise', sub: 'Sharper escalation & deadpan button', prompt: 'Punch up a comedy bit about parents treating an air fryer like nuclear machinery.' },
-  { title: '3 Viral Cold-Open Hooks', sub: 'High-retention first 3 seconds', prompt: 'Give me 3 viral hook variants about corporate 9 AM standup meetings.' },
-];
-
-export function extractSubjectLine(text: string): string {
-  const first = text.split('\n').map((l) => l.replace(/\[[^\]]+\]/g, '').trim()).find(Boolean) ?? 'Custom Comedy Idea';
-  return first.slice(0, 72);
-}
+import { CHAT_STARTERS } from '../../engine/chat/chat_prompts.ts';
+import type { ChatMessage } from '../../engine/storage/storage_types.ts';
+import { uiGlyphs } from '../glyphs.ts';
+import { extractSubjectLine } from './chat_state.ts';
 
 export function renderChatStream(params: {
   messages: ChatMessage[];
@@ -30,7 +20,7 @@ export function renderChatStream(params: {
       Object.assign(document.createElement('p'), { textContent: 'Co-write deadpan premises, Hinglish 5-beat reels, and A/B hooks—then send any reply straight to Prompt Studio or the Rehearsal Stage in one click.' }),
     );
     const grid = Object.assign(document.createElement('div'), { className: 'chat-starter-grid' });
-    for (const st of STARTERS) {
+    for (const st of CHAT_STARTERS) {
       const card = Object.assign(document.createElement('button'), { type: 'button', className: 'chat-starter-card' });
       card.append(Object.assign(document.createElement('strong'), { textContent: st.title }), Object.assign(document.createElement('span'), { textContent: st.sub }));
       card.addEventListener('click', () => params.onSendStarter(st.prompt));

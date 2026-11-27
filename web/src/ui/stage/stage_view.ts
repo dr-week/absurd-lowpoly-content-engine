@@ -1,47 +1,23 @@
-import { COMEDY_BLUEPRINTS } from '../engine/script/blueprints_comedy.ts';
-import { compileScript, type CompiledScript } from '../engine/script/script_compiler.ts';
-import { publishSync } from '../engine/storage/broadcast_sync.ts';
-import { saveScript } from '../engine/storage/idb_script_store.ts';
-import { ensureDefaultProfile, getActiveProfileId, requestStoragePersistence } from '../engine/storage/profile_manager.ts';
-import type { ScoredTopic } from '../types.ts';
-import { uiGlyphs } from './glyphs.ts';
+import { COMEDY_BLUEPRINTS } from '../../engine/script/blueprints_comedy.ts';
+import { compileScript } from '../../engine/script/script_compiler.ts';
+import type { ScoredTopic } from '../../types.ts';
+import { uiGlyphs } from '../glyphs.ts';
 import { renderPacingTimeline } from './pacing_timeline.ts';
-import { renderSafeZoneView, type SafeZonePlatform } from './safe_zone_view.ts';
+import { renderSafeZoneView } from './safe_zone_view.ts';
 import { renderScriptCardView } from './script_card_view.ts';
 import { renderScriptSavedBar } from './script_saved_bar.ts';
+import { stageStore } from './stage_state.ts';
 import { renderTeleprompterView } from './teleprompter_view.ts';
 
-let lastSyncedTopicId: string | null = null;
-let cachedDraftTopic = 'Society lift maintenance fee';
-let cachedBlueprintId = COMEDY_BLUEPRINTS[0].id;
-let cachedScript: CompiledScript | null = null;
-let cachedBeatIdx = 0;
-let cachedPlatform: SafeZonePlatform = 'reels';
-let storageBooted = false;
+export const seedStageTopic = (txt: string): void => stageStore.seedTopic(txt);
 
-export function seedStageTopic(topicText: string): void {
-  cachedDraftTopic = topicText.trim() || cachedDraftTopic;
-  cachedBeatIdx = 0;
-  cachedScript = compileScript({ topic: cachedDraftTopic, blueprintId: cachedBlueprintId });
-}
-
-export function renderScriptChatSection(opts?: {
+export function renderStageView(opts?: {
   activeTopic?: ScoredTopic;
   onToast?: (msg: string) => void;
   onOpenInChat?: (topicText: string) => void;
 }): HTMLElement {
-  if (!storageBooted) {
-    storageBooted = true;
-    void requestStoragePersistence();
-    void ensureDefaultProfile().catch(() => {});
-  }
-
-  if (opts?.activeTopic && opts.activeTopic.id !== lastSyncedTopicId) {
-    lastSyncedTopicId = opts.activeTopic.id;
-    seedStageTopic(opts.activeTopic.title);
-  } else if (!cachedScript) {
-    cachedScript = compileScript({ topic: cachedDraftTopic, blueprintId: cachedBlueprintId });
-  }
+  stageStore.bootStorage();
+  stageStore.syncActiveTopic(opts?.activeTopic);
 
   const section = Object.assign(document.createElement('section'), {
     id: 'section-script-studio',
@@ -58,7 +34,7 @@ export function renderScriptChatSection(opts?: {
   const headerActions = Object.assign(document.createElement('div'), { className: 'section-header__actions' });
   const bpSelect = Object.assign(document.createElement('select'), { className: 'compact-select', ariaLabel: '5-Beat Comedy Blueprint' });
   for (const bp of COMEDY_BLUEPRINTS) {
-    bpSelect.appendChild(Object.assign(document.createElement('option'), { value: bp.id, selected: bp.id === cachedBlueprintId, textContent: `${bp.name} · ${bp.style}` }));
+    bpSelect.appendChild(Object.assign(document.createElement('option'), { value: bp.id, selected: bp.id === stageStore.blueprintId, textContent: `${bp.name} · ${bp.style}` }));
   }
   const chatBtn = Object.assign(document.createElement('button'), { type: 'button', className: 'btn', title: 'Co-write in AI Chat' });
   chatBtn.append(uiGlyphs.chat(14), Object.assign(document.createElement('span'), { textContent: 'AI Chat' }));
@@ -72,9 +48,9 @@ export function renderScriptChatSection(opts?: {
     type: 'text',
     className: 'compact-input script-topic-input',
     placeholder: 'Premise to compile into 5 retention beats...',
-    value: cachedDraftTopic,
+    value: stageStore.draftTopic,
   });
-  topicInput.addEventListener('input', () => { cachedDraftTopic = topicInput.value; });
+  topicInput.addEventListener('input', () => { stageStore.draftTopic = topicInput.value; });
   chatBtn.addEventListener('click', () => opts?.onOpenInChat?.(topicInput.value));
 
   const genBtn = Object.assign(document.createElement('button'), { type: 'submit', className: 'btn btn--primary' });
@@ -86,43 +62,37 @@ export function renderScriptChatSection(opts?: {
   const rightPane = Object.assign(document.createElement('div'), { className: 'script-pane-right' });
   const stage = Object.assign(document.createElement('div'), { className: 'script-stage' });
 
-  const renderAll = (script: CompiledScript) => {
-    cachedScript = script;
+  const renderSubpanels = () => {
     stage.replaceChildren(
-      renderPacingTimeline(script),
-      renderScriptCardView(script, cachedBeatIdx, (idx) => { cachedBeatIdx = idx; renderAll(script); }, opts?.onToast),
+      renderPacingTimeline(stageStore.script),
+      renderScriptCardView(stageStore.script, stageStore.beatIdx, (idx) => { stageStore.beatIdx = idx; renderSubpanels(); }, opts?.onToast),
     );
     rightPane.replaceChildren(
-      renderTeleprompterView(script),
-      renderSafeZoneView(script, cachedBeatIdx, cachedPlatform, (p) => { cachedPlatform = p; }),
+      renderTeleprompterView(stageStore.script),
+      renderSafeZoneView(stageStore.script, stageStore.beatIdx, stageStore.platform, (p) => { stageStore.platform = p; }),
     );
   };
 
   const savedBar = renderScriptSavedBar((rec) => {
-    cachedDraftTopic = rec.topic;
-    cachedBlueprintId = rec.blueprintId;
+    stageStore.loadSaved(rec);
     topicInput.value = rec.topic;
     bpSelect.value = rec.blueprintId;
-    cachedBeatIdx = 0;
-    renderAll(compileScript({ topic: rec.topic, blueprintId: rec.blueprintId }));
+    renderSubpanels();
   }, opts?.onToast);
 
   bpSelect.addEventListener('change', () => {
-    cachedBlueprintId = bpSelect.value;
-    cachedBeatIdx = 0;
-    renderAll(compileScript({ topic: topicInput.value, blueprintId: cachedBlueprintId }));
+    stageStore.blueprintId = bpSelect.value;
+    stageStore.beatIdx = 0;
+    stageStore.script = compileScript({ topic: topicInput.value, blueprintId: stageStore.blueprintId });
+    renderSubpanels();
   });
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    seedStageTopic(topicInput.value);
-    renderAll(cachedScript!);
+    stageStore.seedTopic(topicInput.value);
+    renderSubpanels();
   });
   saveBtn.addEventListener('click', async () => {
-    if (!cachedScript) return;
-    const profileId = getActiveProfileId();
-    const now = Date.now();
-    await saveScript({ ...cachedScript, profileId, createdAt: now, updatedAt: now });
-    publishSync({ type: 'script:saved', profileId, targetId: cachedScript.id });
+    await stageStore.persistCurrent();
     await savedBar.refresh();
     opts?.onToast?.('Saved to Local IndexedDB Vault');
   });
@@ -130,6 +100,6 @@ export function renderScriptChatSection(opts?: {
   leftPane.append(form, stage);
   split.append(leftPane, rightPane);
   section.append(header, savedBar.element, split);
-  renderAll(cachedScript!);
+  renderSubpanels();
   return section;
 }
