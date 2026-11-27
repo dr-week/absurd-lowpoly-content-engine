@@ -129,7 +129,7 @@ function render(): void {
   root.innerHTML = renderAppShell({ config: state.config, activeTab: state.activeTab, drawerOpen: state.drawerOpen, logs: state.logs, savedCount: state.saved.length, surfaceHtml });
   bindAppEvents(state, { render, refreshTopics, selectTopic, createSequel, createMashup, runCustomIdea, toast });
   const scriptMount = document.getElementById('script-studio-mount');
-  if (scriptMount) scriptMount.replaceChildren(renderScriptChatSection());
+  if (scriptMount) scriptMount.replaceChildren(renderScriptChatSection({ activeTopic: state.activeTopic, onToast: toast }));
 }
 
 window.addEventListener('keydown', (ev) => {

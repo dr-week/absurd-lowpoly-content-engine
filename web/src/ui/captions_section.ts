@@ -15,7 +15,7 @@ export function renderCaptionsSection(
     return `
       <section class="section-card zuari-surface-elevated" id="section-captions">
         <div class="section-header">
-          <div class="section-header__title-group"><span class="section-header__step">03</span><h2>Growth, Hooks &amp; Captions</h2></div>
+          <div class="section-header__title-group"><span class="section-header__step">04</span><h2>Growth, Hooks &amp; Captions</h2></div>
         </div>
         <div class="empty-state">Select a topic above to unlock A/B hooks, native Reels overlays, DM-share triggers &amp; stealth brand cameos</div>
       </section>
@@ -75,7 +75,7 @@ export function renderCaptionsSection(
   return `
     <section class="section-card zuari-surface-elevated" id="section-captions">
       <div class="section-header">
-        <div class="section-header__title-group"><span class="section-header__step">03</span><h2>Growth, Overlays &amp; Captions</h2></div>
+        <div class="section-header__title-group"><span class="section-header__step">04</span><h2>Growth, Overlays &amp; Captions</h2></div>
         <div class="section-header__actions">
           <div class="vote-group">${platTabs}</div>
           <button type="button" class="btn" data-action="copy-text" data-copy-id="tags" data-text="${esc(tagsStr)}" title="Copy Hashtags">${copiedTarget === 'tags' ? Glyphs.check(14) : Glyphs.copy(14)}<span>Tags</span></button>

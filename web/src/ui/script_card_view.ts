@@ -9,9 +9,14 @@ function copyPayload(script: CompiledScript, mode: CopyMode): string {
   return JSON.stringify(script, null, 2);
 }
 
-export function renderScriptCardView(script: CompiledScript): HTMLElement {
+export function renderScriptCardView(
+  script: CompiledScript,
+  selectedBeatIdx = 0,
+  onSelectBeat?: (idx: number) => void,
+  onToast?: (msg: string) => void,
+): HTMLElement {
   const card = document.createElement('div');
-  card.className = 'script-card-view';
+  card.className = 'card-subpanel script-card-view';
 
   const header = document.createElement('div');
   header.className = 'script-card-header';
@@ -24,26 +29,25 @@ export function renderScriptCardView(script: CompiledScript): HTMLElement {
   actions.className = 'script-copy-actions';
 
   const modes: Array<{ id: CopyMode; label: string }> = [
-    { id: 'clean', label: 'Copy Clean' },
-    { id: 'rehearsal', label: 'Copy Rehearsal' },
-    { id: 'json', label: 'Copy JSON' },
+    { id: 'clean', label: 'Clean' },
+    { id: 'rehearsal', label: 'Rehearsal' },
+    { id: 'json', label: 'JSON' },
   ];
 
   for (const m of modes) {
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'script-copy-btn';
-    btn.append(uiGlyphs.copy(), document.createTextNode(` ${m.label}`));
+    btn.className = 'btn';
+    const labelSpan = document.createElement('span');
+    labelSpan.textContent = m.label;
+    btn.append(uiGlyphs.copy(13), labelSpan);
     btn.addEventListener('click', async () => {
       const text = copyPayload(script, m.id);
-      if (navigator.clipboard) {
-        await navigator.clipboard.writeText(text);
-      }
-      const orig = btn.textContent;
-      btn.textContent = 'Copied';
+      if (navigator.clipboard) await navigator.clipboard.writeText(text);
+      onToast?.(`Copied ${m.label} script`);
+      btn.replaceChildren(uiGlyphs.check(13), Object.assign(document.createElement('span'), { textContent: 'Copied' }));
       setTimeout(() => {
-        btn.replaceChildren(uiGlyphs.copy(), document.createTextNode(` ${m.label}`));
-        void orig;
+        btn.replaceChildren(uiGlyphs.copy(13), Object.assign(document.createElement('span'), { textContent: m.label }));
       }, 1200);
     });
     actions.appendChild(btn);
@@ -54,13 +58,19 @@ export function renderScriptCardView(script: CompiledScript): HTMLElement {
   const beatsList = document.createElement('div');
   beatsList.className = 'script-beats-list';
 
-  for (const beat of script.beats) {
+  script.beats.forEach((beat, idx) => {
     const row = document.createElement('div');
-    row.className = 'script-beat-row';
+    row.className = `script-beat-row${idx === selectedBeatIdx ? ' is-selected' : ''}`;
+    row.title = 'Click to preview this beat inside the 9:16 Safe-Zone frame';
+    row.addEventListener('click', () => onSelectBeat?.(idx));
 
     const meta = document.createElement('div');
     meta.className = 'script-beat-meta';
-    meta.textContent = `${beat.label} (${beat.estimatedSec}s / ${beat.wordCount}w)`;
+    const leftMeta = document.createElement('span');
+    leftMeta.textContent = beat.label;
+    const rightMeta = document.createElement('span');
+    rightMeta.textContent = `${beat.estimatedSec}s · ${beat.wordCount}w`;
+    meta.append(leftMeta, rightMeta);
 
     const body = document.createElement('p');
     body.className = 'script-beat-text';
@@ -70,14 +80,15 @@ export function renderScriptCardView(script: CompiledScript): HTMLElement {
     chips.className = 'script-cue-chips';
     for (const cue of beat.cues) {
       const chip = document.createElement('span');
-      chip.className = `script-cue-chip is-${cue.type.toLowerCase()}`;
+      const accent = cue.type === 'PAUSE' || cue.type === 'BEAT' ? 'pill--accent' : cue.type === 'CAMERA' ? 'pill--positive' : '';
+      chip.className = `pill ${accent}`.trim();
       chip.textContent = cue.value ? `${cue.type}: ${cue.value}` : cue.type;
       chips.appendChild(chip);
     }
 
     row.append(meta, body, chips);
     beatsList.appendChild(row);
-  }
+  });
 
   card.append(header, beatsList);
   return card;
