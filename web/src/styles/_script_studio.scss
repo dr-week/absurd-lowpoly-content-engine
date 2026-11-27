@@ -131,13 +131,13 @@
   &.is-hook { background: var(--nova-accent-soft); color: var(--nova-accent); border-color: transparent; }
   &.is-setup { background: var(--nova-color-subpanel); color: var(--nova-color-text); }
   &.is-escalation { background: oklch(65% 0.14 65 / 0.16); color: oklch(48% 0.14 55); border-color: transparent; }
-  &.is-twist { background: oklch(62% 0.16 310 / 0.14); color: oklch(48% 0.15 310); border-color: transparent; }
+  &.is-twist { background: oklch(62% 0.13 200 / 0.16); color: oklch(44% 0.13 202); border-color: transparent; }
   &.is-payoff { background: var(--nova-positive-soft); color: var(--nova-positive); border-color: transparent; }
 }
 
 [data-theme='noir'] .script-pacing-seg {
   &.is-escalation { color: oklch(78% 0.13 68); }
-  &.is-twist { color: oklch(78% 0.13 310); }
+  &.is-twist { color: oklch(78% 0.12 200); }
 }
 
 // Script Card & Beat Rows

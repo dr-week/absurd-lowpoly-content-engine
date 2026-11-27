@@ -133,12 +133,12 @@ export function renderStudioView(params: {
         <div class="section-header__actions">
           <select id="target-model" class="compact-select" aria-label="Target Video Model" title="Compile Prompt for Target AI Model">${modelOpts}</select>
           <select id="visual-style" class="compact-select" aria-label="Visual Engine Style" title="Switch Visual Engine">${styleOpts}</select>
+          <button type="button" class="btn" data-action="jump-chat" title="Co-write this premise in AI Chat">${Glyphs.messageSquare(14)}<span>Chat</span></button>
+          <button type="button" class="btn" data-action="jump-stage" title="Rehearse in 5-Beat Stage & Teleprompter">${Glyphs.stage(14)}<span>Stage</span></button>
           ${prompts ? `<button type="button" class="btn" data-action="copy-all" title="Copy Storyboard + Video + Viral Pack">${Glyphs.copy(14)}<span>Copy All</span></button><button type="button" class="btn btn--primary" data-action="make-sequel" title="Generate Part 2 Callback Sequel">${Glyphs.arrowRight(14)}<span>Part 2</span></button>` : ''}
         </div>
       </div>
       ${promptBody}
-    </section>
-    <div id="script-studio-mount"></div>
-    ${renderCaptionsSection(activeTopic, prompts, copiedTarget, marketingPlatform, brandProduct)}
+    </section>${renderCaptionsSection(activeTopic, prompts, copiedTarget, marketingPlatform, brandProduct)}
   `;
 }

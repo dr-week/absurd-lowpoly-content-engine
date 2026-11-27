@@ -1,6 +1,6 @@
 export type VoteValue = 'up' | 'down';
 export type TargetKind = 'topic' | 'storyboard' | 'video';
-export type ActiveTab = 'studio' | 'saved' | 'analytics' | 'logs';
+export type ActiveTab = 'chat' | 'studio' | 'stage' | 'saved' | 'analytics' | 'logs';
 export type SavedFilter = 'all' | 'pending' | 'done';
 export type OutcomeTag = 'flop' | 'good' | 'viral';
 export type HookCategory = 'iconic' | 'build' | 'origin' | 'science' | 'tutorial' | 'news';

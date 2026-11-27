@@ -23,6 +23,11 @@ export function renderAppShell(params: {
             <div class="brand-mark">${Glyphs.layers(16)}</div>
             <h1>Absurd Studio</h1>
           </div>
+          <div class="vote-group" role="navigation" aria-label="Primary Workspaces">
+            <button type="button" class="btn ${activeTab === 'chat' ? 'btn--active' : ''}" data-action="tab" data-tab="chat">${Glyphs.messageSquare(14)}<span>AI Chat</span></button>
+            <button type="button" class="btn ${activeTab === 'studio' ? 'btn--active' : ''}" data-action="tab" data-tab="studio">${Glyphs.sparkle(14)}<span>Studio</span></button>
+            <button type="button" class="btn ${activeTab === 'stage' ? 'btn--active' : ''}" data-action="tab" data-tab="stage">${Glyphs.stage(14)}<span>Stage</span></button>
+          </div>
           <div class="ambient-header__metrics">
             <span class="pill" title="${stats.totalVotes} votes logged">${esc(config.sourceMode)} · <strong>${stats.approvalRate}%</strong></span>
             <button type="button" class="btn btn--icon" data-action="export-jsonl" title="Download JSONL Logs">${Glyphs.download(15)}</button>
@@ -32,10 +37,12 @@ export function renderAppShell(params: {
         </div>
       </header>
 
-      <main class="surface-main">${surfaceHtml}</main>
+      <main class="surface-main" id="surface-main">${surfaceHtml}</main>
 
       <nav class="dock-plane zuari-surface-liquid" aria-label="Navigation">
-        <button type="button" class="dock-btn ${activeTab === 'studio' ? 'is-active' : ''}" data-action="tab" data-tab="studio" title="Studio">${Glyphs.sparkle(16)}<span>Studio</span></button>
+        <button type="button" class="dock-btn ${activeTab === 'chat' ? 'is-active' : ''}" data-action="tab" data-tab="chat" title="AI Chat Writers' Room">${Glyphs.messageSquare(16)}<span>Chat</span></button>
+        <button type="button" class="dock-btn ${activeTab === 'studio' ? 'is-active' : ''}" data-action="tab" data-tab="studio" title="Prompt Studio">${Glyphs.sparkle(16)}<span>Studio</span></button>
+        <button type="button" class="dock-btn ${activeTab === 'stage' ? 'is-active' : ''}" data-action="tab" data-tab="stage" title="Teleprompter & Safe-Zone Stage">${Glyphs.stage(16)}<span>Stage</span></button>
         <button type="button" class="dock-btn ${activeTab === 'saved' ? 'is-active' : ''}" data-action="tab" data-tab="saved" title="Saved">${Glyphs.bookmark(16)}<span>Saved${savedCount > 0 ? ` · ${savedCount}` : ''}</span></button>
         <button type="button" class="dock-btn ${activeTab === 'analytics' ? 'is-active' : ''}" data-action="tab" data-tab="analytics" title="Viral">${Glyphs.barChart(16)}<span>Viral</span></button>
         <button type="button" class="dock-btn ${activeTab === 'logs' ? 'is-active' : ''}" data-action="tab" data-tab="logs" title="Logs">${Glyphs.fileText(16)}<span>Logs</span></button>
@@ -51,8 +58,8 @@ export function renderAppShell(params: {
           <div class="field-group">
             <label for="cfg-theme">Theme</label>
             <select id="cfg-theme">
-              <option value="studio" ${config.theme === 'studio' ? 'selected' : ''}>Studio (Light)</option>
-              <option value="noir" ${config.theme === 'noir' ? 'selected' : ''}>Noir (Dark)</option>
+              <option value="studio" ${config.theme === 'studio' ? 'selected' : ''}>Studio (Liquid Light)</option>
+              <option value="noir" ${config.theme === 'noir' ? 'selected' : ''}>Noir (Liquid Dark)</option>
             </select>
           </div>
 

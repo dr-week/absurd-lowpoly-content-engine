@@ -187,8 +187,9 @@ Built with precision by **DCODE / Content Engine** · [Open Live Studio](https:/
 
 </div>
 
-## Hybrid Local-First Script Studio (Section 02)
+## Liquid Glass Workspaces: AI Chat, Studio & Stage
 
-- **Local-First Storage (`web/src/engine/storage/`)**: IndexedDB (`absurd_script_studio_v1`), AES-256-GCM encrypted vault (`crypto_vault.ts` + `sessionStorage`), multi-tab `BroadcastChannel` (`absurd_script_studio_bus`), and `navigator.storage.persist()` profile management.
-- **5-Beat Retention Script Engine (`web/src/engine/script/`)**: ~2.3 words/sec pacing calculator with `[PAUSE]` deductions, delivery cue parser, audio-first visual gate sanitizer, and 5-beat comedy blueprints (`Hook`, `Setup`, `Escalation`, `Twist`, `Payoff`).
-- **Studio UI (`web/src/ui/`)**: 60/40 split pane with 24x24 SVG glyphs, 5-beat pacing timeline, Clean/Rehearsal/JSON copy modes, WPM teleprompter with mirror mode, and 9:16 safe-zone overlays (IG Reels, TikTok, Shorts).
+- **Dedicated AI Chat Menu (`Chat` Workspace — `web/src/ui/chat_view.ts` & `web/src/engine/chat/chat_engine.ts`)**: Full 2-column Liquid Glass AI Writers' Room with persistent IndexedDB thread history (`threads` store + `BroadcastChannel` multi-tab sync), quick-action slash chips (`/ 5-Beat Script`, `/ Hinglish Pass`, `/ Punch Up Twist`, `/ 3 Hooks`), Free AI + BYOK + offline fallback, and 1-click **`Send to Studio`** / **`Open in Stage`** handoffs on every reply.
+- **Prompt Studio (`Studio` Workspace — `web/src/ui/studio_view.ts`)**: Focused 3-step visual production flow (`01 Topics` -> `02 3x2 Storyboard & Video Prompts` -> `03 Growth, Overlays & Captions`) with 1-click handoffs back to **Chat** and **Stage**.
+- **Rehearsal Stage (`Stage` Workspace — `web/src/ui/script_chat_section.ts`)**: Dedicated 60/40 split pane for the 5-Beat Retention Script Compiler (~2.3 words/sec pacing timeline, cue chips, Clean/Rehearsal/JSON copy modes), WPM mirror teleprompter with glowing eyeline, 9:16 safe-zone HUD overlays (`Reels`, `TikTok`, `Shorts`), and Local IndexedDB Vault.
+- **Local-First Storage (`web/src/engine/storage/`)**: IndexedDB (`absurd_script_studio_v1` v2), AES-256-GCM encrypted vault (`crypto_vault.ts` + `sessionStorage`), and `navigator.storage.persist()` profile management.

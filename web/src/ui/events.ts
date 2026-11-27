@@ -41,6 +41,8 @@ export function bindAppEvents(
     el.addEventListener('click', () => {
       const a = el.dataset.action;
       if (a === 'tab' && el.dataset.tab) { state.activeTab = el.dataset.tab as ActiveTab; hooks.render(); return; }
+      if (a === 'jump-chat') { state.activeTab = 'chat'; hooks.render(); return; }
+      if (a === 'jump-stage') { state.activeTab = 'stage'; hooks.render(); return; }
       if (a === 'toggle-theme') { state.config.theme = state.config.theme === 'studio' ? 'noir' : 'studio'; saveConfig(state.config); hooks.render(); return; }
       if (a === 'open-drawer') { state.drawerOpen = true; hooks.render(); return; }
       if (a === 'close-drawer') { state.drawerOpen = false; hooks.render(); return; }

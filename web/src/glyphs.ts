@@ -78,4 +78,10 @@ export const Glyphs = {
   zap: (size = 16) => svg('<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>', size),
   film: (size = 16) =>
     svg('<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M17 3v18"/><path d="M3 12h18"/><path d="M3 7.5h4"/><path d="M3 16.5h4"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/>', size),
+  messageSquare: (size = 16) =>
+    svg('<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>', size),
+  stage: (size = 16) =>
+    svg('<rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/>', size),
+  plus: (size = 16) => svg('<line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/>', size),
+  send: (size = 16) => svg('<line x1="22" x2="11" y1="2" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>', size),
 };

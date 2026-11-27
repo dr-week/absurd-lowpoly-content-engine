@@ -2,7 +2,8 @@ export type SyncEventType =
   | 'script:saved'
   | 'script:deleted'
   | 'vault:updated'
-  | 'profile:changed';
+  | 'profile:changed'
+  | 'chat:updated';
 
 export interface SyncMessage {
   type: SyncEventType;
@@ -52,6 +53,22 @@ export interface VaultRecord {
   iv: string;
   ciphertext: string;
   salt: string;
+  createdAt: number;
+  updatedAt: number;
+}
+
+export interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  createdAt: number;
+}
+
+export interface ChatThread {
+  id: string;
+  profileId: string;
+  title: string;
+  messages: ChatMessage[];
   createdAt: number;
   updatedAt: number;
 }

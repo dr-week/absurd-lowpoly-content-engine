@@ -19,7 +19,17 @@ let cachedBeatIdx = 0;
 let cachedPlatform: SafeZonePlatform = 'reels';
 let storageBooted = false;
 
-export function renderScriptChatSection(opts?: { activeTopic?: ScoredTopic; onToast?: (msg: string) => void }): HTMLElement {
+export function seedStageTopic(topicText: string): void {
+  cachedDraftTopic = topicText.trim() || cachedDraftTopic;
+  cachedBeatIdx = 0;
+  cachedScript = compileScript({ topic: cachedDraftTopic, blueprintId: cachedBlueprintId });
+}
+
+export function renderScriptChatSection(opts?: {
+  activeTopic?: ScoredTopic;
+  onToast?: (msg: string) => void;
+  onOpenInChat?: (topicText: string) => void;
+}): HTMLElement {
   if (!storageBooted) {
     storageBooted = true;
     void requestStoragePersistence();
@@ -28,44 +38,44 @@ export function renderScriptChatSection(opts?: { activeTopic?: ScoredTopic; onTo
 
   if (opts?.activeTopic && opts.activeTopic.id !== lastSyncedTopicId) {
     lastSyncedTopicId = opts.activeTopic.id;
-    cachedDraftTopic = opts.activeTopic.title;
-    cachedBeatIdx = 0;
-    cachedScript = compileScript({ topic: cachedDraftTopic, blueprintId: cachedBlueprintId });
+    seedStageTopic(opts.activeTopic.title);
   } else if (!cachedScript) {
     cachedScript = compileScript({ topic: cachedDraftTopic, blueprintId: cachedBlueprintId });
   }
 
-  const section = document.createElement('section');
-  section.id = 'section-script-studio';
-  section.className = 'section-card zuari-surface-elevated script-studio-section';
+  const section = Object.assign(document.createElement('section'), {
+    id: 'section-script-studio',
+    className: 'section-card zuari-surface-liquid script-studio-section',
+  });
 
-  const header = document.createElement('div');
-  header.className = 'section-header';
-  const titleGroup = document.createElement('div');
-  titleGroup.className = 'section-header__title-group';
-  const stepBadge = Object.assign(document.createElement('span'), { className: 'section-header__step', textContent: '03' });
-  const h2 = Object.assign(document.createElement('h2'), { textContent: 'Script & Teleprompter Studio' });
-  titleGroup.append(stepBadge, h2);
+  const header = Object.assign(document.createElement('div'), { className: 'section-header' });
+  const titleGroup = Object.assign(document.createElement('div'), { className: 'section-header__title-group' });
+  titleGroup.append(
+    Object.assign(document.createElement('span'), { className: 'section-header__step', textContent: 'Stage' }),
+    Object.assign(document.createElement('h2'), { textContent: '5-Beat Rehearsal, Teleprompter & 9:16 Safe-Zone' }),
+  );
 
-  const headerActions = document.createElement('div');
-  headerActions.className = 'section-header__actions';
+  const headerActions = Object.assign(document.createElement('div'), { className: 'section-header__actions' });
   const bpSelect = Object.assign(document.createElement('select'), { className: 'compact-select', ariaLabel: '5-Beat Comedy Blueprint' });
   for (const bp of COMEDY_BLUEPRINTS) {
     bpSelect.appendChild(Object.assign(document.createElement('option'), { value: bp.id, selected: bp.id === cachedBlueprintId, textContent: `${bp.name} · ${bp.style}` }));
   }
+  const chatBtn = Object.assign(document.createElement('button'), { type: 'button', className: 'btn', title: 'Co-write in AI Chat' });
+  chatBtn.append(uiGlyphs.chat(14), Object.assign(document.createElement('span'), { textContent: 'AI Chat' }));
   const saveBtn = Object.assign(document.createElement('button'), { type: 'button', className: 'btn' });
   saveBtn.append(uiGlyphs.save(14), Object.assign(document.createElement('span'), { textContent: 'Save Local' }));
-  headerActions.append(bpSelect, saveBtn);
+  headerActions.append(bpSelect, chatBtn, saveBtn);
   header.append(titleGroup, headerActions);
 
   const form = Object.assign(document.createElement('form'), { className: 'script-composer-form' });
   const topicInput = Object.assign(document.createElement('input'), {
     type: 'text',
     className: 'compact-input script-topic-input',
-    placeholder: 'Enter premise or select a topic in 01 above...',
+    placeholder: 'Premise to compile into 5 retention beats...',
     value: cachedDraftTopic,
   });
   topicInput.addEventListener('input', () => { cachedDraftTopic = topicInput.value; });
+  chatBtn.addEventListener('click', () => opts?.onOpenInChat?.(topicInput.value));
 
   const genBtn = Object.assign(document.createElement('button'), { type: 'submit', className: 'btn btn--primary' });
   genBtn.append(uiGlyphs.spark(14), Object.assign(document.createElement('span'), { textContent: 'Compile 5-Beat' }));
@@ -102,14 +112,11 @@ export function renderScriptChatSection(opts?: { activeTopic?: ScoredTopic; onTo
     cachedBeatIdx = 0;
     renderAll(compileScript({ topic: topicInput.value, blueprintId: cachedBlueprintId }));
   });
-
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    cachedDraftTopic = topicInput.value;
-    cachedBeatIdx = 0;
-    renderAll(compileScript({ topic: cachedDraftTopic, blueprintId: cachedBlueprintId }));
+    seedStageTopic(topicInput.value);
+    renderAll(cachedScript!);
   });
-
   saveBtn.addEventListener('click', async () => {
     if (!cachedScript) return;
     const profileId = getActiveProfileId();
@@ -123,6 +130,6 @@ export function renderScriptChatSection(opts?: { activeTopic?: ScoredTopic; onTo
   leftPane.append(form, stage);
   split.append(leftPane, rightPane);
   section.append(header, savedBar.element, split);
-  renderAll(cachedScript);
+  renderAll(cachedScript!);
   return section;
 }

@@ -7,7 +7,7 @@ function svgIcon(paths: string[], size = 15): SVGSVGElement {
   svg.setAttribute('height', String(size));
   svg.setAttribute('fill', 'none');
   svg.setAttribute('stroke', 'currentColor');
-  svg.setAttribute('stroke-width', '2');
+  svg.setAttribute('stroke-width', '1.85');
   svg.setAttribute('stroke-linecap', 'round');
   svg.setAttribute('stroke-linejoin', 'round');
   svg.setAttribute('aria-hidden', 'true');
@@ -40,4 +40,9 @@ export const uiGlyphs = {
       s,
     ),
   close: (s = 12) => svgIcon(['M18 6L6 18', 'M6 6l12 12'], s),
+  plus: (s = 14) => svgIcon(['M12 5v14', 'M5 12h14'], s),
+  send: (s = 14) => svgIcon(['M22 2L11 13', 'M22 2l-7 20-4-9-9-4 20-7z'], s),
+  chat: (s = 14) => svgIcon(['M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'], s),
+  stage: (s = 14) => svgIcon(['M4 3h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z', 'M8 21h8', 'M12 17v4'], s),
+  arrowRight: (s = 14) => svgIcon(['M5 12h14', 'M12 5l7 7-7 7'], s),
 };

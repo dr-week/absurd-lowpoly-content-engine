@@ -1,10 +1,13 @@
-// Apple Liquid Glass & Contrasting Boxiness Surfaces
+// Apple visionOS / macOS Liquid Glass Surfaces & Specular Refraction
 
 .zuari-surface-elevated {
+  position: relative;
   background: var(--nova-color-surface);
   border: 1px solid var(--nova-color-border);
   border-radius: var(--nova-radius-squircle);
-  box-shadow: var(--zuari-glass-rim-shadow), var(--zuari-elevation-soft);
+  backdrop-filter: blur(var(--zuari-glass-blur)) saturate(var(--zuari-glass-saturation));
+  -webkit-backdrop-filter: blur(var(--zuari-glass-blur)) saturate(var(--zuari-glass-saturation));
+  box-shadow: var(--zuari-glass-rim-shadow), var(--zuari-elevation-float);
 }
 
 .zuari-surface-frosted {
@@ -22,12 +25,12 @@
   border-radius: var(--nova-radius-squircle);
   backdrop-filter: blur(var(--zuari-glass-blur)) saturate(var(--zuari-glass-saturation));
   -webkit-backdrop-filter: blur(var(--zuari-glass-blur)) saturate(var(--zuari-glass-saturation));
-  box-shadow: var(--zuari-glass-rim-shadow), var(--zuari-elevation-float);
+  box-shadow: var(--zuari-glass-rim-shadow), var(--zuari-elevation-halo);
 
   &::before {
     content: '';
     position: absolute;
-    inset: 1px 12% auto;
+    inset: 1px 10% auto;
     height: 1px;
     background: linear-gradient(
       90deg,
@@ -44,4 +47,7 @@
   border: 1px solid var(--nova-color-border);
   border-radius: var(--nova-radius-md);
   padding: 14px 16px;
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  box-shadow: var(--zuari-glass-rim-shadow);
 }
