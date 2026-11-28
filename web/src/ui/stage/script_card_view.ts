@@ -4,8 +4,8 @@ import { uiGlyphs } from '../glyphs.ts';
 export type CopyMode = 'clean' | 'rehearsal' | 'json';
 
 function copyPayload(script: CompiledScript, mode: CopyMode): string {
-  if (mode === 'clean') return script.cleanText;
-  if (mode === 'rehearsal') return script.rehearsalText;
+  if (mode === 'clean') return script.beats.map((b) => b.spokenText).join('\n\n');
+  if (mode === 'rehearsal') return script.rehearsalText ?? script.beats.map((b) => `[${b.label}] ${b.spokenText}`).join('\n\n');
   return JSON.stringify(script, null, 2);
 }
 
@@ -28,12 +28,12 @@ export function renderScriptCardView(
 
   for (const m of modes) {
     const btn = Object.assign(document.createElement('button'), { type: 'button', className: 'btn' });
-    btn.append(uiGlyphs.copy(13), Object.assign(document.createElement('span'), { textContent: m.label }));
+    btn.innerHTML = `${uiGlyphs.copy()}<span>${m.label}</span>`;
     btn.addEventListener('click', async () => {
       await navigator.clipboard?.writeText(copyPayload(script, m.id));
       onToast?.(`Copied ${m.label} script`);
-      btn.replaceChildren(uiGlyphs.check(13), Object.assign(document.createElement('span'), { textContent: 'Copied' }));
-      setTimeout(() => btn.replaceChildren(uiGlyphs.copy(13), Object.assign(document.createElement('span'), { textContent: m.label })), 1200);
+      btn.innerHTML = `${uiGlyphs.check()}<span>Copied</span>`;
+      setTimeout(() => { btn.innerHTML = `${uiGlyphs.copy()}<span>${m.label}</span>`; }, 1200);
     });
     actions.appendChild(btn);
   }
@@ -50,19 +50,18 @@ export function renderScriptCardView(
     const meta = Object.assign(document.createElement('div'), { className: 'script-beat-meta' });
     meta.append(
       Object.assign(document.createElement('span'), { textContent: beat.label }),
-      Object.assign(document.createElement('span'), { textContent: `${beat.estimatedSec}s · ${beat.wordCount}w` }),
+      Object.assign(document.createElement('span'), { textContent: `${beat.actualSec}s · ${beat.wordCount}w` }),
     );
 
     const chips = Object.assign(document.createElement('div'), { className: 'script-cue-chips' });
-    for (const cue of beat.cues) {
-      const accent = cue.type === 'PAUSE' || cue.type === 'BEAT' ? 'pill--accent' : cue.type === 'CAMERA' ? 'pill--positive' : '';
+    if (beat.visualCue) {
       chips.appendChild(Object.assign(document.createElement('span'), {
-        className: `pill ${accent}`.trim(),
-        textContent: cue.value ? `${cue.type}: ${cue.value}` : cue.type,
+        className: 'pill pill--positive',
+        textContent: beat.visualCue,
       }));
     }
 
-    row.append(meta, Object.assign(document.createElement('p'), { className: 'script-beat-text', textContent: beat.text }), chips);
+    row.append(meta, Object.assign(document.createElement('p'), { className: 'script-beat-text', textContent: beat.spokenText }), chips);
     beatsList.appendChild(row);
   });
 

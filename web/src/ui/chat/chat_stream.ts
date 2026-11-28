@@ -38,17 +38,17 @@ export function renderChatStream(params: {
       const actions = Object.assign(document.createElement('div'), { className: 'chat-msg__actions' });
       const stageBtn = Object.assign(document.createElement('button'), { type: 'button', className: 'pill pill--accent', textContent: 'Open in Stage' });
       stageBtn.style.cursor = 'pointer';
-      stageBtn.prepend(uiGlyphs.stage(12));
+      stageBtn.insertAdjacentHTML('afterbegin', uiGlyphs.stage());
       stageBtn.addEventListener('click', () => params.onOpenInStage(extractSubjectLine(msg.content)));
 
       const studioBtn = Object.assign(document.createElement('button'), { type: 'button', className: 'pill pill--positive', textContent: 'Send to Studio' });
       studioBtn.style.cursor = 'pointer';
-      studioBtn.prepend(uiGlyphs.spark(12));
+      studioBtn.insertAdjacentHTML('afterbegin', uiGlyphs.spark());
       studioBtn.addEventListener('click', () => params.onSendToStudio(extractSubjectLine(msg.content)));
 
       const copyBtn = Object.assign(document.createElement('button'), { type: 'button', className: 'pill', textContent: 'Copy' });
       copyBtn.style.cursor = 'pointer';
-      copyBtn.prepend(uiGlyphs.copy(12));
+      copyBtn.insertAdjacentHTML('afterbegin', uiGlyphs.copy());
       copyBtn.addEventListener('click', () => { void navigator.clipboard?.writeText(msg.content); params.onToast('Copied reply'); });
 
       actions.append(stageBtn, studioBtn, copyBtn);

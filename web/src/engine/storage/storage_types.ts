@@ -42,6 +42,7 @@ export interface StudioProfile {
 export type SyncMessageType =
   | 'script_saved'
   | 'script_deleted'
+  | 'chat_updated'
   | 'vault_updated'
   | 'profile_changed';
 

@@ -40,10 +40,10 @@ export function renderScriptSavedBar(
           className: 'script-saved-chip__del',
           title: 'Delete from IndexedDB',
         });
-        delBtn.appendChild(uiGlyphs.close(11));
+        delBtn.innerHTML = uiGlyphs.close();
         delBtn.addEventListener('click', async () => {
           await deleteScript(rec.id);
-          publishSync({ type: 'script:deleted', profileId: rec.profileId, targetId: rec.id });
+          publishSync('script_deleted', rec.id);
           onToast?.('Removed saved script');
           await refresh();
         });
@@ -58,7 +58,7 @@ export function renderScriptSavedBar(
   };
 
   subscribeSync((msg) => {
-    if (msg.type === 'script:saved' || msg.type === 'script:deleted') void refresh();
+    if (msg.type === 'script_saved' || msg.type === 'script_deleted') void refresh();
   });
   void refresh();
   return { element: bar, refresh };

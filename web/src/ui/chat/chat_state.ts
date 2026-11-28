@@ -20,7 +20,7 @@ class ChatStore {
     if (!this.synced) {
       this.synced = true;
       subscribeSync((m) => {
-        if (m.type === 'chat:updated') void this.reload(onChange);
+        if (m.type === 'chat_updated') void this.reload(onChange);
       });
     }
     if (!this.threads.length) void this.reload(onChange);
@@ -41,7 +41,6 @@ class ChatStore {
       profileId,
       title: extractSubjectLine(promptText),
       messages: [],
-      createdAt: now,
       updatedAt: now,
     };
   }
@@ -60,7 +59,7 @@ class ChatStore {
     this.activeThread!.messages.push({ id: `m_${Date.now()}`, role: 'assistant', content: reply, createdAt: Date.now() });
     await saveChatThread(this.activeThread!).catch(() => {});
     this.threads = await listThreadsByProfile(profileId).catch(() => [this.activeThread!]);
-    publishSync({ type: 'chat:updated', profileId, targetId: this.activeThread!.id });
+    publishSync('chat_updated', this.activeThread!.id);
     this.busy = false;
     onUpdate();
   }
@@ -68,7 +67,7 @@ class ChatStore {
   async removeThread(id: string): Promise<void> {
     const profileId = getActiveProfileId();
     await deleteChatThread(id);
-    publishSync({ type: 'chat:updated', profileId, targetId: id });
+    publishSync('chat_updated', id);
     this.threads = await listThreadsByProfile(profileId).catch(() => []);
     if (this.activeThread?.id === id) this.activeThread = this.threads[0] ?? null;
   }

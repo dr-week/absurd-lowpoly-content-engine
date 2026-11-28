@@ -12,7 +12,7 @@ export function renderSafeZoneView(
   const toolbar = Object.assign(document.createElement('div'), { className: 'safe-zone-toolbar' });
 
   const heading = Object.assign(document.createElement('span'), { className: 'safe-zone-heading' });
-  heading.append(uiGlyphs.frame(14), document.createTextNode('9:16 Safe-Zone HUD'));
+  heading.innerHTML = `${uiGlyphs.frame()}<span>9:16 Safe-Zone HUD</span>`;
 
   const tabs = Object.assign(document.createElement('div'), { className: 'safe-zone-tabs' });
   const stage = Object.assign(document.createElement('div'), { className: 'safe-zone-stage' });
@@ -21,7 +21,7 @@ export function renderSafeZoneView(
   const activeBeat = script.beats[beatIdx] ?? script.beats[0];
   frame.append(
     Object.assign(document.createElement('div'), { className: 'safe-zone-dead-top', textContent: 'TOP UI / NOTCH' }),
-    Object.assign(document.createElement('div'), { className: 'safe-zone-center', textContent: activeBeat?.cleanText ?? script.topic }),
+    Object.assign(document.createElement('div'), { className: 'safe-zone-center', textContent: activeBeat?.spokenText ?? script.topic }),
     Object.assign(document.createElement('div'), { className: 'safe-zone-dead-right', textContent: 'ACTIONS' }),
     Object.assign(document.createElement('div'), { className: 'safe-zone-dead-bottom', textContent: 'CAPTION & AUDIO' }),
   );

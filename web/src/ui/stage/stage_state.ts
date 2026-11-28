@@ -13,7 +13,7 @@ class StageStore {
   private booted = false;
   draftTopic = 'Society lift maintenance fee';
   blueprintId = COMEDY_BLUEPRINTS[0].id;
-  script: CompiledScript = compileScript({ topic: this.draftTopic, blueprintId: this.blueprintId });
+  script: CompiledScript = compileScript({ topic: this.draftTopic, niche: this.blueprintId as any });
   beatIdx = 0;
   platform: SafeZonePlatform = 'reels';
 
@@ -27,7 +27,7 @@ class StageStore {
   seedTopic(topicText: string): void {
     this.draftTopic = topicText.trim() || this.draftTopic;
     this.beatIdx = 0;
-    this.script = compileScript({ topic: this.draftTopic, blueprintId: this.blueprintId });
+    this.script = compileScript({ topic: this.draftTopic, niche: this.blueprintId as any });
   }
 
   syncActiveTopic(activeTopic?: ScoredTopic): void {
@@ -39,16 +39,23 @@ class StageStore {
 
   loadSaved(rec: ScriptRecord): void {
     this.draftTopic = rec.topic;
-    this.blueprintId = rec.blueprintId;
+    this.blueprintId = rec.blueprintId ?? rec.niche;
     this.beatIdx = 0;
-    this.script = compileScript({ topic: rec.topic, blueprintId: rec.blueprintId });
+    this.script = compileScript({ topic: rec.topic, niche: rec.niche });
   }
 
   async persistCurrent(): Promise<void> {
     const profileId = getActiveProfileId();
     const now = Date.now();
-    await saveScript({ ...this.script, profileId, createdAt: now, updatedAt: now });
-    publishSync({ type: 'script:saved', profileId, targetId: this.script.id });
+    await saveScript({
+      ...this.script,
+      profileId,
+      durationSec: this.script.totalDurationSec ?? this.script.totalSec,
+      wordCount: this.script.wordCount ?? this.script.totalWords,
+      createdAt: now,
+      updatedAt: now,
+    });
+    publishSync('script_saved', this.script.id);
   }
 }
 

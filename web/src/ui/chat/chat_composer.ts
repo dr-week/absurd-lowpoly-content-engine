@@ -38,7 +38,7 @@ export function renderChatComposer(params: {
     className: 'btn btn--primary',
     disabled: params.busy,
   });
-  sendBtn.append(uiGlyphs.send(14), Object.assign(document.createElement('span'), { textContent: params.busy ? '...' : 'Send' }));
+  sendBtn.innerHTML = `${uiGlyphs.send()}<span>${params.busy ? '...' : 'Send'}</span>`;
 
   input.addEventListener('keydown', (ev) => {
     if (ev.key === 'Enter' && !ev.shiftKey) {

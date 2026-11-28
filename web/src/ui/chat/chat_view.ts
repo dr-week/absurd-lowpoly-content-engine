@@ -39,17 +39,17 @@ export function renderChatView(opts: {
   const main = Object.assign(document.createElement('div'), { className: 'chat-main' });
   const topbar = Object.assign(document.createElement('div'), { className: 'chat-topbar' });
   const titleBox = Object.assign(document.createElement('div'), { className: 'chat-topbar__title' });
-  titleBox.append(uiGlyphs.chat(16), document.createTextNode(chatStore.activeThread?.title ?? "AI Comedy Writers' Room"));
+  titleBox.innerHTML = `${uiGlyphs.chat()}<span>${chatStore.activeThread?.title ?? "AI Comedy Writers' Room"}</span>`;
 
   const shortcuts = Object.assign(document.createElement('div'), { className: 'chat-topbar__shortcuts' });
   if (opts.activeTopic) {
     shortcuts.appendChild(Object.assign(document.createElement('span'), { className: 'pill pill--accent', textContent: `Context: ${opts.activeTopic.title.slice(0, 28)}` }));
   }
   const toStudioBtn = Object.assign(document.createElement('button'), { type: 'button', className: 'btn', textContent: 'Prompt Studio' });
-  toStudioBtn.prepend(uiGlyphs.spark(13));
+  toStudioBtn.insertAdjacentHTML('afterbegin', uiGlyphs.spark());
   toStudioBtn.addEventListener('click', () => opts.onJumpTab('studio'));
   const toStageBtn = Object.assign(document.createElement('button'), { type: 'button', className: 'btn', textContent: 'Stage & Teleprompter' });
-  toStageBtn.prepend(uiGlyphs.stage(13));
+  toStageBtn.insertAdjacentHTML('afterbegin', uiGlyphs.stage());
   toStageBtn.addEventListener('click', () => opts.onJumpTab('stage'));
   shortcuts.append(toStudioBtn, toStageBtn);
   topbar.append(titleBox, shortcuts);

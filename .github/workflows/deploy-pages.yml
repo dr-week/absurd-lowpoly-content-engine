@@ -54,6 +54,9 @@ jobs:
         working-directory: web
         run: npm install
 
+      - name: Run Vitest unit tests
+        run: npm --prefix web test
+
       - name: Run diversity & quality harness
         working-directory: web
         run: npm run test:harness

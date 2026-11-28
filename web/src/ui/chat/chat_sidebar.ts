@@ -16,7 +16,7 @@ export function renderChatSidebar(params: {
     type: 'button',
     className: 'btn btn--primary chat-sidebar__new-btn',
   });
-  newBtn.append(uiGlyphs.plus(14), Object.assign(document.createElement('span'), { textContent: 'New Chat' }));
+  newBtn.innerHTML = `${uiGlyphs.plus()}<span>New Chat</span>`;
   newBtn.addEventListener('click', params.onNewChat);
   top.appendChild(newBtn);
 
@@ -53,7 +53,7 @@ export function renderChatSidebar(params: {
         className: 'chat-thread-item__del',
         title: 'Delete thread',
       });
-      delBtn.appendChild(uiGlyphs.close(12));
+      delBtn.innerHTML = uiGlyphs.close();
       delBtn.addEventListener('click', (ev) => {
         ev.stopPropagation();
         params.onDeleteThread(t.id);

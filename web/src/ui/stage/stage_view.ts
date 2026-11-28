@@ -36,11 +36,13 @@ export function renderStageView(opts?: {
   for (const bp of COMEDY_BLUEPRINTS) {
     bpSelect.appendChild(Object.assign(document.createElement('option'), { value: bp.id, selected: bp.id === stageStore.blueprintId, textContent: `${bp.name} · ${bp.style}` }));
   }
+  const demoBtn = Object.assign(document.createElement('button'), { type: 'button', className: 'btn', title: 'Load a ready-to-rehearse 5-beat demo script' });
+  demoBtn.innerHTML = `${uiGlyphs.play()}<span>Load Demo Script</span>`;
   const chatBtn = Object.assign(document.createElement('button'), { type: 'button', className: 'btn', title: 'Co-write in AI Chat' });
-  chatBtn.append(uiGlyphs.chat(14), Object.assign(document.createElement('span'), { textContent: 'AI Chat' }));
+  chatBtn.innerHTML = `${uiGlyphs.chat()}<span>AI Chat</span>`;
   const saveBtn = Object.assign(document.createElement('button'), { type: 'button', className: 'btn' });
-  saveBtn.append(uiGlyphs.save(14), Object.assign(document.createElement('span'), { textContent: 'Save Local' }));
-  headerActions.append(bpSelect, chatBtn, saveBtn);
+  saveBtn.innerHTML = `${uiGlyphs.save()}<span>Save Local</span>`;
+  headerActions.append(bpSelect, demoBtn, chatBtn, saveBtn);
   header.append(titleGroup, headerActions);
 
   const form = Object.assign(document.createElement('form'), { className: 'script-composer-form' });
@@ -51,10 +53,17 @@ export function renderStageView(opts?: {
     value: stageStore.draftTopic,
   });
   topicInput.addEventListener('input', () => { stageStore.draftTopic = topicInput.value; });
+  demoBtn.addEventListener('click', () => {
+    const demoTopic = 'Society lift maintenance fee & Pigeon GST';
+    topicInput.value = demoTopic;
+    stageStore.seedTopic(demoTopic);
+    renderSubpanels();
+    opts?.onToast?.('Loaded 5-beat demo script');
+  });
   chatBtn.addEventListener('click', () => opts?.onOpenInChat?.(topicInput.value));
 
   const genBtn = Object.assign(document.createElement('button'), { type: 'submit', className: 'btn btn--primary' });
-  genBtn.append(uiGlyphs.spark(14), Object.assign(document.createElement('span'), { textContent: 'Compile 5-Beat' }));
+  genBtn.innerHTML = `${uiGlyphs.spark()}<span>Compile 5-Beat</span>`;
   form.append(topicInput, genBtn);
 
   const split = Object.assign(document.createElement('div'), { className: 'script-split-pane' });
@@ -76,14 +85,14 @@ export function renderStageView(opts?: {
   const savedBar = renderScriptSavedBar((rec) => {
     stageStore.loadSaved(rec);
     topicInput.value = rec.topic;
-    bpSelect.value = rec.blueprintId;
+    bpSelect.value = rec.blueprintId ?? rec.niche;
     renderSubpanels();
   }, opts?.onToast);
 
   bpSelect.addEventListener('change', () => {
     stageStore.blueprintId = bpSelect.value;
     stageStore.beatIdx = 0;
-    stageStore.script = compileScript({ topic: topicInput.value, blueprintId: stageStore.blueprintId });
+    stageStore.script = compileScript({ topic: topicInput.value, niche: stageStore.blueprintId as any });
     renderSubpanels();
   });
   form.addEventListener('submit', (e) => {

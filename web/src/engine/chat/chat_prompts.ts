@@ -60,7 +60,7 @@ export function buildOfflineCowriterReply(prompt: string, activeTopic?: ScoredTo
 
   const compiled = compileScript({
     topic: subject.slice(0, 80),
-    blueprintId: lower.includes('chaos') || lower.includes('roast') ? 'household-chaos' : 'absurd-deadpan',
+    niche: lower.includes('chaos') || lower.includes('roast') ? 'tech' : 'history',
   });
   return `${compiled.title} (${compiled.totalDurationSec}s · ${compiled.wordCount}w)\n\n${compiled.rehearsalText}`;
 }
