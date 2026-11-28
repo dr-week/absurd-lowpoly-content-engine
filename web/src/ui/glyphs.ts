@@ -26,3 +26,17 @@ const PATHS: Record<GlyphName, string> = {
 export function renderGlyph(name: GlyphName, cls = 'studio-glyph'): string {
   return `<svg class="${cls}" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${PATHS[name]}</svg>`;
 }
+
+export const uiGlyphs = {
+  render: renderGlyph,
+  send: (cls?: string) => renderGlyph('send', cls),
+  play: (cls?: string) => renderGlyph('play', cls),
+  pause: (cls?: string) => renderGlyph('pause', cls),
+  mirror: (cls?: string) => renderGlyph('mirror', cls),
+  copy: (cls?: string) => renderGlyph('copy', cls),
+  eye: (cls?: string) => renderGlyph('eye', cls),
+  shield: (cls?: string) => renderGlyph('shield', cls),
+  sparkles: (cls?: string) => renderGlyph('sparkles', cls),
+  sliders: (cls?: string) => renderGlyph('sliders', cls),
+  clock: (cls?: string) => renderGlyph('clock', cls),
+};

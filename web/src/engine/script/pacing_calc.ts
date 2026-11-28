@@ -31,3 +31,8 @@ export function estimateSpokenSeconds(text: string): number {
   const speechSec = words / WORDS_PER_SEC;
   return Number((speechSec + p1 * 1.0 + p2 * 2.0).toFixed(1));
 }
+
+export function parsePauseSeconds(tag: string): number {
+  const m = /\[PAUSE\s*-\s*(\d+(?:\.\d+)?)s\]/i.exec(tag);
+  return m ? Number(m[1]) : 0;
+}

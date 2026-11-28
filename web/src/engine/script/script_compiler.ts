@@ -10,6 +10,7 @@ import {
 } from './pacing_calc';
 import { sanitizeAudioFirst } from './visual_gate';
 import type { CompiledBeat, CompiledScript, NicheBlueprint } from './script_types';
+export type { CompiledScript };
 
 const BLUEPRINTS: Record<ScriptNiche, NicheBlueprint> = {
   tech: TECH_BLUEPRINT,
@@ -21,6 +22,7 @@ const BLUEPRINTS: Record<ScriptNiche, NicheBlueprint> = {
 export interface CompileOptions {
   niche: ScriptNiche;
   topic: string;
+  blueprintId?: string;
   targetDurationSec?: number;
   includeVisuals?: boolean;
 }

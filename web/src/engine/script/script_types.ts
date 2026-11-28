@@ -38,4 +38,7 @@ export interface CompiledScript {
   totalSec: number;
   targetDurationSec: number;
   wordBudget: number;
+  totalDurationSec?: number;
+  wordCount?: number;
+  rehearsalText?: string;
 }

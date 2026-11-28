@@ -3,6 +3,7 @@ export const IDB_VERSION = 1;
 export const STORE_SCRIPTS = 'scripts';
 export const STORE_VAULT = 'vault';
 export const STORE_PROFILES = 'profiles';
+export const STORE_THREADS = 'threads';
 
 let dbPromise: Promise<IDBDatabase> | null = null;
 
@@ -44,4 +45,18 @@ export function openStudioDb(): Promise<IDBDatabase> {
 
 export function resetDbCacheForTests(): void {
   dbPromise = null;
+}
+
+export async function withStore<T>(
+  storeName: string,
+  mode: IDBTransactionMode,
+  fn: (store: IDBObjectStore) => IDBRequest<T> | void,
+): Promise<T> {
+  const db = await openStudioDb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(storeName, mode);
+    const req = fn(tx.objectStore(storeName));
+    tx.oncomplete = () => resolve((req ? req.result : undefined) as T);
+    tx.onerror = () => reject(tx.error ?? new Error(`IDB error on ${storeName}`));
+  });
 }

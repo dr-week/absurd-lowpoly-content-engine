@@ -41,3 +41,9 @@ export async function ensureDefaultProfile(): Promise<StudioProfile> {
   });
   return profile;
 }
+
+export function getActiveProfileId(): string {
+  return DEFAULT_PROFILE_ID;
+}
+
+export const requestStoragePersistence = requestPersistentStorage;

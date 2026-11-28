@@ -5,6 +5,7 @@ export interface ScriptRecord {
   profileId: string;
   title: string;
   niche: ScriptNiche;
+  blueprintId?: string;
   topic: string;
   durationSec: number;
   wordCount: number;
@@ -49,4 +50,19 @@ export interface SyncMessage {
   payloadId: string;
   senderId: string;
   timestamp: number;
+}
+
+export interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+  createdAt: number;
+}
+
+export interface ChatThread {
+  id: string;
+  profileId: string;
+  title: string;
+  messages: ChatMessage[];
+  updatedAt: number;
 }

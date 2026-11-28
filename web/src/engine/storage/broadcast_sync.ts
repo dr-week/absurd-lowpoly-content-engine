@@ -43,3 +43,11 @@ export class StudioBroadcastBus {
 }
 
 export const studioBus = new StudioBroadcastBus();
+
+export function publishSync(type: SyncMessageType, payloadId: string): void {
+  studioBus.publish(type, payloadId);
+}
+
+export function subscribeSync(listener: SyncListener): () => void {
+  return studioBus.subscribe(listener);
+}
