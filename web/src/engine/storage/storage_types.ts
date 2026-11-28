@@ -1,81 +1,52 @@
-export type SyncEventType =
-  | 'script:saved'
-  | 'script:deleted'
-  | 'vault:updated'
-  | 'profile:changed'
-  | 'chat:updated';
-
-export interface SyncMessage {
-  type: SyncEventType;
-  profileId: string;
-  targetId?: string;
-  timestamp: number;
-}
-
-export interface UserProfile {
-  id: string;
-  name: string;
-  createdAt: number;
-  updatedAt: number;
-  persisted?: boolean;
-}
-
-export type StudioProfile = UserProfile;
-
-export interface UserSettings {
-  profileId: string;
-  defaultLanguage: string;
-  defaultBlueprintId: string;
-  teleprompterWpm: number;
-  mirrorTeleprompter: boolean;
-}
+export type ScriptNiche = 'tech' | 'history' | 'growth' | 'science';
 
 export interface ScriptRecord {
   id: string;
   profileId: string;
   title: string;
+  niche: ScriptNiche;
   topic: string;
-  language: string;
-  blueprintId: string;
-  totalDurationSec: number;
+  durationSec: number;
   wordCount: number;
-  beats: unknown[];
-  cleanText: string;
-  rehearsalText: string;
+  beats: ScriptBeatRecord[];
   createdAt: number;
   updatedAt: number;
 }
 
-export interface VaultRecord {
+export interface ScriptBeatRecord {
   id: string;
-  profileId: string;
   label: string;
-  iv: string;
-  ciphertext: string;
-  salt: string;
-  createdAt: number;
+  transition: string;
+  spokenText: string;
+  visualCue?: string;
+  targetSec: number;
+}
+
+export interface VaultEntry {
+  id: string;
+  label: string;
+  cipherTextB64: string;
+  ivB64: string;
+  saltB64: string;
   updatedAt: number;
 }
 
-export interface ChatMessage {
+export interface StudioProfile {
   id: string;
-  role: 'user' | 'assistant';
-  content: string;
-  createdAt: number;
-}
-
-export interface ChatThread {
-  id: string;
-  profileId: string;
-  title: string;
-  messages: ChatMessage[];
-  createdAt: number;
-  updatedAt: number;
-}
-
-export interface StoragePersistenceStatus {
-  supported: boolean;
+  name: string;
   persisted: boolean;
-  usageBytes?: number;
-  quotaBytes?: number;
+  createdAt: number;
+}
+
+export type SyncMessageType =
+  | 'script_saved'
+  | 'script_deleted'
+  | 'vault_updated'
+  | 'profile_changed';
+
+export interface SyncMessage {
+  type: SyncMessageType;
+  payloadId: string;
+  senderId: string;
+  timestamp: number;
 }

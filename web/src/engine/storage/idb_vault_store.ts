@@ -1,33 +1,32 @@
-import { STORE_VAULT, openStudioDb, withStore } from './idb_conn.ts';
-import type { VaultRecord } from './storage_types.ts';
+import { openStudioDb, STORE_VAULT } from './idb_conn';
+import type { VaultEntry } from './storage_types';
 
-export async function saveVaultRecord(record: VaultRecord): Promise<VaultRecord> {
-  const updated: VaultRecord = {
-    ...record,
-    updatedAt: Date.now(),
-  };
-  await withStore(STORE_VAULT, 'readwrite', (store) => store.put(updated));
-  return updated;
-}
-
-export async function getVaultRecord(id: string): Promise<VaultRecord | undefined> {
-  return withStore<VaultRecord | undefined>(STORE_VAULT, 'readonly', (store) =>
-    store.get(id)
-  );
-}
-
-export async function listVaultByProfile(profileId: string): Promise<VaultRecord[]> {
+export async function saveVaultEntry(entry: VaultEntry): Promise<void> {
   const db = await openStudioDb();
-  return new Promise<VaultRecord[]>((resolve, reject) => {
-    const tx = db.transaction(STORE_VAULT, 'readonly');
-    const store = tx.objectStore(STORE_VAULT);
-    const idx = store.index('profileId');
-    const req = idx.getAll(profileId);
-    req.onsuccess = () => resolve((req.result as VaultRecord[]) ?? []);
-    req.onerror = () => reject(req.error ?? new Error('Failed to list vault records'));
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_VAULT, 'readwrite');
+    tx.objectStore(STORE_VAULT).put(entry);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error ?? new Error('Failed to save vault entry'));
   });
 }
 
-export async function deleteVaultRecord(id: string): Promise<void> {
-  await withStore(STORE_VAULT, 'readwrite', (store) => store.delete(id));
+export async function getVaultEntry(id: string): Promise<VaultEntry | null> {
+  const db = await openStudioDb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_VAULT, 'readonly');
+    const req = tx.objectStore(STORE_VAULT).get(id);
+    req.onsuccess = () => resolve((req.result as VaultEntry | undefined) ?? null);
+    req.onerror = () => reject(req.error ?? new Error('Failed to read vault entry'));
+  });
+}
+
+export async function deleteVaultEntry(id: string): Promise<void> {
+  const db = await openStudioDb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_VAULT, 'readwrite');
+    tx.objectStore(STORE_VAULT).delete(id);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error ?? new Error('Failed to delete vault entry'));
+  });
 }

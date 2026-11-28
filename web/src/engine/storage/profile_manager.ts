@@ -1,61 +1,43 @@
-import { STORE_PROFILES, withStore } from './idb_conn.ts';
-import type { StoragePersistenceStatus, StudioProfile } from './storage_types.ts';
+import { openStudioDb, STORE_PROFILES } from './idb_conn';
+import type { StudioProfile } from './storage_types';
 
-const ACTIVE_PROFILE_KEY = 'absurd_active_profile_id';
-const DEFAULT_PROFILE_ID = 'default-creator';
+const DEFAULT_PROFILE_ID = 'default_creator';
 
-export async function requestStoragePersistence(): Promise<StoragePersistenceStatus> {
-  if (typeof navigator === 'undefined' || !navigator.storage) {
-    return { supported: false, persisted: false };
+export async function requestPersistentStorage(): Promise<boolean> {
+  if (typeof navigator === 'undefined' || !navigator.storage?.persist) {
+    return false;
   }
-  let persisted = false;
-  if (typeof navigator.storage.persisted === 'function') {
-    persisted = await navigator.storage.persisted();
-  }
-  if (!persisted && typeof navigator.storage.persist === 'function') {
-    persisted = await navigator.storage.persist();
-  }
-  const estimate =
-    typeof navigator.storage.estimate === 'function'
-      ? await navigator.storage.estimate()
-      : undefined;
-
-  return {
-    supported: true,
-    persisted,
-    usageBytes: estimate?.usage,
-    quotaBytes: estimate?.quota,
-  };
-}
-
-export function getActiveProfileId(): string {
-  if (typeof localStorage === 'undefined') return DEFAULT_PROFILE_ID;
-  return localStorage.getItem(ACTIVE_PROFILE_KEY) || DEFAULT_PROFILE_ID;
-}
-
-export function setActiveProfileId(profileId: string): void {
-  if (typeof localStorage !== 'undefined') {
-    localStorage.setItem(ACTIVE_PROFILE_KEY, profileId);
+  try {
+    const already = await navigator.storage.persisted();
+    if (already) return true;
+    return await navigator.storage.persist();
+  } catch {
+    return false;
   }
 }
 
 export async function ensureDefaultProfile(): Promise<StudioProfile> {
-  const id = getActiveProfileId();
-  const existing = await withStore<StudioProfile | undefined>(
-    STORE_PROFILES,
-    'readonly',
-    (s) => s.get(id)
-  );
+  const db = await openStudioDb();
+  const existing = await new Promise<StudioProfile | null>((resolve, reject) => {
+    const tx = db.transaction(STORE_PROFILES, 'readonly');
+    const req = tx.objectStore(STORE_PROFILES).get(DEFAULT_PROFILE_ID);
+    req.onsuccess = () => resolve((req.result as StudioProfile | undefined) ?? null);
+    req.onerror = () => reject(req.error ?? new Error('Failed to read profile'));
+  });
   if (existing) return existing;
 
-  const now = Date.now();
+  const persisted = await requestPersistentStorage();
   const profile: StudioProfile = {
-    id,
+    id: DEFAULT_PROFILE_ID,
     name: 'Creator Studio',
-    createdAt: now,
-    updatedAt: now,
-    persisted: false,
+    persisted,
+    createdAt: Date.now(),
   };
-  await withStore(STORE_PROFILES, 'readwrite', (s) => s.put(profile));
+  await new Promise<void>((resolve, reject) => {
+    const tx = db.transaction(STORE_PROFILES, 'readwrite');
+    tx.objectStore(STORE_PROFILES).put(profile);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error ?? new Error('Failed to save profile'));
+  });
   return profile;
 }
