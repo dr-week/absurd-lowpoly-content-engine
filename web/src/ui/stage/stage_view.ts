@@ -69,14 +69,6 @@ export function renderStageView(opts?: {
     opts?.onToast?.('Loaded 5-beat demo script');
   });
   chatBtn.addEventListener('click', () => opts?.onOpenInChat?.(topicInput.value));
-  gdocBtn.addEventListener('click', () => {
-    void exportScriptToGoogleDoc(stageStore.compiled).then(() => opts?.onToast?.('Exported to Google Doc')).catch((e: unknown) => opts?.onToast?.(e instanceof Error ? e.message : 'Export failed'));
-  });
-  ytBtn.addEventListener('click', () => {
-    const meta = buildYouTubeShortsMetadata(stageStore.compiled);
-    void navigator.clipboard?.writeText(`${meta.title}\n\n${meta.description}\n\n${meta.tags.join(' ')}`);
-    opts?.onToast?.('Copied YouTube Shorts Meta');
-  });
 
   const genBtn = Object.assign(document.createElement('button'), { type: 'submit', className: 'btn btn--primary' });
   genBtn.innerHTML = `${uiGlyphs.spark()}<span>Compile 5-Beat</span>`;
