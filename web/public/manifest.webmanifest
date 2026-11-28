@@ -1,0 +1,9 @@
+{
+  "name": "Absurd Studio · Universal Script Studio",
+  "short_name": "Absurd Studio",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#0f172a",
+  "description": "Local-first 5-beat script compiler, teleprompter, and 9:16 safe-zone studio."
+}

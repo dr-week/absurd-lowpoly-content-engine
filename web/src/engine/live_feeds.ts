@@ -1,54 +1,61 @@
-// Free, zero-key, CORS-safe live trend & dictionary fetchers for GitHub Pages
-
-export interface LiveTrendFeed {
-  updated_at: string;
-  keywords: string[];
-  trends: Array<{ title: string; source: string; published: string; url: string }>;
+export interface LiveTrendItem {
+  title: string;
+  niche: 'tech' | 'history' | 'science';
+  source: 'hackernews' | 'wikipedia';
 }
 
-let cachedFeed: LiveTrendFeed | null = null;
-
-/** Load live India Google Trends & News JSON synced by GitHub Actions (zero CORS issues). */
-export async function loadLiveTrends(): Promise<LiveTrendFeed | null> {
-  if (cachedFeed) return cachedFeed;
+export async function fetchHackerNewsTrends(limit = 6): Promise<LiveTrendItem[]> {
   try {
-    const resp = await fetch('./live_trends.json', { cache: 'no-store' });
-    if (!resp.ok) return null;
-    cachedFeed = (await resp.json()) as LiveTrendFeed;
-    return cachedFeed;
-  } catch {
-    return null;
-  }
-}
-
-/**
- * Fetch free, zero-key, CORS-enabled word associations from Datamuse API
- * to inject fresh unexpected dictionary keywords into topic randomization.
- */
-export async function fetchDatamuseKeywords(seedWord: string, max = 8): Promise<string[]> {
-  const clean = seedWord.trim().split(/\s+/)[0];
-  if (!clean) return [];
-  try {
-    const url = `https://api.datamuse.com/words?rel_trg=${encodeURIComponent(clean)}&max=${max}`;
-    const resp = await fetch(url);
-    if (!resp.ok) return [];
-    const rows = (await resp.json()) as Array<{ word: string }>;
-    return rows.map((r) => r.word).filter((w) => w.length >= 3);
+    const res = await fetch(`https://hn.algolia.com/api/v1/search?tags=front_page&hitsPerPage=${limit}`);
+    if (!res.ok) return [];
+    const data = (await res.json()) as { hits?: Array<{ title?: string }> };
+    return (data.hits ?? [])
+      .filter((h) => h.title)
+      .map((h) => ({ title: h.title!.trim(), niche: 'tech' as const, source: 'hackernews' as const }));
   } catch {
     return [];
   }
 }
 
-import { isReligiousContent } from './headline_filter';
-
-const CHIP_NOISE = new Set(['accuses', 'announces', 'claims', 'warns', "didn't", 'cremated', 'convicted', 'criminal', 'detained', 'conning', 'deadlock', 'close', 'dependent']);
-
-export function pickTrendChips(pool: string[], count = 6): string[] {
-  const clean = pool.filter((k) => !CHIP_NOISE.has(k.toLowerCase()) && !isReligiousContent(k));
-  const arr = [...(clean.length >= count ? clean : pool.filter((k) => !isReligiousContent(k)))];
-  for (let i = arr.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+export async function fetchWikipediaTopTrends(limit = 6): Promise<LiveTrendItem[]> {
+  try {
+    const d = new Date(Date.now() - 86_400_000 * 2);
+    const yyyy = d.getUTCFullYear();
+    const mm = String(d.getUTCMonth() + 1).padStart(2, '0');
+    const dd = String(d.getUTCDate()).padStart(2, '0');
+    const res = await fetch(
+      `https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia/all-access/${yyyy}/${mm}/${dd}`,
+    );
+    if (!res.ok) return [];
+    const data = (await res.json()) as { items?: Array<{ articles?: Array<{ article: string }> }> };
+    const articles = data.items?.[0]?.articles ?? [];
+    return articles
+      .filter((a) => !a.article.startsWith('Special:') && a.article !== 'Main_Page')
+      .slice(0, limit)
+      .map((a) => ({
+        title: a.article.replace(/_/g, ' '),
+        niche: 'history' as const,
+        source: 'wikipedia' as const,
+      }));
+  } catch {
+    return [];
   }
-  return arr.slice(0, count);
+}
+
+export async function fetchAllLiveTrends(): Promise<LiveTrendItem[]> {
+  const [hn, wiki] = await Promise.all([fetchHackerNewsTrends(), fetchWikipediaTopTrends()]);
+  return [...hn, ...wiki];
+}
+
+export async function loadLiveTrends(): Promise<{ trends: LiveTrendItem[]; keywords: string[] }> {
+  const trends = await fetchAllLiveTrends();
+  return { trends, keywords: trends.map((t) => t.title) };
+}
+
+export function pickTrendChips(
+  data: { keywords?: string[] } | string[],
+  count = 6,
+): string[] {
+  const list = Array.isArray(data) ? data : (data.keywords ?? []);
+  return list.slice(0, count);
 }
