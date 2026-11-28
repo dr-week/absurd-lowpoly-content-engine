@@ -1,3 +1,4 @@
+import { buildYouTubeShortsMetadata } from '../../engine/export_creators.ts';
 import { COMEDY_BLUEPRINTS } from '../../engine/script/blueprints_comedy.ts';
 import { compileScript } from '../../engine/script/script_compiler.ts';
 import type { ScoredTopic } from '../../types.ts';
@@ -42,7 +43,14 @@ export function renderStageView(opts?: {
   chatBtn.innerHTML = `${uiGlyphs.chat()}<span>AI Chat</span>`;
   const saveBtn = Object.assign(document.createElement('button'), { type: 'button', className: 'btn' });
   saveBtn.innerHTML = `${uiGlyphs.save()}<span>Save Local</span>`;
-  headerActions.append(bpSelect, demoBtn, chatBtn, saveBtn);
+  const ytBtn = Object.assign(document.createElement('button'), { type: 'button', className: 'btn', title: 'Copy YouTube Shorts title, tags & description' });
+  ytBtn.innerHTML = `${uiGlyphs.copy()}<span>YT Meta</span>`;
+  ytBtn.addEventListener('click', async () => {
+    const meta = buildYouTubeShortsMetadata(stageStore.script);
+    await navigator.clipboard?.writeText(`${meta.title}\n\n${meta.description}\n\nTags: ${meta.tags.join(', ')}`);
+    opts?.onToast?.('Copied YouTube Shorts metadata');
+  });
+  headerActions.append(bpSelect, demoBtn, chatBtn, ytBtn, saveBtn);
   header.append(titleGroup, headerActions);
 
   const form = Object.assign(document.createElement('form'), { className: 'script-composer-form' });

@@ -1,5 +1,6 @@
 import { CHAT_SLASH_CHIPS } from '../../engine/chat/chat_prompts.ts';
 import type { ScoredTopic } from '../../types.ts';
+import { isSpeechDictationSupported, startVoiceDictation } from '../../engine/speech_dictation.ts';
 import { uiGlyphs } from '../glyphs.ts';
 
 export function renderChatComposer(params: {
@@ -51,6 +52,22 @@ export function renderChatComposer(params: {
     params.onSubmit(input.value);
   });
 
+  if (isSpeechDictationSupported()) {
+    const micBtn = Object.assign(document.createElement('button'), {
+      type: 'button',
+      className: 'btn btn--icon',
+      title: 'Voice Dictation (Web Speech API)',
+      ariaLabel: 'Voice Dictation',
+    });
+    micBtn.innerHTML = uiGlyphs.chat();
+    micBtn.addEventListener('click', () => {
+      startVoiceDictation((transcript) => {
+        input.value = input.value ? `${input.value} ${transcript}` : transcript;
+        input.focus();
+      });
+    });
+    row.appendChild(micBtn);
+  }
   row.append(input, sendBtn);
   dock.append(slashBar, row);
   return dock;
