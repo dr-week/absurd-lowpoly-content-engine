@@ -27,10 +27,16 @@ export interface CompileOptions {
   includeVisuals?: boolean;
 }
 
+export function normalizeTopic(raw: string): string {
+  const trimmed = raw.trim().replace(/[?.!]+$/, '');
+  const stripped = trimmed.replace(/^(why|how|what|the reason)\s+/i, '').trim();
+  return stripped || 'local-first software';
+}
+
 export function compileScript(opts: CompileOptions): CompiledScript {
   const nicheKey = opts.niche && BLUEPRINTS[opts.niche] ? opts.niche : 'tech';
   const bp = BLUEPRINTS[nicheKey];
-  const cleanTopic = opts.topic.trim() || 'local-first software';
+  const cleanTopic = normalizeTopic(opts.topic);
   const targetDurationSec = Math.max(15, Math.min(90, opts.targetDurationSec ?? 20));
   const includeVisuals = opts.includeVisuals ?? false;
   const scale = targetDurationSec / 20;
@@ -67,4 +73,14 @@ export function compileScript(opts: CompileOptions): CompiledScript {
     targetDurationSec,
     wordBudget: computeWordBudget(targetDurationSec, combinedText),
   };
+}
+
+export function buildByokScriptPrompt(compiled: CompiledScript): string {
+  return JSON.stringify({
+    task: 'Rewrite this 5-beat short script while keeping total spoken words <= wordBudget and preserving [PAUSE - 1s] cues.',
+    niche: compiled.niche,
+    topic: compiled.topic,
+    wordBudget: compiled.wordBudget,
+    beats: compiled.beats.map((b) => ({ id: b.id, spokenText: b.spokenText })),
+  });
 }
