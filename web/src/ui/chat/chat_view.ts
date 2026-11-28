@@ -42,6 +42,18 @@ export function renderChatView(opts: {
   titleBox.innerHTML = `${uiGlyphs.chat()}<span>${chatStore.activeThread?.title ?? "AI Comedy Writers' Room"}</span>`;
 
   const shortcuts = Object.assign(document.createElement('div'), { className: 'chat-topbar__shortcuts' });
+  const isByok = opts.config.sourceMode === 'gemini' || opts.config.sourceMode === 'groq' || opts.config.sourceMode === 'openrouter';
+  const modePill = Object.assign(document.createElement('button'), {
+    type: 'button',
+    className: `pill ${isByok ? 'pill--positive' : ''}`.trim(),
+    title: 'Open BYOK & Key Vault Settings',
+    textContent: isByok ? `BYOK (${opts.config.sourceMode})` : 'Local Blueprint',
+  });
+  modePill.style.cursor = 'pointer';
+  modePill.insertAdjacentHTML('afterbegin', uiGlyphs.shield());
+  modePill.addEventListener('click', () => document.querySelector<HTMLElement>('[data-action="open-drawer"]')?.click());
+  shortcuts.appendChild(modePill);
+
   if (opts.activeTopic) {
     shortcuts.appendChild(Object.assign(document.createElement('span'), { className: 'pill pill--accent', textContent: `Context: ${opts.activeTopic.title.slice(0, 28)}` }));
   }
@@ -55,11 +67,16 @@ export function renderChatView(opts: {
   topbar.append(titleBox, shortcuts);
 
   const onSend = (txt: string) => void chatStore.sendTurn(txt, opts.config, opts.activeTopic, rerender);
+  const onRegenerate = () => {
+    const lastUser = [...(chatStore.activeThread?.messages ?? [])].reverse().find((m) => m.role === 'user');
+    if (lastUser) void chatStore.sendTurn(lastUser.content, opts.config, opts.activeTopic, rerender);
+  };
 
   const stream = renderChatStream({
     messages: chatStore.activeThread?.messages ?? [],
     busy: chatStore.busy,
     onSendStarter: onSend,
+    onRegenerate,
     onSendToStudio: opts.onSendToStudio,
     onOpenInStage: opts.onOpenInStage,
     onToast: opts.onToast,

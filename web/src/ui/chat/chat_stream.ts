@@ -7,6 +7,7 @@ export function renderChatStream(params: {
   messages: ChatMessage[];
   busy: boolean;
   onSendStarter: (prompt: string) => void;
+  onRegenerate?: () => void;
   onSendToStudio: (ideaText: string) => void;
   onOpenInStage: (scriptTopic: string) => void;
   onToast: (msg: string) => void;
@@ -51,7 +52,12 @@ export function renderChatStream(params: {
       copyBtn.insertAdjacentHTML('afterbegin', uiGlyphs.copy());
       copyBtn.addEventListener('click', () => { void navigator.clipboard?.writeText(msg.content); params.onToast('Copied reply'); });
 
-      actions.append(stageBtn, studioBtn, copyBtn);
+      const regenBtn = Object.assign(document.createElement('button'), { type: 'button', className: 'pill', textContent: 'Regenerate' });
+      regenBtn.style.cursor = 'pointer';
+      regenBtn.insertAdjacentHTML('afterbegin', uiGlyphs.reset());
+      regenBtn.addEventListener('click', () => params.onRegenerate?.());
+
+      actions.append(stageBtn, studioBtn, copyBtn, regenBtn);
       item.appendChild(actions);
     }
     stream.appendChild(item);
