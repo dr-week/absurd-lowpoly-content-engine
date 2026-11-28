@@ -55,13 +55,24 @@ class ChatStore {
     this.activeThread!.messages.push({ id: `m_${now}`, role: 'user', content: text, createdAt: now });
     onUpdate();
 
-    const reply = await generateChatReply(config, this.activeThread!.messages, activeTopic);
-    this.activeThread!.messages.push({ id: `m_${Date.now()}`, role: 'assistant', content: reply, createdAt: Date.now() });
-    await saveChatThread(this.activeThread!).catch(() => {});
-    this.threads = await listThreadsByProfile(profileId).catch(() => [this.activeThread!]);
-    publishSync('chat_updated', this.activeThread!.id);
-    this.busy = false;
-    onUpdate();
+    try {
+      const reply = await generateChatReply(config, this.activeThread!.messages, activeTopic);
+      this.activeThread!.messages.push({ id: `m_${Date.now()}`, role: 'assistant', content: reply, createdAt: Date.now() });
+      await saveChatThread(this.activeThread!).catch(() => {});
+      this.threads = await listThreadsByProfile(profileId).catch(() => [this.activeThread!]);
+      publishSync('chat_updated', this.activeThread!.id);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Failed to generate reply';
+      this.activeThread!.messages.push({
+        id: `m_${Date.now()}`,
+        role: 'system',
+        content: `Error: ${msg}`,
+        createdAt: Date.now(),
+      });
+    } finally {
+      this.busy = false;
+      onUpdate();
+    }
   }
 
   async removeThread(id: string): Promise<void> {
