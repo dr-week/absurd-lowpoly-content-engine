@@ -1,92 +1,67 @@
-import { getBlueprintById } from './blueprints_comedy.ts';
-import type { BeatRole } from './blueprints_types.ts';
+import type { ScriptNiche } from '../storage/storage_types';
+import { TECH_BLUEPRINT } from './blueprints_tech';
+import { HISTORY_BLUEPRINT } from './blueprints_history';
+import { GROWTH_BLUEPRINT } from './blueprints_growth';
+import { SCIENCE_BLUEPRINT } from './blueprints_science';
 import {
-  extractDeliveryCues,
-  formatRehearsalLine,
-  stripDeliveryCues,
-  type ParsedCue,
-} from './delivery_cues.ts';
-import {
-  calculatePacingSummary,
+  computeWordBudget,
   countSpokenWords,
-  estimateBeatDurationSec,
-} from './pacing_calc.ts';
-import { sanitizeAudioFirst } from './visual_gate.ts';
+  estimateSpokenSeconds,
+} from './pacing_calc';
+import { sanitizeAudioFirst } from './visual_gate';
+import type { CompiledBeat, CompiledScript, NicheBlueprint } from './script_types';
 
-export interface CompiledBeat {
-  role: BeatRole;
-  label: string;
-  targetSec: number;
-  estimatedSec: number;
-  wordCount: number;
-  text: string;
-  cleanText: string;
-  cues: ParsedCue[];
-}
+const BLUEPRINTS: Record<ScriptNiche, NicheBlueprint> = {
+  tech: TECH_BLUEPRINT,
+  history: HISTORY_BLUEPRINT,
+  growth: GROWTH_BLUEPRINT,
+  science: SCIENCE_BLUEPRINT,
+};
 
-export interface CompiledScript {
-  id: string;
-  title: string;
+export interface CompileOptions {
+  niche: ScriptNiche;
   topic: string;
-  language: string;
-  blueprintId: string;
-  totalDurationSec: number;
-  totalPauseSec: number;
-  wordCount: number;
-  effectiveWpm: number;
-  beats: CompiledBeat[];
-  cleanText: string;
-  rehearsalText: string;
+  targetDurationSec?: number;
+  includeVisuals?: boolean;
 }
 
-export interface CompileScriptInput {
-  topic: string;
-  language?: string;
-  blueprintId?: string;
-  customLines?: Partial<Record<BeatRole, string>>;
-}
+export function compileScript(opts: CompileOptions): CompiledScript {
+  const bp = BLUEPRINTS[opts.niche];
+  const cleanTopic = opts.topic.trim() || 'local-first software';
+  const targetDurationSec = Math.max(15, Math.min(90, opts.targetDurationSec ?? 20));
+  const includeVisuals = opts.includeVisuals ?? false;
+  const scale = targetDurationSec / 20;
 
-export function compileScript(input: CompileScriptInput): CompiledScript {
-  const topic = input.topic.trim() || 'auto-rickshaw Wi-Fi';
-  const language = input.language ?? 'Hinglish';
-  const blueprint = getBlueprintById(input.blueprintId);
-
-  const beats: CompiledBeat[] = blueprint.beats.map((bpBeat) => {
-    const rawLine =
-      input.customLines?.[bpBeat.role] ??
-      bpBeat.template.replaceAll('{topic}', topic);
-    const { cleanAudio } = sanitizeAudioFirst(rawLine);
-    const rehearsal = formatRehearsalLine(cleanAudio);
+  const beats: CompiledBeat[] = bp.beats.map((b) => {
+    const raw = b.template.replace(/\{topic\}/g, cleanTopic);
+    const withVisual = includeVisuals ? `${raw} ${b.visualCue}` : raw;
+    const spokenText = sanitizeAudioFirst(withVisual, includeVisuals);
+    const targetSec = Math.max(2, Math.round(b.targetSec * scale));
     return {
-      role: bpBeat.role,
-      label: bpBeat.label,
-      targetSec: bpBeat.targetSec,
-      estimatedSec: estimateBeatDurationSec(rehearsal),
-      wordCount: countSpokenWords(rehearsal),
-      text: rehearsal,
-      cleanText: stripDeliveryCues(rehearsal),
-      cues: extractDeliveryCues(rehearsal),
+      id: b.id,
+      label: b.label,
+      transition: b.transition,
+      spokenText,
+      visualCue: b.visualCue,
+      targetSec,
+      actualSec: estimateSpokenSeconds(spokenText),
+      wordCount: countSpokenWords(spokenText),
     };
   });
 
-  const pacing = calculatePacingSummary(beats);
-  const cleanText = beats.map((b) => b.cleanText).join('\n\n');
-  const rehearsalText = beats
-    .map((b) => `[${b.label}] ${b.text}`)
-    .join('\n\n');
+  const combinedText = beats.map((b) => b.spokenText).join(' ');
+  const totalWords = beats.reduce((acc, b) => acc + b.wordCount, 0);
+  const totalSec = Number(beats.reduce((acc, b) => acc + b.actualSec, 0).toFixed(1));
 
   return {
     id: `scr_${Date.now().toString(36)}`,
-    title: `${topic} (${blueprint.name})`,
-    topic,
-    language,
-    blueprintId: blueprint.id,
-    totalDurationSec: pacing.totalDurationSec,
-    totalPauseSec: pacing.totalPauseSec,
-    wordCount: pacing.totalWords,
-    effectiveWpm: pacing.effectiveWpm,
+    niche: opts.niche,
+    topic: cleanTopic,
+    title: `${bp.titlePrefix}: ${cleanTopic}`,
     beats,
-    cleanText,
-    rehearsalText,
+    totalWords,
+    totalSec,
+    targetDurationSec,
+    wordBudget: computeWordBudget(targetDurationSec, combinedText),
   };
 }

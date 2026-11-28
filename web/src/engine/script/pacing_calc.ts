@@ -1,68 +1,33 @@
 export const WORDS_PER_SEC = 2.3;
-export const DEFAULT_PAUSE_SEC = 0.6;
+export const PAUSE_1S_PENALTY_WORDS = 2.5;
+export const PAUSE_2S_PENALTY_WORDS = 5.0;
 
-const PAUSE_TAG_RE = /\[PAUSE(?::\s*([\d.]+)s?)?\]/gi;
-const CUE_TAG_RE = /\[[A-Z_]+(?::[^\]]*)?\]/g;
-
-export function parsePauseSeconds(text: string): number {
-  let total = 0;
-  let match: RegExpExecArray | null;
-  PAUSE_TAG_RE.lastIndex = 0;
-  while ((match = PAUSE_TAG_RE.exec(text)) !== null) {
-    const val = match[1] ? Number.parseFloat(match[1]) : DEFAULT_PAUSE_SEC;
-    total += Number.isFinite(val) && val > 0 ? val : DEFAULT_PAUSE_SEC;
-  }
-  return Math.round(total * 10) / 10;
-}
+const PAUSE_1S_RE = /\[PAUSE\s*-\s*1s\]/gi;
+const PAUSE_2S_RE = /\[PAUSE\s*-\s*2s\]/gi;
+const ANY_TAG_RE = /\[[^\]]+\]/g;
 
 export function countSpokenWords(text: string): number {
-  const withoutCues = text.replace(CUE_TAG_RE, ' ').trim();
-  if (!withoutCues) return 0;
-  return withoutCues.split(/\s+/).filter(Boolean).length;
+  const cleaned = text.replace(ANY_TAG_RE, ' ').trim();
+  if (!cleaned) return 0;
+  return cleaned.split(/\s+/).length;
 }
 
-export function estimateBeatDurationSec(text: string): number {
+export function countPausePenaltyWords(text: string): number {
+  const p1 = (text.match(PAUSE_1S_RE) ?? []).length;
+  const p2 = (text.match(PAUSE_2S_RE) ?? []).length;
+  return p1 * PAUSE_1S_PENALTY_WORDS + p2 * PAUSE_2S_PENALTY_WORDS;
+}
+
+export function computeWordBudget(targetSec: number, textWithCues = ''): number {
+  const rawBudget = Math.round(targetSec * WORDS_PER_SEC);
+  const penalty = countPausePenaltyWords(textWithCues);
+  return Math.max(1, Math.round(rawBudget - penalty));
+}
+
+export function estimateSpokenSeconds(text: string): number {
   const words = countSpokenWords(text);
-  const pauseSec = parsePauseSeconds(text);
+  const p1 = (text.match(PAUSE_1S_RE) ?? []).length;
+  const p2 = (text.match(PAUSE_2S_RE) ?? []).length;
   const speechSec = words / WORDS_PER_SEC;
-  return Math.round((speechSec + pauseSec) * 10) / 10;
-}
-
-export function availableSpeechSeconds(
-  targetDurationSec: number,
-  text: string
-): number {
-  const pauseSec = parsePauseSeconds(text);
-  return Math.max(0, Math.round((targetDurationSec - pauseSec) * 10) / 10);
-}
-
-export interface PacingSummary {
-  totalWords: number;
-  totalPauseSec: number;
-  totalDurationSec: number;
-  effectiveWpm: number;
-}
-
-export function calculatePacingSummary(
-  beats: ReadonlyArray<{ text: string }>
-): PacingSummary {
-  let totalWords = 0;
-  let totalPauseSec = 0;
-  let totalDurationSec = 0;
-
-  for (const beat of beats) {
-    totalWords += countSpokenWords(beat.text);
-    totalPauseSec += parsePauseSeconds(beat.text);
-    totalDurationSec += estimateBeatDurationSec(beat.text);
-  }
-
-  const minutes = totalDurationSec / 60;
-  const effectiveWpm = minutes > 0 ? Math.round(totalWords / minutes) : 0;
-
-  return {
-    totalWords,
-    totalPauseSec: Math.round(totalPauseSec * 10) / 10,
-    totalDurationSec: Math.round(totalDurationSec * 10) / 10,
-    effectiveWpm,
-  };
+  return Number((speechSec + p1 * 1.0 + p2 * 2.0).toFixed(1));
 }
