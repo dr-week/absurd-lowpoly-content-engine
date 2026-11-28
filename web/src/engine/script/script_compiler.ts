@@ -28,7 +28,8 @@ export interface CompileOptions {
 }
 
 export function compileScript(opts: CompileOptions): CompiledScript {
-  const bp = BLUEPRINTS[opts.niche];
+  const nicheKey = opts.niche && BLUEPRINTS[opts.niche] ? opts.niche : 'tech';
+  const bp = BLUEPRINTS[nicheKey];
   const cleanTopic = opts.topic.trim() || 'local-first software';
   const targetDurationSec = Math.max(15, Math.min(90, opts.targetDurationSec ?? 20));
   const includeVisuals = opts.includeVisuals ?? false;
