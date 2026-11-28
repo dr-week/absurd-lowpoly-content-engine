@@ -1,4 +1,5 @@
 import { CHAT_SLASH_CHIPS } from '../../engine/chat/chat_prompts.ts';
+import { isSpeechDictationSupported, startVoiceDictation } from '../../engine/speech_dictation.ts';
 import type { ScoredTopic } from '../../types.ts';
 import { uiGlyphs } from '../glyphs.ts';
 
@@ -51,7 +52,19 @@ export function renderChatComposer(params: {
     params.onSubmit(input.value);
   });
 
-  row.append(input, sendBtn);
+  if (isSpeechDictationSupported()) {
+    const micBtn = Object.assign(document.createElement('button'), { type: 'button', className: 'btn', title: 'Voice Dictation', ariaLabel: 'Voice Dictation' });
+    micBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>';
+    micBtn.addEventListener('click', () => {
+      startVoiceDictation(
+        (txt) => { input.value = input.value ? `${input.value} ${txt}` : txt; input.focus(); },
+        () => {},
+      );
+    });
+    row.append(input, micBtn, sendBtn);
+  } else {
+    row.append(input, sendBtn);
+  }
   dock.append(slashBar, row);
   return dock;
 }

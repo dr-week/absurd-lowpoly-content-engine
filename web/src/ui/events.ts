@@ -11,6 +11,7 @@ import { removeSavedTopic, saveLikedTopic, setSavedOutcome } from '../engine/sav
 import { exportJson, exportJsonl, saveConfig, saveLogs, upsertVote } from '../engine/telemetry';
 import { cycleTwistBlueprint } from '../engine/twist_architect';
 import { buildViralPackage } from '../engine/viral_packaging';
+import { backupToDriveAppData, restoreFromDriveAppData, signInWithGoogle, signOutGoogle } from '../engine/storage/google_drive_sync';
 import type { ActiveTab, EngineConfig, GeneratedPrompts, HookCategory, MarketingPlatform, OutcomeTag, RatingLogEntry, SavedFilter, SavedItem, ScoredTopic, SituationCategory, TargetVideoModel, VisualStyle, VoteValue } from '../types';
 
 export interface AppState {
@@ -46,6 +47,20 @@ export function bindAppEvents(
       if (a === 'toggle-theme') { state.config.theme = state.config.theme === 'studio' ? 'noir' : 'studio'; saveConfig(state.config); hooks.render(); return; }
       if (a === 'open-drawer') { state.drawerOpen = true; hooks.render(); return; }
       if (a === 'close-drawer') { state.drawerOpen = false; hooks.render(); return; }
+      if (a === 'drive-signin') {
+        const cid = (document.getElementById('cfg-google-client-id') as HTMLInputElement | null)?.value.trim() ?? '';
+        void signInWithGoogle(cid).then(() => hooks.toast('Signed in with Google')).catch((e: unknown) => hooks.toast(e instanceof Error ? e.message : 'Sign-in failed'));
+        return;
+      }
+      if (a === 'drive-backup') {
+        void backupToDriveAppData({ saved: state.saved, logs: state.logs }).then(() => hooks.toast('Backed up to Drive')).catch((e: unknown) => hooks.toast(e instanceof Error ? e.message : 'Backup failed'));
+        return;
+      }
+      if (a === 'drive-restore') {
+        void restoreFromDriveAppData().then(() => hooks.toast('Restored from Drive')).catch((e: unknown) => hooks.toast(e instanceof Error ? e.message : 'Restore failed'));
+        return;
+      }
+      if (a === 'drive-signout') { signOutGoogle(); hooks.toast('Signed out of Google'); return; }
       if (a === 'toggle-panel' && el.dataset.panel) { const p = el.dataset.panel as 'filters' | 'custom'; state.openPanel = state.openPanel === p ? 'none' : p; hooks.render(); return; }
       if (a === 'clear-filters') { state.hookFilter = 'all'; state.situationFilter = 'all'; state.seedQuery = ''; state.batchNonce += 1; void hooks.refreshTopics(); return; }
       if (a === 'regenerate-topics') { state.batchNonce += 1; void hooks.refreshTopics(); return; }

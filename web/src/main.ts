@@ -139,3 +139,9 @@ window.addEventListener('keydown', (ev) => {
 render();
 void loadLiveTrends().then((feed) => { if (feed?.keywords?.length) { allLiveTrendPool = feed.keywords; state.liveTrends = pickTrendChips(allLiveTrendPool, 6); render(); } });
 if (state.config.sourceMode === 'live-free') void refreshTopics();
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    void navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
