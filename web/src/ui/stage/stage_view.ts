@@ -72,10 +72,20 @@ export function renderStageView(opts?: {
   const stage = Object.assign(document.createElement('div'), { className: 'script-stage' });
 
   const renderSubpanels = () => {
-    stage.replaceChildren(
-      renderPacingTimeline(stageStore.script),
-      renderScriptCardView(stageStore.script, stageStore.beatIdx, (idx) => { stageStore.beatIdx = idx; renderSubpanels(); }, opts?.onToast),
+    let pacingEl = renderPacingTimeline(stageStore.script);
+    const cardEl = renderScriptCardView(
+      stageStore.script,
+      stageStore.beatIdx,
+      (idx) => { stageStore.beatIdx = idx; renderSubpanels(); },
+      opts?.onToast,
+      () => {
+        const nextPacing = renderPacingTimeline(stageStore.script);
+        pacingEl.replaceWith(nextPacing);
+        pacingEl = nextPacing;
+        void stageStore.persistCurrent();
+      },
     );
+    stage.replaceChildren(pacingEl, cardEl);
     rightPane.replaceChildren(
       renderTeleprompterView(stageStore.script),
       renderSafeZoneView(stageStore.script, stageStore.beatIdx, stageStore.platform, (p) => { stageStore.platform = p; }),

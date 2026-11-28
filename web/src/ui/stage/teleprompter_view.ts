@@ -44,10 +44,17 @@ export function renderTeleprompterView(script: CompiledScript): HTMLElement {
 
   const viewport = Object.assign(document.createElement('div'), { className: 'teleprompter-viewport' });
   const scroller = Object.assign(document.createElement('div'), { className: 'teleprompter-scroller', textContent: rehearsalText });
-  viewport.append(Object.assign(document.createElement('div'), { className: 'teleprompter-eyeline' }), scroller);
+  const holdOverlay = Object.assign(document.createElement('div'), { className: 'teleprompter-hold-overlay', hidden: true });
+  viewport.append(Object.assign(document.createElement('div'), { className: 'teleprompter-eyeline' }), scroller, holdOverlay);
+
+  const pauseSec = parsePauseSeconds(rehearsalText);
+  let pauseCountdownSec = 0;
+  let pauseTriggered = false;
 
   const stopPlayback = () => {
     isPlaying = false;
+    pauseCountdownSec = 0;
+    holdOverlay.hidden = true;
     cancelAnimationFrame(rafId);
     playBtn.innerHTML = `${uiGlyphs.play()}<span>Play</span>`;
   };
@@ -55,8 +62,21 @@ export function renderTeleprompterView(script: CompiledScript): HTMLElement {
   const tick = (ts: number) => {
     if (!isPlaying) return;
     if (lastTs > 0) {
-      viewport.scrollTop += (wpm / 60) * 18 * ((ts - lastTs) / 1000);
-      if (viewport.scrollTop + viewport.clientHeight >= viewport.scrollHeight - 2) return stopPlayback();
+      const dt = (ts - lastTs) / 1000;
+      if (pauseCountdownSec > 0) {
+        pauseCountdownSec = Math.max(0, pauseCountdownSec - dt);
+        holdOverlay.hidden = false;
+        holdOverlay.textContent = `HOLD ${pauseCountdownSec.toFixed(1)}s`;
+        if (pauseCountdownSec === 0) holdOverlay.hidden = true;
+      } else {
+        viewport.scrollTop += (wpm / 60) * 18 * dt;
+        const progress = viewport.scrollHeight > 0 ? viewport.scrollTop / viewport.scrollHeight : 0;
+        if (!pauseTriggered && pauseSec > 0 && progress >= 0.45) {
+          pauseTriggered = true;
+          pauseCountdownSec = pauseSec;
+        }
+        if (viewport.scrollTop + viewport.clientHeight >= viewport.scrollHeight - 2) return stopPlayback();
+      }
     }
     lastTs = ts;
     rafId = requestAnimationFrame(tick);

@@ -1,4 +1,5 @@
 import type { CompiledScript } from '../../engine/script/script_compiler.ts';
+import { countSpokenWords, estimateSpokenSeconds } from '../../engine/script/pacing_calc.ts';
 import { uiGlyphs } from '../glyphs.ts';
 
 export type CopyMode = 'clean' | 'rehearsal' | 'json';
@@ -14,6 +15,7 @@ export function renderScriptCardView(
   selectedBeatIdx = 0,
   onSelectBeat?: (idx: number) => void,
   onToast?: (msg: string) => void,
+  onBeatEdit?: () => void,
 ): HTMLElement {
   const card = Object.assign(document.createElement('div'), { className: 'card-subpanel script-card-view' });
   const header = Object.assign(document.createElement('div'), { className: 'script-card-header' });
@@ -27,13 +29,17 @@ export function renderScriptCardView(
   ];
 
   for (const m of modes) {
-    const btn = Object.assign(document.createElement('button'), { type: 'button', className: 'btn' });
+    const btn = Object.assign(document.createElement('button'), { type: 'button', className: 'btn copy-btn' });
     btn.innerHTML = `${uiGlyphs.copy()}<span>${m.label}</span>`;
     btn.addEventListener('click', async () => {
       await navigator.clipboard?.writeText(copyPayload(script, m.id));
       onToast?.(`Copied ${m.label} script`);
-      btn.innerHTML = `${uiGlyphs.check()}<span>Copied</span>`;
-      setTimeout(() => { btn.innerHTML = `${uiGlyphs.copy()}<span>${m.label}</span>`; }, 1200);
+      btn.classList.add('is-copied');
+      btn.innerHTML = `${uiGlyphs.check()}<span>Copied!</span>`;
+      setTimeout(() => {
+        btn.classList.remove('is-copied');
+        btn.innerHTML = `${uiGlyphs.copy()}<span>${m.label}</span>`;
+      }, 1500);
     });
     actions.appendChild(btn);
   }
@@ -48,20 +54,40 @@ export function renderScriptCardView(
     row.addEventListener('click', () => onSelectBeat?.(idx));
 
     const meta = Object.assign(document.createElement('div'), { className: 'script-beat-meta' });
+    const timingSpan = Object.assign(document.createElement('span'), { textContent: `${beat.actualSec}s · ${beat.wordCount}w` });
     meta.append(
       Object.assign(document.createElement('span'), { textContent: beat.label }),
-      Object.assign(document.createElement('span'), { textContent: `${beat.actualSec}s · ${beat.wordCount}w` }),
+      timingSpan,
     );
 
     const chips = Object.assign(document.createElement('div'), { className: 'script-cue-chips' });
     if (beat.visualCue) {
       chips.appendChild(Object.assign(document.createElement('span'), {
-        className: 'pill pill--positive',
+        className: 'pill pill--positive cue-chip',
         textContent: beat.visualCue,
       }));
     }
 
-    row.append(meta, Object.assign(document.createElement('p'), { className: 'script-beat-text', textContent: beat.spokenText }), chips);
+    const editor = Object.assign(document.createElement('textarea'), {
+      className: 'script-beat-editor',
+      value: beat.spokenText,
+      rows: 2,
+      ariaLabel: `${beat.label} spoken text`,
+    });
+    editor.addEventListener('click', (ev) => ev.stopPropagation());
+    editor.addEventListener('input', () => {
+      beat.spokenText = editor.value;
+      beat.wordCount = countSpokenWords(beat.spokenText);
+      beat.actualSec = estimateSpokenSeconds(beat.spokenText);
+      timingSpan.textContent = `${beat.actualSec}s · ${beat.wordCount}w`;
+      script.totalWords = script.beats.reduce((acc, b) => acc + b.wordCount, 0);
+      script.totalSec = Number(script.beats.reduce((acc, b) => acc + b.actualSec, 0).toFixed(1));
+      script.wordCount = script.totalWords;
+      script.totalDurationSec = script.totalSec;
+      onBeatEdit?.();
+    });
+
+    row.append(meta, editor, chips);
     beatsList.appendChild(row);
   });
 
