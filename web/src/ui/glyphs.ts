@@ -1,48 +1,28 @@
-const SVG_NS = 'http://www.w3.org/2000/svg';
+export type GlyphName =
+  | 'send'
+  | 'play'
+  | 'pause'
+  | 'mirror'
+  | 'copy'
+  | 'eye'
+  | 'shield'
+  | 'sparkles'
+  | 'sliders'
+  | 'clock';
 
-function svgIcon(paths: string[], size = 15): SVGSVGElement {
-  const svg = document.createElementNS(SVG_NS, 'svg');
-  svg.setAttribute('viewBox', '0 0 24 24');
-  svg.setAttribute('width', String(size));
-  svg.setAttribute('height', String(size));
-  svg.setAttribute('fill', 'none');
-  svg.setAttribute('stroke', 'currentColor');
-  svg.setAttribute('stroke-width', '1.85');
-  svg.setAttribute('stroke-linecap', 'round');
-  svg.setAttribute('stroke-linejoin', 'round');
-  svg.setAttribute('aria-hidden', 'true');
-
-  for (const d of paths) {
-    const p = document.createElementNS(SVG_NS, 'path');
-    p.setAttribute('d', d);
-    svg.appendChild(p);
-  }
-  return svg;
-}
-
-export const uiGlyphs = {
-  play: (s = 14) => svgIcon(['M6 4l14 8-14 8V4z'], s),
-  pause: (s = 14) => svgIcon(['M6 4h4v16H6z', 'M14 4h4v16h-4z'], s),
-  reset: (s = 14) => svgIcon(['M3 12a9 9 0 1 0 3-6.7L3 8', 'M3 3v5h5'], s),
-  copy: (s = 14) =>
-    svgIcon(['M9 9h11v11H9z', 'M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1'], s),
-  check: (s = 14) => svgIcon(['M20 6L9 17l-5-5'], s),
-  mirror: (s = 14) => svgIcon(['M12 3v18', 'M8 7l-4 5 4 5', 'M16 7l4 5-4 5'], s),
-  spark: (s = 14) =>
-    svgIcon(['M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z'], s),
-  frame: (s = 15) =>
-    svgIcon(['M4 7V4h3', 'M20 7V4h-3', 'M4 17v3h3', 'M20 17v3h-3', 'M8 8h8v8H8z'], s),
-  clock: (s = 15) =>
-    svgIcon(['M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z', 'M12 6v6l4 2'], s),
-  save: (s = 14) =>
-    svgIcon(
-      ['M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z', 'M17 21v-8H7v8', 'M7 3v5h8'],
-      s,
-    ),
-  close: (s = 12) => svgIcon(['M18 6L6 18', 'M6 6l12 12'], s),
-  plus: (s = 14) => svgIcon(['M12 5v14', 'M5 12h14'], s),
-  send: (s = 14) => svgIcon(['M22 2L11 13', 'M22 2l-7 20-4-9-9-4 20-7z'], s),
-  chat: (s = 14) => svgIcon(['M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'], s),
-  stage: (s = 14) => svgIcon(['M4 3h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z', 'M8 21h8', 'M12 17v4'], s),
-  arrowRight: (s = 14) => svgIcon(['M5 12h14', 'M12 5l7 7-7 7'], s),
+const PATHS: Record<GlyphName, string> = {
+  send: '<path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/>',
+  play: '<polygon points="6 3 20 12 6 21 6 3"/>',
+  pause: '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>',
+  mirror: '<path d="M12 3v18"/><path d="M8 7l-4 5 4 5"/><path d="M16 7l4 5-4 5"/>',
+  copy: '<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+  eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',
+  shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/>',
+  sparkles: '<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3Z"/>',
+  sliders: '<line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="9" cy="6" r="2"/><circle cx="15" cy="12" r="2"/><circle cx="10" cy="18" r="2"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/>',
 };
+
+export function renderGlyph(name: GlyphName, cls = 'studio-glyph'): string {
+  return `<svg class="${cls}" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${PATHS[name]}</svg>`;
+}
