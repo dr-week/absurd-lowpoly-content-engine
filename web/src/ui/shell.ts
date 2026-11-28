@@ -15,24 +15,27 @@ export function renderAppShell(params: {
   const stats = computeAnalytics(logs);
   const isLiveAi = config.sourceMode === 'gemini' || config.sourceMode === 'groq' || config.sourceMode === 'openrouter';
 
+  const tabLabels: Record<ActiveTab, string> = {
+    chat: 'AI Chat',
+    studio: 'Script Lab',
+    stage: 'Stage',
+    saved: 'Saved',
+    analytics: 'Analytics',
+    logs: 'Logs',
+  };
+
   return `
     <div class="app-shell">
       <header class="ambient-header zuari-surface-frosted">
         <div class="ambient-header__inner">
           <div class="ambient-header__brand">
             <div class="brand-mark">${Glyphs.layers(16)}</div>
-            <h1>Absurd Studio</h1>
-          </div>
-          <div class="vote-group" role="navigation" aria-label="Primary Workspaces">
-            <button type="button" class="btn ${activeTab === 'chat' ? 'btn--active' : ''}" data-action="tab" data-tab="chat">${Glyphs.messageSquare(14)}<span>AI Chat</span></button>
-            <button type="button" class="btn ${activeTab === 'studio' ? 'btn--active' : ''}" data-action="tab" data-tab="studio">${Glyphs.sparkle(14)}<span>Studio</span></button>
-            <button type="button" class="btn ${activeTab === 'stage' ? 'btn--active' : ''}" data-action="tab" data-tab="stage">${Glyphs.stage(14)}<span>Stage</span></button>
+            <h1>Absurd Studio · ${tabLabels[activeTab]}</h1>
           </div>
           <div class="ambient-header__metrics">
             <span class="pill" title="${stats.totalVotes} votes logged">${esc(config.sourceMode)} · <strong>${stats.approvalRate}%</strong></span>
-            <button type="button" class="btn btn--icon" data-action="export-jsonl" title="Download JSONL Logs">${Glyphs.download(15)}</button>
             <button type="button" class="btn btn--icon" data-action="toggle-theme" title="Theme">${config.theme === 'studio' ? Glyphs.moon(15) : Glyphs.sun(15)}</button>
-            <button type="button" class="btn btn--icon" data-action="open-drawer" title="Settings">${Glyphs.sliders(15)}</button>
+            <button type="button" class="btn btn--icon" data-action="open-drawer" title="BYOK &amp; Vault Settings">${Glyphs.sliders(15)}</button>
           </div>
         </div>
       </header>

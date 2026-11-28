@@ -290,3 +290,38 @@ body {
     min-height: 44px;
   }
 }
+
+/* --------------------------------------------------------------------------
+ * Minimal Utility Top Header (56px max, nowrap, zero overflow at 375px)
+ * -------------------------------------------------------------------------- */
+.ambient-header {
+  max-height: 56px;
+}
+
+.ambient-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 8px;
+  min-width: 0;
+}
+
+.ambient-header__brand {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.ambient-header__brand h1 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ambient-header__metrics {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 6px;
+  flex-shrink: 0;
+}
