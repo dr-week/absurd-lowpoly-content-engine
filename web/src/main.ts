@@ -20,6 +20,7 @@ import { bindAppEvents, type AppState } from './ui/events';
 import { renderSavedView } from './ui/saved_view';
 import { renderAppShell } from './ui/shell';
 import { renderStageView, seedStageTopic } from './ui/stage/stage_view';
+import { mountScriptChatSection } from './ui/script_chat_section';
 import { renderStudioView } from './ui/studio_view';
 
 const cfg0 = loadConfig(), logs0 = loadLogs(), seen0 = loadSeenPairs();
@@ -121,6 +122,9 @@ function render(): void {
     mainSurface.replaceChildren(renderChatView({ config: state.config, activeTopic: state.activeTopic, initialDraft: draft, onToast: toast, onJumpTab: (tab) => { state.activeTab = tab; render(); }, onSendToStudio: (idea) => { void runCustomIdea(idea); }, onOpenInStage: (txt) => { seedStageTopic(txt); state.activeTab = 'stage'; render(); toast('Loaded in Stage'); } }));
   } else if (mainSurface && state.activeTab === 'stage') {
     mainSurface.replaceChildren(renderStageView({ activeTopic: state.activeTopic, onToast: toast, onOpenInChat: (txt) => { seedChatPrompt(txt); chatDraftHandoff = `Punch up this 5-beat script on: ${txt}`; state.activeTab = 'chat'; render(); } }));
+  } else if (state.activeTab === 'studio') {
+    const studioMount = document.getElementById('studio-script-chat-mount');
+    if (studioMount) mountScriptChatSection(studioMount);
   }
 }
 
