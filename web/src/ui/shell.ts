@@ -109,6 +109,17 @@ export function renderAppShell(params: {
               <input id="restore-backup-input" type="file" accept=".json,application/json" hidden />
             </div>
           </div>
+
+          <div class="field-group">
+            <label for="cfg-google-client-id">Google Drive Sync (App-Private)</label>
+            <input id="cfg-google-client-id" type="text" placeholder="Google OAuth Client ID..." />
+            <div class="vote-group" style="margin-top:0.5rem;flex-wrap:wrap;">
+              <button type="button" class="btn" data-action="drive-signin"><span>Sign in with Google</span></button>
+              <button type="button" class="btn" data-action="drive-backup"><span>Backup to Drive</span></button>
+              <button type="button" class="btn" data-action="drive-restore"><span>Restore from Drive</span></button>
+              <button type="button" class="btn" data-action="drive-signout"><span>Sign Out</span></button>
+            </div>
+          </div>
         </aside>
       </div>
 

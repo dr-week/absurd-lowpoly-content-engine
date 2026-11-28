@@ -1,4 +1,5 @@
 import { CHAT_SLASH_CHIPS } from '../../engine/chat/chat_prompts.ts';
+import { isSpeechDictationSupported, startVoiceDictation } from '../../engine/speech_dictation.ts';
 import type { ScoredTopic } from '../../types.ts';
 import { isSpeechDictationSupported, startVoiceDictation } from '../../engine/speech_dictation.ts';
 import { uiGlyphs } from '../glyphs.ts';
